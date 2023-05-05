@@ -1,0 +1,45 @@
+name: "dbt_bigquery_monitoring"
+version: "0.1.0"
+config-version: 2
+
+profile: dbt_bigquery_monitoring
+
+model-paths: ["models"]
+
+clean-targets:
+  - target
+  - dbt_packages
+
+models:
+  +tags:
+    - "dbt-bigquery-monitoring"
+  +on_schema_change: "append_new_columns"
+  compute:
+    +tags:
+      - "dbt-bigquery-monitoring-compute"
+  storage:
+    +tags:
+      - "dbt-bigquery-monitoring-storage"    
+
+
+vars:
+  bq_region: "{{ env_var('DBT_BQ_MONITORING_REGION', 'us') }}"
+  # https://cloud.google.com/bigquery/pricing#on_demand_pricing
+  use_flat_pricing: "{{ env_var('DBT_BQ_MONITORING_USE_FLAT_PRICING', true) }}"
+  per_billed_tb_price: "{{ env_var('DBT_BQ_MONITORING_PER_BILLED_TB_PRICE', 5) }}"
+  free_tb_per_month: "{{ env_var('DBT_BQ_MONITORING_FREE_TB_PER_MONTH', 1) }}"
+  hourly_slot_price: "{{ env_var('DBT_BQ_MONITORING_HOURLY_SLOT_PRICE', 0.04) }}"
+  # https://cloud.google.com/bigquery/pricing#storage
+  active_logical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE', 0.02) }}"
+  long_term_logical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_LONG_TERM_LOGICAL_STORAGE_GB_PRICE', 0.01) }}"
+  active_physical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_ACTIVE_PHYSICAL_STORAGE_GB_PRICE', 0.04) }}"
+  long_term_physical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_LONG_TERM_PHYSICAL_STORAGE_GB_PRICE', 0.02) }}"
+  free_storage_gb_per_month: "{{ env_var('DBT_BQ_MONITORING_FREE_STORAGE_GB_PER_MONTH', 10) }}"
+
+  #project input configuration
+  input_gcp_projects: "{{ env_var('DBT_BQ_MONITORING_GCP_PROJECTS', 'my-gcp-project, my-gcp-project2') }}"
+  lookback_window_days: "{{ env_var('DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS', 1) }}"
+
+  #project output configuration
+  output_materialization: "{{ env_var('DBT_BQ_MONITORING_OUTPUT_MATERIALIZATION', 'table') }}"
+  output_limit_size: "{{ env_var('DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE', 1000) }}"

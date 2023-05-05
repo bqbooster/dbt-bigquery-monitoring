@@ -1,0 +1,7 @@
+.idea/
+# standard dbt ignore
+target/
+dbt_modules/
+dbt_packages/
+logs/
+/.user.yml

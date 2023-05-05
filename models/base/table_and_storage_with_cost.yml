@@ -1,0 +1,94 @@
+version: 2
+
+models:
+  - name: table_and_storage_with_cost
+    description: table details and related storage with cost information
+
+    columns:
+
+      - name: is_insertable_into
+        description: YES or NO depending on whether the table supports DML INSERT statements
+
+      - name: is_typed
+        description: The value is always NO
+
+      - name: ddl
+        description: The DDL statement that can be used to recreate the table, such as CREATE TABLE or CREATE VIEW
+
+      - name: base_table_catalog
+        description: For table clones (Preview), the base table's project. Applicable only to tables with table_type set to CLONE.
+
+      - name: base_table_schema
+        description: For table clones (Preview), the base table's dataset. Applicable only to tables with table_type set to CLONE.
+
+      - name: base_table_name
+        description: For table clones (Preview), the base table's name. Applicable only to tables with table_type set to CLONE.
+
+      - name: default_collation_name
+        description: The name of the default collation specification if it exists; otherwise, NULL. To learn more about the default collation, see https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#default_collation_name
+
+      - name: project_id
+        description: The project ID of the project that contains the dataset
+
+      - name: project_number
+        description: The project number of the project that contains the dataset
+
+      - name: table_schema
+        description: The name of the dataset that contains the table or materialized view, also referred to as the datasetId
+
+      - name: table_name
+        description: The name of the table or materialized view, also referred to as the tableId
+
+      - name: creation_time
+        description: The table's creation time
+
+      - name: deleted
+        description: Indicates whether or not the table is deleted
+
+      - name: storage_last_modified_time
+        description: The most recent time that data was written to the table.
+
+      - name: total_rows
+        description: The total number of rows in the table or materialized view
+
+      - name: total_partitions
+        description: The number of partitions present in the table or materialized view. Unpartitioned tables return 0.
+
+      - name: total_logical_bytes
+        description: Total number of logical (uncompressed) bytes in the table or materialized view
+
+      - name: active_logical_bytes
+        description: Number of logical (uncompressed) bytes that are less than 90 days old
+
+      - name: long_term_logical_bytes
+        description: Number of logical (uncompressed) bytes that are more than 90 days old
+
+      - name: total_physical_bytes
+        description: Total number of physical (compressed) bytes used for storage, including active, long term, and time travel (deleted or changed data) bytes
+
+      - name: active_physical_bytes
+        description: Number of physical (compressed) bytes less than 90 days old, including time travel (deleted or changed data) bytes
+
+      - name: long_term_physical_bytes
+        description: Number of physical (compressed) bytes more than 90 days old
+
+      - name: time_travel_physical_bytes
+        description: Number of physical (compressed) bytes used by time travel storage (deleted or changed data)
+
+      - name: table_type
+        description: The type of table. For example, `EXTERNAL` or `BASE TABLE`
+
+      - name: active_logical_bytes_cost
+        description: The cost of the active logical bytes cost part of the storage in the reference currency (default values are in dollars). This active data is data that is less than 90 days old. The logical bytes are the data counted as raw (uncompressed) bytes.
+
+      - name: long_term_logical_bytes_cost
+        description: The long term cost of the active logical bytes cost part of the storage in the reference currency (default values are in dollars). This long term data is data that is more than 90 days old. The logical bytes are the data counted as raw (uncompressed) bytes.
+
+      - name: active_physical_bytes_cost
+        description: The cost of the active physical bytes cost part of the storage in the reference currency (default values are in dollars). This active data is data that is less than 90 days old. The physical bytes are the data counted as compressed bytes.
+      
+      - name: long_term_physical_bytes_cost
+        description: The long term cost of the active physical bytes cost part of the storage in the reference currency (default values are in dollars). This long term data is data that is more than 90 days old. The physical bytes are the data counted as compressed bytes.
+
+      - name: time_travel_physical_bytes_cost
+        description: The cost of the time travel physical bytes cost part of the storage in the reference currency (default values are in dollars). This time travel data is the historical data (that has been deleted or changed). The default time travel window is 7 days. The physical bytes are the data counted as compressed bytes.

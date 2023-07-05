@@ -10,8 +10,8 @@ SELECT
   t.is_typed,
   t.ddl,
   t.base_table_catalog,
-  t.base_table_schema,
-  t.base_table_name,
+  t.base_table_schema AS dataset_id,
+  t.base_table_name AS table_id,
   t.default_collation_name,
   s.PROJECT_ID,
   s.PROJECT_NUMBER,
@@ -52,7 +52,7 @@ FROM base
 
 SELECT
   *,
-  table_schema AS dataset_id,
-  table_name AS table_id,
-  total_logical_bytes / POW(1024, 4) AS total_tb
+  {{ sharded_table_merger("table_id") }} factored_table_id,
+  total_logical_bytes / POW(1024, 4) AS total_tb,
+  active_logical_bytes_cost + long_term_logical_bytes_cost + active_physical_bytes_cost + long_term_physical_bytes_cost + time_travel_physical_bytes_cost AS storage_cost
 FROM base_with_enriched_fields

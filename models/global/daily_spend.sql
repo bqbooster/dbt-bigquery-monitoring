@@ -1,13 +1,12 @@
 {{
    config(
     materialized='incremental',
-    incremental_strategy = 'merge',
+    incremental_strategy = 'insert_overwrite',
     on_schema_change='append_new_columns',
     partition_by={
       "field": "day",
       "data_type": "timestamp"
     },
-    unique_key = ['day']
     )
 }}
 {%- call set_sql_header(config) %}
@@ -19,6 +18,7 @@ SELECT
   SUM(total_query_cost) AS cost
 FROM {{ ref('compute_cost_per_hour') }}
 {% if is_incremental() %}
-  where hour >= date_sub(date(_dbt_max_partition), interval 1 day)
+  where hour >= timestamp_sub(_dbt_max_partition
+  , interval 1 day)
 {% endif %}
 GROUP BY day

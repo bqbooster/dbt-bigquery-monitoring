@@ -15,7 +15,7 @@ count(*) AS reference_count
 
 SELECT
  ts.*,
- trc.*
+ trc.reference_count
 FROM {{ ref('table_and_storage_with_cost') }} AS ts
 INNER JOIN table_reference_count AS trc USING (project_id, dataset_id, table_id)
 ORDER BY trc.reference_count DESC

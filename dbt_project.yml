@@ -39,6 +39,7 @@ vars:
   #project input configuration
   input_gcp_projects: "{{ env_var('DBT_BQ_MONITORING_GCP_PROJECTS', 'my-gcp-project, my-gcp-project2') }}"
   lookback_window_days: "{{ env_var('DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS', 1) }}"
+  run_schedule: "{{ env_var('DBT_BQ_MONITORING_RUN_SCHEDULE', 'hourly') }}"
 
   #project output configuration
   output_materialization: "{{ env_var('DBT_BQ_MONITORING_OUTPUT_MATERIALIZATION', 'table') }}"

@@ -1,8 +1,8 @@
-{#- macro to add cost related formula to base jobs table  -#}
-{% macro sharded_table_merger(table_name) -%}
+{#- macro replace the suffix from sharded table to merge as a single table for cost monitoring -#}
+{% macro sharded_table_merger(table_name_field) -%}
 REGEXP_REPLACE(
-REGEXP_REPLACE(
-  bq_storage.table_name,
-   r"(\d{8,10})$", "<date>"),
-    r"(20\d\dQ[1-4])$", "<quarter>") AS bq_storage_table_name_pattern
+  REGEXP_REPLACE(
+    {{ table_name_field }},
+    r"(\d{8,10})$", "<date>"),
+  r"(20\d\dQ[1-4])$", "<quarter>")
 {%- endmacro %}

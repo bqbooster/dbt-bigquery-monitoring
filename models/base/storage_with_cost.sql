@@ -9,8 +9,8 @@ WITH base AS (
 SELECT
   PROJECT_ID,
   PROJECT_NUMBER,
-  TABLE_SCHEMA,
-  TABLE_NAME,
+  TABLE_SCHEMA as dataset_id,
+  TABLE_NAME as table_id,
   CREATION_TIME,
   DELETED,
   STORAGE_LAST_MODIFIED_TIME,
@@ -25,7 +25,7 @@ SELECT
   TIME_TRAVEL_PHYSICAL_BYTES,
   TABLE_TYPE
 FROM
-  `{{ project | trim }}`.`region-{{ var('bq_region') }}`.``INFORMATION_SCHEMA``.`TABLE_STORAGE`
+  `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`TABLE_STORAGE`
 {% if not loop.last %}UNION ALL{% endif %}
 {% endfor %}
 ),
@@ -43,5 +43,6 @@ FROM base
 
 SELECT
   *,
-  total_logical_bytes / POW(1024, 4) AS total_tb
+  total_logical_bytes / POW(1024, 4) AS total_tb,
+  active_logical_bytes_cost + long_term_logical_bytes_cost + active_physical_bytes_cost + long_term_physical_bytes_cost + time_travel_physical_bytes_cost AS storage_cost
 FROM base_with_enriched_fields

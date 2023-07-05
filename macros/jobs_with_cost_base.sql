@@ -26,7 +26,6 @@ SELECT
   {% endif -%}
   referenced_tables,
   reservation_id,
-  session_info,
   start_time,
   state,
   statement_type,
@@ -44,7 +43,6 @@ FROM
   `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`{{ table_name }}`
 {#- Prevent to duplicate costs as script contains query #}
 WHERE statement_type != 'SCRIPT'
-AND creation_time > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {{ var('lookback_window_days') }} DAY)
 {% if not loop.last %}UNION ALL{% endif %}
 {% endfor %}
 ),

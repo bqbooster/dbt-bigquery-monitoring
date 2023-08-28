@@ -1,5 +1,11 @@
 # dbt-bigquery-monitoring
 
+🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+
+**This package is still in development and is not ready for production use.**
+
+🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+
 dbt-bigquery-monitoring is a dbt package that provides models for monitoring BigQuery performance and costs.
 
 ## Get started

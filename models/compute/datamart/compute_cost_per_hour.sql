@@ -9,7 +9,7 @@
     },
     cluster_by = ["hour"],
     unique_key = ['hour'],
-    partition_expiration_days = "{{ var('lookback_window_days') }}"
+    partition_expiration_days = var('lookback_window_days')
     )
 }}
 {%- call set_sql_header(config) %}
@@ -24,4 +24,7 @@ SELECT
   MILLISECONDS_TO_READABLE_TIME_UDF(SUM(total_slot_ms), 2) AS total_slot_time,
   COUNT(*) AS query_count
 FROM {{ ref('jobs_incremental') }}
+{% if is_incremental() %}
+WHERE TIMESTAMP_TRUNC(creation_time, DAY) >= _dbt_max_partition
+{% endif %}
 GROUP BY day, hour

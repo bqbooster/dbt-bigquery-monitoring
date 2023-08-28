@@ -11,23 +11,26 @@ clean-targets:
   - dbt_packages
 
 models:
-  +tags:
-    - "dbt-bigquery-monitoring"
-  +on_schema_change: "append_new_columns"
-  compute:
+  dbt_bigquery_monitoring:
     +tags:
-      - "dbt-bigquery-monitoring-compute"
-  storage:
-    +tags:
-      - "dbt-bigquery-monitoring-storage"    
+      - "dbt-bigquery-monitoring"
+    +on_schema_change: "append_new_columns"
+    compute:
+      +tags:
+        - "dbt-bigquery-monitoring-compute"
+    storage:
+      +tags:
+        - "dbt-bigquery-monitoring-storage"    
 
 
 vars:
   bq_region: "{{ env_var('DBT_BQ_MONITORING_REGION', 'us') }}"
-  # https://cloud.google.com/bigquery/pricing#on_demand_pricing
+  # https://cloud.google.com/bigquery/pricing#pricing
+  # On-demand compute (analysis) pricing
   use_flat_pricing: "{{ env_var('DBT_BQ_MONITORING_USE_FLAT_PRICING', true) }}"
-  per_billed_tb_price: "{{ env_var('DBT_BQ_MONITORING_PER_BILLED_TB_PRICE', 5) }}"
+  per_billed_tb_price: "{{ env_var('DBT_BQ_MONITORING_PER_BILLED_TB_PRICE', 6.25) }}"
   free_tb_per_month: "{{ env_var('DBT_BQ_MONITORING_FREE_TB_PER_MONTH', 1) }}"
+  # Capacity compute (analysis) pricing
   hourly_slot_price: "{{ env_var('DBT_BQ_MONITORING_HOURLY_SLOT_PRICE', 0.04) }}"
   # https://cloud.google.com/bigquery/pricing#storage
   active_logical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE', 0.02) }}"

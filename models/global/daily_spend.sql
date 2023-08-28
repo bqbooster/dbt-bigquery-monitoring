@@ -18,7 +18,6 @@ SELECT
   SUM(total_query_cost) AS cost
 FROM {{ ref('compute_cost_per_hour') }}
 {% if is_incremental() %}
-  where hour >= timestamp_sub(_dbt_max_partition
-  , interval 1 day)
+  where hour >= timestamp_sub(_dbt_max_partition, interval 1 day)
 {% endif %}
 GROUP BY day

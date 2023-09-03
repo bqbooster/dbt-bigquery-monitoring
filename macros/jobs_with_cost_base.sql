@@ -60,6 +60,11 @@ SELECT
   IF(LENGTH(dbt_info) > 0, JSON_EXTRACT_SCALAR(dbt_info, '$.profile_name'), NULL) AS dbt_profile_name,
   IF(LENGTH(dbt_info) > 0, JSON_EXTRACT_SCALAR(dbt_info, '$.target_name'), NULL) AS dbt_target_name,
   IF(LENGTH(dbt_info) > 0, JSON_EXTRACT_SCALAR(dbt_info, '$.node_id'), NULL) AS dbt_model_name,
+  IF(LENGTH(dbt_info) > 0,
+  ARRAY(
+  SELECT JSON_VALUE(string_element, '$')
+  FROM UNNEST(JSON_QUERY_ARRAY(dbt_info, '$.node_tags')) AS string_element
+  ), NULL) AS node_tags,
   {% endif -%}
   FROM base
 ),

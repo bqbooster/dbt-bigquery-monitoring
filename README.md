@@ -38,6 +38,17 @@ packages:
     version: 0.1.0
 ```
 
+### Add metadata to queries (optional)
+
+To enhance your query metadata with dbt model information, the package provides a dedicated macro that leverage "dbt query comments" (the header set at the top of each query)
+To configure the query comments, add the following config to `dbt_project.yml`.
+
+```yaml
+query-comment:
+  comment: '{{ dbt_bigquery_monitoring.get_query_comment(node) }}'
+  append: true
+```
+
 ### Using the package
 
 A lot of settings have default values that can be overriden using:

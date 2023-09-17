@@ -1,10 +1,6 @@
 # dbt-bigquery-monitoring
 
-🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
-
-**This package is still in development and is not ready for production use.**
-
-🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+🚧 The package is still early stage and might vary a lot 🚧
 
 dbt-bigquery-monitoring is a dbt package that provides models for monitoring BigQuery performance and costs.
 
@@ -34,8 +30,8 @@ Add the following to your `packages.yml` file:
 
 ```yml
 packages:
-  - package: kayrnt/dbt_bigquery_monitoring
-    version: 0.1.0
+  - git: "https://github.com/kayrnt/dbt_bigquery_monitoring.git"
+    revision: 0.1.0
 ```
 
 ### Add metadata to queries (optional)
@@ -49,7 +45,35 @@ query-comment:
   append: true
 ```
 
-### Using the package
+### Setup a profile
+
+To use this package, you will need to setup a profile that will be used to connect to BigQuery.
+
+The profile used is for the project `dbt_bigquery_monitoring` and can be configured as follow for a production account using a service account keyfile:
+
+```yaml
+dbt_bigquery_monitoring:
+  outputs:
+    default:
+      type: bigquery
+
+      ## Service account auth ##
+      method: service-account
+      keyfile: [full path to your keyfile]
+
+      project: [project id] # storage project
+      execution_project: [execution project id] # execution project
+      dataset: [dataset name] # dbt_bigquery_monitoring dataset, you may just use dbt_bigquery_monitoring
+      threads: 4
+      location: [dataset location]
+      priority: interactive
+
+      timeout_seconds: 1000000
+```
+
+if you're running locally to try the package you can swap the `method` to `method: oauth` (and remove the `keyfile` line).
+
+### Configure the package
 
 A lot of settings have default values that can be overriden using:
 
@@ -81,3 +105,35 @@ Following settings are defined as `dbt_project_variable` (**Environment variable
 - `lookback_window_days` (**DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS**) : number of days to look back for monitoring (default: `1`)
 - `output_materialization` (**DBT_BQ_MONITORING_OUTPUT_MATERIALIZATION**) : materialization to use for the models (default: `table`)
 - `output_limit_size` (**DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE**) : limit size to use for the models (default: `1000`)
+
+### Running the package
+
+The package is designed to be run as a daily or hourly job.
+To do so, you can use the following dbt command:
+
+```bash
+dbt run -s tag:dbt-bigquery-monitoring
+```
+
+### Using the package
+
+The package provides the following datamarts that can be easily used to build monitoring charts and dashboards:
+
+- global
+  - `daily_spend`
+
+- compute
+  - `compute_cost_per_hour`
+  - `most_expensive_jobs`
+  - `most_expensive_users`
+  - `most_repeated_jobs`
+  - `slowest_jobs`
+
+- storage
+  - `most_expensive_tables`
+  - `read_heavy_tables`
+  - `unused_tables`
+
+## Contributing
+
+If you feel like contribute, don't hesitate to open an issue and submit a PR.

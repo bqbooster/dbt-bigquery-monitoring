@@ -20,8 +20,7 @@ models:
         - "dbt-bigquery-monitoring-compute"
     storage:
       +tags:
-        - "dbt-bigquery-monitoring-storage"    
-
+        - "dbt-bigquery-monitoring-storage"   
 
 vars:
   bq_region: "{{ env_var('DBT_BQ_MONITORING_REGION', 'us') }}"

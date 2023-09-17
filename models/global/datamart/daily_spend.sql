@@ -21,3 +21,4 @@ FROM {{ ref('compute_cost_per_hour') }}
   where hour >= timestamp_sub(_dbt_max_partition, interval 1 day)
 {% endif %}
 GROUP BY day
+{# TODO - add a union with storage_cost_per_hour once added #}

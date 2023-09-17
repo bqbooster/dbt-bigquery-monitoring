@@ -30,7 +30,7 @@ Add the following to your `packages.yml` file:
 
 ```yml
 packages:
-  - git: "https://github.com/kayrnt/dbt_bigquery_monitoring.git"
+  - git: "https://github.com/Kayrnt/dbt-bigquery-monitoring.git"
     revision: 0.1.0
 ```
 

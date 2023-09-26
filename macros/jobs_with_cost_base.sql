@@ -2,7 +2,7 @@
 {% macro jobs_with_cost_base(table_name, contains_query) -%}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs -#}
 WITH base AS (
-  {% for project in var('input_gcp_projects').split(',') -%}
+  {% for project in var('input_gcp_projects') -%}
 SELECT
   bi_engine_statistics,
   cache_hit,

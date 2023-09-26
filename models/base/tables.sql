@@ -5,8 +5,8 @@
 }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-tables -#}
 WITH base AS (
-  {% for project in var('input_gcp_projects').split(',') -%}
-SELECT 
+  {% for project in var('input_gcp_projects') -%}
+SELECT
   table_catalog,
   table_schema,
   table_name,

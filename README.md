@@ -10,8 +10,8 @@ dbt-bigquery-monitoring is a dbt package that provides models for monitoring Big
 
 To use this package, you will need to grant the following permissions to the Service Account that dbt uses to connect to BigQuery:
 
-- **bigquery.`TABLES`.get** - To [access BigQuery tables data](https://cloud.google.com/bigquery/docs/information-schema-table-storage#required_permissions)
-- **bigquery.`TABLES`.list** - To [access BigQuery tables data](https://cloud.google.com/bigquery/docs/information-schema-table-storage#required_permissions)
+- **bigquery.tables.get** - To [access BigQuery tables data](https://cloud.google.com/bigquery/docs/information-schema-table-storage#required_roles)
+- **bigquery.tables.list** - To [access BigQuery tables data](https://cloud.google.com/bigquery/docs/information-schema-table-storage#required_roles)
 - **bigquery.jobs.listAll**
   - At the organization or project level, depending on desired scope
   - Note that JOBS_BY_ORGANIZATION is only available to users with defined Google Cloud organizations. More information on permissions and access control in BigQuery can be found [here](https://cloud.google.com/bigquery/docs/access-control).
@@ -31,7 +31,7 @@ Add the following to your `packages.yml` file:
 ```yml
 packages:
   - git: "https://github.com/Kayrnt/dbt-bigquery-monitoring.git"
-    revision: 0.1.0
+    revision: 0.1.1
 ```
 
 ### Add metadata to queries (optional)
@@ -42,7 +42,6 @@ To configure the query comments, add the following config to `dbt_project.yml`.
 ```yaml
 query-comment:
   comment: '{{ dbt_bigquery_monitoring.get_query_comment(node) }}'
-  append: true
 ```
 
 ### Setup a profile

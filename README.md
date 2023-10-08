@@ -8,7 +8,17 @@ dbt-bigquery-monitoring is a dbt package that provides models for monitoring Big
 
 ### Granting rights
 
-To use this package, you will need to grant the following permissions to the Service Account that dbt uses to connect to BigQuery:
+To use this package, you will need to grant permissions to the Service Account that dbt uses to connect to BigQuery.
+
+The required permissions (listed above) are available to:
+
+- [`BigQuery Resource Admin`](https://cloud.google.com/bigquery/docs/access-control#bigquery.resourceAdmin)
+- [`BigQuery Admin`](https://cloud.google.com/bigquery/docs/access-control#bigquery.admin) roles but feel free to create a custom role.
+
+<details>
+<summary>
+if you prefer to use custom roles, you can use the following permissions.
+</summary>
 
 - **bigquery.tables.get** - To [access BigQuery tables data](https://cloud.google.com/bigquery/docs/information-schema-table-storage#required_roles)
 - **bigquery.tables.list** - To [access BigQuery tables data](https://cloud.google.com/bigquery/docs/information-schema-table-storage#required_roles)
@@ -19,10 +29,7 @@ To use this package, you will need to grant the following permissions to the Ser
 - **bigquery.capacityCommitments.list** - To [access BigQuery Reservations data](https://cloud.google.com/bigquery/docs/information-schema-reservations#required_permissions)
 - **bigquery.reservationAssignments.list** - To [access BigQuery Reservations data](https://cloud.google.com/bigquery/docs/information-schema-reservations#required_permissions)
 
-The required permissions (listed above) are available to:
-
-- [`BigQuery Resource Admin`](https://cloud.google.com/bigquery/docs/access-control#bigquery.resourceAdmin)
-- [`BigQuery Admin`](https://cloud.google.com/bigquery/docs/access-control#bigquery.admin) roles but feel free to create a custom role.
+</details>
 
 ### Installing the package to your dbt project
 
@@ -31,46 +38,8 @@ Add the following to your `packages.yml` file:
 ```yml
 packages:
   - git: "https://github.com/Kayrnt/dbt-bigquery-monitoring.git"
-    revision: 0.1.1
+    revision: 0.1.0
 ```
-
-### Add metadata to queries (optional)
-
-To enhance your query metadata with dbt model information, the package provides a dedicated macro that leverage "dbt query comments" (the header set at the top of each query)
-To configure the query comments, add the following config to `dbt_project.yml`.
-
-```yaml
-query-comment:
-  comment: '{{ dbt_bigquery_monitoring.get_query_comment(node) }}'
-```
-
-### Setup a profile
-
-To use this package, you will need to setup a profile that will be used to connect to BigQuery.
-
-The profile used is for the project `dbt_bigquery_monitoring` and can be configured as follow for a production account using a service account keyfile:
-
-```yaml
-dbt_bigquery_monitoring:
-  outputs:
-    default:
-      type: bigquery
-
-      ## Service account auth ##
-      method: service-account
-      keyfile: [full path to your keyfile]
-
-      project: [project id] # storage project
-      execution_project: [execution project id] # execution project
-      dataset: [dataset name] # dbt_bigquery_monitoring dataset, you may just use dbt_bigquery_monitoring
-      threads: 4
-      location: [dataset location]
-      priority: interactive
-
-      timeout_seconds: 1000000
-```
-
-if you're running locally to try the package you can swap the `method` to `method: oauth` (and remove the `keyfile` line).
 
 ### Configure the package
 
@@ -81,7 +50,18 @@ A lot of settings have default values that can be overriden using:
 
 However some of them don't so you need to set all of them in your project variables or environment variables.
 
-### Settings
+Here is the mandatory settings to set in the `dbt_project.yml` file:
+
+```yml
+vars:
+  # dbt bigquery monitoring vars
+  input_gcp_projects: [ 'my-gcp-project', 'my-gcp-project-2' ]
+```
+
+<details>
+<summary>
+Settings details
+</summary>
 
 Following settings are defined as `dbt_project_variable` (**Environment variable**).
 
@@ -104,6 +84,17 @@ Following settings are defined as `dbt_project_variable` (**Environment variable
 - `lookback_window_days` (**DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS**) : number of days to look back for monitoring (default: `1`)
 - `output_materialization` (**DBT_BQ_MONITORING_OUTPUT_MATERIALIZATION**) : materialization to use for the models (default: `table`)
 - `output_limit_size` (**DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE**) : limit size to use for the models (default: `1000`)
+</details>
+
+#### Add metadata to queries (Recommanded but optional)
+
+To enhance your query metadata with dbt model information, the package provides a dedicated macro that leverage "dbt query comments" (the header set at the top of each query)
+To configure the query comments, add the following config to `dbt_project.yml`.
+
+```yaml
+query-comment:
+  comment: '{{ dbt_bigquery_monitoring.get_query_comment(node) }}'
+```
 
 ### Running the package
 
@@ -136,3 +127,31 @@ The package provides the following datamarts that can be easily used to build mo
 ## Contributing
 
 If you feel like contribute, don't hesitate to open an issue and submit a PR.
+
+### Setup a profile
+
+To run the package in development mode (ie from that repository instead of through an installed package), you will need to setup a profile that will be used to connect to BigQuery.
+
+The profile used is for the project `dbt_bigquery_monitoring` and can be configured as follow for a production account using a service account keyfile:
+
+```yaml
+dbt_bigquery_monitoring:
+  outputs:
+    default:
+      type: bigquery
+
+      ## Service account auth ##
+      method: service-account
+      keyfile: [full path to your keyfile]
+
+      project: [project id] # storage project
+      execution_project: [execution project id] # execution project
+      dataset: [dataset name] # dbt_bigquery_monitoring dataset, you may just use dbt_bigquery_monitoring
+      threads: 4
+      location: [dataset location]
+      priority: interactive
+
+      timeout_seconds: 1000000
+```
+
+if you're running locally to try the package you can swap the `method` to `method: oauth` (and remove the `keyfile` line).

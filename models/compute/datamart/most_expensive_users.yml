@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: most_expensive_users
+    description: >
+      A model that calculates the most expensive users based on query cost.
+    meta:
+      label: "Most Expensive Users"
+      order_fields_by: "label"
+      group_label: "Compute cost"
+    columns:
+      - name: day
+        description: The day of the data.
+      - name: user_email
+        description: The email address of the user.
+      - name: avg_query_cost
+        description: The average query cost per user and day.
+      - name: total_query_cost
+        description: The total query cost for the user and day.
+      - name: total_slot_ms
+        description: The total slot milliseconds used by the user's queries and day.
+      - name: total_slot_time
+        description: The total slot time in human-readable format used by the user's queries and day.
+      - name: query_count
+        description: The total number of queries run by the user and day.

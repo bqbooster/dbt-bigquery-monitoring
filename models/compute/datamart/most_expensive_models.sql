@@ -11,7 +11,7 @@
 ));
 {%- endcall %}
 SELECT
-  query,
+  dbt_model_name,
   topSum(ARRAY_CONCAT_AGG(project_ids)) AS project_ids,
   topSum(ARRAY_CONCAT_AGG(reservation_ids)) AS reservation_ids,
   topSum(ARRAY_CONCAT_AGG(user_emails)) AS user_emails,
@@ -21,8 +21,7 @@ SELECT
   MILLISECONDS_TO_READABLE_TIME_UDF(SUM(total_slot_ms), 2) AS total_slot_time,
   SUM(amount) AS amount
 FROM
-  {{ ref('most_repeated_jobs_incremental') }}
-GROUP BY query
-HAVING amount > 1
-ORDER BY amount DESC
+  {{ ref('most_expensive_models_incremental') }}
+GROUP BY dbt_model_name
+ORDER BY total_query_cost DESC
 LIMIT {{ var('output_limit_size') }}

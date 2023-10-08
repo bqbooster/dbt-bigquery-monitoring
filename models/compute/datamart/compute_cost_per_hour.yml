@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: compute_cost_per_hour
+    description: >
+      A model that store the compute cost per hour.
+    meta:
+      label: "Compute cost per hour"
+      order_fields_by: "label"
+      group_label: "Compute cost"
+    columns:
+      - name: day
+        description: The day of the compute cost.
+        tests:
+          - not_null
+      - name: hour
+        description: The hour of the compute cost.
+        tests:
+          - not_null
+      - name: total_query_cost
+        description: The total cost of all queries run during the hour.
+        tests:
+          - not_null
+      - name: failing_query_cost
+        description: The total cost of all queries that failed during the hour.
+        tests:
+          - not_null
+      - name: total_slot_ms
+        description: The total number of slot time milliseconds used by all queries during the hour.
+        tests:
+          - not_null
+      - name: total_slot_time
+        description: The total number of slot time in human readable format used by all queries during the hour.
+        tests:
+          - not_null
+      - name: query_count
+        description: The total number of queries run during the hour.
+        tests:
+          - not_null
+    

@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: most_repeated_jobs
+    description: >
+      A model that stores information about the most repeated jobs.
+    meta:
+      label: "Most Repeated Jobs"
+      order_fields_by: "label"
+      group_label: "Compute cost"
+    columns:
+      - name: query
+        description: The SQL query.
+        tests:
+          - not_null
+      - name: project_ids
+        description: The top aggregated project IDs.
+        tests:
+          - not_null
+      - name: reservation_ids
+        description: The top aggregated reservation IDs.
+        tests:
+          - not_null
+      - name: user_emails
+        description: The top aggregated user emails.
+        tests:
+          - not_null
+      - name: cache_hit_ratio
+        description: The ratio of cache hits.
+        tests:
+          - not_null
+      - name: total_query_cost
+        description: The total query cost.
+        tests:
+          - not_null
+      - name: total_slot_ms
+        description: The total number of slot time milliseconds.
+        tests:
+          - not_null
+      - name: total_slot_time
+        description: The total slot time in human-readable format.
+        tests:
+          - not_null
+      - name: amount
+        description: The total amount of occurrences.
+        tests:
+          - not_null

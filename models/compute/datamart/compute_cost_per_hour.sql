@@ -18,8 +18,8 @@
 SELECT
   TIMESTAMP_TRUNC(creation_time, DAY) AS day,
   TIMESTAMP_TRUNC(creation_time, HOUR) AS hour,
-  SUM(query_cost) AS total_query_cost,
-  SUM(IF(error_result IS NOT NULL, query_cost, 0)) AS failing_query_cost,
+  SUM(ROUND(query_cost, 2)) AS total_query_cost,
+  SUM(IF(error_result IS NOT NULL, ROUND(query_cost, 2), 0)) AS failing_query_cost,
   SUM(total_slot_ms) AS total_slot_ms,
   MILLISECONDS_TO_READABLE_TIME_UDF(SUM(total_slot_ms), 2) AS total_slot_time,
   COUNT(*) AS query_count

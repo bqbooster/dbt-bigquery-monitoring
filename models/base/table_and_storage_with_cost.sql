@@ -4,7 +4,7 @@
     )
 }}
 WITH base AS (
-  {% for project in var('input_gcp_projects') -%}
+  {% for project in project_list() -%}
 SELECT
   t.is_insertable_into,
   t.is_typed,

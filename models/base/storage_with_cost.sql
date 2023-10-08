@@ -5,7 +5,7 @@
 }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-tables -#}
 WITH base AS (
-  {% for project in var('input_gcp_projects') -%}
+  {% for project in project_list() -%}
 SELECT
   PROJECT_ID,
   PROJECT_NUMBER,

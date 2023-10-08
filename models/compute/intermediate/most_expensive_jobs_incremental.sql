@@ -7,7 +7,7 @@
       "data_type": "timestamp",
       "granularity": "hour"
     },
-    cluster_by = ["user_email"],
+    cluster_by = ["hour", "user_email"],
     partition_expiration_days = var('lookback_window_days')
     )
 }}
@@ -17,7 +17,7 @@ SELECT
   query,
   query_cost,
   user_email,
-  total_slot_ms
+  total_slot_ms,
+  RANK() OVER (PARTITION BY hour ORDER BY query_cost DESC) AS rank
 FROM {{ ref('jobs_incremental') }}
-ORDER BY query_cost DESC
-LIMIT {{ var('output_limit_size') }}
+QUALIFY rank <= {{ var('output_limit_size') }}

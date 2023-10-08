@@ -1,5 +1,5 @@
 name: "dbt_bigquery_monitoring"
-version: "0.1.0"
+version: "0.1.2"
 config-version: 2
 
 profile: dbt_bigquery_monitoring
@@ -39,7 +39,7 @@ vars:
   free_storage_gb_per_month: "{{ env_var('DBT_BQ_MONITORING_FREE_STORAGE_GB_PER_MONTH', 10) }}"
 
   #project input configuration
-  input_gcp_projects: "{{ env_var('DBT_BQ_MONITORING_GCP_PROJECTS', ['my-gcp-project, my-gcp-project2']) }}"
+  input_gcp_projects: "{{ env_var('DBT_BQ_MONITORING_GCP_PROJECTS') }}" # example: ['my-gcp-project', 'my-gcp-project2']
   lookback_window_days: "{{ env_var('DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS', 1) }}"
   run_schedule: "{{ env_var('DBT_BQ_MONITORING_RUN_SCHEDULE', 'hourly') }}"
 

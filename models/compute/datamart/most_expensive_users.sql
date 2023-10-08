@@ -7,7 +7,7 @@
   {{ milliseconds_to_readable_time_udf() }}
 {%- endcall %}
 SELECT
-  day,
+  TIMESTAMP_TRUNC(hour, DAY) day,
   user_email,
   SUM(total_query_cost)/SUM(query_count) AS avg_query_cost,
   SUM(total_query_cost) AS total_query_cost,

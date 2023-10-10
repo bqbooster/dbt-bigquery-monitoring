@@ -1,0 +1,127 @@
+version: 2
+
+models:
+  - name: read_heavy_tables
+    description: >
+      A model that selects data from table_and_storage_with_cost with a LEFT JOIN on table_reference_incremental.
+    meta:
+      label: "Most Expensive Tables"
+      order_fields_by: "label"
+      group_label: "Storage cost"      
+    columns:
+      - name: is_insertable_into
+        description: The is_insertable_into column.
+        tests:
+          - not_null
+      - name: is_typed
+        description: The is_typed column.
+        tests:
+          - not_null
+      - name: ddl
+        description: The ddl column.
+        tests:
+          - not_null
+      - name: project_id
+        description: The project_id column.
+        tests:
+          - not_null
+      - name: dataset_id
+        description: The dataset_id column.
+        tests:
+          - not_null
+      - name: table_id
+        description: The table_id column.
+        tests:
+          - not_null
+      - name: default_collation_name
+        description: The default_collation_name column.
+        tests:
+          - not_null
+      - name: project_number
+        description: The project_number column.
+        tests:
+          - not_null
+      - name: creation_time
+        description: The creation_time column.
+        tests:
+          - not_null
+      - name: deleted
+        description: The deleted column.
+        tests:
+          - not_null
+      - name: storage_last_modified_time
+        description: The storage_last_modified_time column.
+        tests:
+          - not_null
+      - name: total_rows
+        description: The total_rows column.
+        tests:
+          - not_null
+      - name: total_partitions
+        description: The total_partitions column.
+        tests:
+          - not_null
+      - name: total_logical_bytes
+        description: The total_logical_bytes column.
+        tests:
+          - not_null
+      - name: active_logical_bytes
+        description: The active_logical_bytes column.
+        tests:
+          - not_null
+      - name: long_term_logical_bytes
+        description: The long_term_logical_bytes column.
+        tests:
+          - not_null
+      - name: total_physical_bytes
+        description: The total_physical_bytes column.
+        tests:
+          - not_null
+      - name: active_physical_bytes
+        description: The active_physical_bytes column.
+        tests:
+          - not_null
+      - name: long_term_physical_bytes
+        description: The long_term_physical_bytes column.
+        tests:
+          - not_null
+      - name: time_travel_physical_bytes
+        description: The time_travel_physical_bytes column.
+        tests:
+          - not_null
+      - name: table_type
+        description: The table_type column.
+        tests:
+          - not_null
+      - name: active_logical_bytes_cost
+        description: The active_logical_bytes_cost column.
+        tests:
+          - not_null
+      - name: long_term_logical_bytes_cost
+        description: The long_term_logical_bytes_cost column.
+        tests:
+          - not_null
+      - name: active_physical_bytes_cost
+        description: The active_physical_bytes_cost column.
+        tests:
+          - not_null
+      - name: long_term_physical_bytes_cost
+        description: The long_term_physical_bytes_cost column.
+        tests:
+          - not_null
+      - name: time_travel_physical_bytes_cost
+        description: The time_travel_physical_bytes_cost column.
+        tests:
+          - not_null
+      - name: factored_table_id
+        description: The factored_table_id column.
+        tests:
+          - not_null
+      - name: total_tb
+        description: The total_tb column.
+        tests:
+          - not_null
+      - name: storage_cost
+        description: The storage_cost column
+        tests:
+          - not_null

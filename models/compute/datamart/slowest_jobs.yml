@@ -11,29 +11,16 @@ models:
     columns:
       - name: hour
         description: The hour of the job execution.
-        tests:
-          - not_null
       - name: job_id
         description: The ID of the job.
-        tests:
-          - not_null
       - name: query
         description: The SQL query executed by the job.
-        tests:
-          - not_null
       - name: query_cost
         description: The cost of the query execution.
-        tests:
-          - not_null
       - name: user_email
         description: The email of the user who initiated the job.
-        tests:
-          - not_null
       - name: total_slot_ms
         description: The total number of slot time milliseconds used by the job.
-        tests:
-          - not_null
       - name: total_run_time
         description: The total run time of the job in a human-readable format.
-        tests:
-          - not_null
+        

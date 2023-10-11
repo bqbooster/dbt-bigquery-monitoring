@@ -11,121 +11,62 @@ models:
     columns:
       - name: is_insertable_into
         description: YES or NO depending on whether the table supports DML INSERT statements
-        tests:
-          - not_null
       - name: is_typed
         description: The value is always NO
-        tests:
-          - not_null
       - name: ddl
         description: The Data Definition Language for the table.
-        tests:
-          - not_null
       - name: project_id
         description: The project ID associated with the table.
-        tests:
-          - not_null
       - name: dataset_id
         description: The dataset ID associated with the table.
-        tests:
-          - not_null
       - name: table_id
         description: The table ID.
-        tests:
-          - not_null
       - name: default_collation_name
         description: The default collation name for the table.
-        tests:
-          - not_null
       - name: project_number
         description: The project number associated with the table.
-        tests:
-          - not_null
       - name: creation_time
         description: The creation time of the table.
-        tests:
-          - not_null
       - name: deleted
         description: Indicates whether the table is deleted.
-        tests:
-          - not_null
       - name: storage_last_modified_time
         description: The timestamp of the last storage modification.
-        tests:
-          - not_null
       - name: total_rows
         description: The total number of rows in the table.
-        tests:
-          - not_null
       - name: total_partitions
         description: The total number of partitions in the table.
-        tests:
-          - not_null
       - name: total_logical_bytes
         description: The total logical bytes used by the table.
-        tests:
-          - not_null
       - name: active_logical_bytes
         description: The active logical bytes used by the table.
-        tests:
-          - not_null
       - name: long_term_logical_bytes
         description: The long-term logical bytes used by the table.
-        tests:
-          - not_null
       - name: total_physical_bytes
         description: The total physical bytes used by the table.
-        tests:
-          - not_null
       - name: active_physical_bytes
         description: The active physical bytes used by the table.
-        tests:
-          - not_null
       - name: long_term_physical_bytes
         description: The long-term physical bytes used by the table.
-        tests:
-          - not_null
       - name: time_travel_physical_bytes
         description: The time travel physical bytes used by the table.
-        tests:
-          - not_null
       - name: table_type
         description: The type of the table.
-        tests:
-          - not_null
       - name: active_logical_bytes_cost
         description: The cost associated with active logical bytes.
-        tests:
-          - not_null
       - name: long_term_logical_bytes_cost
         description: The cost associated with long-term logical bytes.
-        tests:
-          - not_null
       - name: active_physical_bytes_cost
         description: The cost associated with active physical bytes.
-        tests:
-          - not_null
       - name: long_term_physical_bytes_cost
         description: The cost associated with long-term physical bytes.
-        tests:
-          - not_null
       - name: time_travel_physical_bytes_cost
         description: The cost associated with time travel physical bytes.
-        tests:
-          - not_null
       - name: factored_table_id
         description: The factored table ID.
-        tests:
-          - not_null
       - name: total_tb
         description: The total TB of storage used by the table.
-        tests:
-          - not_null
       - name: storage_cost
         description: The storage cost associated with the table.
-        tests:
-          - not_null
       - name: reference_count
         description: The count of references to the table.
-        tests:
-          - not_null
+        

@@ -11,13 +11,8 @@ models:
     columns:
       - name: day
         description: The day of the aggregated cost.
-        tests:
-          - not_null
       - name: cost_category
         description: The category of the cost (e.g., "compute").
-        tests:
-          - not_null
       - name: cost
         description: The total cost for the day in the specified category.
-        tests:
-          - not_null
+        

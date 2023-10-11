@@ -2,121 +2,82 @@ version: 2
 
 models:
   - name: jobs_with_cost
-    tables:
-      - name: jobs
-        columns:
-          - name: bi_engine_statistics
-            description: If the project is configured to use the BI Engine SQL Interface, then this field contains BiEngineStatistics. Otherwise NULL.
-
-          - name: cache_hit
-            description: Whether the query results of this job were from a cache. If you have a multi-query statement job, cache_hit for your parent query is NULL.
-
-          - name: creation_time
-            description: (Partitioning column) Creation time of this job. Partitioning is based on the UTC time of this timestamp.
-
-          - name: destination_table
-            description: Destination table for results, if any.
-
-          - name: dml_statistics
-            description:
-              "If the job is a query with a DML statement, the value is a record with the following fields:
-              inserted_row_count: The number of rows that were inserted.
-              deleted_row_count: The number of rows that were deleted.
-              updated_row_count: The number of rows that were updated.
-              For all other jobs, the value is NULL.
-              This column is present in the `INFORMATION_SCHEMA`.JOBS_BY_USER and `INFORMATION_SCHEMA`.JOBS_BY_PROJECT views."
-
-          - name: end_time
-            description: End time of this job.
-
-          - name: error_result
-            description: Details of any errors as ErrorProto objects.
-
-          - name: job_id
-            description: The ID of the job. For example, bquxjob_1234.
-
-          - name: job_stages
-            description: Query stages of the job.
-
-          - name: job_type
-            description: The type of the job. Can be QUERY, LOAD, EXTRACT, COPY, or NULL. A NULL value indicates an internal job, such as a script job statement evaluation or a materialized view refresh.
-
-          - name: labels
-            description: Array of labels applied to the job as key-value pairs.
-
-          - name: parent_job_id
-            description: ID of the parent job, if any.
-
-          - name: priority
-            description: The priority of this job. Valid values include INTERACTIVE and BATCH.
-
-          - name: project_id
-            description: (Clustering column) The ID of the project.
-
-          - name: project_number
-            description: The number of the project.
-
-          - name: query
-            description: SQL query text. Only the JOBS_BY_PROJECT view has the query column.
-
-          - name: referenced_tables
-            description: Array of tables referenced by the job. Only populated for query jobs.
-
-          - name: reservation_id
-            description:
-              "Name of the primary reservation assigned to this job, in the format RESERVATION_ADMIN_PROJECT:RESERVATION_LOCATION.RESERVATION_NAME.
-              In this output:
-              RESERVATION_ADMIN_PROJECT: the name of the Google Cloud project that administers the reservation
-              RESERVATION_LOCATION: the location of the reservation
-              RESERVATION_NAME: the name of the reservation"
-
-          - name: session_info
-            description: Details about the session in which this job ran, if any. (Preview)
-
-          - name: start_time
-            description: Start time of this job.
-
-          - name: state
-            description: Running state of the job. Valid states include PENDING, RUNNING, and DONE.
-
-          - name: statement_type
-            description: The type of query statement. For example, DELETE, INSERT, SCRIPT, SELECT, or UPDATE. See QueryStatementType for list of valid values.
-
-          - name: timeline
-            description: Query timeline of the job. Contains snapshots of query execution.
-
-          - name: total_bytes_billed
-            description:
-              "If the project is configured to use on-demand pricing, then this field contains the total bytes billed for the job. If the project is configured to use flat-rate pricing, then you are not billed for bytes and this field is informational only.
-              Note: This column's values are empty for queries that read from tables with row-level access policies. For more information, see best practices for row-level security in BigQuery."
-
-          - name: total_bytes_processed
-            description: Total bytes processed by the job.
-
-          - name: total_modified_partitions
-            description: The total number of partitions the job modified. This field is populated for LOAD and QUERY jobs.
-
-          - name: total_slot_ms
-            description: Slot milliseconds for the job over its entire duration.
-
-          - name: transaction_id
-            description: ID of the transaction in which this job ran, if any. (Preview)
-
-          - name: user_email
-            description: (Clustering column) Email address or service account of the user who ran the job.
-
-          - name: query_info.resource_warning
-            description:
-              "The warning message that appears if the resource usage during query processing is above the internal threshold of the system.
-              A successful query job can have the resource_warning field populated. With resource_warning, you get additional data points to optimize your queries and to set up monitoring for performance trends of an equivalent set of queries by using query_hashes."
-
-          - name: query_info.query_hashes.normalized_literals
-            description:
-              "Contains the hashes of the query. normalized_literals is a hexadecimal STRING hash that ignores comments, parameter values, UDFs, and literals.
-              This field appears for successful GoogleSQL queries that are not cache hits."
-
-          - name: transferred_bytes
-            description: Total bytes transferred for cross-cloud queries, such as BigQuery Omni cross-cloud transfer jobs.
-
-          - name: materialized_view_statistics
-            description: Statistics of materialized views considered in a query job. (Preview)
+    description: >
+      A model that combines job data with cost information.
+    meta:
+      label: "Jobs with Cost"
+      order_fields_by: "label"
+      group_label: "Compute cost"
+    columns:
+      - name: bi_engine_statistics
+        description: The BI engine statistics.
+      - name: cache_hit
+        description: Indicates whether the cache was hit.
+      - name: creation_time
+        description: The creation time of the job.
+      - name: hour
+        description: The hour of the job creation time.
+      - name: destination_table
+        description: The destination table for the job.
+      - name: end_time
+        description: The end time of the job.
+      - name: error_result
+        description: The error result of the job.
+      - name: job_id
+        description: The unique identifier of the job.
+      - name: job_stages
+        description: The stages of the job.
+      - name: job_type
+        description: The type of the job.
+      - name: labels
+        description: The labels associated with the job.
+      - name: parent_job_id
+        description: The parent job's unique identifier.
+      - name: priority
+        description: The job's priority.
+      - name: project_id
+        description: The project's unique identifier.
+      - name: project_number
+        description: The project's number.
+      - name: referenced_tables
+        description: The tables referenced by the job.
+      - name: reservation_id
+        description: The reservation ID.
+      - name: start_time
+        description: The start time of the job.
+      - name: state
+        description: The state of the job.
+      - name: statement_type
+        description: The type of SQL statement.
+      - name: timeline
+        description: The job's timeline.
+      - name: total_bytes_billed
+        description: The total bytes billed for the job.
+      - name: total_bytes_processed
+        description: The total bytes processed by the job.
+      - name: total_modified_partitions
+        description: The total modified partitions.
+      - name: total_slot_ms
+        description: The total slot time in milliseconds.
+      - name: transaction_id
+        description: The transaction ID of the job.
+      - name: user_email
+        description: The email of the user who initiated the job.
+      - name: query_info
+        description: Additional query information.
+      - name: transferred_bytes
+        description: The total transferred bytes.
+      - name: materialized_view_statistics
+        description: Statistics for materialized views.
+      - name: avg_slots
+        description: The average slots used during the job.
+      - name: total_tb_billed
+        description: The total billed terabytes.
+      - name: total_time_seconds
+        description: The total time in seconds for the job.
+      - name: flat_pricing_query_cost
+        description: The query cost based on flat pricing.
+      - name: ondemand_query_cost
+        description: The query cost based on on-demand pricing.
+      - name: query_cost
+        description: The final query cost based on pricing choice.

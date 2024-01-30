@@ -7,8 +7,8 @@
       "field": "day",
       "data_type": "timestamp"
     },
-    cluster_by = ["hour"],
-    unique_key = ['hour'],
+    cluster_by = ['hour', 'project_id'],
+    unique_key = ['hour', 'project_id'],
     partition_expiration_days = var('lookback_window_days')
     )
 }}
@@ -18,6 +18,7 @@
 SELECT
   TIMESTAMP_TRUNC(creation_time, DAY) AS day,
   TIMESTAMP_TRUNC(creation_time, HOUR) AS hour,
+  project_id,
   SUM(ROUND(query_cost, 2)) AS total_query_cost,
   SUM(IF(error_result IS NOT NULL, ROUND(query_cost, 2), 0)) AS failing_query_cost,
   SUM(total_slot_ms) AS total_slot_ms,
@@ -27,4 +28,4 @@ FROM {{ ref('jobs_incremental') }}
 {% if is_incremental() %}
 WHERE TIMESTAMP_TRUNC(creation_time, DAY) >= _dbt_max_partition
 {% endif %}
-GROUP BY day, hour
+GROUP BY day, hour, project_id

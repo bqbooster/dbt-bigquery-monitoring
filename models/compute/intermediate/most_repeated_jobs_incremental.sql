@@ -20,7 +20,7 @@ SELECT
   COUNTIF(cache_hit) cache_hit,
   SUM(query_cost) AS total_query_cost,
   SUM(total_slot_ms) AS total_slot_ms,
-  COUNT(*) AS amount
+  COUNT(*) AS query_count
 FROM
   {{ ref('jobs_incremental') }}
 GROUP BY hour, query

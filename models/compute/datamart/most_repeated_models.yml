@@ -1,16 +1,16 @@
 version: 2
 
 models:
-  - name: most_repeated_jobs
+  - name: most_repeated_models
     description: >
-      A model that stores information about the most repeated jobs.
+      A model that stores information about the most repeated models.
     meta:
-      label: "Most Repeated Jobs"
+      label: "Most Repeated Models"
       order_fields_by: "label"
       group_label: "Compute cost"
     columns:
-      - name: query
-        description: The SQL query.
+      - name: dbt_model_name
+        description: The name of the DBT model.
       - name: project_ids
         description: The top aggregated project IDs.
       - name: reservation_ids
@@ -25,6 +25,6 @@ models:
         description: The total number of slot time milliseconds.
       - name: total_slot_time
         description: The total slot time in human-readable format.
-      - name: query_count
-        description: The total query count for the model.
+      - name: amount
+        description: The total amount of occurrences.
         

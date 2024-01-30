@@ -13,6 +13,7 @@
 }}
 SELECT
   hour,
+  project_id,
   job_id,
   query,
   query_cost,

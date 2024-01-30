@@ -25,6 +25,6 @@ models:
         description: The total slot time milliseconds for the model.
       - name: total_slot_time
         description: The total slot time in human-readable format for the model.
-      - name: amount
-        description: The total amount for the model.
+      - name: query_count
+        description: The total query count for the model.
         

@@ -11,6 +11,8 @@ models:
     columns:
       - name: hour
         description: The hour of the job execution.
+      - name: project_id
+        description: The project id of the job.
       - name: job_id
         description: The ID of the job.
       - name: query

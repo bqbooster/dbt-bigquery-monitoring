@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: most_repeated_models_incremental
+    description: ""
+    columns:
+      - name: hour
+        data_type: timestamp
+        description: ""
+
+      - name: dbt_model_name
+        data_type: string
+        description: ""
+
+      - name: project_ids
+        data_type: record
+        description: ""
+
+      - name: project_ids.value
+        data_type: string
+        description: ""
+
+      - name: project_ids.count
+        data_type: int64
+        description: ""
+
+      - name: reservation_ids
+        data_type: record
+        description: ""
+
+      - name: reservation_ids.value
+        data_type: string
+        description: ""
+
+      - name: reservation_ids.count
+        data_type: int64
+        description: ""
+
+      - name: user_emails
+        data_type: record
+        description: ""
+
+      - name: user_emails.value
+        data_type: string
+        description: ""
+
+      - name: user_emails.count
+        data_type: int64
+        description: ""
+
+      - name: cache_hit
+        data_type: int64
+        description: ""
+
+      - name: total_query_cost
+        data_type: float64
+        description: ""
+
+      - name: total_slot_ms
+        data_type: int64
+        description: ""
+
+      - name: amount
+        data_type: int64
+        description: ""
+

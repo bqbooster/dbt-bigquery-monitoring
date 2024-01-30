@@ -13,6 +13,8 @@ models:
         description: The day of the compute cost.
       - name: hour
         description: The hour of the compute cost.
+      - name: project_id
+        description: The project id of the job.
       - name: total_query_cost
         description: The total cost of all queries run during the hour.
       - name: failing_query_cost

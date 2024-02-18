@@ -23,5 +23,4 @@ SELECT
   COUNT(*) AS query_count
 FROM
   {{ ref('jobs_incremental') }}
-WHERE dbt_model_name IS NOT NULL
 GROUP BY hour, dbt_model_name

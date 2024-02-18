@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: table_reference_incremental
+    description: ""
+    columns:
+      - name: day
+        data_type: timestamp
+        description: ""
+
+      - name: project_id
+        data_type: string
+        description: ""
+
+      - name: dataset_id
+        data_type: string
+        description: ""
+
+      - name: table_id
+        data_type: string
+        description: ""
+
+      - name: reference_count
+        data_type: int64
+        description: ""
+

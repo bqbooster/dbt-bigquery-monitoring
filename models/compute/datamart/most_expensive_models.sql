@@ -15,11 +15,11 @@ SELECT
   topSum(ARRAY_CONCAT_AGG(project_ids)) AS project_ids,
   topSum(ARRAY_CONCAT_AGG(reservation_ids)) AS reservation_ids,
   topSum(ARRAY_CONCAT_AGG(user_emails)) AS user_emails,
-  SUM(cache_hit) / SUM(amount) AS cache_hit_ratio,
+  SUM(cache_hit) / SUM(query_count) AS cache_hit_ratio,
   SUM(ROUND(total_query_cost, 2)) AS total_query_cost,
   SUM(total_slot_ms) AS total_slot_ms,
   MILLISECONDS_TO_READABLE_TIME_UDF(SUM(total_slot_ms), 2) AS total_slot_time,
-  SUM(amount) AS amount
+  SUM(query_count) AS query_count
 FROM
   {{ ref('most_expensive_models_incremental') }}
 GROUP BY dbt_model_name

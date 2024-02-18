@@ -11,7 +11,7 @@
 ));
 {%- endcall %}
 SELECT
-  query,
+  dbt_model_name,
   topSum(ARRAY_CONCAT_AGG(project_ids)) AS project_ids,
   topSum(ARRAY_CONCAT_AGG(reservation_ids)) AS reservation_ids,
   topSum(ARRAY_CONCAT_AGG(user_emails)) AS user_emails,
@@ -22,8 +22,8 @@ SELECT
   SUM(query_count) AS query_count,
   SUM(cache_hit) AS cache_hit,
 FROM
-  {{ ref('most_repeated_jobs_incremental') }}
-GROUP BY query
+  {{ ref('most_repeated_models_incremental') }}
+GROUP BY dbt_model_name
 HAVING query_count > 1
 ORDER BY query_count DESC
 LIMIT {{ var('output_limit_size') }}

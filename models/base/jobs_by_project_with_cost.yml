@@ -1,9 +1,9 @@
 version: 2
 
 models:
-  - name: jobs_with_cost
+  - name: jobs_by_project_with_cost
     description: >
-      A model that combines job data with cost information.
+      A model that combines job data by project with cost information.
     meta:
       label: "Jobs with Cost"
       order_fields_by: "label"
@@ -19,8 +19,6 @@ models:
         description: The hour of the job creation time.
       - name: destination_table
         description: The destination table for the job.
-      - name: dml_statistics
-        description: Statistics for DML statements.
       - name: end_time
         description: The end time of the job.
       - name: error_result
@@ -41,8 +39,6 @@ models:
         description: The project's unique identifier.
       - name: project_number
         description: The project's number.
-      - name: query
-        description: The job's query
       - name: referenced_tables
         description: The tables referenced by the job.
       - name: reservation_id

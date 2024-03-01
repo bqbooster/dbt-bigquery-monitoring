@@ -38,7 +38,7 @@ Add the following to your `packages.yml` file:
 ```yml
 packages:
   - git: "https://github.com/Kayrnt/dbt-bigquery-monitoring.git"
-    revision: 0.2.0
+    revision: 0.3.0
 ```
 
 ### Configure the package

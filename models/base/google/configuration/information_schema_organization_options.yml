@@ -1,0 +1,17 @@
+models:
+- columns:
+  - description: One of the name values in the options table.
+    name: OPTION_NAME
+    type: STRING
+  - description: The option description.
+    name: OPTION_DESCRIPTION
+    type: STRING
+  - description: The data type of the OPTION_VALUE.
+    name: OPTION_TYPE
+    type: STRING
+  - description: The current value of the option.
+    name: OPTION_VALUE
+    type: STRING
+  description: dataset details with related information
+  name: organization_options
+version: 2

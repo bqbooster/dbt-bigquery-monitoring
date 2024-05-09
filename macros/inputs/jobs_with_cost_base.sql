@@ -2,7 +2,6 @@
 {% macro jobs_with_cost_base(table_name, contains_query) -%}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs -#}
 WITH base AS (
-  {% for project in project_list() -%}
 SELECT
   bi_engine_statistics,
   cache_hit,
@@ -43,11 +42,9 @@ SELECT
   transferred_bytes,
   materialized_view_statistics
 FROM
-  `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`{{ table_name }}`
+  {{ ref(table_name) }}
 {#- Prevent to duplicate costs as script contains query #}
 WHERE statement_type != 'SCRIPT'
-{% if not loop.last %}UNION ALL{% endif %}
-{% endfor %}
 ),
 base_with_enriched_fields AS (
 SELECT

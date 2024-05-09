@@ -1,0 +1,25 @@
+models:
+- columns:
+  - description: "The name of the project that contains the routine where the\n  \
+      \    option is defined"
+    name: SPECIFIC_CATALOG
+    type: STRING
+  - description: "The name of the dataset that contains the routine where the option\n\
+      \      is defined"
+    name: SPECIFIC_SCHEMA
+    type: STRING
+  - description: The name of the routine
+    name: SPECIFIC_NAME
+    type: STRING
+  - description: One of the name values in the options table
+    name: OPTION_NAME
+    type: STRING
+  - description: One of the data type values in the options table
+    name: OPTION_TYPE
+    type: STRING
+  - description: One of the value options in the options table
+    name: OPTION_VALUE
+    type: STRING
+  description: dataset details with related information
+  name: routine_options
+version: 2

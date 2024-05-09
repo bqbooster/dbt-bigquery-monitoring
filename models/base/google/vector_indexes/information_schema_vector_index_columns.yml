@@ -1,0 +1,24 @@
+models:
+- columns:
+  - description: The name of the project that contains the dataset.
+    name: index_catalog
+    type: STRING
+  - description: The name of the dataset that contains the vector index.
+    name: index_schema
+    type: STRING
+  - description: The name of the table that the vector index is created on.
+    name: table_name
+    type: STRING
+  - description: The name of the vector index.
+    name: index_name
+    type: STRING
+  - description: The name of the indexed column.
+    name: index_column_name
+    type: STRING
+  - description: "The full path of the expanded indexed field, starting with the column\n\
+      \          name. Fields are separated by a period."
+    name: index_field_path
+    type: STRING
+  description: dataset details with related information
+  name: vector_index_columns
+version: 2

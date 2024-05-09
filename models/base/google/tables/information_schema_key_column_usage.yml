@@ -1,0 +1,38 @@
+models:
+- columns:
+  - description: The constraint project name.
+    name: CONSTRAINT_CATALOG
+    type: STRING
+  - description: The constraint dataset name.
+    name: CONSTRAINT_SCHEMA
+    type: STRING
+  - description: The constraint name.
+    name: CONSTRAINT_NAME
+    type: STRING
+  - description: The project name of the constrained table.
+    name: TABLE_CATALOG
+    type: STRING
+  - description: The name of the constrained table dataset.
+    name: TABLE_SCHEMA
+    type: STRING
+  - description: The name of the constrained table.
+    name: TABLE_NAME
+    type: STRING
+  - description: The name of the constrained column.
+    name: COLUMN_NAME
+    type: STRING
+  - description: 'The ordinal position of the column within the constraint key
+
+      (starting at 1).'
+    name: ORDINAL_POSITION
+    type: INT64
+  - description: 'For foreign keys, the ordinal position of the column within the
+
+      primary key constraint (starting at 1). This value is NULL
+
+      for primary key constraints.'
+    name: POSITION_IN_UNIQUE_CONSTRAINT
+    type: INT64
+  description: dataset details with related information
+  name: key_column_usage
+version: 2

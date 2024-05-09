@@ -1,0 +1,34 @@
+models:
+- columns:
+  - description: "(Partitioning column) Start timestamp of the 1 minute interval\n\
+      \        for the aggregated statistics."
+    name: start_timestamp
+    type: TIMESTAMP
+  - description: (Clustering column) ID of the project.
+    name: project_id
+    type: STRING
+  - description: Number of the project.
+    name: project_number
+    type: INTEGER
+  - description: (Clustering column) ID of the dataset.
+    name: dataset_id
+    type: STRING
+  - description: (Clustering column) ID of the table.
+    name: table_id
+    type: STRING
+  - description: "Error code returned for the requests specified by this row. NULL\
+      \ for\n        successful requests."
+    name: error_code
+    type: STRING
+  - description: Total number of requests within the 1 minute interval.
+    name: total_requests
+    type: INTEGER
+  - description: Total number of rows from all requests within the 1 minute interval.
+    name: total_rows
+    type: INTEGER
+  - description: Total number of bytes from all rows within the 1 minute interval.
+    name: total_input_bytes
+    type: INTEGER
+  description: dataset details with related information
+  name: streaming_timeline_by_folder
+version: 2

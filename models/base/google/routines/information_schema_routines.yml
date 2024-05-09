@@ -1,0 +1,62 @@
+models:
+- columns:
+  - description: "The name of the project that contains the dataset where the\n  \
+      \    routine is defined"
+    name: SPECIFIC_CATALOG
+    type: STRING
+  - description: The name of the dataset that contains the routine
+    name: SPECIFIC_SCHEMA
+    type: STRING
+  - description: The name of the routine
+    name: SPECIFIC_NAME
+    type: STRING
+  - description: "The name of the project that contains the dataset where the routine\n\
+      \      is defined"
+    name: ROUTINE_CATALOG
+    type: STRING
+  - description: The name of the dataset that contains the routine
+    name: ROUTINE_SCHEMA
+    type: STRING
+  - description: The name of the routine
+    name: ROUTINE_NAME
+    type: STRING
+  - description: "The routine type:\n\nFUNCTION: A BigQuery\n            persistent\
+      \ user-defined function\nPROCEDURE: A BigQuery\n            stored procedure\n\
+      TABLE FUNCTION: A BigQuery\n            table function."
+    name: ROUTINE_TYPE
+    type: STRING
+  - description: "The data type that the routine returns. NULL if the\n      routine\
+      \ is a stored procedure"
+    name: DATA_TYPE
+    type: STRING
+  - description: "How the body of the routine is defined, either SQL or\n      EXTERNAL\
+      \ if the routine is a JavaScript user-defined\n      function"
+    name: ROUTINE_BODY
+    type: STRING
+  - description: The definition of the routine
+    name: ROUTINE_DEFINITION
+    type: STRING
+  - description: "JAVASCRIPT if the routine is a JavaScript\n        user-defined\
+      \ function or NULL if the routine was defined\n        with SQL"
+    name: EXTERNAL_LANGUAGE
+    type: STRING
+  - description: "YES if the routine is known to be deterministic,\n        NO if\
+      \ it is not, or NULL if unknown"
+    name: IS_DETERMINISTIC
+    type: STRING
+  - description: Security type of the routine, always NULL
+    name: SECURITY_TYPE
+    type: STRING
+  - description: The routine's creation time
+    name: CREATED
+    type: TIMESTAMP
+  - description: The routine's last modification time
+    name: LAST_ALTERED
+    type: TIMESTAMP
+  - description: "The DDL statement\n        that can be used to create the routine,\
+      \ such as\n        CREATE FUNCTION\n        or CREATE PROCEDURE"
+    name: DDL
+    type: STRING
+  description: dataset details with related information
+  name: routine
+version: 2

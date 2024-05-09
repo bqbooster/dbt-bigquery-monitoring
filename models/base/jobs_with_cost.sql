@@ -3,4 +3,4 @@
     materialized='view'
     )
 }}
-{{ jobs_with_cost_base("JOBS", contains_query = False) }}
+{{ jobs_with_cost_base("information_schema_jobs", contains_query = False) }}

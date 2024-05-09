@@ -1,0 +1,27 @@
+models:
+- columns:
+  - description: The name of the project that contains the dataset.
+    name: index_catalog
+    type: STRING
+  - description: The name of the dataset that contains the vector index.
+    name: index_schema
+    type: STRING
+  - description: The name of the table that the vector index is created on.
+    name: table_name
+    type: STRING
+  - description: The name of the vector index.
+    name: index_name
+    type: STRING
+  - description: "The name of the option used in the data definition language statement\n\
+      \      (DDL) to create the vector index."
+    name: option_name
+    type: STRING
+  - description: The option data type.
+    name: option_type
+    type: STRING
+  - description: The option value.
+    name: option_value
+    type: STRING
+  description: dataset details with related information
+  name: vector_index_options
+version: 2

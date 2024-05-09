@@ -1,0 +1,23 @@
+{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-streaming-by-organization -#}
+WITH base AS (
+{% if project_list()|length > 0 -%}
+  {% for project in project_list() -%}
+  SELECT * FROM `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`STREAMING_TIMELINE_BY_ORGANIZATION`
+  {% if not loop.last %}UNION ALL{% endif %}
+  {% endfor %}
+{%- else %}
+  SELECT * FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`STREAMING_TIMELINE_BY_ORGANIZATION`
+{%- endif %}
+)
+SELECT
+start_timestamp,
+project_id,
+project_number,
+dataset_id,
+table_id,
+error_code,
+total_requests,
+total_rows,
+total_input_bytes,
+FROM
+  base

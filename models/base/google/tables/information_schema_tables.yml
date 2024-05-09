@@ -1,0 +1,98 @@
+models:
+- columns:
+  - description: The project ID of the project that contains the dataset.
+    name: table_catalog
+    type: STRING
+  - description: "The name of the dataset that contains the table or view. Also referred\n\
+      \        to as the datasetId."
+    name: table_schema
+    type: STRING
+  - description: "The name of the table or view. Also referred to as the\n       \
+      \ tableId."
+    name: table_name
+    type: STRING
+  - description: "The table type; one of the following:\n\nBASE TABLE: A standard\n\
+      \            table\nCLONE: A\n            table clone\nSNAPSHOT: A\n       \
+      \     table snapshot\nVIEW: A\n            view\nMATERIALIZED VIEW: A\n    \
+      \        materialized view\n            or materialized view replica\nEXTERNAL:\
+      \ A table that references an\n            external data source"
+    name: table_type
+    type: STRING
+  - description: "YES or NO depending on whether the table\n        supports DML INSERT\n\
+      \        statements"
+    name: is_insertable_into
+    type: STRING
+  - description: The value is always NO
+    name: is_typed
+    type: STRING
+  - description: The table's creation time
+    name: creation_time
+    type: TIMESTAMP
+  - description: "For table clones\n      and table snapshots,\n        the base table's\
+      \ project. Applicable only to\n        tables with table_type set to CLONE or\n\
+      \        SNAPSHOT."
+    name: base_table_catalog
+    type: STRING
+  - description: "For table clones\n      and table snapshots,\n        the base table's\
+      \ dataset. Applicable only to tables with\n        table_type set to CLONE or\n\
+      \        SNAPSHOT."
+    name: base_table_schema
+    type: STRING
+  - description: "For table clones\n      and table snapshots,\n        the base table's\
+      \ name. Applicable only to tables with\n        table_type set to CLONE or\n\
+      \        SNAPSHOT."
+    name: base_table_name
+    type: STRING
+  - description: "For table clones\n      and table snapshots,\n        the time when\
+      \ the clone\n        or snapshot\n        operation was run on the base table\
+      \ to create this table. If\n        time travel was used, then this\n      \
+      \  field contains the time travel timestamp. Otherwise, the\n        snapshot_time_ms\
+      \ field is the same as the\n        creation_time field. Applicable only to\n\
+      \        tables with table_type set to CLONE or\n        SNAPSHOT."
+    name: snapshot_time_ms
+    type: TIMESTAMP
+  - description: "For\n      materialized view replicas,\n        the base materialized\
+      \ view's project."
+    name: replica_source_catalog
+    type: STRING
+  - description: "For\n      materialized view replicas,\n        the base materialized\
+      \ view's dataset."
+    name: replica_source_schema
+    type: STRING
+  - description: "For\n      materialized view replicas,\n        the base materialized\
+      \ view's name."
+    name: replica_source_name
+    type: STRING
+  - description: "For\n      materialized view replicas,\n        the status of the\
+      \ replication from the base materialized view to the\n        materialized view\
+      \ replica; one of the following:\n\nREPLICATION_STATUS_UNSPECIFIED\nACTIVE:\
+      \ Replication is active with no errors\nSOURCE_DELETED: The source materialized\
+      \ view has\n          been deleted\nPERMISSION_DENIED: The source materialized\
+      \ view\n          hasn't been authorized\n          on the dataset that contains\
+      \ the source Amazon S3\n          BigLake tables used in the query that created\
+      \ the\n          materialized view.\nUNSUPPORTED_CONFIGURATION: There is an\
+      \ issue with\n          the replica's\n          prerequisites\n          other\
+      \ than source materialized view authorization."
+    name: replication_status
+    type: STRING
+  - description: "If replication_status indicates a replication issue for a\n    \
+      \  materialized view replica,\n        replication_error provides further details\
+      \ about the issue."
+    name: replication_error
+    type: STRING
+  - description: "The DDL statement\n        that can be used to recreate the table,\
+      \ such as\n        CREATE TABLE\n        or CREATE VIEW"
+    name: ddl
+    type: STRING
+  - description: "The name of the default collation specification\n        if it exists;\
+      \ otherwise, NULL."
+    name: default_collation_name
+    type: STRING
+  - description: "For tables that use change data capture (CDC), the time when row\n\
+      \        modifications were last applied. For more information, see\n      \
+      \  Monitor table upsert operation progress."
+    name: upsert_stream_apply_watermark
+    type: TIMESTAMP
+  description: dataset details with related information
+  name: tables
+version: 2

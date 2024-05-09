@@ -1,0 +1,42 @@
+models:
+- columns:
+  - description: Start time of this one-minute period.
+    name: period_start
+    type: TIMESTAMP
+  - description: ID of the reservation admin project.
+    name: project_id
+    type: STRING
+  - description: Number of the project.
+    name: project_number
+    type: INTEGER
+  - description: The name of the reservation.
+    name: reservation_name
+    type: STRING
+  - description: False if slot sharing is enabled, otherwise true.
+    name: ignore_idle_slots
+    type: BOOL
+  - description: The number of slots assigned to this reservation.
+    name: slots_assigned
+    type: INTEGER
+  - description: "The maximum slot capacity for this reservation, including slot\n\
+      \      sharing. If ignore_idle_slots is true, this is the same as slots_assigned,\
+      \ otherwise this is the total number of slots in all capacity commitments in\
+      \ the admin project."
+    name: slots_max_assigned
+    type: INTEGER
+  - description: 'Information about the autoscale capacity of the reservation. Fields
+      include the following:
+
+
+      current_slots: the number of slots added to the reservation by autoscaling.
+
+      max_slots: the maximum number of slots that could be added to the reservation
+      by autoscaling.'
+    name: autoscale
+    type: STRUCT
+  - description: For joining with the jobs_timeline table. This is of the form project_id:location.reservation_name.
+    name: reservation_id
+    type: STRING
+  description: dataset details with related information
+  name: reservations_timeline
+version: 2

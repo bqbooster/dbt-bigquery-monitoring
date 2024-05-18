@@ -1,0 +1,26 @@
+models:
+- columns:
+  - description: The name of the project that contains the table snapshot
+    name: table_catalog
+    type: STRING
+  - description: The name of the dataset that contains the table snapshot
+    name: table_schema
+    type: STRING
+  - description: The name of the table snapshot
+    name: table_name
+    type: STRING
+  - description: The name of the project that contains the base table
+    name: base_table_catalog
+    type: STRING
+  - description: The name of the dataset that contains the base table
+    name: base_table_schema
+    type: STRING
+  - description: The name of the base table
+    name: base_table_name
+    type: STRING
+  - description: The time that the table snapshot was created
+    name: snapshot_time
+    type: TIMESTAMP
+  description: dataset details with related information
+  name: table_snapshots
+version: 2

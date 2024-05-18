@@ -1,0 +1,39 @@
+models:
+- columns:
+  - description: The constraint project name.
+    name: CONSTRAINT_CATALOG
+    type: STRING
+  - description: The constraint dataset name.
+    name: CONSTRAINT_SCHEMA
+    type: STRING
+  - description: The constraint name.
+    name: CONSTRAINT_NAME
+    type: STRING
+  - description: The constrained table project name.
+    name: TABLE_CATALOG
+    type: STRING
+  - description: The constrained table dataset name.
+    name: TABLE_SCHEMA
+    type: STRING
+  - description: The constrained table name.
+    name: TABLE_NAME
+    type: STRING
+  - description: 'Either PRIMARY KEY or
+
+      FOREIGN KEY.'
+    name: CONSTRAINT_TYPE
+    type: STRING
+  - description: "YES or NO depending on if a constraint is\n      deferrable. Only\
+      \ NO is supported."
+    name: IS_DEFERRABLE
+    type: STRING
+  - description: Only NO is supported.
+    name: INITIALLY_DEFERRED
+    type: STRING
+  - description: "YES or NO depending on if the constraint is\nenforced. \nOnly NO\
+      \ is supported."
+    name: ENFORCED
+    type: STRING
+  description: dataset details with related information
+  name: table_constraints
+version: 2

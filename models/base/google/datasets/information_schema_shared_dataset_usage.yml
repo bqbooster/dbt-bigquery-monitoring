@@ -1,0 +1,58 @@
+models:
+- columns:
+  - description: (Clustering column) The ID of the project that contains the shared
+      dataset.
+    name: project_id
+    type: STRING
+  - description: (Clustering column) The ID of the shared dataset.
+    name: dataset_id
+    type: STRING
+  - description: The ID of the accessed table.
+    name: table_id
+    type: STRING
+  - description: The resource path of the data exchange.
+    name: data_exchange_id
+    type: STRING
+  - description: The resource path of the listing.
+    name: listing_id
+    type: STRING
+  - description: (Partitioning column) The start time of this job.
+    name: job_start_time
+    type: TIMESTAMP
+  - description: The end time of this job.
+    name: job_end_time
+    type: TIMESTAMP
+  - description: The job ID. For example, bquxjob_1234.
+    name: job_id
+    type: STRING
+  - description: The number of the project this job belongs to.
+    name: job_project_number
+    type: INTEGER
+  - description: The location of the job.
+    name: job_location
+    type: STRING
+  - description: The project number of the subscriber's project.
+    name: linked_project_number
+    type: INTEGER
+  - description: The linked dataset ID of the subscriber's dataset.
+    name: linked_dataset_id
+    type: STRING
+  - description: "The organization number in which the job ran. This is the organization\
+      \ number of the\n     subscriber. This field is empty for projects that don't\
+      \ have an organization."
+    name: subscriber_org_number
+    type: INTEGER
+  - description: "A human-readable string that refers to the organization in which\
+      \ the job ran. This is the\n     organization number of the subscriber. This\
+      \ field is empty for projects that don't have an organization."
+    name: subscriber_org_display_name
+    type: STRING
+  - description: The number of rows processed from this table by the job.
+    name: num_rows_processed
+    type: INTEGER
+  - description: The total bytes processed from this table by the job.
+    name: total_bytes_processed
+    type: INTEGER
+  description: dataset details with related information
+  name: shared_dataset_usage
+version: 2

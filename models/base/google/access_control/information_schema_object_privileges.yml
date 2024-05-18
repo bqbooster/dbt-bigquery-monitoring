@@ -1,0 +1,21 @@
+models:
+- columns:
+  - description: The project ID of the project that contains the resource.
+    name: OBJECT_CATALOG
+    type: STRING
+  - description: The name of the dataset that contains the resource. This is null
+      for dataset resource types.
+    name: OBJECT_SCHEMA
+    type: STRING
+  - description: The name of the table, view or dataset the policy applies to.
+    name: OBJECT_NAME
+    type: STRING
+  - description: The resource type, such as SCHEMA (dataset), TABLE, VIEW, and EXTERNAL.
+    name: OBJECT_TYPE
+    type: STRING
+  - description: The user type and user that the role is granted to.
+    name: GRANTEE
+    type: STRING
+  description: dataset details with related information
+  name: object_privileges
+version: 2

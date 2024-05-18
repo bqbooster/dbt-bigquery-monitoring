@@ -5,7 +5,6 @@
 }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-tables -#}
 WITH base AS (
-  {% for project in project_list() -%}
 SELECT
   PROJECT_ID,
   PROJECT_NUMBER,
@@ -25,9 +24,7 @@ SELECT
   TIME_TRAVEL_PHYSICAL_BYTES,
   TABLE_TYPE
 FROM
-  `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`TABLE_STORAGE`
-{% if not loop.last %}UNION ALL{% endif %}
-{% endfor %}
+    {{ ref('information_schema_table_storage') }}
 ),
 
 base_with_enriched_fields AS (

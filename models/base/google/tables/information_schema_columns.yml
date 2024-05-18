@@ -1,0 +1,72 @@
+models:
+- columns:
+  - description: The project ID of the project that contains the dataset
+    name: TABLE_CATALOG
+    type: STRING
+  - description: "The name of the dataset that contains the table also referred to\
+      \ as\n        the datasetId"
+    name: TABLE_SCHEMA
+    type: STRING
+  - description: The name of the table or view also referred to as the tableId
+    name: TABLE_NAME
+    type: STRING
+  - description: The name of the column
+    name: COLUMN_NAME
+    type: STRING
+  - description: "The 1-indexed offset of the column within the table; if it's a pseudo\n\
+      \        column such as _PARTITIONTIME or _PARTITIONDATE, the value is\n   \
+      \     NULL"
+    name: ORDINAL_POSITION
+    type: INT64
+  - description: "YES or NO depending on whether the column's\n        mode allows\
+      \ NULL values"
+    name: IS_NULLABLE
+    type: STRING
+  - description: The column's GoogleSQL data type
+    name: DATA_TYPE
+    type: STRING
+  - description: The value is always NEVER
+    name: IS_GENERATED
+    type: STRING
+  - description: The value is always NULL
+    name: GENERATION_EXPRESSION
+    type: STRING
+  - description: The value is always NULL
+    name: IS_STORED
+    type: STRING
+  - description: "YES or NO depending on whether the column is\n      a pseudo column\
+      \ such as _PARTITIONTIME or _PARTITIONDATE"
+    name: IS_HIDDEN
+    type: STRING
+  - description: The value is always NULL
+    name: IS_UPDATABLE
+    type: STRING
+  - description: "YES or NO depending on whether the column is\n      a pseudo column\
+      \ such as _PARTITIONTIME or _PARTITIONDATE"
+    name: IS_SYSTEM_DEFINED
+    type: STRING
+  - description: "YES or NO depending on whether the column is\n        a partitioning\
+      \ column"
+    name: IS_PARTITIONING_COLUMN
+    type: STRING
+  - description: "The 1-indexed offset of the column within the table's\n        clustering\
+      \ columns; the value is NULL if the table is not a\n        clustered table"
+    name: CLUSTERING_ORDINAL_POSITION
+    type: INT64
+  - description: "The name of the collation specification\n        if it exists; otherwise,\
+      \ NULL\n\n        If a STRING or ARRAY<STRING> is passed\n        in, the collation\
+      \ specification is returned if it exists; otherwise\n        NULL is returned"
+    name: COLLATION_NAME
+    type: STRING
+  - description: "The default value of the\n        column if it exists; otherwise,\
+      \ the value is NULL"
+    name: COLUMN_DEFAULT
+    type: STRING
+  - description: "The mode of rounding that's used for values written to the field\
+      \ if its\n        type is a parameterized NUMERIC or BIGNUMERIC;\n        otherwise,\
+      \ the value is NULL"
+    name: ROUNDING_MODE
+    type: STRING
+  description: dataset details with related information
+  name: columns
+version: 2

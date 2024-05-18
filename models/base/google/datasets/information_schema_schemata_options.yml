@@ -1,0 +1,21 @@
+models:
+- columns:
+  - description: The name of the project that contains the dataset
+    name: CATALOG_NAME
+    type: STRING
+  - description: The name of the dataset, also referred to as the datasetId
+    name: SCHEMA_NAME
+    type: STRING
+  - description: "The name of the option. For a list of supported options, see the\n\
+      \      schema options list."
+    name: OPTION_NAME
+    type: STRING
+  - description: The data type of the option
+    name: OPTION_TYPE
+    type: STRING
+  - description: The value of the option
+    name: OPTION_VALUE
+    type: STRING
+  description: dataset details with related information
+  name: schemata_options
+version: 2

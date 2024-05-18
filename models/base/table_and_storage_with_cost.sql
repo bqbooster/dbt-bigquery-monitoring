@@ -4,7 +4,6 @@
     )
 }}
 WITH base AS (
-  {% for project in project_list() -%}
 SELECT
   t.is_insertable_into,
   t.is_typed,
@@ -27,13 +26,9 @@ SELECT
   s.long_term_physical_bytes,
   s.time_travel_physical_bytes,
   s.table_type
-  FROM
-  `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`TABLES` AS t
-  INNER JOIN
-  `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`TABLE_STORAGE` AS s ON
+  FROM {{ ref('information_schema_tables') }} t
+  INNER JOIN {{ ref('information_schema_table_storage') }} AS s ON
     t.table_name = s.table_name AND t.table_schema = s.table_schema
-{% if not loop.last %}UNION ALL{% endif %}
-{% endfor %}
 ),
 
 base_with_enriched_fields AS (

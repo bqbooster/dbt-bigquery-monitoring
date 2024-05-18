@@ -1,0 +1,29 @@
+models:
+- columns:
+  - description: The name of the project that contains the dataset.
+    name: TABLE_CATALOG
+    type: STRING
+  - description: "The name of the dataset that contains the table. Also\n      referred\
+      \ to as the datasetId."
+    name: TABLE_SCHEMA
+    type: STRING
+  - description: "The name of the table. Also referred to as the\n      tableId."
+    name: TABLE_NAME
+    type: STRING
+  - description: The column name.
+    name: COLUMN_NAME
+    type: STRING
+  - description: The constraint project name.
+    name: CONSTRAINT_CATALOG
+    type: STRING
+  - description: The constraint dataset name.
+    name: CONSTRAINT_SCHEMA
+    type: STRING
+  - description: "The constraint name. It can be the name of the\n      primary key\
+      \ if the column is used by the primary key or the name of\n      foreign key\
+      \ if the column is used by a foreign key."
+    name: CONSTRAINT_NAME
+    type: STRING
+  description: dataset details with related information
+  name: constraint_column_usage
+version: 2

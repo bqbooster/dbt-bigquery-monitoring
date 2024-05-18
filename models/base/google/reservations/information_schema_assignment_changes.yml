@@ -1,0 +1,46 @@
+models:
+- columns:
+  - description: Time when the change occurred.
+    name: change_timestamp
+    type: TIMESTAMP
+  - description: ID of the administration project.
+    name: project_id
+    type: STRING
+  - description: Number of the administration project.
+    name: project_number
+    type: INTEGER
+  - description: ID that uniquely identifies the assignment.
+    name: assignment_id
+    type: STRING
+  - description: Name of the reservation that the assignment uses.
+    name: reservation_name
+    type: STRING
+  - description: "The type of job that can use the reservation. Can be\n        PIPELINE\
+      \ or QUERY."
+    name: job_type
+    type: STRING
+  - description: ID that uniquely identifies the assignee resource.
+    name: assignee_id
+    type: STRING
+  - description: Number that uniquely identifies the assignee resource.
+    name: assignee_number
+    type: INTEGER
+  - description: "Type of assignee resource. Can be organization,\n        folder\
+      \ or project."
+    name: assignee_type
+    type: STRING
+  - description: "Type of event that occurred with the assignment. Can be\n      \
+      \  CREATE, UPDATE, or DELETE."
+    name: action
+    type: STRING
+  - description: "Email address of the user or subject of the workforce identity\n\
+      \        federation that made the change. google for changes\n        made by\
+      \ Google. NULL if the email address is unknown."
+    name: user_email
+    type: STRING
+  - description: "State of the assignment. Can be PENDING or\n        ACTIVE."
+    name: state
+    type: STRING
+  description: dataset details with related information
+  name: assignment_changes
+version: 2

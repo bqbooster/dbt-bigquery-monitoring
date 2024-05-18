@@ -38,19 +38,38 @@ Add the following to your `packages.yml` file:
 ```yml
 packages:
   - package: bqbooster/dbt_bigquery_monitoring
-    version: 0.3.0
+    version: 0.4.0
 ```
 
 ### Configure the package
 
-A lot of settings have default values that can be overriden using:
+Settings have default values that can be overriden using:
 
 - dbt project variables (and therefore also by CLI variable override)
 - environment variables
 
-However some of them don't so you need to set all of them in your project variables or environment variables.
+Please note that the default region is `us` and there's no way, at the time of writing, to query cross region tables but you might run that project in each region you want to monitor and [then replicate the tables to a central region](https://cloud.google.com/bigquery/docs/data-replication) to build an aggregated view.
 
-Here is the mandatory settings to set in the `dbt_project.yml` file:
+To know which region is related to a job, in the BQ UI, use the `Job history` (bottom panel), take a job and look at `Location` field when clicking on a job. You can also access the region of a dataset/table by opening the details panel of it and check the `Data location` field.
+
+#### Modes
+
+###### Region mode (default)
+In this mode, the package will monitor all the GCP projects in the region specified in the `dbt_project.yml` file.
+
+```yml
+vars:
+  # dbt bigquery monitoring vars
+  bq_region: 'us'
+```
+
+**Requirements**
+- Execution project needs to be the same as the storage project else you'll need to use the second mode.
+- If you have multiple GCP Projects in the same region, you should use the "project mode" (with `input_gcp_projects` setting to specify them) as else you will run into errors such as: `Within a standard SQL view, references to tables/views require explicit project IDs unless the entity is created in the same project that is issuing the query, but these references are not project-qualified: "region-us.INFORMATION_SCHEMA.JOBS"`.
+
+###### Project mode
+
+To enable the "project mode", you'll need to define explicitly one mandatory setting to set in the `dbt_project.yml` file:
 
 ```yml
 vars:
@@ -65,15 +84,15 @@ Settings details
 
 Following settings are defined as `dbt_project_variable` (**Environment variable**).
 
-#### Required settings
-
-- `input_gcp_projects` (**DBT_BQ_MONITORING_GCP_PROJECTS**) : list of GCP projects to monitor
-
 #### Optional settings
 
+##### Environment
+- `input_gcp_projects` (**DBT_BQ_MONITORING_GCP_PROJECTS**) : list of GCP projects to monitor (default: `[]`)
 - `bq_region` (**DBT_BQ_MONITORING_REGION**) : region where the monitored projects are located (default: `us`)
+
+##### Pricing
 - `use_flat_pricing` (**DBT_BQ_MONITORING_USE_FLAT_PRICING**) : whether to use flat pricing or not (default: `true`)
-- `per_billed_tb_price` (**DBT_BQ_MONITORING_PER_BILLED_TB_PRICE**) : price per billed TB (default: `5`)
+- `per_billed_tb_price` (**DBT_BQ_MONITORING_PER_BILLED_TB_PRICE**) : price per billed TB (default: `6,25`)
 - `free_tb_per_month` (**DBT_BQ_MONITORING_FREE_TB_PER_MONTH**) : free TB per month (default: `1`)
 - `hourly_slot_price` (**DBT_BQ_MONITORING_HOURLY_SLOT_PRICE**) : price per slot per hour (default: `0.04`)
 - `active_logical_storage_gb_price` (**DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE**) : price per active logical storage GB (default: `0.02`)
@@ -81,9 +100,11 @@ Following settings are defined as `dbt_project_variable` (**Environment variable
 - `active_physical_storage_gb_price` (**DBT_BQ_MONITORING_ACTIVE_PHYSICAL_STORAGE_GB_PRICE**) : price per active physical storage GB (default: `0.04`)
 - `long_term_physical_storage_gb_price` (**DBT_BQ_MONITORING_LONG_TERM_PHYSICAL_STORAGE_GB_PRICE**) : price per long term physical storage GB (default: `0.02`)
 - `free_storage_gb_per_month` (**DBT_BQ_MONITORING_FREE_STORAGE_GB_PER_MONTH**) : free storage GB per month (default: `10`)
-- `lookback_window_days` (**DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS**) : number of days to look back for monitoring (default: `1`)
-- `output_materialization` (**DBT_BQ_MONITORING_OUTPUT_MATERIALIZATION**) : materialization to use for the models (default: `table`)
+
+###### Package
+- `lookback_window_days` (**DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS**) : number of days to look back for monitoring (default: `7`)
 - `output_limit_size` (**DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE**) : limit size to use for the models (default: `1000`)
+
 </details>
 
 #### Add metadata to queries (Recommanded but optional)
@@ -105,7 +126,110 @@ To do so, you can use the following dbt command:
 dbt run -s tag:dbt-bigquery-monitoring
 ```
 
+#### Tags
+
+The package provides the following tags that can be used to filter the models:
+- compute: `tag:dbt-bigquery-monitoring-compute`
+- storage: `tag:dbt-bigquery-monitoring-storage`
+
+As those models can rely on base models which means you have to run at least run base once.
+To be sure, you just rely on the upstream dependency and run, for instance:
+```bash
+dbt run -s +tag:dbt-bigquery-monitoring-compute
+```
+
 ### Using the package
+
+#### Google INFORMATION_SCHEMA tables
+
+Following models are available to query the INFORMATION_SCHEMA tables. They are materialized as `ephemeral` in dbt so it acts as a "source" but let you access multiple multiple project based tables using a single `ref`.
+
+##### Example
+You can use those models such as:
+```sql
+SELECT query FROM {{ ref('information_schema_jobs') }}
+```
+
+##### Tables
+
+Here's the list (**don't forget to prefix the following list by `information_schema_` in your `ref` call**):
+- access_control
+  - object_privileges
+- bi_engine
+  - bi_capacities
+  - bi_capacity_changes
+- configuration
+  - effective_project_options
+  - organization_options
+  - organization_options_changes
+  - project_options
+  - project_options_changes
+- datasets
+  - links
+  - schemata
+  - schemata_options
+  - schemata_replicas
+  - shared_dataset_usage
+- jobs
+  - jobs
+  - jobs_by_folder
+  - jobs_by_organization
+  - jobs_by_project
+  - jobs_by_user
+- jobs_timeline
+  - jobs_timeline
+  - jobs_timeline_by_folder
+  - jobs_timeline_by_organization
+  - jobs_timeline_by_user
+- reservations
+  - assignment_changes
+  - assignments
+  - capacity_commitment_changes
+  - capacity_commitments
+  - reservation_changes
+  - reservations
+  - reservations_timeline
+- routines
+  - parameters
+  - routine_options
+  - routines
+- search_indexes
+  - search_index_columns
+  - search_indexes
+- sessions
+  - sessions
+  - sessions_by_project
+  - sessions_by_user
+- streaming
+  - streaming_timeline
+  - streaming_timeline_by_folder
+  - streaming_timeline_by_organization
+- tables
+  - column_field_paths
+  - columns
+  - constraint_column_usage
+  - key_column_usage
+  - table_constraints
+  - table_options
+  - table_snapshots
+  - table_storage
+  - table_storage_by_organization
+  - table_storage_usage_timeline
+  - table_storage_usage_timeline_by_organization
+  - tables
+- vector_indexes
+  - vector_index_columns
+  - vector_index_options
+  - vector_indexes
+- views
+  - materialized_views
+  - views
+- write_api
+  - write_api_timeline
+  - write_api_timeline_by_folder
+  - write_api_timeline_by_organization
+
+#### Models
 
 The package provides the following datamarts that can be easily used to build monitoring charts and dashboards:
 

@@ -2,25 +2,25 @@ version: 2
 
 models:
   - name: table_reference_incremental
-    description: ""
+    description: This table is storing the reference count of each table in actual BigQuery queries.
     columns:
       - name: day
         data_type: timestamp
-        description: ""
+        description: day of the creation_time
 
       - name: project_id
         data_type: string
-        description: ""
+        description: GCP project id from the referenced table
 
       - name: dataset_id
         data_type: string
-        description: ""
+        description: dataset id from the referenced table
 
       - name: table_id
         data_type: string
-        description: ""
+        description: reference table
 
       - name: reference_count
         data_type: int64
-        description: ""
+        description: number of references to the table for the given day
 

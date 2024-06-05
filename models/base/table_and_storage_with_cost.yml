@@ -121,3 +121,51 @@ models:
       - name: time_travel_physical_bytes_cost
         description: The cost of the time travel physical bytes cost part of the storage in the reference currency (default values are in dollars). This time travel data is the historical data (that has been deleted or changed). The default time travel window is 7 days. The physical bytes are the data counted as compressed bytes.
         type: FLOAT64
+
+      - name: fail_safe_physical_bytes_cost
+        description: The cost of the fail safe physical bytes cost part of the storage in the reference currency (default values are in dollars). This time travel data is the historical data (that has been deleted or changed). The default time travel window is 7 days. The physical bytes are the data counted as compressed bytes.
+        type: FLOAT64
+
+      - name: factored_table_id
+        description: The factored table id
+        type: STRING
+
+      - name: total_logical_tb
+        description: Total number of logical (uncompressed) terabytes in the table or materialized view
+        type: FLOAT64
+
+      - name: total_physical_tb
+        description: Total number of physical (compressed) terabytes used for storage, including active, long term, and time travel (deleted or changed data) terabytes
+        type: FLOAT64
+
+      - name: logical_cost_monthly_forecast
+        description: The forecasted cost of the logical bytes cost part of the storage in the reference currency (default values are in dollars). The logical bytes are the data counted as raw (uncompressed) bytes.
+        type: FLOAT64
+
+      - name: physical_cost_monthly_forecast
+        description: The forecasted cost of the physical bytes cost part of the storage in the reference currency (default values are in dollars). The physical bytes are the data counted as compressed bytes.
+        type: FLOAT64
+
+      - name: physical_cost_monthly_forecast_with_zero_time_travel_and_fail_safe
+        description: The forecasted cost of the physical bytes cost part of the storage in the reference currency (default values are in dollars) with zero time travel and fail safe. The physical bytes are the data counted as compressed bytes.
+        type: FLOAT64
+
+      - name: time_travel_per_active_byte_ratio
+        description: The ratio of time travel bytes to active bytes
+        type: FLOAT64
+
+      - name: fail_safe_per_active_byte_ratio
+        description: The ratio of fail safe bytes to active bytes
+        type: FLOAT64
+
+      - name: active_compression_ratio
+        description: The ratio of active physical bytes to active logical bytes
+        type: FLOAT64
+
+      - name: long_term_compression_ratio
+        description: The ratio of long term physical bytes to long term logical bytes
+        type: FLOAT64
+
+      - name: storage_pricing_model_difference
+        description: The difference between the storage pricing model and the default pricing model
+        type: STRING

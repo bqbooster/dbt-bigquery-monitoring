@@ -169,7 +169,7 @@ def generate_files(
     # Update the column list
     columns = update_column_list(columns, exclude_columns)
 
-    base_filename = f"{dir}/information_schema_{filename}"
+    base_filename = f"output/{dir}/information_schema_{filename}"
 
     # Create the YML file
     filename_yml = f"{base_filename}.yml"
@@ -185,7 +185,7 @@ def generate_files(
             "version": 2,
             "models": [
                 {
-                    "name": table_name.lower(),
+                    "name": "information_schema_" + table_name.lower(),
                     "description": "dataset details with related information",
                     "columns": [
                         {

@@ -25,5 +25,5 @@ models:
     name: LINKED_SCHEMA_ORG_DISPLAY_NAME
     type: STRING
   description: dataset details with related information
-  name: schemata_links
+  name: information_schema_schemata_links
 version: 2

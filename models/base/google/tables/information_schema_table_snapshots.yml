@@ -22,5 +22,5 @@ models:
     name: snapshot_time
     type: TIMESTAMP
   description: dataset details with related information
-  name: table_snapshots
+  name: information_schema_table_snapshots
 version: 2

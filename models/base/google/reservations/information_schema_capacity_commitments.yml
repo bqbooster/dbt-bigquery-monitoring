@@ -36,5 +36,5 @@ models:
     name: renewal_plan
     type: STRING
   description: dataset details with related information
-  name: capacity_commitments
+  name: information_schema_capacity_commitments
 version: 2

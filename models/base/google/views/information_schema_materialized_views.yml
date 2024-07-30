@@ -25,5 +25,5 @@ models:
     name: LAST_REFRESH_STATUS
     type: RECORD
   description: dataset details with related information
-  name: materialized_views
+  name: information_schema_materialized_views
 version: 2

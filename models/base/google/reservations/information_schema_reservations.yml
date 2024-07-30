@@ -39,5 +39,5 @@ models:
     name: edition
     type: STRING
   description: dataset details with related information
-  name: reservations
+  name: information_schema_reservations
 version: 2

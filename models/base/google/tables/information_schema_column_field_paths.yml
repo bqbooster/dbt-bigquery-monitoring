@@ -35,5 +35,5 @@ models:
     name: ROUNDING_MODE
     type: STRING
   description: dataset details with related information
-  name: column_field_paths
+  name: information_schema_column_field_paths
 version: 2

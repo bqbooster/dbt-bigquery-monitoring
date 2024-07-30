@@ -64,5 +64,5 @@ models:
     name: period_estimated_runnable_units
     type: INTEGER
   description: dataset details with related information
-  name: jobs_timeline_by_user
+  name: information_schema_jobs_timeline_by_user
 version: 2

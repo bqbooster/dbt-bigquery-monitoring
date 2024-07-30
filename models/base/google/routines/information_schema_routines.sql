@@ -17,14 +17,14 @@ Access control with IAM. -#}
         {% for project in project_list() -%}
         
     SELECT specific_catalog, specific_schema, specific_name, routine_catalog, routine_schema, routine_name, routine_type, data_type, routine_body, routine_definition, external_language, is_deterministic, security_type, created, last_altered, ddl
-    FROM `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ROUTINE`
+    FROM `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ROUTINES`
     
         {% if not loop.last %}UNION ALL{% endif %}
         {% endfor %}
     {%- else %}
         
     SELECT specific_catalog, specific_schema, specific_name, routine_catalog, routine_schema, routine_name, routine_type, data_type, routine_body, routine_definition, external_language, is_deterministic, security_type, created, last_altered, ddl
-    FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ROUTINE`
+    FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ROUTINES`
     
     {%- endif %}
     )

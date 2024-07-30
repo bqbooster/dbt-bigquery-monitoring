@@ -71,5 +71,5 @@ models:
     name: period_estimated_runnable_units
     type: INTEGER
   description: dataset details with related information
-  name: jobs_timeline_by_folder
+  name: information_schema_jobs_timeline_by_folder
 version: 2

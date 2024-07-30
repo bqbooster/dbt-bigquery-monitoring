@@ -20,5 +20,5 @@ models:
     name: GRANTEE
     type: STRING
   description: dataset details with related information
-  name: object_privileges
+  name: information_schema_object_privileges
 version: 2

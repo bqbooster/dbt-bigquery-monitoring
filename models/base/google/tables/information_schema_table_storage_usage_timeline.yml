@@ -45,5 +45,5 @@ models:
     name: BILLABLE_LONG_TERM_PHYSICAL_USAGE
     type: INT64
   description: dataset details with related information
-  name: table_storage_usage_timeline
+  name: information_schema_table_storage_usage_timeline
 version: 2

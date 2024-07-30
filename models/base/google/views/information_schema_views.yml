@@ -21,5 +21,5 @@ models:
     name: USE_STANDARD_SQL
     type: STRING
   description: dataset details with related information
-  name: views
+  name: information_schema_views
 version: 2

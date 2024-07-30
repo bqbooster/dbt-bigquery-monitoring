@@ -23,5 +23,5 @@ models:
     name: option_value
     type: STRING
   description: dataset details with related information
-  name: vector_index_options
+  name: information_schema_vector_index_options
 version: 2

@@ -42,9 +42,9 @@ models:
     name: CURRENT_PHYSICAL_BYTES
     type: INT64
   - description: "Total number of physical (compressed) bytes used for storage,\n\
-      \        including active, long-term, time travel (deleted or changed data),\
-      \ and\n        fail-safe (deleted or changed data retained after the time-travel\
-      \ window)\n        bytes."
+      \        including active, long-term, and time travel (deleted or changed data)\n\
+      \        bytes. Fail-safe (deleted or changed data retained after the time-travel\n\
+      \        window) bytes aren't included."
     name: TOTAL_PHYSICAL_BYTES
     type: INT64
   - description: "Number of physical (compressed) bytes younger than 90 days,\n  \
@@ -72,5 +72,5 @@ models:
     name: FAIL_SAFE_PHYSICAL_BYTES
     type: INT64
   description: dataset details with related information
-  name: table_storage_by_organization
+  name: information_schema_table_storage_by_organization
 version: 2

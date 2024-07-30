@@ -35,5 +35,5 @@ models:
     name: ENFORCED
     type: STRING
   description: dataset details with related information
-  name: table_constraints
+  name: information_schema_table_constraints
 version: 2

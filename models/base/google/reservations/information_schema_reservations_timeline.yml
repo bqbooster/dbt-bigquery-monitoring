@@ -38,5 +38,5 @@ models:
     name: reservation_id
     type: STRING
   description: dataset details with related information
-  name: reservations_timeline
+  name: information_schema_reservations_timeline
 version: 2

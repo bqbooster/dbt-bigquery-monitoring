@@ -30,5 +30,5 @@ models:
     name: user_email
     type: STRING
   description: dataset details with related information
-  name: sessions_by_user
+  name: information_schema_sessions_by_user
 version: 2

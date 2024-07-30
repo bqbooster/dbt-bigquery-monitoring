@@ -13,5 +13,5 @@ models:
     name: OPTION_VALUE
     type: STRING
   description: dataset details with related information
-  name: project_options
+  name: information_schema_project_options
 version: 2

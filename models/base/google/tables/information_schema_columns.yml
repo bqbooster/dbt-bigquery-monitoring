@@ -68,5 +68,5 @@ models:
     name: ROUNDING_MODE
     type: STRING
   description: dataset details with related information
-  name: columns
+  name: information_schema_columns
 version: 2

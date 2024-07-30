@@ -58,5 +58,5 @@ models:
     name: DDL
     type: STRING
   description: dataset details with related information
-  name: routine
+  name: information_schema_routines
 version: 2

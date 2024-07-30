@@ -42,5 +42,5 @@ models:
     name: state
     type: STRING
   description: dataset details with related information
-  name: assignment_changes
+  name: information_schema_assignment_changes
 version: 2

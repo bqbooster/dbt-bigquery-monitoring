@@ -36,5 +36,5 @@ models:
     name: IS_AGGREGATE
     type: STRING
   description: dataset details with related information
-  name: parameters
+  name: information_schema_parameters
 version: 2

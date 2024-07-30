@@ -37,5 +37,5 @@ models:
     name: replication_time
     type: TIMESTAMP
   description: dataset details with related information
-  name: schemata_replicas
+  name: information_schema_schemata_replicas
 version: 2

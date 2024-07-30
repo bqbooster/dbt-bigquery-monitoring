@@ -13,5 +13,5 @@ models:
     name: OPTION_VALUE
     type: STRING
   description: dataset details with related information
-  name: organization_options
+  name: information_schema_organization_options
 version: 2

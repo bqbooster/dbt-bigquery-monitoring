@@ -14,3 +14,8 @@ setup_environment:
 
 run:
 	python documentation_parser.py
+
+#test using pytest
+test:
+	pytest test_documentation_parser.py
+

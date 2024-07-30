@@ -150,5 +150,5 @@ models:
     name: query_info
     type: RECORD
   description: dataset details with related information
-  name: jobs_by_project
+  name: information_schema_jobs_by_project
 version: 2

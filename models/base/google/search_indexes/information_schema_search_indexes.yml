@@ -71,5 +71,5 @@ models:
     name: analyzer
     type: STRING
   description: dataset details with related information
-  name: search_indexes
+  name: information_schema_search_indexes
 version: 2

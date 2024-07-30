@@ -30,5 +30,5 @@ models:
     name: total_input_bytes
     type: INTEGER
   description: dataset details with related information
-  name: streaming_timeline_by_folder
+  name: information_schema_streaming_timeline_by_folder
 version: 2

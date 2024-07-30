@@ -25,5 +25,5 @@ models:
     name: CONSTRAINT_NAME
     type: STRING
   description: dataset details with related information
-  name: constraint_column_usage
+  name: information_schema_constraint_column_usage
 version: 2

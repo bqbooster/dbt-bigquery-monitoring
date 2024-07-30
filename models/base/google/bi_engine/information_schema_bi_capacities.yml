@@ -20,5 +20,5 @@ models:
     name: preferred_tables
     type: REPEATED STRING
   description: dataset details with related information
-  name: bi_capacities
+  name: information_schema_bi_capacities
 version: 2

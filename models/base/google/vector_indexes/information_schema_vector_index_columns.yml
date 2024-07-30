@@ -20,5 +20,5 @@ models:
     name: index_field_path
     type: STRING
   description: dataset details with related information
-  name: vector_index_columns
+  name: information_schema_vector_index_columns
 version: 2

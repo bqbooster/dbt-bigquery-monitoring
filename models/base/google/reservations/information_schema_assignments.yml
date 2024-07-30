@@ -16,7 +16,7 @@ models:
     name: reservation_name
     type: STRING
   - description: "The type of job that can use the reservation. Can be\n        PIPELINE,\
-      \ QUERY, ML_EXTERNAL, or\n        BACKGROUND."
+      \ QUERY, CONTINUOUS,\n        ML_EXTERNAL, or BACKGROUND."
     name: job_type
     type: STRING
   - description: ID that uniquely identifies the assignee resource.
@@ -30,5 +30,5 @@ models:
     name: assignee_type
     type: STRING
   description: dataset details with related information
-  name: assignments
+  name: information_schema_assignments
 version: 2

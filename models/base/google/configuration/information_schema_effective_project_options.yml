@@ -18,5 +18,5 @@ models:
     name: OPTION_SET_ON_ID
     type: STRING
   description: dataset details with related information
-  name: effective_project_options
+  name: information_schema_effective_project_options
 version: 2

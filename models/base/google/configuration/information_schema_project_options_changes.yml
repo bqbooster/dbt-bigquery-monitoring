@@ -20,5 +20,5 @@ models:
     name: project_number
     type: INTEGER
   description: dataset details with related information
-  name: project_options_changes
+  name: information_schema_project_options_changes
 version: 2

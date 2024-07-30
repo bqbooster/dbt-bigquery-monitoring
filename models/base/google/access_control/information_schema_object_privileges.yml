@@ -13,9 +13,12 @@ models:
   - description: The resource type, such as SCHEMA (dataset), TABLE, VIEW, and EXTERNAL.
     name: OBJECT_TYPE
     type: STRING
+  - description: The role ID, such as roles/bigquery.dataEditor.
+    name: PRIVILEGE_TYPE
+    type: STRING
   - description: The user type and user that the role is granted to.
     name: GRANTEE
     type: STRING
   description: dataset details with related information
-  name: object_privileges
+  name: information_schema_object_privileges
 version: 2

@@ -67,5 +67,5 @@ models:
     name: total_storage_bytes
     type: INTEGER
   description: dataset details with related information
-  name: vector_indexes
+  name: information_schema_vector_indexes
 version: 2

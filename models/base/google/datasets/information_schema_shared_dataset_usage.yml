@@ -54,5 +54,5 @@ models:
     name: total_bytes_processed
     type: INTEGER
   description: dataset details with related information
-  name: shared_dataset_usage
+  name: information_schema_shared_dataset_usage
 version: 2

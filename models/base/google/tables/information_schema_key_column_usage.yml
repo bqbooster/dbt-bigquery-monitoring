@@ -34,5 +34,5 @@ models:
     name: POSITION_IN_UNIQUE_CONSTRAINT
     type: INT64
   description: dataset details with related information
-  name: key_column_usage
+  name: information_schema_key_column_usage
 version: 2

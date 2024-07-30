@@ -94,5 +94,5 @@ models:
     name: upsert_stream_apply_watermark
     type: TIMESTAMP
   description: dataset details with related information
-  name: tables
+  name: information_schema_tables
 version: 2

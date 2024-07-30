@@ -83,6 +83,42 @@ def update_column_list(input_columns: List[dict], exclude_columns: List[str]):
 
     return columns
 
+def generate_sql(url: str, column_names: List[str], table_name: str, required_role_str: str):
+    # Prepare the column names as a comma-separated string
+    columns_str = ", ".join(column_names)
+
+    # Prepare the base SQL string for the project list
+    project_sql = f"""
+    SELECT {columns_str}
+    FROM `{{{{ project | trim }}}}`.`region-{{{{ var('bq_region') }}}}`.`INFORMATION_SCHEMA`.`{table_name}`
+    """
+
+    # Prepare the base SQL string for when there's no project list
+    no_project_sql = f"""
+    SELECT {columns_str}
+    FROM `region-{{{{ var('bq_region') }}}}`.`INFORMATION_SCHEMA`.`{table_name}`
+    """
+
+    # Combine everything into the final SQL string
+    sql = f"""
+    {{# More details about base table in {url} -#}}
+    {required_role_str}
+    WITH base AS (
+    {{% if project_list()|length > 0 -%}}
+        {{% for project in project_list() -%}}
+        {project_sql}
+        {{% if not loop.last %}}UNION ALL{{% endif %}}
+        {{% endfor %}}
+    {{%- else %}}
+        {no_project_sql}
+    {{%- endif %}}
+    )
+    SELECT
+    {columns_str},
+    FROM
+    base
+    """
+    return sql
 
 def generate_files(
     filename: str, dir: str, url: str, exclude_columns: List[str], override_table_name: str = None
@@ -179,30 +215,8 @@ def generate_files(
 
     # Create the SQL file
     with open(filename_sql, "w") as f:
-        f.write(
-            f"{{# More details about base table in {url} -#}}\n"
-            + required_role_str
-            + "WITH base AS (\n"
-            + "{% if project_list()|length > 0 -%}\n"
-            + "  {% for project in project_list() -%}\n"
-            + "  SELECT * FROM `{{{{ project | trim }}}}`.`region-{{{{ var('bq_region') }}}}`.`INFORMATION_SCHEMA`.`{table_name}`\n".format(
-                table_name=table_name
-            )
-            + "  {% if not loop.last %}UNION ALL{% endif %}\n"
-            + "  {% endfor %}\n"
-            + "{%- else %}\n"
-            + "  SELECT * FROM `region-{{{{ var('bq_region') }}}}`.`INFORMATION_SCHEMA`.`{table_name}`\n".format(
-                table_name=table_name
-            )
-            + "{%- endif %}\n"
-            + ")\n"
-            + "SELECT\n"
-        )
-
         column_names = [column["name"].lower() for column in columns]
-        f.write(",\n".join(column_names) + ",\n")
-
-        f.write("FROM\n" + "  base\n")
+        f.write(generate_sql(url, column_names, table_name, required_role_str))
 
     print(f"Files '{filename_sql}' and '{filename_yml}' have been created.")
 

@@ -1,6 +1,6 @@
 import pytest
 from bs4 import BeautifulSoup
-from documentation_parser import parse_required_role, parse_table_name, update_column_list
+from documentation_parser import parse_required_role, parse_table_name, update_column_list, generate_sql
 
 def test_parse_required_role():
     # Test case: Required role is present
@@ -97,3 +97,9 @@ def test_update_column_list():
         {'name': 'column3', 'type': 'RECORD', 'description': 'column3.subcolumn1 : Subcolumn 1 of Column 3\ncolumn3.subcolumn2 : Subcolumn 2 of Column 3'},
     ]
     assert result == expected_columns
+
+def test_generate_sql():
+    # Test generate_sql function
+    result = generate_sql("https://cloud.google.com/bigquery/docs/information-schema-jobs", ["field1", "field2", "field3"], "jobs", "jobs.admin")
+    expected = "\n    {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs -#}\n    jobs.admin\n    WITH base AS (\n    {% if project_list()|length > 0 -%}\n        {% for project in project_list() -%}\n        \n    SELECT field1, field2, field3\n    FROM `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`jobs`\n    \n        {% if not loop.last %}UNION ALL{% endif %}\n        {% endfor %}\n    {%- else %}\n        \n    SELECT field1, field2, field3\n    FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`jobs`\n    \n    {%- endif %}\n    )\n    SELECT\n    field1, field2, field3,\n    FROM\n    base\n    "
+    assert result == expected

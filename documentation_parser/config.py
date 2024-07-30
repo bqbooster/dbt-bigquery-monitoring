@@ -60,34 +60,39 @@ pages_to_process = {
     "jobs": {
         "dir": "jobs",
         "url": "https://cloud.google.com/bigquery/docs/information-schema-jobs",
+        "exclude_columns": ["query_info.resource_warning", "query_info.query_hashes.normalized_literals", "query_info.performance_insights", "query_info.optimization_details", "folder_numbers"],
     },
     "jobs_by_project": {
         "dir": "jobs",
         "url": "https://cloud.google.com/bigquery/docs/information-schema-jobs",
         "override_table_name": "JOBS_BY_PROJECT",
+        "exclude_columns": ["query_info.resource_warning", "query_info.query_hashes.normalized_literals", "query_info.performance_insights", "query_info.optimization_details", "folder_numbers"],
     },
     "jobs_by_user": {
         "dir": "jobs",
         "url": "https://cloud.google.com/bigquery/docs/information-schema-jobs-by-user",
+        "exclude_columns": ["query_info.resource_warning", "query_info.query_hashes.normalized_literals", "query_info.performance_insights", "query_info.optimization_details", "folder_numbers"],
     },
     "jobs_by_folder": {
         "dir": "jobs",
         "url": "https://cloud.google.com/bigquery/docs/information-schema-jobs-by-folder",
+        "exclude_columns": ["query_info.resource_warning", "query_info.query_hashes.normalized_literals", "query_info.performance_insights", "query_info.optimization_details", "folder_numbers"],
     },
     "jobs_by_organization": {
         "dir": "jobs",
         "url": "https://cloud.google.com/bigquery/docs/information-schema-jobs-by-organization",
+        "exclude_columns": ["query_info.resource_warning", "query_info.query_hashes.normalized_literals", "query_info.performance_insights", "query_info.optimization_details", "folder_numbers"],
     },
     # jobs timeline
     "jobs_timeline": {
         "dir": "jobs_timeline",
         "url": "https://cloud.google.com/bigquery/docs/information-schema-jobs-timeline",
-        "exclude_columns": ["folder_numbers"],
+        "exclude_columns": ["query_info.resource_warning", "query_info.query_hashes.normalized_literals", "query_info.performance_insights", "query_info.optimization_details", "folder_numbers"],
     },
     "jobs_timeline_by_user": {
         "dir": "jobs_timeline",
         "url": "https://cloud.google.com/bigquery/docs/information-schema-jobs-timeline-by-user",
-        "exclude_columns": ["folder_numbers"],
+        "exclude_columns": ["query_info.resource_warning", "query_info.query_hashes.normalized_literals", "query_info.performance_insights", "query_info.optimization_details", "folder_numbers"],
     },
     "jobs_timeline_by_folder": {
         "dir": "jobs_timeline",

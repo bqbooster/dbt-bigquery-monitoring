@@ -44,7 +44,7 @@ pages_to_process = {
         "dir": "datasets",
         "url": "https://cloud.google.com/bigquery/docs/information-schema-datasets-schemata",
     },
-    "links": {
+    "schemata_links": {
         "dir": "datasets",
         "url": "https://cloud.google.com/bigquery/docs/information-schema-datasets-schemata-links",
     },

@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: dataset_with_better_pricing_on_physical_billing_model
+    description: >
+      A model that identifies datasets with a better pricing model under physical billing, 
+      compared to logical billing, by evaluating the difference in storage costs.
+    meta:
+      label: "Better Pricing Model (Physical)"
+      order_fields_by: "label"
+      group_label: "Storage cost optimization"
+    columns:
+      - name: project_id
+        description: The ID of the BigQuery project.
+      - name: dataset_id
+        description: The ID of the dataset.
+      - name: total_logical_tb
+        description: The total size of the dataset in terabytes, as calculated by logical bytes.
+      - name: total_physical_tb
+        description: The total size of the dataset in terabytes, as calculated by physical bytes.
+      - name: logical_cost_monthly_forecast
+        description: The forecasted monthly storage cost for the dataset under the logical billing model.
+      - name: physical_cost_monthly_forecast
+        description: The forecasted monthly storage cost for the dataset under the physical billing model.
+      - name: storage_pricing_model_difference
+        description: The difference in storage cost between the logical and physical pricing models.

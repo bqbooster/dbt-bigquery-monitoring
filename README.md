@@ -22,7 +22,7 @@ The required permissions (listed above) are available to:
 <details>
 <summary>
 if you prefer to use custom roles, you can use the following permissions.
-</summary>
+</summary >
 
 - **bigquery.tables.get** - To [access BigQuery tables data](https://cloud.google.com/bigquery/docs/information-schema-table-storage#required_roles)
 - **bigquery.tables.list** - To [access BigQuery tables data](https://cloud.google.com/bigquery/docs/information-schema-table-storage#required_roles)
@@ -42,7 +42,7 @@ Add the following to your `packages.yml` file:
 ```yml
 packages:
   - package: bqbooster/dbt_bigquery_monitoring
-    version: 0.5.2
+    version: 0.5.3
 ```
 
 ### Configure the package

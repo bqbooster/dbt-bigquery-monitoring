@@ -111,7 +111,7 @@ Following settings are defined as `dbt_project_variable` (**Environment variable
 
 </details>
 
-#### Add metadata to queries (Recommanded but optional)
+#### Add metadata to queries (Recommended but optional)
 
 To enhance your query metadata with dbt model information, the package provides a dedicated macro that leverage "dbt query comments" (the header set at the top of each query)
 To configure the query comments, add the following config to `dbt_project.yml`.

@@ -42,7 +42,18 @@ Add the following to your `packages.yml` file:
 ```yml
 packages:
   - package: bqbooster/dbt_bigquery_monitoring
-    version: 0.5.3
+    version: 0.5.4
+```
+
+### Set up an output dataset
+
+In your dbt_project.yml file, add the following configuration:
+
+```yml
+models:
+  ## dbt-bigquery-models models will be created in the schema '<your_schema>_dbt_bigquery_monitoring' (or anything related if you override output schema system through a macro)
+  dbt_bigquery_monitoring:
+    +schema: "dbt_bigquery_monitoring"
 ```
 
 ### Configure the package
@@ -96,13 +107,15 @@ Following settings are defined as `dbt_project_variable` (**Environment variable
 
 ##### Pricing
 - `use_flat_pricing` (**DBT_BQ_MONITORING_USE_FLAT_PRICING**) : whether to use flat pricing or not (default: `true`)
-- `per_billed_tb_price` (**DBT_BQ_MONITORING_PER_BILLED_TB_PRICE**) : price per billed TB (default: `6,25`)
-- `free_tb_per_month` (**DBT_BQ_MONITORING_FREE_TB_PER_MONTH**) : free TB per month (default: `1`)
-- `hourly_slot_price` (**DBT_BQ_MONITORING_HOURLY_SLOT_PRICE**) : price per slot per hour (default: `0.04`)
-- `active_logical_storage_gb_price` (**DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE**) : price per active logical storage GB (default: `0.02`)
-- `long_term_logical_storage_gb_price` (**DBT_BQ_MONITORING_LONG_TERM_LOGICAL_STORAGE_GB_PRICE**) : price per long term logical storage GB (default: `0.01`)
-- `active_physical_storage_gb_price` (**DBT_BQ_MONITORING_ACTIVE_PHYSICAL_STORAGE_GB_PRICE**) : price per active physical storage GB (default: `0.04`)
-- `long_term_physical_storage_gb_price` (**DBT_BQ_MONITORING_LONG_TERM_PHYSICAL_STORAGE_GB_PRICE**) : price per long term physical storage GB (default: `0.02`)
+- `per_billed_tb_price` (**DBT_BQ_MONITORING_PER_BILLED_TB_PRICE**) : price in US dollars per billed TB of data processed (default: `6,25`)
+- `free_tb_per_month` (**DBT_BQ_MONITORING_FREE_TB_PER_MONTH**) : free on demand compute quota TB per month (default: `1`)
+- `hourly_slot_price` (**DBT_BQ_MONITORING_HOURLY_SLOT_PRICE**) : hourly price in US dollars per slot per hour (default: `0.04`)
+- `active_logical_storage_gb_price` (**DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE**) : monthly price in US dollars per active logical storage GB (default: `0.02`)
+- `long_term_logical_storage_gb_price` (**DBT_BQ_MONITORING_LONG_TERM_LOGICAL_STORAGE_GB_PRICE**) : monthly price in US dollars per long term logical storage GB (default: `0.01`)
+- `active_physical_storage_gb_price` (**DBT_BQ_MONITORING_ACTIVE_PHYSICAL_STORAGE_GB_PRICE**) : monthly price in US dollars per active physical storage GB (default: `0.04`)
+- `long_term_physical_storage_gb_price` (**DBT_BQ_MONITORING_LONG_TERM_PHYSICAL_STORAGE_GB_PRICE**) : monthly price in US dollars per long term physical storage GB (default: `0.02`)
+- `bi_engine_gb_hourly_price` (**DBT_BQ_MONITORING_BI_ENGINE_GB_HOURLY_PRICE**): hourly price in US dollars per BI engine GB of memory (default: `0.0416`)
+
 - `free_storage_gb_per_month` (**DBT_BQ_MONITORING_FREE_STORAGE_GB_PER_MONTH**) : free storage GB per month (default: `10`)
 
 ###### Package
@@ -154,9 +167,11 @@ You can use those models such as:
 SELECT query FROM {{ ref('information_schema_jobs') }}
 ```
 
-##### Tables
+<details>
+<summary>
+Here's the list (**don't forget to prefix the following list by `information_schema_` in your `ref` call**).
+</summary>
 
-Here's the list (**don't forget to prefix the following list by `information_schema_` in your `ref` call**):
 - access_control
   - object_privileges
 - bi_engine
@@ -252,34 +267,9 @@ The package provides the following datamarts that can be easily used to build mo
   - `read_heavy_tables`
   - `unused_tables`
 
+</details>
+
 ## Contributing
 
 If you feel like contribute, don't hesitate to open an issue and submit a PR.
-
-### Setup a profile
-
-To run the package in development mode (ie from that repository instead of through an installed package), you will need to setup a profile that will be used to connect to BigQuery.
-
-The profile used is for the project `dbt_bigquery_monitoring` and can be configured as follow for a production account using a service account keyfile:
-
-```yaml
-dbt_bigquery_monitoring:
-  outputs:
-    default:
-      type: bigquery
-
-      ## Service account auth ##
-      method: service-account
-      keyfile: [full path to your keyfile]
-
-      project: [project id] # storage project
-      execution_project: [execution project id] # execution project
-      dataset: [dataset name] # dbt_bigquery_monitoring dataset, you may just use dbt_bigquery_monitoring
-      threads: 4
-      location: [dataset location]
-      priority: interactive
-
-      timeout_seconds: 1000000
-```
-
-if you're running locally to try the package you can swap the `method` to `method: oauth` (and remove the `keyfile` line).
+For more details, please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file.

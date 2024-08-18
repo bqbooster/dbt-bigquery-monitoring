@@ -45,6 +45,8 @@ vars:
   active_physical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_ACTIVE_PHYSICAL_STORAGE_GB_PRICE', 0.04) }}"
   long_term_physical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_LONG_TERM_PHYSICAL_STORAGE_GB_PRICE', 0.02) }}"
   free_storage_gb_per_month: "{{ env_var('DBT_BQ_MONITORING_FREE_STORAGE_GB_PER_MONTH', 10) }}"
+  # BI Engine pricing
+  bi_engine_gb_hourly_price: "{{ env_var('DBT_BQ_MONITORING_BI_ENGINE_GB_HOURLY_PRICE', 0.0416) }}"
 
   # Project input configuration
   lookback_window_days: "{{ env_var('DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS', 7) }}"

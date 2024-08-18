@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: bigquery_monitoring_options
+    description: This model contains current configuration options and values for dbt BigQuery monitoring extension.
+    columns:
+      - name: option_label
+        description: The label of the configuration option.
+      - name: option_value
+        description: The value of the configuration option.

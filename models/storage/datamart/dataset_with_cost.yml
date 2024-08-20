@@ -1,0 +1,130 @@
+version: 2
+
+models:
+  - name: dataset_with_cost
+    description: Dataset details and related storage with cost information.
+
+    columns:
+      - name: project_id
+        description: The project ID of the project that contains the dataset.
+        type: STRING
+
+      - name: dataset_id
+        description: The name of the dataset that contains the table or materialized view, also referred to as the datasetId.
+        type: STRING
+
+      - name: project_number
+        description: The project number of the project that contains the dataset.
+        type: INT64
+
+      - name: storage_last_modified_time
+        description: The most recent time that data was written to the table.
+        type: TIMESTAMP
+
+      - name: total_rows
+        description: The total number of rows in the table or materialized view.
+        type: INT64
+
+      - name: total_partitions
+        description: The number of partitions present in the table or materialized view. Unpartitioned tables return 0.
+        type: INT64
+
+      - name: total_logical_bytes
+        description: Total number of logical (uncompressed) bytes in the table or materialized view.
+        type: INT64
+
+      - name: active_logical_bytes
+        description: Number of logical (uncompressed) bytes that are less than 90 days old.
+        type: INT64
+
+      - name: long_term_logical_bytes
+        description: Number of logical (uncompressed) bytes that are more than 90 days old.
+        type: INT64
+
+      - name: total_physical_bytes
+        description: Total number of physical (compressed) bytes used for storage, including active, long term, and time travel (deleted or changed data) bytes.
+        type: INT64
+
+      - name: active_physical_bytes
+        description: Number of physical (compressed) bytes less than 90 days old, including time travel (deleted or changed data) bytes.
+        type: INT64
+
+      - name: long_term_physical_bytes
+        description: Number of physical (compressed) bytes more than 90 days old.
+        type: INT64
+
+      - name: time_travel_physical_bytes
+        description: Number of physical (compressed) bytes used by time travel storage (deleted or changed data).
+        type: INT64
+
+      - name: fail_safe_physical_bytes
+        description: Number of physical (compressed) bytes used by fail-safe storage.
+        type: INT64
+
+      - name: active_logical_bytes_cost
+        description: The cost of active logical bytes storage in the reference currency (e.g., dollars). Active data is less than 90 days old and counted as raw (uncompressed) bytes.
+        type: FLOAT64
+
+      - name: long_term_logical_bytes_cost
+        description: The cost of long-term logical bytes storage in the reference currency. Long-term data is more than 90 days old and counted as raw (uncompressed) bytes.
+        type: FLOAT64
+
+      - name: active_physical_bytes_cost
+        description: The cost of active physical bytes storage in the reference currency. Active data is less than 90 days old and counted as compressed bytes.
+        type: FLOAT64
+
+      - name: long_term_physical_bytes_cost
+        description: The cost of long-term physical bytes storage in the reference currency. Long-term data is more than 90 days old and counted as compressed bytes.
+        type: FLOAT64
+
+      - name: time_travel_physical_bytes_cost
+        description: The cost of time travel physical bytes storage in the reference currency. Time travel data is historical data that has been deleted or changed.
+        type: FLOAT64
+
+      - name: fail_safe_physical_bytes_cost
+        description: The cost of fail-safe physical bytes storage in the reference currency. Fail-safe data is historical data that has been deleted or changed.
+        type: FLOAT64
+
+      - name: total_logical_tb
+        description: Total number of logical (uncompressed) terabytes in the table or materialized view.
+        type: FLOAT64
+
+      - name: total_physical_tb
+        description: Total number of physical (compressed) terabytes used for storage, including active, long term, and time travel (deleted or changed data) terabytes.
+        type: FLOAT64
+
+      - name: logical_cost_monthly_forecast
+        description: The forecasted monthly cost of the logical bytes storage in the reference currency.
+        type: FLOAT64
+
+      - name: physical_cost_monthly_forecast
+        description: The forecasted monthly cost of the physical bytes storage in the reference currency.
+        type: FLOAT64
+
+      - name: physical_cost_monthly_forecast_with_zero_time_travel_and_fail_safe
+        description: The forecasted monthly cost of the physical bytes storage in the reference currency with zero time travel and fail-safe costs.
+        type: FLOAT64
+
+      - name: time_travel_per_active_byte_ratio
+        description: The ratio of time travel physical bytes to active physical bytes.
+        type: FLOAT64
+
+      - name: fail_safe_per_active_byte_ratio
+        description: The ratio of fail-safe physical bytes to active physical bytes.
+        type: FLOAT64
+
+      - name: active_compression_ratio
+        description: The ratio of active logical bytes to active physical bytes minus time travel bytes.
+        type: FLOAT64
+
+      - name: long_term_compression_ratio
+        description: The ratio of long-term logical bytes to long-term physical bytes.
+        type: FLOAT64
+
+      - name: prefer_physical_pricing_model
+        description: A boolean flag indicating whether the physical storage pricing model is preferred over the logical storage pricing model.
+        type: BOOLEAN
+
+      - name: storage_pricing_model_difference
+        description: The difference between the logical and physical storage pricing models.
+        type: FLOAT64

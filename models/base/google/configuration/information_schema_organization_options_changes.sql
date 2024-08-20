@@ -7,7 +7,7 @@
       ask your administrator to grant you the
     
   
-  BigQuery Admin  (roles/bigquery.admin) IAM role on organization.
+  BigQuery Admin  (roles/bigquery.admin) IAM role on your organization.
   
 
   

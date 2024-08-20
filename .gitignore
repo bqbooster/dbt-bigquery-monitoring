@@ -1,11 +1,19 @@
+# IDE
 .idea/
+.vscode/
+# cache
+.cache
 # standard dbt ignore
 target/
 dbt_modules/
 dbt_packages/
 logs/
 /.user.yml
-documenation_parser/html_content.html
 # ignore any __pycache__ directories
 __pycache__/
+# ignore temporary documentation parser files
 documentation_parser/tmp_html_content.html
+documentation_parser/output/
+# reports
+reports/
+

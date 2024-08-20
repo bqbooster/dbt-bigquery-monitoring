@@ -1,0 +1,32 @@
+name: release
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ CHANGELOG.md ]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Get the latest version
+      id: latest
+      uses: miniscruff/changie-action@v2
+      with:
+        version: latest
+        args: latest
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        body_path: ".changes/${{ steps.latest.outputs.output }}.md"
+        tag_name: "${{ steps.latest.outputs.output }}"
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        body: View full release notes in the [Changelog](https://github.com/bqbooster/dbt-bigquery-monitoring/blob/main/CHANGELOG.md)
+        tag_name: v2 # currently no way of finding this in changie directly

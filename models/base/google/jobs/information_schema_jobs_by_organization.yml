@@ -23,7 +23,8 @@ models:
   - description: Details of any errors as ErrorProto objects.
     name: error_result
     type: RECORD
-  - description: The ID of the job. For example, bquxjob_1234.
+  - description: "The ID of the job if a job was created. Otherwise, the query ID\
+      \ of a query using short\n        query mode. For example, bquxjob_1234."
     name: job_id
     type: STRING
   - description: "Query\n          stages of the job.\n\n        Note: This column's\
@@ -68,8 +69,7 @@ models:
       \ the location of the reservation\nRESERVATION_NAME: the name of the reservation"
     name: reservation_id
     type: STRING
-  - description: "Details about the session\n        in which this job ran, if any.\
-      \ (Preview)"
+  - description: "Details about the session\n        in which this job ran, if any."
     name: session_info
     type: RECORD
   - description: "The start time of this job, in milliseconds since the epoch. This\
@@ -126,6 +126,17 @@ models:
   - description: "Statistics of\n        materialized views considered in a query\
       \ job. (Preview)"
     name: materialized_view_statistics
+    type: RECORD
+  - description: "job_creation_reason.code : Specifies the high level reason why a\
+      \ job was created.\n        Possible values are:\n        \nREQUESTED: job creation\
+      \ was requested.\nLONG_RUNNING: the query request ran beyond a system defined\
+      \ timeout\n            specified by the\n            timeoutMs\n           \
+      \ field in the QueryRequest. As a result it was considered a long running\n\
+      \            operation for which a job was created.\nLARGE_RESULTS: the results\
+      \ from the query cannot fit in the in-line\n            response.\nOTHER: the\
+      \ system has determined that the query needs to be executed as a\n         \
+      \   job."
+    name: job_creation_reason
     type: RECORD
   - description: "query_info.resource_warning : The warning message that appears if\
       \ the resource usage during query processing is above the internal threshold\

@@ -7,7 +7,6 @@
 {%- set options = [
   'bq_region',
   'input_gcp_projects',
-  'output_dataset',
   'use_flat_pricing',
   'per_billed_tb_price',
   'free_tb_per_month',

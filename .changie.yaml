@@ -10,11 +10,15 @@ kindFormat: '### {{.Kind}}'
 changeFormat: |-
   {{- $IssueList := list }}
   {{- $changes := splitList " " $.Custom.Issue }}
-  {{- range $issueNbr := $changes }}
-    {{- $changeLink := "[#nbr](https://github.com/bqbooster/dbt-bigquery-monitoring/issues/nbr)" | replace "nbr" $issueNbr }}
-    {{- $IssueList = append $IssueList $changeLink  }}
-  {{- end -}}
-  - {{.Body}} ({{ range $index, $element := $IssueList }}{{if $index}}, {{end}}{{$element}}{{end}})
+  {{- if ne (len $changes) 0 }}
+    {{- range $issueNbr := $changes }}
+      {{- $changeLink := "[#nbr](https://github.com/bqbooster/dbt-bigquery-monitoring/issues/nbr)" | replace "nbr" $issueNbr }}
+      {{- $IssueList = append $IssueList $changeLink }}
+    {{- end }}
+    - {{.Body}} ({{ range $index, $element := $IssueList }}{{if $index}}, {{end}}{{$element}}{{end}})
+  {{- else }}
+    - {{.Body}}
+  {{- end }}
 
 kinds:
   - label: Breaking Changes
@@ -38,9 +42,9 @@ custom:
   type: string
   minLength: 3
 - key: Issue
-  label: GitHub Issue Number (separated by a single space if multiple)
+  label: GitHub Issue Number (optional, separated by a single space if multiple)
   type: string
-  minLength: 1
+  minLength: 0
 
 footerFormat: |
   {{- $contributorDict := dict }}
@@ -53,30 +57,30 @@ footerFormat: |
       {{- $authorLower := lower $author }}
       {{- /* we only want to include non-core team contributors */}}
       {{- if not (has $authorLower $maintainers)}}
-        {{- $changeList := splitList " " $change.Custom.Author }}
-          {{- $IssueList := list }}
-          {{- $changeLink := $change.Kind }}
-          {{- $changes := splitList " " $change.Custom.Issue }}
+        {{- $IssueList := list }}
+        {{- $changes := splitList " " $change.Custom.Issue }}
+        {{- if ne (len $changes) 0 }}
           {{- range $issueNbr := $changes }}
             {{- $changeLink := "[#nbr](https://github.com/bqbooster/dbt-bigquery-monitoring/issues/nbr)" | replace "nbr" $issueNbr }}
-            {{- $IssueList = append $IssueList $changeLink  }}
+            {{- $IssueList = append $IssueList $changeLink }}
           {{- end }}
-          {{- /* check if this contributor has other changes associated with them already */}}
-          {{- if hasKey $contributorDict $author }}
-            {{- $contributionList := get $contributorDict $author }}
-            {{- $contributionList = concat $contributionList $IssueList  }}
-            {{- $contributorDict := set $contributorDict $author $contributionList }}
-          {{- else }}
-            {{- $contributionList := $IssueList }}
-            {{- $contributorDict := set $contributorDict $author $contributionList }}
-          {{- end }}
-        {{- end}}
-    {{- end}}
+        {{- end }}
+        {{- /* check if this contributor has other changes associated with them already */}}
+        {{- if hasKey $contributorDict $author }}
+          {{- $contributionList := get $contributorDict $author }}
+          {{- $contributionList = concat $contributionList $IssueList }}
+          {{- $contributorDict = set $contributorDict $author $contributionList }}
+        {{- else }}
+          {{- $contributionList := $IssueList }}
+          {{- $contributorDict = set $contributorDict $author $contributionList }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
   {{- end }}
   {{- /* no indentation here for formatting so the final markdown doesn't have unneeded indentations */}}
   {{- if $contributorDict}}
   ### Contributors
   {{- range $k,$v := $contributorDict }}
-  - [@{{$k}}](https://github.com/{{$k}}) ({{ range $index, $element := $v }}{{if $index}}, {{end}}{{$element}}{{end}})
+  - [@{{$k}}](https://github.com/{{$k}}){{ if $v }} ({{ range $index, $element := $v }}{{if $index}}, {{end}}{{$element}}{{end}}){{ end }}
   {{- end }}
   {{- end }}

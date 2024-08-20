@@ -102,6 +102,19 @@ pages_to_process = {
         "dir": "jobs_timeline",
         "url": "https://cloud.google.com/bigquery/docs/information-schema-jobs-timeline-by-organization",
     },
+    # recommendations and insights
+    "insights": {
+        "dir": "recommendations_and_insights",
+        "url": "https://cloud.google.com/bigquery/docs/information-schema-insights",
+    },
+    "recommendations": {
+        "dir": "recommendations_and_insights",
+        "url": "https://cloud.google.com/bigquery/docs/information-schema-recommendations",
+    },
+    "recommendations_by_organization": {
+        "dir": "recommendations_and_insights",
+        "url": "https://cloud.google.com/bigquery/docs/information-schema-recommendations-by-org",
+    },
     # reservations
     "assignments": {
         "dir": "reservations",

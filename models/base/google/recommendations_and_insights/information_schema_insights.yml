@@ -1,0 +1,49 @@
+models:
+- columns:
+  - description: Base64 encoded ID that contains the insight type and insight ID
+    name: insight_id
+    type: STRING
+  - description: The type of the Insight. For example, google.bigquery.materializedview.Insight.
+    name: insight_type
+    type: STRING
+  - description: The subtype of the insight.
+    name: subtype
+    type: STRING
+  - description: The ID of the project.
+    name: project_id
+    type: STRING
+  - description: The number of the project.
+    name: project_number
+    type: STRING
+  - description: The description about the recommendation.
+    name: description
+    type: STRING
+  - description: This field represents the time when the insight was last refreshed.
+    name: last_updated_time
+    type: TIMESTAMP
+  - description: The optimization category of the impact.
+    name: category
+    type: STRING
+  - description: Fully qualified resource names this insight is targeting.
+    name: target_resources
+    type: STRING
+  - description: The state of the insight. For a list of possible values, see Value.
+    name: state
+    type: STRING
+  - description: The severity of the Insight. For a list of possible values, see Severity.
+    name: severity
+    type: STRING
+  - description: Full recommendation names this insight is associated with. Recommendation
+      name is the Base64 encoded representation of recommender type and the recommendations
+      ID.
+    name: associated_recommendation_ids
+    type: STRING
+  - description: "Additional details about the insight.\n      \ncontent: Insight\
+      \ content in JSON format.\nstate_metadata: Metadata about the state of the Insight.\
+      \ Contains key-value pairs.\nobservation_period_seconds: Observation Period\
+      \ for generating the insight."
+    name: additional_details
+    type: RECORD
+  description: dataset details with related information
+  name: information_schema_insights
+version: 2

@@ -1,25 +1,25 @@
-models:
-- columns:
-  - description: The name of the project that contains the dataset
-    name: TABLE_CATALOG
-    type: STRING
-  - description: "The name of the dataset that contains the view also referred to\
-      \ as the\n        dataset id"
-    name: TABLE_SCHEMA
-    type: STRING
-  - description: The name of the view also referred to as the table id
-    name: TABLE_NAME
-    type: STRING
-  - description: The SQL query that defines the view
-    name: VIEW_DEFINITION
-    type: STRING
-  - description: The value returned is always NULL
-    name: CHECK_OPTION
-    type: STRING
-  - description: "YES if the view was created by using a\n        GoogleSQL query;\
-      \ NO if useLegacySql\n        is set to true"
-    name: USE_STANDARD_SQL
-    type: STRING
-  description: dataset details with related information
-  name: information_schema_views
 version: 2
+models:
+- name: information_schema_views
+  description: dataset details with related information
+  columns:
+  - name: TABLE_CATALOG
+    description: The name of the project that contains the dataset
+    type: STRING
+  - name: TABLE_SCHEMA
+    description: "The name of the dataset that contains the view also referred to\
+      \ as the\n        dataset id"
+    type: STRING
+  - name: TABLE_NAME
+    description: The name of the view also referred to as the table id
+    type: STRING
+  - name: VIEW_DEFINITION
+    description: The SQL query that defines the view
+    type: STRING
+  - name: CHECK_OPTION
+    description: The value returned is always NULL
+    type: STRING
+  - name: USE_STANDARD_SQL
+    description: "YES if the view was created by using a\n        GoogleSQL query;\
+      \ NO if useLegacySql\n        is set to true"
+    type: STRING

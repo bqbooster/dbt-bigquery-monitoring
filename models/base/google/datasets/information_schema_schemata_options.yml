@@ -1,24 +1,24 @@
+version: 2
 models:
-- columns:
-  - description: The name of the project that contains the dataset
-    name: CATALOG_NAME
+- name: information_schema_schemata_options
+  description: dataset details with related information
+  columns:
+  - name: CATALOG_NAME
+    description: The name of the project that contains the dataset
     type: STRING
-  - description: The name of the dataset, also referred to as the datasetId
-    name: SCHEMA_NAME
+  - name: SCHEMA_NAME
+    description: The name of the dataset, also referred to as the datasetId
     type: STRING
-  - description: "The name of the option. For a list of supported options, see the\n\
+  - name: OPTION_NAME
+    description: "The name of the option. For a list of supported options, see the\n\
       \      schema options list.\n      The storage_billing_model option is only\
       \ displayed for\n      datasets that have been updated after December 1, 2022.\
       \ For datasets that\n      were last updated before that date, the storage billing\
       \ model is\n      LOGICAL."
-    name: OPTION_NAME
     type: STRING
-  - description: The data type of the option
-    name: OPTION_TYPE
+  - name: OPTION_TYPE
+    description: The data type of the option
     type: STRING
-  - description: The value of the option
-    name: OPTION_VALUE
+  - name: OPTION_VALUE
+    description: The value of the option
     type: STRING
-  description: dataset details with related information
-  name: information_schema_schemata_options
-version: 2

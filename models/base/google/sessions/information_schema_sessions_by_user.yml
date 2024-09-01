@@ -1,34 +1,34 @@
-models:
-- columns:
-  - description: "(Partitioning column) Creation time of this session.\n        Partitioning\
-      \ is based on the UTC time of this timestamp."
-    name: creation_time
-    type: TIMESTAMP
-  - description: "(Partitioning column) Expiration time of this session.\n       \
-      \ Partitioning is based on the UTC time of this timestamp."
-    name: expiration_time
-    type: TIMESTAMP
-  - description: "Is the session is still active? TRUE if yes, otherwise\n       \
-      \ FALSE."
-    name: is_active
-    type: BOOL
-  - description: "(Partitioning column) Time when the session was last modified.\n\
-      \        Partitioning is based on the UTC time of this timestamp."
-    name: last_modified_time
-    type: TIMESTAMP
-  - description: (Clustering column) ID of the project.
-    name: project_id
-    type: STRING
-  - description: Number of the project.
-    name: project_number
-    type: INTEGER
-  - description: ID of the session. For example, bquxsession_1234.
-    name: session_id
-    type: STRING
-  - description: "(Clustering column) Email address or service account of\n      \
-      \  the user who ran the session."
-    name: user_email
-    type: STRING
-  description: dataset details with related information
-  name: information_schema_sessions_by_user
 version: 2
+models:
+- name: information_schema_sessions_by_user
+  description: dataset details with related information
+  columns:
+  - name: creation_time
+    description: "(Partitioning column) Creation time of this session.\n        Partitioning\
+      \ is based on the UTC time of this timestamp."
+    type: TIMESTAMP
+  - name: expiration_time
+    description: "(Partitioning column) Expiration time of this session.\n       \
+      \ Partitioning is based on the UTC time of this timestamp."
+    type: TIMESTAMP
+  - name: is_active
+    description: "Is the session is still active? TRUE if yes, otherwise\n       \
+      \ FALSE."
+    type: BOOL
+  - name: last_modified_time
+    description: "(Partitioning column) Time when the session was last modified.\n\
+      \        Partitioning is based on the UTC time of this timestamp."
+    type: TIMESTAMP
+  - name: project_id
+    description: (Clustering column) ID of the project.
+    type: STRING
+  - name: project_number
+    description: Number of the project.
+    type: INTEGER
+  - name: session_id
+    description: ID of the session. For example, bquxsession_1234.
+    type: STRING
+  - name: user_email
+    description: "(Clustering column) Email address or service account of\n      \
+      \  the user who ran the session."
+    type: STRING

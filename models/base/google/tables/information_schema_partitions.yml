@@ -1,0 +1,34 @@
+version: 2
+models:
+- name: information_schema_partitions
+  description: dataset details with related information
+  columns:
+  - name: TABLE_CATALOG
+    description: The project ID of the project that contains the table
+    type: STRING
+  - name: TABLE_SCHEMA
+    description: "The name of the dataset that contains the table, also referred to\
+      \ as\n        the datasetId"
+    type: STRING
+  - name: TABLE_NAME
+    description: The name of the table, also referred to as the tableId
+    type: STRING
+  - name: PARTITION_ID
+    description: "A single partition's ID. For unpartitioned tables, the value is\n\
+      \        NULL. For partitioned tables that contain rows with\n        NULL values\
+      \ in the partitioning column, the value is\n        __NULL__."
+    type: STRING
+  - name: TOTAL_ROWS
+    description: The total number of rows in the partition
+    type: INTEGER
+  - name: TOTAL_LOGICAL_BYTES
+    description: The total number of logical bytes in the partition
+    type: INTEGER
+  - name: LAST_MODIFIED_TIME
+    description: The time when the data was most recently written to the partition
+    type: TIMESTAMP
+  - name: STORAGE_TIER
+    description: "The partition's storage tier:\n\nACTIVE: the partition is billed\
+      \ as\n            active storage\nLONG_TERM: the partition is billed as\n  \
+      \          long-term storage"
+    type: STRING

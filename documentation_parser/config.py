@@ -200,15 +200,21 @@ pages_to_process = {
         "url": "https://cloud.google.com/bigquery/docs/information-schema-column-field-paths",
     },
     "constraint_column_usage": {
+        "type": "dataset",
         "dir": "tables",
         "url": "https://cloud.google.com/bigquery/docs/information-schema-constraint-column-usage",
     },
     "key_column_usage": {
+        "type": "dataset",
         "dir": "tables",
         "url": "https://cloud.google.com/bigquery/docs/information-schema-key-column-usage",
     },
     # partitions is per dataset
-    # "partitions": {"dir": "tables","url": "https://cloud.google.com/bigquery/docs/information-schema-partitions"},
+    "partitions": {
+        "type": "dataset",
+        "dir": "tables",
+        "url": "https://cloud.google.com/bigquery/docs/information-schema-partitions"
+    },
     "tables": {
         "dir": "tables",
         "url": "https://cloud.google.com/bigquery/docs/information-schema-tables",

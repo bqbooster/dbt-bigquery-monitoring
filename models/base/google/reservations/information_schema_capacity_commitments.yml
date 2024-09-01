@@ -1,40 +1,40 @@
+version: 2
 models:
-- columns:
-  - description: The DDL statement used to create this capacity commitment.
-    name: ddl
+- name: information_schema_capacity_commitments
+  description: dataset details with related information
+  columns:
+  - name: ddl
+    description: The DDL statement used to create this capacity commitment.
     type: STRING
-  - description: ID of the administration project.
-    name: project_id
+  - name: project_id
+    description: ID of the administration project.
     type: STRING
-  - description: Number of the administration project.
-    name: project_number
+  - name: project_number
+    description: Number of the administration project.
     type: INTEGER
-  - description: ID that uniquely identifies the capacity commitment.
-    name: capacity_commitment_id
+  - name: capacity_commitment_id
+    description: ID that uniquely identifies the capacity commitment.
     type: STRING
-  - description: Commitment plan of the capacity commitment.
-    name: commitment_plan
+  - name: commitment_plan
+    description: Commitment plan of the capacity commitment.
     type: STRING
-  - description: "State the capacity commitment is in. Can be PENDING or\n       \
+  - name: state
+    description: "State the capacity commitment is in. Can be PENDING or\n       \
       \ ACTIVE."
-    name: state
     type: STRING
-  - description: Slot count associated with the capacity commitment.
-    name: slot_count
+  - name: slot_count
+    description: Slot count associated with the capacity commitment.
     type: INTEGER
-  - description: The edition associated with this reservation. For more information
+  - name: edition
+    description: The edition associated with this reservation. For more information
       about editions, see Introduction to BigQuery editions.
-    name: edition
     type: STRING
-  - description: Whether the commitment is associated with the legacy flat-rate capacity
+  - name: is_flat_rate
+    description: Whether the commitment is associated with the legacy flat-rate capacity
       model or an edition. If FALSE, the current commitment is associated with an
       edition. If TRUE, the commitment is the legacy flat-rate capacity model.
-    name: is_flat_rate
     type: BOOL
-  - description: New commitment plan after the end of current commitment plan. You
+  - name: renewal_plan
+    description: New commitment plan after the end of current commitment plan. You
       can change the renewal plan for a commitment at any time until it expires.
-    name: renewal_plan
     type: STRING
-  description: dataset details with related information
-  name: information_schema_capacity_commitments
-version: 2

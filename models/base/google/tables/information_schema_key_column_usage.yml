@@ -1,38 +1,38 @@
+version: 2
 models:
-- columns:
-  - description: The constraint project name.
-    name: CONSTRAINT_CATALOG
+- name: information_schema_key_column_usage
+  description: dataset details with related information
+  columns:
+  - name: CONSTRAINT_CATALOG
+    description: The constraint project name.
     type: STRING
-  - description: The constraint dataset name.
-    name: CONSTRAINT_SCHEMA
+  - name: CONSTRAINT_SCHEMA
+    description: The constraint dataset name.
     type: STRING
-  - description: The constraint name.
-    name: CONSTRAINT_NAME
+  - name: CONSTRAINT_NAME
+    description: The constraint name.
     type: STRING
-  - description: The project name of the constrained table.
-    name: TABLE_CATALOG
+  - name: TABLE_CATALOG
+    description: The project name of the constrained table.
     type: STRING
-  - description: The name of the constrained table dataset.
-    name: TABLE_SCHEMA
+  - name: TABLE_SCHEMA
+    description: The name of the constrained table dataset.
     type: STRING
-  - description: The name of the constrained table.
-    name: TABLE_NAME
+  - name: TABLE_NAME
+    description: The name of the constrained table.
     type: STRING
-  - description: The name of the constrained column.
-    name: COLUMN_NAME
+  - name: COLUMN_NAME
+    description: The name of the constrained column.
     type: STRING
-  - description: 'The ordinal position of the column within the constraint key
+  - name: ORDINAL_POSITION
+    description: 'The ordinal position of the column within the constraint key
 
       (starting at 1).'
-    name: ORDINAL_POSITION
     type: INT64
-  - description: 'For foreign keys, the ordinal position of the column within the
+  - name: POSITION_IN_UNIQUE_CONSTRAINT
+    description: 'For foreign keys, the ordinal position of the column within the
 
       primary key constraint (starting at 1). This value is NULL
 
       for primary key constraints.'
-    name: POSITION_IN_UNIQUE_CONSTRAINT
     type: INT64
-  description: dataset details with related information
-  name: information_schema_key_column_usage
-version: 2

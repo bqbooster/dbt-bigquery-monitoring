@@ -1,31 +1,31 @@
-models:
-- columns:
-  - description: The name of the project that contains the dataset
-    name: CATALOG_NAME
-    type: STRING
-  - description: The dataset's name also referred to as the datasetId
-    name: SCHEMA_NAME
-    type: STRING
-  - description: The value is always NULL
-    name: SCHEMA_OWNER
-    type: STRING
-  - description: The dataset's creation time
-    name: CREATION_TIME
-    type: TIMESTAMP
-  - description: The dataset's last modified time
-    name: LAST_MODIFIED_TIME
-    type: TIMESTAMP
-  - description: The dataset's geographic location
-    name: LOCATION
-    type: STRING
-  - description: "The CREATE SCHEMA\n        DDL statement that can be used to create\
-      \ the dataset"
-    name: DDL
-    type: STRING
-  - description: "The name of the default collation specification\n        if it exists;\
-      \ otherwise, NULL."
-    name: DEFAULT_COLLATION_NAME
-    type: STRING
-  description: dataset details with related information
-  name: information_schema_schemata
 version: 2
+models:
+- name: information_schema_schemata
+  description: dataset details with related information
+  columns:
+  - name: CATALOG_NAME
+    description: The name of the project that contains the dataset
+    type: STRING
+  - name: SCHEMA_NAME
+    description: The dataset's name also referred to as the datasetId
+    type: STRING
+  - name: SCHEMA_OWNER
+    description: The value is always NULL
+    type: STRING
+  - name: CREATION_TIME
+    description: The dataset's creation time
+    type: TIMESTAMP
+  - name: LAST_MODIFIED_TIME
+    description: The dataset's last modified time
+    type: TIMESTAMP
+  - name: LOCATION
+    description: The dataset's geographic location
+    type: STRING
+  - name: DDL
+    description: "The CREATE SCHEMA\n        DDL statement that can be used to create\
+      \ the dataset"
+    type: STRING
+  - name: DEFAULT_COLLATION_NAME
+    description: "The name of the default collation specification\n        if it exists;\
+      \ otherwise, NULL."
+    type: STRING

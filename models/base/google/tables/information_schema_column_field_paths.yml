@@ -1,39 +1,39 @@
+version: 2
 models:
-- columns:
-  - description: The project ID of the project that contains the dataset
-    name: TABLE_CATALOG
+- name: information_schema_column_field_paths
+  description: dataset details with related information
+  columns:
+  - name: TABLE_CATALOG
+    description: The project ID of the project that contains the dataset
     type: STRING
-  - description: "The name of the dataset that contains the table also referred to\
+  - name: TABLE_SCHEMA
+    description: "The name of the dataset that contains the table also referred to\
       \ as\n        the datasetId"
-    name: TABLE_SCHEMA
     type: STRING
-  - description: The name of the table or view also referred to as the tableId
-    name: TABLE_NAME
+  - name: TABLE_NAME
+    description: The name of the table or view also referred to as the tableId
     type: STRING
-  - description: The name of the column
-    name: COLUMN_NAME
+  - name: COLUMN_NAME
+    description: The name of the column
     type: STRING
-  - description: "The path to a column nested\n        within a `RECORD` or `STRUCT`\
+  - name: FIELD_PATH
+    description: "The path to a column nested\n        within a `RECORD` or `STRUCT`\
       \ column"
-    name: FIELD_PATH
     type: STRING
-  - description: "The column's GoogleSQL\n        data type"
-    name: DATA_TYPE
+  - name: DATA_TYPE
+    description: "The column's GoogleSQL\n        data type"
     type: STRING
-  - description: The column's description
-    name: DESCRIPTION
+  - name: DESCRIPTION
+    description: The column's description
     type: STRING
-  - description: "The name of the collation specification\n        if it exists; otherwise,\
+  - name: COLLATION_NAME
+    description: "The name of the collation specification\n        if it exists; otherwise,\
       \ NULL\n\n        If a STRING, ARRAY<STRING>, or\n        STRING field in a\
       \ STRUCT is passed in, the\n        collation specification is returned if it\
       \ exists; otherwise,\n        NULL is returned"
-    name: COLLATION_NAME
     type: STRING
-  - description: "The mode of rounding that's used when applying precision and scale\
+  - name: ROUNDING_MODE
+    description: "The mode of rounding that's used when applying precision and scale\
       \ to\n        parameterized NUMERIC or BIGNUMERIC values;\n        otherwise,\
       \ the value is NULL"
-    name: ROUNDING_MODE
     type: STRING
-  description: dataset details with related information
-  name: information_schema_column_field_paths
-version: 2

@@ -1,49 +1,49 @@
+version: 2
 models:
-- columns:
-  - description: The project ID of the project that contains the dataset
-    name: PROJECT_ID
+- name: information_schema_table_storage_usage_timeline_by_organization
+  description: dataset details with related information
+  columns:
+  - name: PROJECT_ID
+    description: The project ID of the project that contains the dataset
     type: STRING
-  - description: The project ID of the project that contains the dataset
-    name: TABLE_CATALOG
+  - name: TABLE_CATALOG
+    description: The project ID of the project that contains the dataset
     type: STRING
-  - description: The project number of the project that contains the dataset
-    name: PROJECT_NUMBER
+  - name: PROJECT_NUMBER
+    description: The project number of the project that contains the dataset
     type: INT64
-  - description: "The name of the dataset that contains the table or materialized\
+  - name: TABLE_SCHEMA
+    description: "The name of the dataset that contains the table or materialized\
       \ view,\n       also referred to as the datasetId"
-    name: TABLE_SCHEMA
     type: STRING
-  - description: "The name of the table or materialized view, also referred to as\
+  - name: TABLE_NAME
+    description: "The name of the table or materialized view, also referred to as\
       \ the\n       tableId"
-    name: TABLE_NAME
     type: STRING
-  - description: "The total logical usage, in MB second.\nReturns 0 if the dataset\
+  - name: BILLABLE_TOTAL_LOGICAL_USAGE
+    description: "The total logical usage, in MB second.\nReturns 0 if the dataset\
       \ uses the physical storage\n     billing model."
-    name: BILLABLE_TOTAL_LOGICAL_USAGE
     type: INT64
-  - description: "The logical usage that is less than 90 days old, in MB\n     second.\n\
+  - name: BILLABLE_ACTIVE_LOGICAL_USAGE
+    description: "The logical usage that is less than 90 days old, in MB\n     second.\n\
       Returns 0 if the dataset uses the physical storage\n     billing model."
-    name: BILLABLE_ACTIVE_LOGICAL_USAGE
     type: INT64
-  - description: "The logical usage that is more than 90 days old, in MB\n     second.\n\
+  - name: BILLABLE_LONG_TERM_LOGICAL_USAGE
+    description: "The logical usage that is more than 90 days old, in MB\n     second.\n\
       Returns 0 if the dataset uses the physical storage\n     billing model."
-    name: BILLABLE_LONG_TERM_LOGICAL_USAGE
     type: INT64
-  - description: "The total usage in MB second. This includes\n     physical bytes\
+  - name: BILLABLE_TOTAL_PHYSICAL_USAGE
+    description: "The total usage in MB second. This includes\n     physical bytes\
       \ used for fail-safe and\n     time travel storage.\nReturns 0 if the dataset\
       \ uses the logical storage\n     billing model."
-    name: BILLABLE_TOTAL_PHYSICAL_USAGE
     type: INT64
-  - description: "The physical usage that is less than 90 days old,\n     in MB second.\
+  - name: BILLABLE_ACTIVE_PHYSICAL_USAGE
+    description: "The physical usage that is less than 90 days old,\n     in MB second.\
       \ This\n     includes physical bytes used for fail-safe and\n     time travel\
       \ storage.\nReturns 0 if the dataset uses the logical storage\n     billing\
       \ model."
-    name: BILLABLE_ACTIVE_PHYSICAL_USAGE
     type: INT64
-  - description: "The physical usage that is more than 90 days old,\n     in MB second.\n\
+  - name: BILLABLE_LONG_TERM_PHYSICAL_USAGE
+    description: "The physical usage that is more than 90 days old,\n     in MB second.\n\
       Returns 0 if the dataset uses the logical storage\n     billing model."
-    name: BILLABLE_LONG_TERM_PHYSICAL_USAGE
     type: INT64
-  description: dataset details with related information
-  name: information_schema_table_storage_usage_timeline_by_organization
-version: 2

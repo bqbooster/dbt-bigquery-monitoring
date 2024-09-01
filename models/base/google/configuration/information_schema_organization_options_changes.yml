@@ -1,24 +1,24 @@
-models:
-- columns:
-  - description: The time the configuration change occurred.
-    name: update_time
-    type: TIMESTAMP
-  - description: "For first-party users, it's their user email. For third-party users,\
-      \ it's\n  the name that users set in the third-party identity provider."
-    name: username
-    type: STRING
-  - description: "A JSON object of the configuration options users updated in the\n\
-      \       change, containing the previous and the new values of updated fields."
-    name: updated_options
-    type: JSON
-  - description: "The project ID. This field is empty for organization-level\n   \
-      \   configuration changes."
-    name: project_id
-    type: STRING
-  - description: "The project number. This field is empty for the organization-level\n\
-      \       configuration changes."
-    name: project_number
-    type: INTEGER
-  description: dataset details with related information
-  name: information_schema_organization_options_changes
 version: 2
+models:
+- name: information_schema_organization_options_changes
+  description: dataset details with related information
+  columns:
+  - name: update_time
+    description: The time the configuration change occurred.
+    type: TIMESTAMP
+  - name: username
+    description: "For first-party users, it's their user email. For third-party users,\
+      \ it's\n  the name that users set in the third-party identity provider."
+    type: STRING
+  - name: updated_options
+    description: "A JSON object of the configuration options users updated in the\n\
+      \       change, containing the previous and the new values of updated fields."
+    type: JSON
+  - name: project_id
+    description: "The project ID. This field is empty for organization-level\n   \
+      \   configuration changes."
+    type: STRING
+  - name: project_number
+    description: "The project number. This field is empty for the organization-level\n\
+      \       configuration changes."
+    type: INTEGER

@@ -1,24 +1,24 @@
-models:
-- columns:
-  - description: The project ID of the project that contains the resource.
-    name: OBJECT_CATALOG
-    type: STRING
-  - description: "The name of the dataset that contains the resource. This is\n  \
-      \      NULL if the resource itself is a dataset."
-    name: OBJECT_SCHEMA
-    type: STRING
-  - description: The name of the table, view, or dataset the policy applies to.
-    name: OBJECT_NAME
-    type: STRING
-  - description: The resource type, such as SCHEMA (dataset), TABLE, VIEW, and EXTERNAL.
-    name: OBJECT_TYPE
-    type: STRING
-  - description: The role ID, such as roles/bigquery.dataEditor.
-    name: PRIVILEGE_TYPE
-    type: STRING
-  - description: The user type and user that the role is granted to.
-    name: GRANTEE
-    type: STRING
-  description: dataset details with related information
-  name: information_schema_object_privileges
 version: 2
+models:
+- name: information_schema_object_privileges
+  description: dataset details with related information
+  columns:
+  - name: OBJECT_CATALOG
+    description: The project ID of the project that contains the resource.
+    type: STRING
+  - name: OBJECT_SCHEMA
+    description: "The name of the dataset that contains the resource. This is\n  \
+      \      NULL if the resource itself is a dataset."
+    type: STRING
+  - name: OBJECT_NAME
+    description: The name of the table, view, or dataset the policy applies to.
+    type: STRING
+  - name: OBJECT_TYPE
+    description: The resource type, such as SCHEMA (dataset), TABLE, VIEW, and EXTERNAL.
+    type: STRING
+  - name: PRIVILEGE_TYPE
+    description: The role ID, such as roles/bigquery.dataEditor.
+    type: STRING
+  - name: GRANTEE
+    description: The user type and user that the role is granted to.
+    type: STRING

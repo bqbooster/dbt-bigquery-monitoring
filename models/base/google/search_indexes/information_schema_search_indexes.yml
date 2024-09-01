@@ -1,18 +1,22 @@
+version: 2
 models:
-- columns:
-  - description: The name of the project that contains the dataset.
-    name: index_catalog
+- name: information_schema_search_indexes
+  description: dataset details with related information
+  columns:
+  - name: index_catalog
+    description: The name of the project that contains the dataset.
     type: STRING
-  - description: The name of the dataset that contains the index.
-    name: index_schema
+  - name: index_schema
+    description: The name of the dataset that contains the index.
     type: STRING
-  - description: The name of the base table that the index is created on.
-    name: table_name
+  - name: table_name
+    description: The name of the base table that the index is created on.
     type: STRING
-  - description: The name of the index.
-    name: index_name
+  - name: index_name
+    description: The name of the index.
     type: STRING
-  - description: "The status of the index: ACTIVE, PENDING\n          DISABLEMENT,\
+  - name: index_status
+    description: "The status of the index: ACTIVE, PENDING\n          DISABLEMENT,\
       \ TEMPORARILY DISABLED, or\n          PERMANENTLY DISABLED.\n          \nACTIVE\
       \ means that the index is\n               usable or being created. Refer to\
       \ the coverage_percentage\n               to see the progress of index creation.\n\
@@ -28,48 +32,44 @@ models:
       \ DISABLED means that there is an\n              incompatible schema change\
       \ on the base table, such as changing the\n              type of an indexed\
       \ column from STRING to\n              INT64."
-    name: index_status
     type: STRING
-  - description: The time the index was created.
-    name: creation_time
+  - name: creation_time
+    description: The time the index was created.
     type: TIMESTAMP
-  - description: "The last time the index configuration was modified. For example,\n\
+  - name: last_modification_time
+    description: "The last time the index configuration was modified. For example,\n\
       \          deleting an indexed column."
-    name: last_modification_time
     type: TIMESTAMP
-  - description: "The last time the table data was indexed. A NULL value\n       \
+  - name: last_refresh_time
+    description: "The last time the table data was indexed. A NULL value\n       \
       \   means the index is not yet available."
-    name: last_refresh_time
     type: TIMESTAMP
-  - description: "The time the status of the index was set to DISABLED. The\n    \
+  - name: disable_time
+    description: "The time the status of the index was set to DISABLED. The\n    \
       \      value is NULL if the index status is not\n          DISABLED."
-    name: disable_time
     type: TIMESTAMP
-  - description: "The reason the index was disabled. NULL if the index\n        status\
+  - name: disable_reason
+    description: "The reason the index was disabled. NULL if the index\n        status\
       \ is not DISABLED."
-    name: disable_reason
     type: STRING
-  - description: The DDL statement used to create the index.
-    name: DDL
+  - name: DDL
+    description: The DDL statement used to create the index.
     type: STRING
-  - description: "The approximate percentage of table data that has been indexed.\
+  - name: coverage_percentage
+    description: "The approximate percentage of table data that has been indexed.\
       \ 0%\n        means the index is not usable in a SEARCH query, even if\n   \
       \     some data has already been indexed."
-    name: coverage_percentage
     type: INTEGER
-  - description: The number of rows in the base table that have not been indexed.
-    name: unindexed_row_count
+  - name: unindexed_row_count
+    description: The number of rows in the base table that have not been indexed.
     type: INTEGER
-  - description: The number of billable logical bytes for the index.
-    name: total_logical_bytes
+  - name: total_logical_bytes
+    description: The number of billable logical bytes for the index.
     type: INTEGER
-  - description: The number of billable storage bytes for the index.
-    name: total_storage_bytes
+  - name: total_storage_bytes
+    description: The number of billable storage bytes for the index.
     type: INTEGER
-  - description: "The text analyzer\n        to use to generate tokens for the search\
+  - name: analyzer
+    description: "The text analyzer\n        to use to generate tokens for the search\
       \ index."
-    name: analyzer
     type: STRING
-  description: dataset details with related information
-  name: information_schema_search_indexes
-version: 2

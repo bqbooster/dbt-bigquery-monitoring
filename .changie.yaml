@@ -9,13 +9,17 @@ versionFormat: '## dbt-bigquery-monitoring {{.Version}} - {{.Time.Format "Januar
 kindFormat: '### {{.Kind}}'
 changeFormat: |-
   {{- $IssueList := list }}
-  {{- $changes := splitList " " $.Custom.Issue }}
-  {{- if ne (len $changes) 0 }}
-    {{- range $issueNbr := $changes }}
-      {{- $changeLink := "[#nbr](https://github.com/bqbooster/dbt-bigquery-monitoring/issues/nbr)" | replace "nbr" $issueNbr }}
-      {{- $IssueList = append $IssueList $changeLink }}
+  {{- if $.Custom.Issue }}
+    {{- $changes := splitList " " (printf "%s" $.Custom.Issue) }}
+    {{- if ne (len $changes) 0 }}
+      {{- range $issueNbr := $changes }}
+        {{- $changeLink := "[#nbr](https://github.com/bqbooster/dbt-bigquery-monitoring/issues/nbr)" | replace "nbr" $issueNbr }}
+        {{- $IssueList = append $IssueList $changeLink }}
+      {{- end }}
+      - {{.Body}} ({{ range $index, $element := $IssueList }}{{if $index}}, {{end}}{{$element}}{{end}})
+    {{- else }}
+      - {{.Body}}
     {{- end }}
-    - {{.Body}} ({{ range $index, $element := $IssueList }}{{if $index}}, {{end}}{{$element}}{{end}})
   {{- else }}
     - {{.Body}}
   {{- end }}
@@ -60,18 +64,20 @@ footerFormat: |
   {{- /* ensure we always skip snyk and dependabot in addition to the core team */}}
   {{- $maintainers := list "dependabot[bot]" "snyk-bot"}}
   {{- range $change := .Changes }}
-    {{- $authorList := splitList " " $change.Custom.Author }}
+    {{- $authorList := splitList " " (printf "%s" $change.Custom.Author) }}
     {{- /* loop through all authors for a single changelog */}}
     {{- range $author := $authorList }}
       {{- $authorLower := lower $author }}
       {{- /* we only want to include non-core team contributors */}}
       {{- if not (has $authorLower $maintainers)}}
         {{- $IssueList := list }}
-        {{- $changes := splitList " " $change.Custom.Issue }}
-        {{- if ne (len $changes) 0 }}
-          {{- range $issueNbr := $changes }}
-            {{- $changeLink := "[#nbr](https://github.com/bqbooster/dbt-bigquery-monitoring/issues/nbr)" | replace "nbr" $issueNbr }}
-            {{- $IssueList = append $IssueList $changeLink }}
+        {{- if $change.Custom.Issue }}
+          {{- $changes := splitList " " (printf "%s" $change.Custom.Issue) }}
+          {{- if ne (len $changes) 0 }}
+            {{- range $issueNbr := $changes }}
+              {{- $changeLink := "[#nbr](https://github.com/bqbooster/dbt-bigquery-monitoring/issues/nbr)" | replace "nbr" $issueNbr }}
+              {{- $IssueList = append $IssueList $changeLink }}
+            {{- end }}
           {{- end }}
         {{- end }}
         {{- /* check if this contributor has other changes associated with them already */}}

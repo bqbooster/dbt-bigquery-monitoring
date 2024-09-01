@@ -29,6 +29,10 @@ jobs:
         version: latest
         args: latest
 
+    - name: Update README.md example to ${{ steps.latest.outputs.output }}
+      run: |
+        sed -i '' 's/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${{ steps.latest.outputs.output }}/' README.md
+
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v4
       with:

@@ -1,3 +1,5 @@
+name: Generate Release PR
+
 on:
   workflow_dispatch:
 

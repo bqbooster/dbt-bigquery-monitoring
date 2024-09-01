@@ -22,12 +22,21 @@ changeFormat: |-
 
 kinds:
   - label: Breaking Changes
+    auto: major
   - label: Features
+    auto: minor
   - label: Fixes
+    auto: patch
   - label: Docs
+    auto: patch
   - label: Under the Hood
+    auto: patch
   - label: Dependencies
+    auto: patch
   - label: Security
+    auto: patch
+  - label: Removed
+    auto: major
 
 newlines:
   afterChangelogHeader: 1

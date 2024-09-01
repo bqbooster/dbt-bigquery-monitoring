@@ -1,6 +1,6 @@
 
-    {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-materialized-views -#}
-    {# Required role/permissions: 
+      {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-materialized-views -#}
+      {# Required role/permissions: 
     
       To get the permissions that you need to query the INFORMATION_SCHEMA.MATERIALIZED_VIEWS view,
     
@@ -12,7 +12,7 @@
 
   
   
-  For more information about granting roles, see Manage access.
+  For more information about granting roles, see Manage access to projects, folders, and organizations.
   
   
       
@@ -41,24 +41,20 @@ The following permissions are required to query the INFORMATION_SCHEMA.MATERIALI
       other predefined roles.
     Access control with IAM -#}
 
-    WITH base AS (
-    {% if project_list()|length > 0 -%}
-        {% for project in project_list() -%}
-        
-    SELECT table_catalog, table_schema, table_name, last_refresh_time, refresh_watermark, last_refresh_status
-    FROM `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`MATERIALIZED_VIEWS`
-    
-        {% if not loop.last %}UNION ALL{% endif %}
-        {% endfor %}
-    {%- else %}
-        
-    SELECT table_catalog, table_schema, table_name, last_refresh_time, refresh_watermark, last_refresh_status
-    FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`MATERIALIZED_VIEWS`
-    
-    {%- endif %}
-    )
-    SELECT
-    table_catalog, table_schema, table_name, last_refresh_time, refresh_watermark, last_refresh_status,
-    FROM
-    base
-    
+      WITH base AS (
+      {% if project_list()|length > 0 -%}
+          {% for project in project_list() -%}
+            SELECT table_catalog, table_schema, table_name, last_refresh_time, refresh_watermark, last_refresh_status
+            FROM `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`MATERIALIZED_VIEWS`
+          {% if not loop.last %}UNION ALL{% endif %}
+          {% endfor %}
+      {%- else %}
+          SELECT table_catalog, table_schema, table_name, last_refresh_time, refresh_watermark, last_refresh_status
+          FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`MATERIALIZED_VIEWS`
+      {%- endif %}
+      )
+      SELECT
+      table_catalog, table_schema, table_name, last_refresh_time, refresh_watermark, last_refresh_status,
+      FROM
+      base
+      

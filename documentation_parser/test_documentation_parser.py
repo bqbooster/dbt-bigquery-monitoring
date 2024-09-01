@@ -1,6 +1,7 @@
 import pytest
 from bs4 import BeautifulSoup
-from documentation_parser import parse_required_role, parse_table_name, update_column_list, generate_sql
+from documentation_parser import parse_required_role, parse_table_name, update_column_list
+from sql_generator import generate_sql
 
 def test_parse_required_role():
     # Test case: Required role is present
@@ -98,8 +99,16 @@ def test_update_column_list():
     ]
     assert result == expected_columns
 
-def test_generate_sql():
+def test_generate_sql_table():
     # Test generate_sql function
-    result = generate_sql("https://cloud.google.com/bigquery/docs/information-schema-jobs", ["field1", "field2", "field3"], "jobs", "jobs.admin")
-    expected = "\n    {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs -#}\n    jobs.admin\n    WITH base AS (\n    {% if project_list()|length > 0 -%}\n        {% for project in project_list() -%}\n        \n    SELECT field1, field2, field3\n    FROM `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`jobs`\n    \n        {% if not loop.last %}UNION ALL{% endif %}\n        {% endfor %}\n    {%- else %}\n        \n    SELECT field1, field2, field3\n    FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`jobs`\n    \n    {%- endif %}\n    )\n    SELECT\n    field1, field2, field3,\n    FROM\n    base\n    "
+    columns = [{"name": "field1", "type": "STRING", "description": "Field 1"}, {"name": "field2", "type": "INTEGER", "description": "Field 2"}, {"name": "field3", "type": "STRING", "description": "Field 3"}]
+    result = generate_sql("https://cloud.google.com/bigquery/docs/information-schema-jobs", columns, "jobs", "jobs.admin", "table")
+    expected = "\n      {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs -#}\n      jobs.admin\n      WITH base AS (\n      {% if project_list()|length > 0 -%}\n          {% for project in project_list() -%}\n            SELECT field1, field2, field3\n            FROM `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`jobs`\n          {% if not loop.last %}UNION ALL{% endif %}\n          {% endfor %}\n      {%- else %}\n          SELECT field1, field2, field3\n          FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`jobs`\n      {%- endif %}\n      )\n      SELECT\n      field1, field2, field3,\n      FROM\n      base\n      "
+    assert result == expected
+
+def test_generate_sql_dataset():
+    # Test generate_sql function
+    columns = [{"name": "field1", "type": "STRING", "description": "Field 1"}, {"name": "field2", "type": "INTEGER", "description": "Field 2"}, {"name": "field3", "type": "STRING", "description": "Field 3"}]
+    result = generate_sql("https://cloud.google.com/bigquery/docs/information-schema-jobs", columns, "jobs", "jobs.admin", "dataset")
+    expected = '\n    {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs -#}\n    jobs.admin\n    \n    {% set preflight_sql -%}\n    {% if project_list()|length > 0 -%}\n    {% for project in project_list() -%}\n    SELECT\n    SCHEMA_NAME\n    FROM `{{ project | trim }}`.`region-{{ var(\'bq_region\') }}`.`INFORMATION_SCHEMA`.`SCHEMATA`\n    {% if not loop.last %}UNION ALL{% endif %}\n    {% endfor %}\n    {%- else %}\n    SELECT\n    SCHEMA_NAME\n    FROM `region-{{ var(\'bq_region\') }}`.`INFORMATION_SCHEMA`.`SCHEMATA`\n    {%- endif %}\n    {%- endset %}\n    {% set results = run_query(preflight_sql) %}\n    {% set dataset_list = results | map(attribute=\'SCHEMA_NAME\') | list %}\n    {%- if dataset_list | length == 0 -%}\n    {{ log("No datasets found in the project list", info=True) }}\n    {%- endif -%}\n    \n    WITH base AS (\n    {%- if dataset_list | length == 0 -%}\n      SELECT CAST(NULL AS STRING) AS field1, CAST(NULL AS INTEGER) AS field2, CAST(NULL AS STRING) AS field3\n      LIMIT 0\n    {%- else %}\n    {% for dataset in dataset_list -%}\n      SELECT field1, field2, field3\n      FROM `{{ dataset | trim }}`.`INFORMATION_SCHEMA`.`jobs`\n    {% if not loop.last %}UNION ALL{% endif %}\n    {% endfor %}\n    {%- endif -%}\n    )\n    SELECT\n    field1, field2, field3,\n    FROM\n    base\n    '
     assert result == expected

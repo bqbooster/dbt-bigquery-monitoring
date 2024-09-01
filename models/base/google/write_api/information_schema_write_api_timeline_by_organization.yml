@@ -1,39 +1,39 @@
+version: 2
 models:
-- columns:
-  - description: "(Partitioning column) Start timestamp of the 1 minute interval\n\
+- name: information_schema_write_api_timeline_by_organization
+  description: dataset details with related information
+  columns:
+  - name: start_timestamp
+    description: "(Partitioning column) Start timestamp of the 1 minute interval\n\
       \        for the aggregated statistics."
-    name: start_timestamp
     type: TIMESTAMP
-  - description: (Clustering column) ID of the project.
-    name: project_id
+  - name: project_id
+    description: (Clustering column) ID of the project.
     type: STRING
-  - description: Number of the project.
-    name: project_number
+  - name: project_number
+    description: Number of the project.
     type: INTEGER
-  - description: (Clustering column) ID of the dataset.
-    name: dataset_id
+  - name: dataset_id
+    description: (Clustering column) ID of the dataset.
     type: STRING
-  - description: (Clustering column) ID of the table.
-    name: table_id
+  - name: table_id
+    description: (Clustering column) ID of the table.
     type: STRING
-  - description: "The stream type used \n      for the data ingestion with BigQuery\
+  - name: stream_type
+    description: "The stream type used \n      for the data ingestion with BigQuery\
       \ Storage Write API. It is supposed to be one of \"DEFAULT\", \"COMMITTED\"\
       , \"BUFFERED\", or \"PENDING\"."
-    name: stream_type
     type: STRING
-  - description: "Error code returned for the requests specified by this row. \"OK\"\
+  - name: error_code
+    description: "Error code returned for the requests specified by this row. \"OK\"\
       \ for\n        successful requests."
-    name: error_code
     type: STRING
-  - description: Total number of requests within the 1 minute interval.
-    name: total_requests
+  - name: total_requests
+    description: Total number of requests within the 1 minute interval.
     type: INTEGER
-  - description: Total number of rows from all requests within the 1 minute interval.
-    name: total_rows
+  - name: total_rows
+    description: Total number of rows from all requests within the 1 minute interval.
     type: INTEGER
-  - description: Total number of bytes from all rows within the 1 minute interval.
-    name: total_input_bytes
+  - name: total_input_bytes
+    description: Total number of bytes from all rows within the 1 minute interval.
     type: INTEGER
-  description: dataset details with related information
-  name: information_schema_write_api_timeline_by_organization
-version: 2

@@ -1,72 +1,72 @@
+version: 2
 models:
-- columns:
-  - description: The project ID of the project that contains the dataset
-    name: TABLE_CATALOG
+- name: information_schema_columns
+  description: dataset details with related information
+  columns:
+  - name: TABLE_CATALOG
+    description: The project ID of the project that contains the dataset
     type: STRING
-  - description: "The name of the dataset that contains the table also referred to\
+  - name: TABLE_SCHEMA
+    description: "The name of the dataset that contains the table also referred to\
       \ as\n        the datasetId"
-    name: TABLE_SCHEMA
     type: STRING
-  - description: The name of the table or view also referred to as the tableId
-    name: TABLE_NAME
+  - name: TABLE_NAME
+    description: The name of the table or view also referred to as the tableId
     type: STRING
-  - description: The name of the column
-    name: COLUMN_NAME
+  - name: COLUMN_NAME
+    description: The name of the column
     type: STRING
-  - description: "The 1-indexed offset of the column within the table; if it's a pseudo\n\
+  - name: ORDINAL_POSITION
+    description: "The 1-indexed offset of the column within the table; if it's a pseudo\n\
       \        column such as _PARTITIONTIME or _PARTITIONDATE, the value is\n   \
       \     NULL"
-    name: ORDINAL_POSITION
     type: INT64
-  - description: "YES or NO depending on whether the column's\n        mode allows\
+  - name: IS_NULLABLE
+    description: "YES or NO depending on whether the column's\n        mode allows\
       \ NULL values"
-    name: IS_NULLABLE
     type: STRING
-  - description: The column's GoogleSQL data type
-    name: DATA_TYPE
+  - name: DATA_TYPE
+    description: The column's GoogleSQL data type
     type: STRING
-  - description: The value is always NEVER
-    name: IS_GENERATED
+  - name: IS_GENERATED
+    description: The value is always NEVER
     type: STRING
-  - description: The value is always NULL
-    name: GENERATION_EXPRESSION
+  - name: GENERATION_EXPRESSION
+    description: The value is always NULL
     type: STRING
-  - description: The value is always NULL
-    name: IS_STORED
+  - name: IS_STORED
+    description: The value is always NULL
     type: STRING
-  - description: "YES or NO depending on whether the column is\n      a pseudo column\
+  - name: IS_HIDDEN
+    description: "YES or NO depending on whether the column is\n      a pseudo column\
       \ such as _PARTITIONTIME or _PARTITIONDATE"
-    name: IS_HIDDEN
     type: STRING
-  - description: The value is always NULL
-    name: IS_UPDATABLE
+  - name: IS_UPDATABLE
+    description: The value is always NULL
     type: STRING
-  - description: "YES or NO depending on whether the column is\n      a pseudo column\
+  - name: IS_SYSTEM_DEFINED
+    description: "YES or NO depending on whether the column is\n      a pseudo column\
       \ such as _PARTITIONTIME or _PARTITIONDATE"
-    name: IS_SYSTEM_DEFINED
     type: STRING
-  - description: "YES or NO depending on whether the column is\n        a partitioning\
+  - name: IS_PARTITIONING_COLUMN
+    description: "YES or NO depending on whether the column is\n        a partitioning\
       \ column"
-    name: IS_PARTITIONING_COLUMN
     type: STRING
-  - description: "The 1-indexed offset of the column within the table's\n        clustering\
+  - name: CLUSTERING_ORDINAL_POSITION
+    description: "The 1-indexed offset of the column within the table's\n        clustering\
       \ columns; the value is NULL if the table is not a\n        clustered table"
-    name: CLUSTERING_ORDINAL_POSITION
     type: INT64
-  - description: "The name of the collation specification\n        if it exists; otherwise,\
+  - name: COLLATION_NAME
+    description: "The name of the collation specification\n        if it exists; otherwise,\
       \ NULL\n\n        If a STRING or ARRAY<STRING> is passed\n        in, the collation\
       \ specification is returned if it exists; otherwise\n        NULL is returned"
-    name: COLLATION_NAME
     type: STRING
-  - description: "The default value of the\n        column if it exists; otherwise,\
+  - name: COLUMN_DEFAULT
+    description: "The default value of the\n        column if it exists; otherwise,\
       \ the value is NULL"
-    name: COLUMN_DEFAULT
     type: STRING
-  - description: "The mode of rounding that's used for values written to the field\
+  - name: ROUNDING_MODE
+    description: "The mode of rounding that's used for values written to the field\
       \ if its\n        type is a parameterized NUMERIC or BIGNUMERIC;\n        otherwise,\
       \ the value is NULL"
-    name: ROUNDING_MODE
     type: STRING
-  description: dataset details with related information
-  name: information_schema_columns
-version: 2

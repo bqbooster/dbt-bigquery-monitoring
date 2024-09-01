@@ -1,29 +1,29 @@
-models:
-- columns:
-  - description: The name of the project that contains the source dataset.
-    name: CATALOG_NAME
-    type: STRING
-  - description: "The name of the source dataset. The dataset name is also referred\
-      \ to as\n     the datasetId."
-    name: SCHEMA_NAME
-    type: STRING
-  - description: The project number of the project that contains the linked dataset.
-    name: LINKED_SCHEMA_CATALOG_NUMBER
-    type: STRING
-  - description: The project name of the project that contains the linked dataset.
-    name: LINKED_SCHEMA_CATALOG_NAME
-    type: STRING
-  - description: "The name of the linked dataset. The dataset name is also referred\
-      \ to as\n     the datasetId."
-    name: LINKED_SCHEMA_NAME
-    type: STRING
-  - description: The time when the linked dataset was created.
-    name: LINKED_SCHEMA_CREATION_TIME
-    type: TIMESTAMP
-  - description: The display name of the organization in which the linked dataset
-      is created.
-    name: LINKED_SCHEMA_ORG_DISPLAY_NAME
-    type: STRING
-  description: dataset details with related information
-  name: information_schema_schemata_links
 version: 2
+models:
+- name: information_schema_schemata_links
+  description: dataset details with related information
+  columns:
+  - name: CATALOG_NAME
+    description: The name of the project that contains the source dataset.
+    type: STRING
+  - name: SCHEMA_NAME
+    description: "The name of the source dataset. The dataset name is also referred\
+      \ to as\n     the datasetId."
+    type: STRING
+  - name: LINKED_SCHEMA_CATALOG_NUMBER
+    description: The project number of the project that contains the linked dataset.
+    type: STRING
+  - name: LINKED_SCHEMA_CATALOG_NAME
+    description: The project name of the project that contains the linked dataset.
+    type: STRING
+  - name: LINKED_SCHEMA_NAME
+    description: "The name of the linked dataset. The dataset name is also referred\
+      \ to as\n     the datasetId."
+    type: STRING
+  - name: LINKED_SCHEMA_CREATION_TIME
+    description: The time when the linked dataset was created.
+    type: TIMESTAMP
+  - name: LINKED_SCHEMA_ORG_DISPLAY_NAME
+    description: The display name of the organization in which the linked dataset
+      is created.
+    type: STRING

@@ -1,24 +1,24 @@
-models:
-- columns:
-  - description: The name of the project that contains the dataset.
-    name: index_catalog
-    type: STRING
-  - description: The name of the dataset that contains the index.
-    name: index_schema
-    type: STRING
-  - description: The name of the base table that the index is created on.
-    name: table_name
-    type: STRING
-  - description: The name of the index.
-    name: index_name
-    type: STRING
-  - description: The name of the top-level indexed column.
-    name: index_column_name
-    type: STRING
-  - description: "The full path of the expanded indexed field, starting with the column\n\
-      \          name. Fields are separated by a period."
-    name: index_field_path
-    type: STRING
-  description: dataset details with related information
-  name: information_schema_search_index_columns
 version: 2
+models:
+- name: information_schema_search_index_columns
+  description: dataset details with related information
+  columns:
+  - name: index_catalog
+    description: The name of the project that contains the dataset.
+    type: STRING
+  - name: index_schema
+    description: The name of the dataset that contains the index.
+    type: STRING
+  - name: table_name
+    description: The name of the base table that the index is created on.
+    type: STRING
+  - name: index_name
+    description: The name of the index.
+    type: STRING
+  - name: index_column_name
+    description: The name of the top-level indexed column.
+    type: STRING
+  - name: index_field_path
+    description: "The full path of the expanded indexed field, starting with the column\n\
+      \          name. Fields are separated by a period."
+    type: STRING

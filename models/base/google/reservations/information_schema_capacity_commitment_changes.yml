@@ -1,63 +1,63 @@
+version: 2
 models:
-- columns:
-  - description: Time when the change occurred.
-    name: change_timestamp
+- name: information_schema_capacity_commitment_changes
+  description: dataset details with related information
+  columns:
+  - name: change_timestamp
+    description: Time when the change occurred.
     type: TIMESTAMP
-  - description: ID of the administration project.
-    name: project_id
+  - name: project_id
+    description: ID of the administration project.
     type: STRING
-  - description: Number of the administration project.
-    name: project_number
+  - name: project_number
+    description: Number of the administration project.
     type: INTEGER
-  - description: ID that uniquely identifies the capacity commitment.
-    name: capacity_commitment_id
+  - name: capacity_commitment_id
+    description: ID that uniquely identifies the capacity commitment.
     type: STRING
-  - description: Commitment plan of the capacity commitment.
-    name: commitment_plan
+  - name: commitment_plan
+    description: Commitment plan of the capacity commitment.
     type: STRING
-  - description: "State the capacity commitment is in. Can be PENDING or\n       \
+  - name: state
+    description: "State the capacity commitment is in. Can be PENDING or\n       \
       \ ACTIVE."
-    name: state
     type: STRING
-  - description: Slot count associated with the capacity commitment.
-    name: slot_count
+  - name: slot_count
+    description: Slot count associated with the capacity commitment.
     type: INTEGER
-  - description: "Type of event that occurred with the capacity commitment. Can be\n\
+  - name: action
+    description: "Type of event that occurred with the capacity commitment. Can be\n\
       \        CREATE, UPDATE, or DELETE."
-    name: action
     type: STRING
-  - description: "Email address of the user or subject of the workforce identity\n\
+  - name: user_email
+    description: "Email address of the user or subject of the workforce identity\n\
       \        federation that made the change. google for changes\n        made by\
       \ Google. NULL if the email address is unknown."
-    name: user_email
     type: STRING
-  - description: "The start of the current commitment period. Only applicable for\n\
+  - name: commitment_start_time
+    description: "The start of the current commitment period. Only applicable for\n\
       \        ACTIVE capacity commitments, otherwise this is\n        NULL."
-    name: commitment_start_time
     type: TIMESTAMP
-  - description: "The end of the current commitment period. Only applicable for\n\
+  - name: commitment_end_time
+    description: "The end of the current commitment period. Only applicable for\n\
       \        ACTIVE capacity commitments, otherwise this is\n        NULL."
-    name: commitment_end_time
     type: TIMESTAMP
-  - description: "For a FAILED commitment plan, provides the failure\n        reason,\
+  - name: failure_status
+    description: "For a FAILED commitment plan, provides the failure\n        reason,\
       \ otherwise this is NULL. RECORD\n        consists of code and message."
-    name: failure_status
     type: RECORD
-  - description: "The plan this capacity commitment is converted to after\n      \
+  - name: renewal_plan
+    description: "The plan this capacity commitment is converted to after\n      \
       \  commitment_end_time passes. After the plan is changed,\n        the committed\
       \ period is extended according to the commitment plan. Only\n        applicable\
       \ for ANNUAL and TRIAL\n        commitments, otherwise this is NULL."
-    name: renewal_plan
     type: STRING
-  - description: The edition associated with this reservation. For more information
+  - name: edition
+    description: The edition associated with this reservation. For more information
       about editions, see Introduction to BigQuery editions.
-    name: edition
     type: STRING
-  - description: Whether the commitment is associated with the legacy flat-rate capacity
+  - name: is_flat_rate
+    description: Whether the commitment is associated with the legacy flat-rate capacity
       model or an edition. If FALSE, the current commitment is associated with an
       edition. If TRUE, the commitment is the legacy flat-rate capacity model.
-    name: is_flat_rate
     type: BOOL
-  description: dataset details with related information
-  name: information_schema_capacity_commitment_changes
-version: 2

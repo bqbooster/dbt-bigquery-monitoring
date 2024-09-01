@@ -1,34 +1,34 @@
-models:
-- columns:
-  - description: The DDL statement used to create this assignment.
-    name: ddl
-    type: STRING
-  - description: ID of the administration project.
-    name: project_id
-    type: STRING
-  - description: Number of the administration project.
-    name: project_number
-    type: INTEGER
-  - description: ID that uniquely identifies the assignment.
-    name: assignment_id
-    type: STRING
-  - description: Name of the reservation that the assignment uses.
-    name: reservation_name
-    type: STRING
-  - description: "The type of job that can use the reservation. Can be\n        PIPELINE,\
-      \ QUERY, CONTINUOUS,\n        ML_EXTERNAL, or BACKGROUND."
-    name: job_type
-    type: STRING
-  - description: ID that uniquely identifies the assignee resource.
-    name: assignee_id
-    type: STRING
-  - description: Number that uniquely identifies the assignee resource.
-    name: assignee_number
-    type: INTEGER
-  - description: "Type of assignee resource. Can be organization,\n        folder\
-      \ or project."
-    name: assignee_type
-    type: STRING
-  description: dataset details with related information
-  name: information_schema_assignments
 version: 2
+models:
+- name: information_schema_assignments
+  description: dataset details with related information
+  columns:
+  - name: ddl
+    description: The DDL statement used to create this assignment.
+    type: STRING
+  - name: project_id
+    description: ID of the administration project.
+    type: STRING
+  - name: project_number
+    description: Number of the administration project.
+    type: INTEGER
+  - name: assignment_id
+    description: ID that uniquely identifies the assignment.
+    type: STRING
+  - name: reservation_name
+    description: Name of the reservation that the assignment uses.
+    type: STRING
+  - name: job_type
+    description: "The type of job that can use the reservation. Can be\n        PIPELINE,\
+      \ QUERY, CONTINUOUS,\n        ML_EXTERNAL, or BACKGROUND."
+    type: STRING
+  - name: assignee_id
+    description: ID that uniquely identifies the assignee resource.
+    type: STRING
+  - name: assignee_number
+    description: Number that uniquely identifies the assignee resource.
+    type: INTEGER
+  - name: assignee_type
+    description: "Type of assignee resource. Can be organization,\n        folder\
+      \ or project."
+    type: STRING

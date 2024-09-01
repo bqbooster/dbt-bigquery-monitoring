@@ -6,6 +6,7 @@ import yaml
 import requests
 from bs4 import BeautifulSoup
 from config import pages_to_process
+from sql_generator import generate_sql
 
 
 def parse_table_name(soup):
@@ -83,45 +84,9 @@ def update_column_list(input_columns: List[dict], exclude_columns: List[str]):
 
     return columns
 
-def generate_sql(url: str, column_names: List[str], table_name: str, required_role_str: str):
-    # Prepare the column names as a comma-separated string
-    columns_str = ", ".join(column_names)
-
-    # Prepare the base SQL string for the project list
-    project_sql = f"""
-    SELECT {columns_str}
-    FROM `{{{{ project | trim }}}}`.`region-{{{{ var('bq_region') }}}}`.`INFORMATION_SCHEMA`.`{table_name}`
-    """
-
-    # Prepare the base SQL string for when there's no project list
-    no_project_sql = f"""
-    SELECT {columns_str}
-    FROM `region-{{{{ var('bq_region') }}}}`.`INFORMATION_SCHEMA`.`{table_name}`
-    """
-
-    # Combine everything into the final SQL string
-    sql = f"""
-    {{# More details about base table in {url} -#}}
-    {required_role_str}
-    WITH base AS (
-    {{% if project_list()|length > 0 -%}}
-        {{% for project in project_list() -%}}
-        {project_sql}
-        {{% if not loop.last %}}UNION ALL{{% endif %}}
-        {{% endfor %}}
-    {{%- else %}}
-        {no_project_sql}
-    {{%- endif %}}
-    )
-    SELECT
-    {columns_str},
-    FROM
-    base
-    """
-    return sql
-
 def generate_files(
-    filename: str, dir: str, url: str, exclude_columns: List[str], override_table_name: str = None
+    filename: str, dir: str, url: str,
+    exclude_columns: List[str], override_table_name: str, type: str
 ):
     # Fetch the HTML content from the URL
     response = requests.get(url)
@@ -169,7 +134,9 @@ def generate_files(
     # Update the column list
     columns = update_column_list(columns, exclude_columns)
 
-    base_filename = f"output/{dir}/information_schema_{filename}"
+    model_name = f"information_schema_{filename.lower()}"
+
+    base_filename = f"output/{dir}/{model_name}"
 
     # Create the YML file
     filename_yml = f"{base_filename}.yml"
@@ -185,7 +152,7 @@ def generate_files(
             "version": 2,
             "models": [
                 {
-                    "name": "information_schema_" + table_name.lower(),
+                    "name": model_name,
                     "description": "dataset details with related information",
                     "columns": [
                         {
@@ -198,7 +165,7 @@ def generate_files(
                 }
             ],
         }
-        yaml.dump(yaml_data, f)
+        yaml.dump(yaml_data, f, sort_keys=False)
 
     filename_sql = f"{base_filename}.sql"
 
@@ -212,11 +179,12 @@ def generate_files(
         if required_role
         else ""
     )
+    sql_type = "table" if type is None else type
 
     # Create the SQL file
     with open(filename_sql, "w") as f:
-        column_names = [column["name"].lower() for column in columns]
-        f.write(generate_sql(url, column_names, table_name, required_role_str))
+        sql_file_content = generate_sql(url, columns, table_name, required_role_str, sql_type)
+        f.write(sql_file_content)
 
     print(f"Files '{filename_sql}' and '{filename_yml}' have been created.")
 
@@ -229,6 +197,7 @@ def generate_all():
             target["url"],
             target.get("exclude_columns"),
             target.get("override_table_name"),
+            target.get("type"),
         )
 
 
@@ -241,6 +210,7 @@ def generate_for_key(key: str):
             target["url"],
             target.get("exclude_columns"),
             target.get("override_table_name"),
+            target.get("type"),
         )
     else:
         print(f"Error: Could not find key {key} in the pages_to_process dictionary.")

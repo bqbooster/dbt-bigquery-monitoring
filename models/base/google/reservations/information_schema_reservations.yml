@@ -1,30 +1,34 @@
+version: 2
 models:
-- columns:
-  - description: The DDL statement used to create this reservation.
-    name: ddl
+- name: information_schema_reservations
+  description: dataset details with related information
+  columns:
+  - name: ddl
+    description: The DDL statement used to create this reservation.
     type: STRING
-  - description: ID of the administration project.
-    name: project_id
+  - name: project_id
+    description: ID of the administration project.
     type: STRING
-  - description: Number of the administration project.
-    name: project_number
+  - name: project_number
+    description: Number of the administration project.
     type: INTEGER
-  - description: User provided reservation name.
-    name: reservation_name
+  - name: reservation_name
+    description: User provided reservation name.
     type: STRING
-  - description: "If false, any query using this reservation can use unused idle slots\n\
+  - name: ignore_idle_slots
+    description: "If false, any query using this reservation can use unused idle slots\n\
       \        from other capacity commitments."
-    name: ignore_idle_slots
     type: BOOL
-  - description: Baseline of the reservation.
-    name: slot_capacity
+  - name: slot_capacity
+    description: Baseline of the reservation.
     type: INTEGER
-  - description: "The target number of queries that can execute simultaneously, which\
+  - name: target_job_concurrency
+    description: "The target number of queries that can execute simultaneously, which\
       \ is\n        limited by available resources. If zero,\n        then this value\
       \ is computed automatically based on available\n        resources."
-    name: target_job_concurrency
     type: INTEGER
-  - description: 'Information about the autoscale capacity of the reservation. Fields
+  - name: autoscale
+    description: 'Information about the autoscale capacity of the reservation. Fields
       include the following:
 
 
@@ -32,12 +36,8 @@ models:
 
       max_slots: the maximum number of slots that could be added to the reservation
       by autoscaling.'
-    name: autoscale
     type: STRUCT
-  - description: The edition associated with this reservation. For more information
+  - name: edition
+    description: The edition associated with this reservation. For more information
       about editions, see Introduction to BigQuery editions.
-    name: edition
     type: STRING
-  description: dataset details with related information
-  name: information_schema_reservations
-version: 2

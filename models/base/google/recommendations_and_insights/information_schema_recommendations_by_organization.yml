@@ -1,53 +1,57 @@
+version: 2
 models:
-- columns:
-  - description: Base64 encoded ID that contains the RecommendationID and recommender.
-    name: recommendation_id
+- name: information_schema_recommendations_by_organization
+  description: dataset details with related information
+  columns:
+  - name: recommendation_id
+    description: Base64 encoded ID that contains the RecommendationID and recommender.
     type: STRING
-  - description: The type of recommendation. For example, google.bigquery.table.PartitionClusterRecommender
+  - name: recommender
+    description: The type of recommendation. For example, google.bigquery.table.PartitionClusterRecommender
       for partitioning and clustering recommendations.
-    name: recommender
     type: STRING
-  - description: The subtype of the recommendation.
-    name: subtype
+  - name: subtype
+    description: The subtype of the recommendation.
     type: STRING
-  - description: The ID of the project.
-    name: project_id
+  - name: project_id
+    description: The ID of the project.
     type: STRING
-  - description: The number of the project.
-    name: project_number
+  - name: project_number
+    description: The number of the project.
     type: STRING
-  - description: The description about the recommendation.
-    name: description
+  - name: description
+    description: The description about the recommendation.
     type: STRING
-  - description: This field represents the time when the recommendation was last created.
-    name: last_updated_time
+  - name: last_updated_time
+    description: This field represents the time when the recommendation was last created.
     type: TIMESTAMP
-  - description: Fully qualified resource names this recommendation is targeting.
-    name: target_resources
+  - name: target_resources
+    description: Fully qualified resource names this recommendation is targeting.
     type: STRING
-  - description: The state of the recommendation. For a list of possible values, see
+  - name: state
+    description: The state of the recommendation. For a list of possible values, see
       State.
-    name: state
     type: STRING
-  - description: "The impact this recommendation can have when trying to optimize\
+  - name: primary_impact
+    description: "The impact this recommendation can have when trying to optimize\
       \ the primary category. Contains the following fields:\n      \ncategory: The\
       \ category this recommendation is trying to optimize. For a list of possible\
       \ values, see Category.\ncost_projection: This value may be populated if the\
       \ recommendation can project the cost savings from this recommendation. Only\
       \ present when the category is COST.\nsecurity_projection: Might be present\
       \ when the category is SECURITY."
-    name: primary_impact
     type: RECORD
-  - description: The priority of the recommendation. For a list of possible values,
+  - name: priority
+    description: The priority of the recommendation. For a list of possible values,
       see Priority.
-    name: priority
     type: STRING
-  - description: Full Insight names associated with the recommendation.Insight name
+  - name: associated_insight_ids
+    description: Full Insight names associated with the recommendation.Insight name
       is the Base64 encoded representation of Insight type name & the Insight ID.
       This can be used to query Insights view.
-    name: associated_insight_ids
     type: STRING
-  - description: "Additional Details about the recommendation.\n      \noverview:\
+  - name: additional_details
+    description: "Additional Details about the recommendation.\n      \noverview:\
       \ Overview of the recommendation in JSON format. The content of this field might\
       \ change based on the recommender.\nstate_metadata: Metadata about the state\
       \ of the recommendation in key-value pairs.\noperations: List of operations\
@@ -57,8 +61,4 @@ models:
       \ be populated.\nresource_type: The cloud resource type.\nresource: Fully qualified\
       \ resource name.\npath: Path of the target field relative to the resource.\n\
       value: Value of the path field."
-    name: additional_details
     type: RECORD
-  description: dataset details with related information
-  name: information_schema_recommendations_by_organization
-version: 2

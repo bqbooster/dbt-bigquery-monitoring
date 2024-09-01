@@ -1,6 +1,6 @@
 {{
    config(
-    materialized='view'
+    materialized=materialization_view_if_explicit_projects()
     )
 }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-tables -#}

@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: stg_partitions_monitoring
+    description: >
+      A model that summarizes partition information for tables across projects and datasets.
+    config:
+      materialized: table
+    columns:
+      - name: project_id
+        description: The project ID (TABLE_CATALOG) where the table resides.
+      - name: dataset_id
+        description: The dataset ID (TABLE_SCHEMA) where the table resides.
+      - name: table_id
+        description: The name of the table.
+      - name: partition_type
+        description: >
+          The type of partitioning used for the table. Can be YEAR, MONTH, DAY, or HOUR,
+          determined by the format of the partition_id.
+      - name: earliest_partition_id
+        description: The ID of the earliest partition for the table.
+      - name: latest_partition_id
+        description: The ID of the latest partition for the table.
+      - name: partition_count
+        description: The total number of partitions for the table.
+      - name: sum_total_logical_bytes
+        description: The sum of total_logical_bytes across all partitions of the table.
+      - name: max_last_updated_time
+        description: The most recent last_modified_time across all partitions of the table.

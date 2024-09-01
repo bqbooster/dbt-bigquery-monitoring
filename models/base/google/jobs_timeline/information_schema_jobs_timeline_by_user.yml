@@ -1,68 +1,72 @@
+version: 2
 models:
-- columns:
-  - description: Start time of this period.
-    name: period_start
+- name: information_schema_jobs_timeline_by_user
+  description: dataset details with related information
+  columns:
+  - name: period_start
+    description: Start time of this period.
     type: TIMESTAMP
-  - description: Slot milliseconds consumed in this period.
-    name: period_slot_ms
+  - name: period_slot_ms
+    description: Slot milliseconds consumed in this period.
     type: INTEGER
-  - description: Shuffle usage ratio in the selected time period.
-    name: period_shuffle_ram_usage_ratio
+  - name: period_shuffle_ram_usage_ratio
+    description: Shuffle usage ratio in the selected time period.
     type: FLOAT
-  - description: (Clustering column) ID of the project.
-    name: project_id
+  - name: project_id
+    description: (Clustering column) ID of the project.
     type: STRING
-  - description: Number of the project.
-    name: project_number
+  - name: project_number
+    description: Number of the project.
     type: INTEGER
-  - description: "(Clustering column) Email address or service account of\n      \
+  - name: user_email
+    description: "(Clustering column) Email address or service account of\n      \
       \    the user who ran the job."
-    name: user_email
     type: STRING
-  - description: ID of the job. For example, bquxjob_1234.
-    name: job_id
+  - name: job_id
+    description: ID of the job. For example, bquxjob_1234.
     type: STRING
-  - description: "The type of the job. Can be QUERY, LOAD,\n          EXTRACT, COPY,\
+  - name: job_type
+    description: "The type of the job. Can be QUERY, LOAD,\n          EXTRACT, COPY,\
       \ or null. Job\n          type null indicates an internal job, such as script\
       \ job\n          statement evaluation or materialized view refresh."
-    name: job_type
     type: STRING
-  - description: "The type of query statement, if valid. For example,\n          SELECT,\
+  - name: statement_type
+    description: "The type of query statement, if valid. For example,\n          SELECT,\
       \ INSERT, UPDATE, or\n          DELETE."
-    name: statement_type
     type: STRING
-  - description: "(Partitioning column) Creation time of this job. Partitioning\n\
+  - name: job_creation_time
+    description: "(Partitioning column) Creation time of this job. Partitioning\n\
       \        is based on the UTC time of this timestamp."
-    name: job_creation_time
     type: TIMESTAMP
-  - description: Start time of this job.
-    name: job_start_time
+  - name: job_start_time
+    description: Start time of this job.
     type: TIMESTAMP
-  - description: End time of this job.
-    name: job_end_time
+  - name: job_end_time
+    description: End time of this job.
     type: TIMESTAMP
-  - description: "Running state of the job at the end of this period. Valid states\n\
+  - name: state
+    description: "Running state of the job at the end of this period. Valid states\n\
       \        include PENDING, RUNNING, and\n        DONE."
-    name: state
     type: STRING
-  - description: "Name of the primary reservation assigned to this job at the end\
+  - name: reservation_id
+    description: "Name of the primary reservation assigned to this job at the end\
       \ of\n        this period, if applicable."
-    name: reservation_id
     type: STRING
-  - description: Total bytes processed by the job.
-    name: total_bytes_processed
+  - name: edition
+    description: The edition associated with the reservation assigned to this job.
+      For more information about editions, see Introduction to BigQuery editions.
+    type: STRING
+  - name: total_bytes_processed
+    description: Total bytes processed by the job.
     type: INTEGER
-  - description: "Details of error (if any) as an \nErrorProto."
-    name: error_result
+  - name: error_result
+    description: "Details of error (if any) as an \nErrorProto."
     type: RECORD
-  - description: Whether the query results of this job were from a cache.
-    name: cache_hit
+  - name: cache_hit
+    description: Whether the query results of this job were from a cache.
     type: BOOLEAN
-  - description: Units of work that can be scheduled immediately in this period. Additional
+  - name: period_estimated_runnable_units
+    description: Units of work that can be scheduled immediately in this period. Additional
       slots for these units of work accelerate your query, provided no other query
       in the reservation needs additional slots.
-    name: period_estimated_runnable_units
     type: INTEGER
-  description: dataset details with related information
-  name: information_schema_jobs_timeline_by_user
-version: 2

@@ -1,76 +1,76 @@
+version: 2
 models:
-- columns:
-  - description: The project ID of the project that contains the dataset.
-    name: PROJECT_ID
+- name: information_schema_table_storage_by_organization
+  description: dataset details with related information
+  columns:
+  - name: PROJECT_ID
+    description: The project ID of the project that contains the dataset.
     type: STRING
-  - description: The project number of the project that contains the dataset.
-    name: PROJECT_NUMBER
+  - name: PROJECT_NUMBER
+    description: The project number of the project that contains the dataset.
     type: INT64
-  - description: The project ID of the project that contains the dataset.
-    name: TABLE_CATALOG
+  - name: TABLE_CATALOG
+    description: The project ID of the project that contains the dataset.
     type: STRING
-  - description: "The name of the dataset that contains the table or materialized\
+  - name: TABLE_SCHEMA
+    description: "The name of the dataset that contains the table or materialized\
       \ view,\n        also referred to as the datasetId."
-    name: TABLE_SCHEMA
     type: STRING
-  - description: "The name of the table or materialized view, also referred to as\
+  - name: TABLE_NAME
+    description: "The name of the table or materialized view, also referred to as\
       \ the\n        tableId."
-    name: TABLE_NAME
     type: STRING
-  - description: The creation time of the table.
-    name: CREATION_TIME
+  - name: CREATION_TIME
+    description: The creation time of the table.
     type: TIMESTAMP
-  - description: The total number of rows in the table or materialized view.
-    name: TOTAL_ROWS
+  - name: TOTAL_ROWS
+    description: The total number of rows in the table or materialized view.
     type: INT64
-  - description: "The number of partitions present in the table or materialized view.\n\
+  - name: TOTAL_PARTITIONS
+    description: "The number of partitions present in the table or materialized view.\n\
       \        Unpartitioned tables return 0."
-    name: TOTAL_PARTITIONS
     type: INT64
-  - description: "Total number of logical (uncompressed) bytes in the table or\n \
+  - name: TOTAL_LOGICAL_BYTES
+    description: "Total number of logical (uncompressed) bytes in the table or\n \
       \     materialized view."
-    name: TOTAL_LOGICAL_BYTES
     type: INT64
-  - description: Number of logical (uncompressed) bytes that are younger than 90 days.
-    name: ACTIVE_LOGICAL_BYTES
+  - name: ACTIVE_LOGICAL_BYTES
+    description: Number of logical (uncompressed) bytes that are younger than 90 days.
     type: INT64
-  - description: Number of logical (uncompressed) bytes that are older than 90 days.
-    name: LONG_TERM_LOGICAL_BYTES
+  - name: LONG_TERM_LOGICAL_BYTES
+    description: Number of logical (uncompressed) bytes that are older than 90 days.
     type: INT64
-  - description: "Total number of physical bytes for the current storage of the\n\
+  - name: CURRENT_PHYSICAL_BYTES
+    description: "Total number of physical bytes for the current storage of the\n\
       \      table across all partitions."
-    name: CURRENT_PHYSICAL_BYTES
     type: INT64
-  - description: "Total number of physical (compressed) bytes used for storage,\n\
+  - name: TOTAL_PHYSICAL_BYTES
+    description: "Total number of physical (compressed) bytes used for storage,\n\
       \        including active, long-term, and time travel (deleted or changed data)\n\
       \        bytes. Fail-safe (deleted or changed data retained after the time-travel\n\
       \        window) bytes aren't included."
-    name: TOTAL_PHYSICAL_BYTES
     type: INT64
-  - description: "Number of physical (compressed) bytes younger than 90 days,\n  \
+  - name: ACTIVE_PHYSICAL_BYTES
+    description: "Number of physical (compressed) bytes younger than 90 days,\n  \
       \    including time travel (deleted or changed data) bytes."
-    name: ACTIVE_PHYSICAL_BYTES
     type: INT64
-  - description: Number of physical (compressed) bytes older than 90 days.
-    name: LONG_TERM_PHYSICAL_BYTES
+  - name: LONG_TERM_PHYSICAL_BYTES
+    description: Number of physical (compressed) bytes older than 90 days.
     type: INT64
-  - description: "Number of physical (compressed) bytes used by time travel storage\n\
+  - name: TIME_TRAVEL_PHYSICAL_BYTES
+    description: "Number of physical (compressed) bytes used by time travel storage\n\
       \        (deleted or changed data)."
-    name: TIME_TRAVEL_PHYSICAL_BYTES
     type: INT64
-  - description: The most recent time that data was written to the table.
-    name: STORAGE_LAST_MODIFIED_TIME
+  - name: STORAGE_LAST_MODIFIED_TIME
+    description: The most recent time that data was written to the table.
     type: TIMESTAMP
-  - description: Indicates whether or not the table is deleted.
-    name: DELETED
+  - name: DELETED
+    description: Indicates whether or not the table is deleted.
     type: BOOLEAN
-  - description: "The type of table. For example, EXTERNAL or\n      BASE TABLE."
-    name: TABLE_TYPE
+  - name: TABLE_TYPE
+    description: "The type of table. For example, EXTERNAL or\n      BASE TABLE."
     type: STRING
-  - description: "Number of physical (compressed) bytes used by the fail-safe storage\n\
+  - name: FAIL_SAFE_PHYSICAL_BYTES
+    description: "Number of physical (compressed) bytes used by the fail-safe storage\n\
       \        (deleted or changed data)."
-    name: FAIL_SAFE_PHYSICAL_BYTES
     type: INT64
-  description: dataset details with related information
-  name: information_schema_table_storage_by_organization
-version: 2

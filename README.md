@@ -18,11 +18,12 @@ There are various ways to add required permissions to leverage the extension.
 
 #### "YOLO" mode
 
-The simplest way is to give BQ admin access role: [`BigQuery Admin`](https://cloud.google.com/bigquery/docs/access-control#bigquery.admin)
+The simplest way is to give BQ admin access role: 
+- [BigQuery Admin](https://cloud.google.com/bigquery/docs/access-control#bigquery.admin) can do pretty much everything in BigQuery (so more than enough)
 
 It's great for testing but not recommended for production where you'd rather follow the principle of least privilege.
 
-### Finer grain basic roles
+#### Finer grain basic roles
 
 Google provides some predefined roles that can be used to grant the necessary permissions to the service account that dbt uses to connect to BigQuery.
 

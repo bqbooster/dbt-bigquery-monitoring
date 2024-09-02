@@ -14,19 +14,37 @@ The package is actively used with the latest dbt stable version which `1.8.2` at
 
 To use this package, you will need to grant permissions to the Service Account that dbt uses to connect to BigQuery.
 
-The required permissions (listed above) are available to:
+There are various ways to add required permissions to leverage the extension.
 
-- [`BigQuery Resource Admin`](https://cloud.google.com/bigquery/docs/access-control#bigquery.resourceAdmin)
-- [`BigQuery Admin`](https://cloud.google.com/bigquery/docs/access-control#bigquery.admin) roles but feel free to create a custom role.
+#### "YOLO" mode
+
+The simplest way is to give BQ admin access role: [`BigQuery Admin`](https://cloud.google.com/bigquery/docs/access-control#bigquery.admin)
+
+It's great for testing but not recommended for production where you'd rather follow the principle of least privilege.
+
+### Finer grain basic roles
+
+Google provides some predefined roles that can be used to grant the necessary permissions to the service account that dbt uses to connect to BigQuery.
+
+Here's the list of predefined roles that can be combined to cover the extension needs:
+
+- [BigQuery Data Editor](https://cloud.google.com/bigquery/docs/access-control#bigquery.dataEditor) to list and modify datasets/tables
+- [BigQuery User](https://cloud.google.com/bigquery/docs/access-control#bigquery.user) to run queries
+- [BigQuery Resource Viewer](https://cloud.google.com/bigquery/docs/access-control#bigquery.resourceViewer) to access some metadata tables
+
+#### Custom roles
 
 <details>
 <summary>
 if you prefer to use custom roles, you can use the following permissions.
 </summary >
 
-- __bigquery.tables.get__ - To [access BigQuery tables data](https://cloud.google.com/bigquery/docs/information-schema-table-storage#required_roles)
-- __bigquery.tables.list__ - To [access BigQuery tables data](https://cloud.google.com/bigquery/docs/information-schema-table-storage#required_roles)
-- **bigquery.jobs.listAll**
+This list might not be exhaustive and you might need to add more permissions depending on your use case but it should be a good start:
+- __bigquery.jobs.create__ - To Create BigQuery request
+- __bigquery.tables.get__ - To access BigQuery tables data
+- __bigquery.tables.list__ - To access BigQuery tables data
+- __bigquery.jobs.listAll__ - To access BigQuery jobs data
+
    - At the organization or project level, depending on desired scope
    - Note that JOBS_BY_ORGANIZATION is only available to users with defined Google Cloud organizations. More information on permissions and access control in BigQuery can be found [here](https://cloud.google.com/bigquery/docs/access-control).
 
@@ -182,13 +200,16 @@ Here's the list (**don't forget to prefix the following list by `information_sch
 </summary>
 
 - access_control
+
    - object_privileges
 
 - bi_engine
+
    - bi_capacities
    - bi_capacity_changes
 
 - configuration
+
    - effective_project_options
    - organization_options
    - organization_options_changes
@@ -196,6 +217,7 @@ Here's the list (**don't forget to prefix the following list by `information_sch
    - project_options_changes
 
 - datasets
+
    - links
    - schemata
    - schemata_options
@@ -203,6 +225,7 @@ Here's the list (**don't forget to prefix the following list by `information_sch
    - shared_dataset_usage
 
 - jobs
+
    - jobs
    - jobs_by_folder
    - jobs_by_organization
@@ -210,12 +233,14 @@ Here's the list (**don't forget to prefix the following list by `information_sch
    - jobs_by_user
 
 - jobs_timeline
+
    - jobs_timeline
    - jobs_timeline_by_folder
    - jobs_timeline_by_organization
    - jobs_timeline_by_user
 
 - reservations
+
    - assignment_changes
    - assignments
    - capacity_commitment_changes
@@ -225,25 +250,30 @@ Here's the list (**don't forget to prefix the following list by `information_sch
    - reservations_timeline
 
 - routines
+
    - parameters
    - routine_options
    - routines
 
 - search_indexes
+
    - search_index_columns
    - search_indexes
 
 - sessions
+
    - sessions
    - sessions_by_project
    - sessions_by_user
 
 - streaming
+
    - streaming_timeline
    - streaming_timeline_by_folder
    - streaming_timeline_by_organization
 
 - tables
+
    - column_field_paths
    - columns
    - constraint_column_usage
@@ -258,15 +288,18 @@ Here's the list (**don't forget to prefix the following list by `information_sch
    - tables
 
 - vector_indexes
+
    - vector_index_columns
    - vector_index_options
    - vector_indexes
 
 - views
+
    - materialized_views
    - views
 
 - write_api
+
    - write_api_timeline
    - write_api_timeline_by_folder
    - write_api_timeline_by_organization

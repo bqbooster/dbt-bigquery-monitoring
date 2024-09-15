@@ -240,6 +240,11 @@ Here's the list (**don't forget to prefix the following list by `information_sch
    - jobs_timeline_by_organization
    - jobs_timeline_by_user
 
+- recommendations_and_insights
+   - insights
+   - recommendations_by_organization
+   - recommendations
+
 - reservations
 
    - assignment_changes
@@ -279,6 +284,7 @@ Here's the list (**don't forget to prefix the following list by `information_sch
    - columns
    - constraint_column_usage
    - key_column_usage
+   - partitions
    - table_constraints
    - table_options
    - table_snapshots
@@ -312,19 +318,28 @@ The package provides the following datamarts that can be easily used to build mo
 - global
 
    - `daily_spend`
+   - `dbt_bigquery_monitoring_options`
 
 - compute
 
    - `compute_cost_per_hour`
    - `most_expensive_jobs`
+   - `most_expensive_models`
    - `most_expensive_users`
    - `most_repeated_jobs`
+   - `most_repeated_models`
    - `slowest_jobs`
 
 - storage
 
+   - `dataset_with_better_pricing_on_logical_billing_model`
+   - `dataset_with_better_pricing_on_physical_billing_model`
+   - `dataset_with_cost`
    - `most_expensive_tables`
+   - `partitions_monitoring`
    - `read_heavy_tables`
+   - `table_with_better_pricing_on_logical_billing_model`
+   - `table_with_better_pricing_on_physical_billing_model`
    - `unused_tables`
 
 </details>

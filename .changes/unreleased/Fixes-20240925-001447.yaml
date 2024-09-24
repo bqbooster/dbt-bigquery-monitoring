@@ -1,6 +1,0 @@
-kind: Fixes
-body: Fix the version defined in get_query_comment macro
-time: 2024-09-25T00:14:47.295065+02:00
-custom:
-    Author: Kayrnt
-    Issue: "19"

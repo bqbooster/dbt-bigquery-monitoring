@@ -18,7 +18,7 @@ There are various ways to add required permissions to leverage the extension.
 
 #### "YOLO" mode
 
-The simplest way is to give BQ admin access role: 
+The simplest way is to give BQ admin access role:
 - [BigQuery Admin](https://cloud.google.com/bigquery/docs/access-control#bigquery.admin) can do pretty much everything in BigQuery (so more than enough)
 
 It's great for testing but not recommended for production where you'd rather follow the principle of least privilege.
@@ -41,6 +41,7 @@ if you prefer to use custom roles, you can use the following permissions.
 </summary >
 
 This list might not be exhaustive and you might need to add more permissions depending on your use case but it should be a good start:
+
 - __bigquery.jobs.create__ - To Create BigQuery request
 - __bigquery.tables.get__ - To access BigQuery tables data
 - __bigquery.tables.list__ - To access BigQuery tables data
@@ -241,6 +242,7 @@ Here's the list (**don't forget to prefix the following list by `information_sch
    - jobs_timeline_by_user
 
 - recommendations_and_insights
+
    - insights
    - recommendations_by_organization
    - recommendations

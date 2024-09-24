@@ -31,7 +31,11 @@ jobs:
 
     - name: Update README.md example to ${{ steps.latest.outputs.output }}
       run: |
-        sed -i '' 's/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${{ steps.latest.outputs.output }}/' README.md
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+          sed -i '' 's/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${{ steps.latest.outputs.output }}/' README.md
+        else
+          sed -i 's/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${{ steps.latest.outputs.output }}/' README.md
+        fi
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v4

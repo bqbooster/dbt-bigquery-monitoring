@@ -1,0 +1,6 @@
+kind: Fixes
+body: Fix the name of the dbt_bigquery_monitoring_options model
+time: 2024-09-24T22:08:56.178715+02:00
+custom:
+    Author: gofford
+    Issue: "17"

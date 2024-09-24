@@ -31,10 +31,11 @@ jobs:
 
     - name: Update README.md example to ${{ steps.latest.outputs.output }}
       run: |
+        LATEST_VERSION=${{ steps.latest.outputs.output }}
         if [[ "$OSTYPE" == "darwin"* ]]; then
-          sed -i '' 's/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${{ steps.latest.outputs.output }}/' README.md
+          sed -i '' 's/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${LATEST_VERSION#v}/' README.md
         else
-          sed -i 's/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${{ steps.latest.outputs.output }}/' README.md
+          sed -i 's/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${LATEST_VERSION#v}/' README.md
         fi
 
     - name: Create Pull Request

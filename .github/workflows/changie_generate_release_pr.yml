@@ -34,10 +34,9 @@ jobs:
         LATEST_VERSION=${{ steps.latest.outputs.output }}
         LATEST_VERSION_STRIPPED=${LATEST_VERSION#v}
         if [[ "$OSTYPE" == "darwin"* ]]; then
-          sed -i '' 's/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${LATEST_VERSION_STRIPPED}/' README.md
-          # update the version in /macros/set_query_comment.sql file
+          sed -i '' "s/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${LATEST_VERSION_STRIPPED}/" README.md
         else
-          sed -i 's/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${LATEST_VERSION_STRIPPED}/' README.md
+          sed -i "s/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${LATEST_VERSION_STRIPPED}/" README.md
         fi
 
     - name: Update version in /macros/set_query_comment.sql

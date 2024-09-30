@@ -1,6 +1,0 @@
-kind: Fixes
-body: rename macro to workaround a <1.6 bug
-time: 2024-09-30T21:30:44.308764+02:00
-custom:
-    Author: Kayrnt
-    Issue: "26"

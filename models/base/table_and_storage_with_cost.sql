@@ -1,6 +1,6 @@
 {{
    config(
-    materialized=materialization_view_if_explicit_projects()
+    materialized=materialized_as_view_if_explicit_projects()
     )
 }}
 WITH base AS (

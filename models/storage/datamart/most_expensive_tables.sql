@@ -3,8 +3,7 @@
     materialized='table',
     )
 }}
-SELECT
-  *
+SELECT *
 FROM {{ ref('table_and_storage_with_cost') }}
 {%- if var('prefer_physical_pricing_model') %}
 ORDER BY physical_cost_monthly_forecast DESC

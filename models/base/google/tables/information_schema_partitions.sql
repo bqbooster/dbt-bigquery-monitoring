@@ -1,5 +1,4 @@
-
-    {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-partitions -#}
+{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-partitions -#}
     {# Required role/permissions: To query the INFORMATION_SCHEMA.PARTITIONS view, you need the following
 Identity and Access Management (IAM) permissions:
 bigquery.tables.get
@@ -40,14 +39,32 @@ Access control with IAM. -#}
       LIMIT 0
     {%- else %}
     {% for dataset in dataset_list -%}
-      SELECT table_catalog, table_schema, table_name, partition_id, total_rows, total_logical_bytes, last_modified_time, storage_tier
+      SELECT
+table_catalog,
+table_schema,
+table_name,
+partition_id,
+total_rows,
+total_logical_bytes,
+last_modified_time,
+storage_tier
       FROM `{{ dataset | trim }}`.`INFORMATION_SCHEMA`.`PARTITIONS`
     {% if not loop.last %}UNION ALL{% endif %}
     {% endfor %}
     {%- endif -%}
-    )
-    SELECT
-    table_catalog, table_schema, table_name, partition_id, total_rows, total_logical_bytes, last_modified_time, storage_tier,
+    
+
+
+)
+
+SELECT
+    table_catalog,
+table_schema,
+table_name,
+partition_id,
+total_rows,
+total_logical_bytes,
+last_modified_time,
+storage_tier,
     FROM
     base
-    

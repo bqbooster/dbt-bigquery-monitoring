@@ -6,15 +6,15 @@
 {%- call set_sql_header(config) %}
   {{ milliseconds_to_readable_time_udf() }}
 
-  CREATE TEMP FUNCTION topSum(arr ANY TYPE) AS ((
+  CREATE TEMP FUNCTION TOP_SUM(arr ANY TYPE) AS ((
   SELECT APPROX_TOP_SUM(c.value, c.count, 100) FROM UNNEST(arr) c
 ));
 {%- endcall %}
 SELECT
   query,
-  topSum(ARRAY_CONCAT_AGG(project_ids)) AS project_ids,
-  topSum(ARRAY_CONCAT_AGG(reservation_ids)) AS reservation_ids,
-  topSum(ARRAY_CONCAT_AGG(user_emails)) AS user_emails,
+  TOP_SUM(ARRAY_CONCAT_AGG(project_ids)) AS project_ids,
+  TOP_SUM(ARRAY_CONCAT_AGG(reservation_ids)) AS reservation_ids,
+  TOP_SUM(ARRAY_CONCAT_AGG(user_emails)) AS user_emails,
   SUM(cache_hit) / SUM(query_count) AS cache_hit_ratio,
   SUM(ROUND(total_query_cost, 2)) AS total_query_cost,
   SUM(total_slot_ms) AS total_slot_ms,

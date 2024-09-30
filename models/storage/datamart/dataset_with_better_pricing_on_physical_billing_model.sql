@@ -18,8 +18,8 @@ WITH storage_cost AS (
   AND prefer_physical_pricing_model
   GROUP BY ALL
 )
-SELECT
-  *
+
+SELECT *
 FROM storage_cost
 ORDER BY storage_pricing_model_difference DESC
 LIMIT {{ var('output_limit_size') }}

@@ -18,8 +18,8 @@ WITH storage_cost AS (
   AND table_type = 'BASE TABLE'
   AND prefer_physical_pricing_model
 )
-SELECT
-  *
+
+SELECT *
 FROM storage_cost
 ORDER BY storage_pricing_model_difference DESC
 LIMIT {{ var('output_limit_size') }}

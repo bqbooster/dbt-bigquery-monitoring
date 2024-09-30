@@ -1,5 +1,4 @@
-
-      {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-index-columns -#}
+{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-index-columns -#}
       {# Required role/permissions: To see search index metadata, you need the
 bigquery.tables.get or bigquery.tables.list Identity and Access Management (IAM)
 permission on the table with the index. Each of the following predefined
@@ -21,12 +20,23 @@ Access control with IAM. -#}
           {% if not loop.last %}UNION ALL{% endif %}
           {% endfor %}
       {%- else %}
-          SELECT index_catalog, index_schema, table_name, index_name, index_column_name, index_field_path
+          SELECT
+index_catalog,
+index_schema,
+table_name,
+index_name,
+index_column_name,
+index_field_path
           FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`SEARCH_INDEX_COLUMNS`
       {%- endif %}
       )
-      SELECT
-      index_catalog, index_schema, table_name, index_name, index_column_name, index_field_path,
+
+SELECT
+      index_catalog,
+index_schema,
+table_name,
+index_name,
+index_column_name,
+index_field_path,
       FROM
       base
-      

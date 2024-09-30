@@ -53,3 +53,4 @@ vars:
   # Project output configuration
   output_materialization: "{{ env_var('DBT_BQ_MONITORING_OUTPUT_MATERIALIZATION', 'table') }}"
   output_limit_size: "{{ env_var('DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE', 1000) }}"
+  output_partition_expiration_days: "{{ env_var('DBT_BQ_MONITORING_TABLE_EXPIRATION_DAYS', 365) }}"

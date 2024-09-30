@@ -5,17 +5,18 @@
     cluster_by = ["project_id", "dataset_id", "table_id"],
     partition_by = {
       "field": "day",
-      "data_type": "timestamp"
+      "data_type": "timestamp",
+      "copy_partitions": should_use_copy_partitions()
     },
     )
 }}
 SELECT
-  TIMESTAMP_TRUNC(creation_time, DAY) day,
+  TIMESTAMP_TRUNC(creation_time, DAY) AS day,
   rt.project_id,
   rt.dataset_id,
   rt.table_id,
-  count(*) AS reference_count
-FROM {{ ref('jobs_by_project_with_cost') }}, unnest(referenced_tables) AS rt
+  COUNT(*) AS reference_count
+FROM {{ ref('jobs_by_project_with_cost') }}, UNNEST(referenced_tables) AS rt
 {% if is_incremental_run() %}
 WHERE creation_time > _dbt_max_partition
 {% else %}

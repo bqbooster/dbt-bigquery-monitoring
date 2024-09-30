@@ -3,8 +3,7 @@
     materialized='ephemeral',
     )
 }}
-SELECT
-  *
+SELECT *
 FROM
   {{ ref('jobs_by_project_with_cost') }}
 {% if is_incremental_run() %}

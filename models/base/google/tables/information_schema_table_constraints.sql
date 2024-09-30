@@ -1,5 +1,4 @@
-
-      {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-table-constraints -#}
+{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-table-constraints -#}
       {# Required role/permissions: You need the following
 Identity and Access Management (IAM) permissions:
 bigquery.tables.get for viewing primary and foreign key definitions.
@@ -24,12 +23,31 @@ Predefined roles and permissions. -#}
           {% if not loop.last %}UNION ALL{% endif %}
           {% endfor %}
       {%- else %}
-          SELECT constraint_catalog, constraint_schema, constraint_name, table_catalog, table_schema, table_name, constraint_type, is_deferrable, initially_deferred, enforced
+          SELECT
+constraint_catalog,
+constraint_schema,
+constraint_name,
+table_catalog,
+table_schema,
+table_name,
+constraint_type,
+is_deferrable,
+initially_deferred,
+enforced
           FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`TABLE_CONSTRAINTS`
       {%- endif %}
       )
-      SELECT
-      constraint_catalog, constraint_schema, constraint_name, table_catalog, table_schema, table_name, constraint_type, is_deferrable, initially_deferred, enforced,
+
+SELECT
+      constraint_catalog,
+constraint_schema,
+constraint_name,
+table_catalog,
+table_schema,
+table_name,
+constraint_type,
+is_deferrable,
+initially_deferred,
+enforced,
       FROM
       base
-      

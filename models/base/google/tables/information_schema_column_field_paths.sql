@@ -1,5 +1,4 @@
-
-      {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-column-field-paths -#}
+{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-column-field-paths -#}
       {# Required role/permissions: To query the INFORMATION_SCHEMA.COLUMN_FIELD_PATHS view, you need the following
 Identity and Access Management (IAM) permissions:
 bigquery.tables.get
@@ -21,12 +20,29 @@ Access control with IAM. -#}
           {% if not loop.last %}UNION ALL{% endif %}
           {% endfor %}
       {%- else %}
-          SELECT table_catalog, table_schema, table_name, column_name, field_path, data_type, description, collation_name, rounding_mode
+          SELECT
+table_catalog,
+table_schema,
+table_name,
+column_name,
+field_path,
+data_type,
+description,
+collation_name,
+rounding_mode
           FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`COLUMN_FIELD_PATHS`
       {%- endif %}
       )
-      SELECT
-      table_catalog, table_schema, table_name, column_name, field_path, data_type, description, collation_name, rounding_mode,
+
+SELECT
+      table_catalog,
+table_schema,
+table_name,
+column_name,
+field_path,
+data_type,
+description,
+collation_name,
+rounding_mode,
       FROM
       base
-      

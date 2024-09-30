@@ -1,5 +1,4 @@
-
-      {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-views -#}
+{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-views -#}
       {# Required role/permissions: To get view metadata, you need the following Identity and Access Management (IAM)
 permissions:
 bigquery.tables.get
@@ -21,12 +20,23 @@ Access control with IAM. -#}
           {% if not loop.last %}UNION ALL{% endif %}
           {% endfor %}
       {%- else %}
-          SELECT table_catalog, table_schema, table_name, view_definition, check_option, use_standard_sql
+          SELECT
+table_catalog,
+table_schema,
+table_name,
+view_definition,
+check_option,
+use_standard_sql
           FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`VIEWS`
       {%- endif %}
       )
-      SELECT
-      table_catalog, table_schema, table_name, view_definition, check_option, use_standard_sql,
+
+SELECT
+      table_catalog,
+table_schema,
+table_name,
+view_definition,
+check_option,
+use_standard_sql,
       FROM
       base
-      

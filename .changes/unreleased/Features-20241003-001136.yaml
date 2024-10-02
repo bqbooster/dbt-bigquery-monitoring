@@ -1,6 +1,0 @@
-kind: Features
-body: partition expiration is now configurable
-time: 2024-10-03T00:11:36.650157+02:00
-custom:
-    Author: Kayrnt
-    Issue: ""

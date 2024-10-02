@@ -1,5 +1,4 @@
-
-      {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-effective-project-options -#}
+{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-effective-project-options -#}
       {# Required role/permissions: To get effective project options metadata, you need the bigquery.config.get
 Identity and Access Management (IAM) permission.The following predefined IAM role includes the
 permissions that you need in order to get effective project options metadata:
@@ -15,12 +14,21 @@ roles and permissions. -#}
           {% if not loop.last %}UNION ALL{% endif %}
           {% endfor %}
       {%- else %}
-          SELECT option_name, option_description, option_type, option_set_level, option_set_on_id
+          SELECT
+option_name,
+option_description,
+option_type,
+option_set_level,
+option_set_on_id
           FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`EFFECTIVE_PROJECT_OPTIONS`
       {%- endif %}
       )
-      SELECT
-      option_name, option_description, option_type, option_set_level, option_set_on_id,
+
+SELECT
+      option_name,
+option_description,
+option_type,
+option_set_level,
+option_set_on_id,
       FROM
       base
-      

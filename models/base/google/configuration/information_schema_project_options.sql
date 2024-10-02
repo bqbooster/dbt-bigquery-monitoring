@@ -1,5 +1,4 @@
-
-      {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-project-options -#}
+{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-project-options -#}
       {# Required role/permissions: To get configuration options metadata, you need the following Identity and Access Management (IAM) permissions:
 bigquery.config.get
 The following predefined IAM role includes the
@@ -16,12 +15,19 @@ roles and permissions. -#}
           {% if not loop.last %}UNION ALL{% endif %}
           {% endfor %}
       {%- else %}
-          SELECT option_name, option_description, option_type, option_value
+          SELECT
+option_name,
+option_description,
+option_type,
+option_value
           FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`PROJECT_OPTIONS`
       {%- endif %}
       )
-      SELECT
-      option_name, option_description, option_type, option_value,
+
+SELECT
+      option_name,
+option_description,
+option_type,
+option_value,
       FROM
       base
-      

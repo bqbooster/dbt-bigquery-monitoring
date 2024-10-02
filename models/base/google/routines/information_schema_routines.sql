@@ -1,5 +1,4 @@
-
-      {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-routines -#}
+{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-routines -#}
       {# Required role/permissions: To query the INFORMATION_SCHEMA.ROUTINES view, you need the following
 Identity and Access Management (IAM) permissions:
 bigquery.routines.get
@@ -20,12 +19,43 @@ Access control with IAM. -#}
           {% if not loop.last %}UNION ALL{% endif %}
           {% endfor %}
       {%- else %}
-          SELECT specific_catalog, specific_schema, specific_name, routine_catalog, routine_schema, routine_name, routine_type, data_type, routine_body, routine_definition, external_language, is_deterministic, security_type, created, last_altered, ddl
+          SELECT
+specific_catalog,
+specific_schema,
+specific_name,
+routine_catalog,
+routine_schema,
+routine_name,
+routine_type,
+data_type,
+routine_body,
+routine_definition,
+external_language,
+is_deterministic,
+security_type,
+created,
+last_altered,
+ddl
           FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ROUTINES`
       {%- endif %}
       )
-      SELECT
-      specific_catalog, specific_schema, specific_name, routine_catalog, routine_schema, routine_name, routine_type, data_type, routine_body, routine_definition, external_language, is_deterministic, security_type, created, last_altered, ddl,
+
+SELECT
+      specific_catalog,
+specific_schema,
+specific_name,
+routine_catalog,
+routine_schema,
+routine_name,
+routine_type,
+data_type,
+routine_body,
+routine_definition,
+external_language,
+is_deterministic,
+security_type,
+created,
+last_altered,
+ddl,
       FROM
       base
-      

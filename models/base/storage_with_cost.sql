@@ -6,23 +6,23 @@
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-tables -#}
 WITH base AS (
 SELECT
-  PROJECT_ID,
-  PROJECT_NUMBER,
-  TABLE_SCHEMA as dataset_id,
-  TABLE_NAME as table_id,
-  CREATION_TIME,
-  DELETED,
-  STORAGE_LAST_MODIFIED_TIME,
-  TOTAL_ROWS,
-  TOTAL_PARTITIONS,
-  TOTAL_LOGICAL_BYTES,
-  ACTIVE_LOGICAL_BYTES,
-  LONG_TERM_LOGICAL_BYTES,
-  TOTAL_PHYSICAL_BYTES,
-  ACTIVE_PHYSICAL_BYTES,
-  LONG_TERM_PHYSICAL_BYTES,
-  TIME_TRAVEL_PHYSICAL_BYTES,
-  TABLE_TYPE
+  project_id,
+  project_number,
+  table_schema AS dataset_id,
+  table_name AS table_id,
+  creation_time,
+  deleted,
+  storage_last_modified_time,
+  total_rows,
+  total_partitions,
+  total_logical_bytes,
+  active_logical_bytes,
+  long_term_logical_bytes,
+  total_physical_bytes,
+  active_physical_bytes,
+  long_term_physical_bytes,
+  time_travel_physical_bytes,
+  table_type
 FROM
     {{ ref('information_schema_table_storage') }}
 ),

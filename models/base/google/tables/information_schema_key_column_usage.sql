@@ -1,5 +1,4 @@
-
-    {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-key-column-usage -#}
+{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-key-column-usage -#}
     
     
     {% set preflight_sql -%}
@@ -28,14 +27,34 @@
       LIMIT 0
     {%- else %}
     {% for dataset in dataset_list -%}
-      SELECT constraint_catalog, constraint_schema, constraint_name, table_catalog, table_schema, table_name, column_name, ordinal_position, position_in_unique_constraint
+      SELECT
+constraint_catalog,
+constraint_schema,
+constraint_name,
+table_catalog,
+table_schema,
+table_name,
+column_name,
+ordinal_position,
+position_in_unique_constraint
       FROM `{{ dataset | trim }}`.`INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE`
     {% if not loop.last %}UNION ALL{% endif %}
     {% endfor %}
     {%- endif -%}
-    )
-    SELECT
-    constraint_catalog, constraint_schema, constraint_name, table_catalog, table_schema, table_name, column_name, ordinal_position, position_in_unique_constraint,
+    
+
+
+)
+
+SELECT
+    constraint_catalog,
+constraint_schema,
+constraint_name,
+table_catalog,
+table_schema,
+table_name,
+column_name,
+ordinal_position,
+position_in_unique_constraint,
     FROM
     base
-    

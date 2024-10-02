@@ -1,0 +1,14 @@
+dbt_bigquery_monitoring:
+  target: ci
+  outputs:
+    ci:
+      type: bigquery
+      method: service-account
+      project: "{{ env_var('DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT') }}"
+      execution_project: "{{ env_var('DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT') }}"
+      dataset: dbt_bigquery_monitoring_test_commit_{{ env_var('GITHUB_SHA_OVERRIDE', '') if env_var('GITHUB_SHA_OVERRIDE', '') else env_var('GITHUB_SHA') }}
+      threads: 8
+      keyfile: ./keyfile.json
+      timeout_seconds: 300
+      location: "{{ env_var('DBT_ENV_IGQUERY_TEST_LOCATION') }}"
+      retries: 0

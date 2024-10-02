@@ -24,7 +24,9 @@
 ] %}
 
 {% for option in options %}
-SELECT "{{ option }}" as option_label, "{{ var(option) }}" as option_value
+SELECT
+"{{ option }}" AS option_label,
+"{{ var(option) }}" AS option_value
 {% if not loop.last %}
 UNION ALL
 {% endif %}

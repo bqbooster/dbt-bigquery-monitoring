@@ -5,7 +5,8 @@
     partition_by = {
       "field": "hour",
       "data_type": "timestamp",
-      "granularity": "hour"
+      "granularity": "hour",
+      "copy_partitions": should_use_copy_partitions()
     },
     cluster_by = ["hour", "user_email"],
     partition_expiration_days = var('lookback_window_days')

@@ -1,5 +1,4 @@
-
-      {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-organization-options-changes -#}
+{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-organization-options-changes -#}
       {# Required role/permissions: 
     
       To get the permission that you need to get the configuration changes,
@@ -24,12 +23,21 @@
           {% if not loop.last %}UNION ALL{% endif %}
           {% endfor %}
       {%- else %}
-          SELECT update_time, username, updated_options, project_id, project_number
+          SELECT
+update_time,
+username,
+updated_options,
+project_id,
+project_number
           FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ORGANIZATION_OPTIONS_CHANGES`
       {%- endif %}
       )
-      SELECT
-      update_time, username, updated_options, project_id, project_number,
+
+SELECT
+      update_time,
+username,
+updated_options,
+project_id,
+project_number,
       FROM
       base
-      

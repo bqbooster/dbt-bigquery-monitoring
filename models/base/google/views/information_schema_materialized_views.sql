@@ -1,5 +1,4 @@
-
-      {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-materialized-views -#}
+{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-materialized-views -#}
       {# Required role/permissions: 
     
       To get the permissions that you need to query the INFORMATION_SCHEMA.MATERIALIZED_VIEWS view,
@@ -49,12 +48,23 @@ The following permissions are required to query the INFORMATION_SCHEMA.MATERIALI
           {% if not loop.last %}UNION ALL{% endif %}
           {% endfor %}
       {%- else %}
-          SELECT table_catalog, table_schema, table_name, last_refresh_time, refresh_watermark, last_refresh_status
+          SELECT
+table_catalog,
+table_schema,
+table_name,
+last_refresh_time,
+refresh_watermark,
+last_refresh_status
           FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`MATERIALIZED_VIEWS`
       {%- endif %}
       )
-      SELECT
-      table_catalog, table_schema, table_name, last_refresh_time, refresh_watermark, last_refresh_status,
+
+SELECT
+      table_catalog,
+table_schema,
+table_name,
+last_refresh_time,
+refresh_watermark,
+last_refresh_status,
       FROM
       base
-      

@@ -1,0 +1,20 @@
+name: 'dbt_bigquery_monitoring_tests'
+version: '1.0.0'
+config-version: 2
+
+profile: dbt_bigquery_monitoring
+
+flags:
+    send_anonymous_usage_stats: False
+    use_colors: True
+
+clean-targets:
+  - target
+  - dbt_packages
+
+vars:
+  output_partition_expiration_days: 1
+  lookback_window_days: 1
+
+query-comment:
+  comment: '{{ dbt_bigquery_monitoring.get_query_comment(node) }}'

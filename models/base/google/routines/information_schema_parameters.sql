@@ -1,5 +1,4 @@
-
-      {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-parameters -#}
+{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-parameters -#}
       {# Required role/permissions: To query the INFORMATION_SCHEMA.PARAMETERS view, you need the following
 Identity and Access Management (IAM) permissions:
 bigquery.routines.get
@@ -20,12 +19,31 @@ Access control with IAM. -#}
           {% if not loop.last %}UNION ALL{% endif %}
           {% endfor %}
       {%- else %}
-          SELECT specific_catalog, specific_schema, specific_name, ordinal_position, parameter_mode, is_result, parameter_name, data_type, parameter_default, is_aggregate
+          SELECT
+specific_catalog,
+specific_schema,
+specific_name,
+ordinal_position,
+parameter_mode,
+is_result,
+parameter_name,
+data_type,
+parameter_default,
+is_aggregate
           FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`PARAMETERS`
       {%- endif %}
       )
-      SELECT
-      specific_catalog, specific_schema, specific_name, ordinal_position, parameter_mode, is_result, parameter_name, data_type, parameter_default, is_aggregate,
+
+SELECT
+      specific_catalog,
+specific_schema,
+specific_name,
+ordinal_position,
+parameter_mode,
+is_result,
+parameter_name,
+data_type,
+parameter_default,
+is_aggregate,
       FROM
       base
-      

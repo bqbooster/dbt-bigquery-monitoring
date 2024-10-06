@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: compute_billing_per_hour
+    description: >
+      This model calculates the hourly compute cost for BigQuery compute SKUs from the GCP billing export data.
+    meta:
+      label: "compute cost per hour"
+      order_fields_by: "label"
+      group_label: "compute cost"
+    columns:
+    - name: hour
+      description: The hour when the usage occurred, truncated to the hour.
+    - name: compute_type
+      description: The type of compute as described by the SKU.
+    - name: compute_cost
+      description: The total compute cost for the given hour and compute type.
+    - name: currency_symbol
+      description: The symbol of the currency used for the cost.

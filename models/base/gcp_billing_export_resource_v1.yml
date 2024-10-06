@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: gcp_billing_export_resource_v1
+    description: >
+      This model extracts billing data from the GCP billing export table, including details such as cost, usage, and project information.
+    columns:
+      - name: billing_account_id
+        description: The ID of the billing account.
+      - name: invoice_month
+        description: The month of the invoice.
+      - name: cost_type
+        description: The type of cost (e.g., usage, subscription).
+      - name: service
+        description: The service associated with the cost.
+      - name: sku
+        description: The SKU associated with the cost.
+      - name: usage_start_time
+        description: The start time of the usage period.
+      - name: usage_end_time
+        description: The end time of the usage period.
+      - name: project
+        description: The project associated with the cost.
+      - name: labels
+        description: The labels associated with the cost.
+      - name: system_labels
+        description: The system labels associated with the cost.
+      - name: location
+        description: The location where the cost was incurred.
+      - name: cost
+        description: The cost incurred.
+      - name: currency
+        description: The currency in which the cost is billed.
+      - name: currency_conversion_rate
+        description: The conversion rate used for the currency.
+      - name: usage
+        description: The amount of usage.
+      - name: credits
+        description: The credits applied to the cost.
+      - name: adjustment_info
+        description: Information about any adjustments to the cost.
+      - name: export_time
+        description: The time when the data was exported.
+      - name: tags
+        description: The tags associated with the cost.
+      - name: cost_at_list
+        description: The list cost before any discounts or credits.
+      - name: transaction_type
+        description: The type of transaction.
+      - name: seller_name
+        description: The name of the seller.

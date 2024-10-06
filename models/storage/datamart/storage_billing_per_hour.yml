@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: storage_billing_per_hour
+    description: >
+      This model calculates the hourly storage cost for BigQuery storage SKUs from the GCP billing export data.
+    meta:
+      label: "Storage cost per hour"
+      order_fields_by: "label"
+      group_label: "Storage cost"
+    columns:
+    - name: hour
+      description: The hour when the usage occurred, truncated to the hour.
+    - name: storage_type
+      description: The type of storage as described by the SKU.
+    - name: storage_cost
+      description: The total storage cost for the given hour and storage type.
+    - name: currency_symbol
+      description: The symbol of the currency used for the cost.

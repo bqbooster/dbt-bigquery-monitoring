@@ -49,6 +49,16 @@ jobs:
           sed -i "s/dbt_bigquery_monitoring_version=\"[0-9]*\.[0-9]*\.[0-9]*\",/dbt_bigquery_monitoring_version=\"${LATEST_VERSION_STRIPPED}\",/" macros/set_query_comment.sql
         fi
 
+    - name: Update version in /dbt_project.yml
+      run: |
+        LATEST_VERSION=${{ steps.latest.outputs.output }}
+        LATEST_VERSION_STRIPPED=${LATEST_VERSION#v}
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+          sed -i '' "s/version: \"[0-9]*\.[0-9]*\.[0-9]*\"/version: \"${LATEST_VERSION_STRIPPED}\"/" dbt_project.yml
+        else
+          sed -i "s/version: \"[0-9]*\.[0-9]*\.[0-9]*\"/version: \"${LATEST_VERSION_STRIPPED}\"/" dbt_project.yml
+        fi
+
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v4
       with:

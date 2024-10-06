@@ -64,7 +64,7 @@ models:
       - name: factored_table_id
         description: The factored table ID.
       - name: total_tb
-        description: The total TB of storage used by the table.
+        description: The logical bytes table size in TiB.
       - name: storage_cost
         description: The storage cost associated with the table.
       - name: reference_count

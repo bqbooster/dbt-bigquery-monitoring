@@ -7,64 +7,63 @@ models:
     meta:
       label: "Most Expensive Tables"
       order_fields_by: "label"
-      group_label: "Storage cost"      
+      group_label: "Storage cost"
     columns:
       - name: is_insertable_into
-        description: The is_insertable_into column.
+        description: Indicates if the table is insertable.
       - name: is_typed
-        description: The is_typed column.
+        description: Indicates if the table is typed.
       - name: ddl
-        description: The ddl column.
+        description: The Data Definition Language (DDL) statement for the table.
       - name: project_id
-        description: The project_id column.
+        description: The ID of the project containing the table.
       - name: dataset_id
-        description: The dataset_id column.
+        description: The ID of the dataset containing the table.
       - name: table_id
-        description: The table_id column.
+        description: The ID of the table.
       - name: default_collation_name
-        description: The default_collation_name column.
+        description: The default collation name of the table.
       - name: project_number
-        description: The project_number column.
+        description: The number of the project containing the table.
       - name: creation_time
-        description: The creation_time column.
+        description: The creation time of the table.
       - name: deleted
-        description: The deleted column.
+        description: Indicates if the table is deleted.
       - name: storage_last_modified_time
-        description: The storage_last_modified_time column.
+        description: The last modified time of the table's storage.
       - name: total_rows
-        description: The total_rows column.
+        description: The total number of rows in the table.
       - name: total_partitions
-        description: The total_partitions column.
+        description: The total number of partitions in the table.
       - name: total_logical_bytes
-        description: The total_logical_bytes column.
+        description: The total logical bytes of the table.
       - name: active_logical_bytes
-        description: The active_logical_bytes column.
+        description: The active logical bytes of the table.
       - name: long_term_logical_bytes
-        description: The long_term_logical_bytes column.
+        description: The long-term logical bytes of the table.
       - name: total_physical_bytes
-        description: The total_physical_bytes column.
+        description: The total physical bytes of the table.
       - name: active_physical_bytes
-        description: The active_physical_bytes column.
+        description: The active physical bytes of the table.
       - name: long_term_physical_bytes
-        description: The long_term_physical_bytes column.
+        description: The long-term physical bytes of the table.
       - name: time_travel_physical_bytes
-        description: The time_travel_physical_bytes column.
+        description: The physical bytes used for time travel in the table.
       - name: table_type
-        description: The table_type column.
+        description: The type of the table.
       - name: active_logical_bytes_cost
-        description: The active_logical_bytes_cost column.
+        description: The cost associated with active logical bytes.
       - name: long_term_logical_bytes_cost
-        description: The long_term_logical_bytes_cost column.
+        description: The cost associated with long-term logical bytes.
       - name: active_physical_bytes_cost
-        description: The active_physical_bytes_cost column.
+        description: The cost associated with active physical bytes.
       - name: long_term_physical_bytes_cost
-        description: The long_term_physical_bytes_cost column.
+        description: The cost associated with long-term physical bytes.
       - name: time_travel_physical_bytes_cost
-        description: The time_travel_physical_bytes_cost column.
+        description: The cost associated with time travel physical bytes.
       - name: factored_table_id
-        description: The factored_table_id column.
+        description: The factored ID of the table.
       - name: total_tb
-        description: The total_tb column.
+        description: The logical bytes table size in TiB.
       - name: storage_cost
-        description: The storage_cost column
-        
+        description: The storage cost of the table.

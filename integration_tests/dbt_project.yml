@@ -4,6 +4,8 @@ config-version: 2
 
 profile: dbt_bigquery_monitoring
 
+model-paths: ["models"]
+
 flags:
     send_anonymous_usage_stats: False
     use_colors: True
@@ -15,6 +17,10 @@ clean-targets:
 vars:
   output_partition_expiration_days: 1
   lookback_window_days: 1
+  enable_gcp_billing_export: true
+  gcp_billing_export_storage_project: '{{ target.project }}'
+  gcp_billing_export_dataset:  '{{ target.dataset }}'
+  gcp_billing_export_table: 'gcp_billing_export_fixture'
 
 query-comment:
   comment: '{{ dbt_bigquery_monitoring.get_query_comment(node) }}'

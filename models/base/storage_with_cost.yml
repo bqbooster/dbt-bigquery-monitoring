@@ -54,6 +54,6 @@ models:
       - name: time_travel_physical_bytes_cost
         description: The cost of time travel physical bytes.
       - name: total_tb
-        description: The total size in terabytes.
+        description: The logical bytes table size in TiB.
       - name: storage_cost
         description: The total storage cost.

@@ -90,7 +90,7 @@ To know which region is related to a job, in the BQ UI, use the `Job history` (b
 
 #### Modes
 
-###### Region mode (default)
+##### Region mode (default)
 
 In this mode, the package will monitor all the GCP projects in the region specified in the `dbt_project.yml` file.
 
@@ -105,7 +105,7 @@ vars:
 - Execution project needs to be the same as the storage project else you'll need to use the second mode.
 - If you have multiple GCP Projects in the same region, you should use the "project mode" (with `input_gcp_projects` setting to specify them) as else you will run into errors such as: `Within a standard SQL view, references to tables/views require explicit project IDs unless the entity is created in the same project that is issuing the query, but these references are not project-qualified: "region-us.INFORMATION_SCHEMA.JOBS"`.
 
-###### Project mode
+##### Project mode
 
 To enable the "project mode", you'll need to define explicitly one mandatory setting to set in the `dbt_project.yml` file:
 
@@ -115,12 +115,31 @@ vars:
   input_gcp_projects: [ 'my-gcp-project', 'my-gcp-project-2' ]
 ```
 
+##### GCP Billing export
+
+GCP Billing export is a feature that allows you to export your billing data to BigQuery. It allows the package to track the real cost of your queries and storage overtime.
+
+To enable on GCP end, you can follow the [official documentation](https://cloud.google.com/billing/docs/how-to/export-data-bigquery) to set up the export.
+
+Then enable the GCP billing export monitoring in the package, you'll need to define the following settings in the `dbt_project.yml` file:
+
+```yml
+vars:
+  # dbt bigquery monitoring vars
+  enable_gcp_billing_export: true
+  gcp_billing_export_storage_project: 'my-gcp-project'
+  gcp_billing_export_dataset: 'my_dataset'
+  gcp_billing_export_table: 'my_table'
+```
+
+#### Customizing the package configuration
+
 <details>
 <summary>
 Settings details
 </summary>
 
-Following settings are defined as `dbt_project_variable` (__Environment variable__).
+Following settings are defined with following template: `dbt_project_variable` (__Environment variable__) : description (default if any).
 
 #### Optional settings
 
@@ -147,6 +166,13 @@ Following settings are defined as `dbt_project_variable` (__Environment variable
 - `lookback_window_days` (__DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS__) : number of days to look back for monitoring (default: `7`)
 - `output_limit_size` (__DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE__) : limit size to use for the models (default: `1000`)
 - `output_partition_expiration_days` (__DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE__) : default table expiration in days for incremental models (default: `365` days)
+
+###### GCP Billing export
+- `enable_gcp_billing_export` (__DBT_BQ_MONITORING_ENABLE_GCP_BILLING_EXPORT__) : toggle to enable GCP billing export monitoring (default: `false`)
+- `gcp_billing_export_storage_project` (__DBT_BQ_MONITORING_GCP_BILLING_EXPORT_STORAGE_PROJECT__) : the GCP project where billing export data is stored (default: `'placeholder'` if `enable_gcp_billing_export` is `true`; otherwise `None`)
+- `gcp_billing_export_dataset` (__DBT_BQ_MONITORING_GCP_BILLING_EXPORT_DATASET__) : the dataset for GCP billing export data (default: `'placeholder'` if `enable_gcp_billing_export` is `true`; otherwise `None`)
+- `gcp_billing_export_table` (__DBT_BQ_MONITORING_GCP_BILLING_EXPORT_TABLE__) : the table for GCP billing export data (default: `'placeholder'` if `enable_gcp_billing_export` is `true`; otherwise `None`)
+
 
 </details>
 
@@ -314,6 +340,11 @@ Here's the list (**don't forget to prefix the following list by `information_sch
    - write_api_timeline_by_folder
    - write_api_timeline_by_organization
 
+
+- gcp_billing_export
+
+   - gcp_billing_export_resource_v1
+
 #### Models
 
 The package provides the following datamarts that can be easily used to build monitoring charts and dashboards:
@@ -325,6 +356,7 @@ The package provides the following datamarts that can be easily used to build mo
 
 - compute
 
+   - `compute_billing_per_hour`
    - `compute_cost_per_hour`
    - `most_expensive_jobs`
    - `most_expensive_models`
@@ -341,6 +373,7 @@ The package provides the following datamarts that can be easily used to build mo
    - `most_expensive_tables`
    - `partitions_monitoring`
    - `read_heavy_tables`
+   - `storage_billing_per_hour`
    - `table_with_better_pricing_on_logical_billing_model`
    - `table_with_better_pricing_on_physical_billing_model`
    - `unused_tables`

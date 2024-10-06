@@ -6,7 +6,7 @@
     {%- set comment_dict = {} -%}
     {%- do comment_dict.update(
         app='dbt',
-        dbt_bigquery_monitoring_version="0.8.0",
+        dbt_bigquery_monitoring_version="0.9.0",
         dbt_version=dbt_version,
         project_name=project_name,
         target_name=target.name,

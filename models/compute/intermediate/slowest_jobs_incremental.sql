@@ -22,5 +22,5 @@ SELECT
   total_slot_ms,
   total_time_seconds,
   RANK() OVER (PARTITION BY hour ORDER BY total_time_seconds DESC) AS rank
-FROM {{ ref('jobs_incremental') }}
+FROM {{ ref('jobs_done_incremental_hourly') }}
 QUALIFY rank <= {{ var('output_limit_size') }}

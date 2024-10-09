@@ -23,5 +23,5 @@ SELECT
   SUM(total_slot_ms) AS total_slot_ms,
   COUNT(*) AS query_count
 FROM
-  {{ ref('jobs_done_incremental_hourly') }}
+  {{ jobs_done_incremental_hourly() }}
 GROUP BY hour, query

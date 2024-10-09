@@ -24,5 +24,5 @@ SELECT
   SUM(total_slot_ms) AS total_slot_ms,
   MILLISECONDS_TO_READABLE_TIME_UDF(SUM(total_slot_ms), 2) AS total_slot_time,
   COUNT(*) AS query_count
-FROM {{ ref('jobs_done_incremental_daily') }}
+FROM {{ jobs_done_incremental_daily() }}
 GROUP BY day, hour, project_id

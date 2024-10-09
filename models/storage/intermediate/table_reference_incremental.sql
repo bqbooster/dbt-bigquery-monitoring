@@ -17,7 +17,7 @@ SELECT
   rt.table_id,
   COUNT(*) AS reference_count
 FROM {{ ref('jobs_by_project_with_cost') }}, UNNEST(referenced_tables) AS rt
-{% if is_incremental_run() %}
+{% if is_incremental() %}
 WHERE creation_time > _dbt_max_partition
 {% else %}
 WHERE creation_time > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {{ var('lookback_window_days') }} DAY)

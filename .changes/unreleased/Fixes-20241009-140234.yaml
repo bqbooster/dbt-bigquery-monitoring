@@ -1,0 +1,6 @@
+kind: Fixes
+body: Bugs on macros copy_partition / gcp billing export
+time: 2024-10-09T14:02:34.38311+02:00
+custom:
+    Author: Kayrnt
+    Issue: ""

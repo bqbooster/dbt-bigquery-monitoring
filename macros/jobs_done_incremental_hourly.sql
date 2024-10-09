@@ -1,17 +1,13 @@
-{{
-   config(
-    materialized='ephemeral',
-    )
-}}
 {#- This intermediate model aims to return already done jobs that in the lookback window or starting the last partial partitions.
     The downstream jobs will use that model to aggregate all finished jobs as pending/running jobs metrics will evolve
     So the lookback is based on the max partition of the downstream model
 #}
+{% macro jobs_done_incremental_hourly() -%}
 SELECT *
 FROM
   {{ ref('jobs_by_project_with_cost') }}
 WHERE
-{% if is_incremental_run() %}
+{% if is_incremental() %}
 creation_time > TIMESTAMP_TRUNC(_dbt_max_partition, HOUR)
 {% else %}
 creation_time > TIMESTAMP_SUB(
@@ -19,3 +15,4 @@ creation_time > TIMESTAMP_SUB(
   INTERVAL {{ var('lookback_window_days') }} DAY)
 {% endif %}
 AND state = 'DONE'
+{%- endmacro %}

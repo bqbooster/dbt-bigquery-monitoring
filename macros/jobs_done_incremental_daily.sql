@@ -3,7 +3,7 @@
     So the lookback is based on the max partition of the downstream model
 #}
 {% macro jobs_done_incremental_daily() -%}
-SELECT *
+(SELECT *
 FROM
   {{ ref('jobs_by_project_with_cost') }}
 WHERE
@@ -15,4 +15,5 @@ creation_time > TIMESTAMP_SUB(
   INTERVAL {{ var('lookback_window_days') }} DAY)
 {% endif %}
 AND state = 'DONE'
+)
 {%- endmacro %}

@@ -21,5 +21,5 @@ SELECT
   user_email,
   total_slot_ms,
   RANK() OVER (PARTITION BY hour ORDER BY query_cost DESC) AS rank
-FROM {{ ref('jobs_incremental') }}
+FROM {{ jobs_done_incremental_hourly() }}
 QUALIFY rank <= {{ var('output_limit_size') }}

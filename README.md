@@ -166,6 +166,7 @@ Following settings are defined with following template: `dbt_project_variable` (
 - `lookback_window_days` (__DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS__) : number of days to look back for monitoring (default: `7`)
 - `output_limit_size` (__DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE__) : limit size to use for the models (default: `1000`)
 - `output_partition_expiration_days` (__DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE__) : default table expiration in days for incremental models (default: `365` days)
+- `use_copy_partitions` (__DBT_BQ_MONITORING_USE_COPY_PARTITIONS__) : whether to use copy partitions or not (default: `true`)
 
 ###### GCP Billing export
 - `enable_gcp_billing_export` (__DBT_BQ_MONITORING_ENABLE_GCP_BILLING_EXPORT__) : toggle to enable GCP billing export monitoring (default: `false`)

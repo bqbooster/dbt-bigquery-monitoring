@@ -18,5 +18,5 @@ SELECT
   SUM(query_cost) AS total_query_cost,
   SUM(total_slot_ms) AS total_slot_ms,
   COUNT(*) AS query_count
-FROM {{ ref('jobs_incremental') }}
+FROM {{ jobs_done_incremental_hourly() }}
 GROUP BY hour, user_email

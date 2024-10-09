@@ -1,0 +1,6 @@
+kind: Fixes
+body: Fix is_incremental_run that wasn't working and replaced with a macro to inline proper incremental behavior
+time: 2024-10-09T14:01:53.586455+02:00
+custom:
+    Author: Kayrnt
+    Issue: ""

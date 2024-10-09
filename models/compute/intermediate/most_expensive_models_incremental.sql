@@ -23,6 +23,6 @@ SELECT
   SUM(total_slot_ms) AS total_slot_ms,
   COUNT(*) AS query_count
 FROM
-  {{ ref('jobs_incremental') }}
+  {{ jobs_done_incremental_hourly() }}
 WHERE dbt_model_name IS NOT NULL
 GROUP BY hour, dbt_model_name

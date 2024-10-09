@@ -6,6 +6,8 @@ dbt-bigquery-monitoring is a dbt package that provides models for monitoring Big
 
 ## Getting started
 
+*little tip: click on "Watch -> Custom -> Releases" to get an email on new versions with the changelog*
+
 ### dbt compatibility
 
 The package is actively used with the latest dbt stable version which `1.8.2` at the time of writing.

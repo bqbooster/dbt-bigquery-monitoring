@@ -26,6 +26,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }} # Check out the code of the PR
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
       - name: Install tox
         run: python3 -m pip install tox
@@ -52,6 +57,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }} # Check out the code of the PR
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'    
 
       - name: Install Python packages
         run: python -m pip install dbt-bigquery~=1.8.2 sqlfluff-templater-dbt

@@ -1,6 +1,0 @@
-kind: Features
-body: Add partition_expiration_days to partition & move to view the partitions_monitoring model as it is just adding computed fields on stg_partitions_monitoring
-time: 2024-10-15T12:02:15.661806+02:00
-custom:
-    Author: Kayrnt
-    Issue: ""

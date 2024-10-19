@@ -87,3 +87,10 @@ tox -e lint -- models/path/to/directory
 #### Rules
 
 Enforced rules are defined within `tox.ini`. To view the full list of available rules and their configuration, see the [SQLFluff documentation](https://docs.sqlfluff.com/en/stable/rules.html).
+
+## Generation of dbt base google models
+
+dbt base google models are generated in another dedicated project hosted in:
+https://github.com/bqbooster/dbt-bigquery-monitoring-parser
+
+It was separated to ensure that users don't install the parser (and tests) when they install the dbt package.

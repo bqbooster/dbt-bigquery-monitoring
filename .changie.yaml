@@ -16,9 +16,9 @@ changeFormat: |-
         {{- $changeLink := "[#nbr](https://github.com/bqbooster/dbt-bigquery-monitoring/issues/nbr)" | replace "nbr" $issueNbr }}
         {{- $IssueList = append $IssueList $changeLink }}
       {{- end }}
-      - {{.Body}} ({{ range $index, $element := $IssueList }}{{if $index}}, {{end}}{{$element}}{{end}})
+    - {{.Body}} ({{ range $index, $element := $IssueList }}{{if $index}}, {{end}}{{$element}}{{end}})
     {{- else }}
-      - {{.Body}}
+    - {{.Body}}
     {{- end }}
   {{- else }}
     - {{.Body}}

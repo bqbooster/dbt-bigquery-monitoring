@@ -1,6 +1,7 @@
 # IDE
 .idea/
 .vscode/
+.condarc
 # cache
 .cache
 # standard dbt ignore
@@ -12,9 +13,6 @@ logs/
 package-lock.yml
 # ignore any __pycache__ directories
 __pycache__/
-# ignore temporary documentation parser files
-documentation_parser/tmp_html_content.html
-documentation_parser/output/
 # reports
 reports/
 # ci

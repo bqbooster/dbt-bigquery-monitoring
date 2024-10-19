@@ -1,6 +1,7 @@
 # IDE
 .idea/
 .vscode/
+.condarc
 # cache
 .cache
 # standard dbt ignore

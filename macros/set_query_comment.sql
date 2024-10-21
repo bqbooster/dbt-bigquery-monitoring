@@ -112,7 +112,5 @@
     ) -%}
     {%- endif -%}
 
-    {{ log("comment_dict" ~ comment_dict) }}
-
     {{ return(tojson(comment_dict)) }}
 {% endmacro %}

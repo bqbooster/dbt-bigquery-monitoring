@@ -8,7 +8,7 @@ WITH partition_expirations AS (
 table_catalog,
 table_schema,
 table_name,
-CAST(option_value AS INT64) AS partition_expiration_days
+SAFE_CAST(option_value AS INT64) AS partition_expiration_days
   FROM {{ ref('information_schema_table_options') }}
   WHERE option_name = 'partition_expiration_days'
 )

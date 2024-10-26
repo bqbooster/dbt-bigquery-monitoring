@@ -17,13 +17,13 @@ Access control with IAM. -#}
     {% if project_list()|length > 0 -%}
     {% for project in project_list() -%}
     SELECT
-    SCHEMA_NAME
+    CONCAT('`', CATALOG_NAME, '`.`', SCHEMA_NAME, '`') AS SCHEMA_NAME
     FROM `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`SCHEMATA`
     {% if not loop.last %}UNION ALL{% endif %}
     {% endfor %}
     {%- else %}
     SELECT
-    SCHEMA_NAME
+    CONCAT('`', CATALOG_NAME, '`.`', SCHEMA_NAME, '`') AS SCHEMA_NAME
     FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`SCHEMATA`
     {%- endif %}
     {%- endset %}
@@ -45,7 +45,7 @@ total_rows,
 total_logical_bytes,
 last_modified_time,
 storage_tier
-      FROM `{{ dataset | trim }}`.`INFORMATION_SCHEMA`.`PARTITIONS`
+      FROM {{ dataset | trim }}.`INFORMATION_SCHEMA`.`PARTITIONS`
     {% if not loop.last %}UNION ALL{% endif %}
     {% endfor %}
     {%- endif -%}

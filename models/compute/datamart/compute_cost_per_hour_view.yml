@@ -1,14 +1,18 @@
 version: 2
 
 models:
-  - name: compute_cost_per_hour
+  - name: compute_cost_per_hour_view
     description: >
-      A model that store the compute cost per hour.
+      An enriched view over the model that stores the compute cost per hour.
     meta:
       label: "Compute cost per hour"
       order_fields_by: "label"
       group_label: "Compute cost"
     columns:
+      - name: year
+        description: The year of the compute cost.
+      - name: month
+        description: The month of the compute cost.
       - name: day
         description: The day of the compute cost.
       - name: hour

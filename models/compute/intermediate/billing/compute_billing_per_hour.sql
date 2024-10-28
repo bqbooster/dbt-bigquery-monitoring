@@ -22,6 +22,6 @@ WHERE
 ((service.description LIKE 'BigQuery' AND LOWER(sku.description) LIKE '%analysis%')
 OR (service.description LIKE 'BigQuery Reservation API'))
 {% if is_incremental() %}
-AND TIMESTAMP_TRUNC(usage_start_time, HOUR) > _dbt_max_partition
+AND TIMESTAMP_TRUNC(usage_start_time, HOUR) >= _dbt_max_partition
 {% endif %}
 GROUP BY ALL

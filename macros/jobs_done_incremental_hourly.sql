@@ -8,9 +8,9 @@ FROM
   {{ ref('jobs_by_project_with_cost') }}
 WHERE
 {% if is_incremental() %}
-creation_time > TIMESTAMP_TRUNC(_dbt_max_partition, HOUR)
+creation_time >= TIMESTAMP_TRUNC(_dbt_max_partition, HOUR)
 {% else %}
-creation_time > TIMESTAMP_SUB(
+creation_time >= TIMESTAMP_SUB(
   TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR),
   INTERVAL {{ var('lookback_window_days') }} DAY)
 {% endif %}

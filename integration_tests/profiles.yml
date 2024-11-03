@@ -10,5 +10,5 @@ dbt_bigquery_monitoring:
       threads: 8
       keyfile: ./keyfile.json
       timeout_seconds: 300
-      location: "{{ env_var('DBT_ENV_IGQUERY_TEST_LOCATION') }}"
+      location: "{{ env_var('DBT_ENV_SECRET_BIGQUERY_TEST_LOCATION') }}"
       retries: 0

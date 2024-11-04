@@ -1,0 +1,6 @@
+kind: Features
+body: Add compute_cost_per_minute for precise compute cost tracking
+time: 2024-11-04T21:10:28.835264+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

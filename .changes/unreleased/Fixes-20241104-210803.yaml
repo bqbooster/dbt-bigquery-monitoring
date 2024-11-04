@@ -1,0 +1,6 @@
+kind: Fixes
+body: Add equality on incremental models to avoid cases where hours could be skipped
+time: 2024-11-04T21:08:03.71365+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

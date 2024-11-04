@@ -362,6 +362,9 @@ The package provides the following datamarts that can be easily used to build mo
 
    - `compute_billing_per_hour`
    - `compute_cost_per_hour`
+    - `compute_cost_per_hour_view` (adds computed metrics)
+   - `compute_cost_per_minute`
+    - `compute_cost_per_minute_view` (adds computed metrics)
    - `most_expensive_jobs`
    - `most_expensive_models`
    - `most_expensive_users`

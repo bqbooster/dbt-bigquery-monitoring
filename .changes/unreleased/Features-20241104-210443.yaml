@@ -1,6 +1,0 @@
-kind: Features
-body: Add storage costs to daily_spend when using GCP cost export
-time: 2024-11-04T21:04:43.957707+01:00
-custom:
-    Author: Kayrnt
-    Issue: ""

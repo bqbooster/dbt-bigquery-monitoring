@@ -1,0 +1,6 @@
+kind: Fixes
+body: Fix lookback for compute billing and make it customizable via `lookback_incremental_billing_window_days` var
+time: 2024-11-08T16:42:24.170779+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

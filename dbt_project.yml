@@ -49,7 +49,11 @@ vars:
   bi_engine_gb_hourly_price: "{{ env_var('DBT_BQ_MONITORING_BI_ENGINE_GB_HOURLY_PRICE', 0.0416) }}"
 
   # Project input configuration
-  lookback_window_days: "{{ env_var('DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS', 7) }}"
+  # The number of days to look back for regular tables, you might use up to 180 days usually.
+  # Expiration on intermediate tables is aligned so that it can store data as old your maximum lookback window as it's partitioned by time.
+  lookback_window_days: "{{ env_var('DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS', 7) }}" 
+  # Billing data can be late, a safe window is to refresh data for the past 3 days but you can increase it for exceptional cases
+  lookback_incremental_billing_window_days: "{{ env_var('DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS', 3) }}"
   # Project output configuration
   output_materialization: "{{ env_var('DBT_BQ_MONITORING_OUTPUT_MATERIALIZATION', 'table') }}"
   output_limit_size: "{{ env_var('DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE', 1000) }}"

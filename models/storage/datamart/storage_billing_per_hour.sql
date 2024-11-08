@@ -22,6 +22,6 @@ WHERE
 (service.description LIKE '%BigQuery%'
 AND LOWER(sku.description) LIKE '%storage%')
 {% if is_incremental() %}
-AND TIMESTAMP_TRUNC(usage_start_time, HOUR) >= TIMESTAMP_SUB(_dbt_max_partition, INTERVAL 3 DAY)
+AND TIMESTAMP_TRUNC(usage_start_time, HOUR) >= TIMESTAMP_SUB(_dbt_max_partition, INTERVAL {{ var('lookback_incremental_billing_window_days') }} DAY)
 {% endif %}
 GROUP BY ALL

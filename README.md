@@ -166,6 +166,7 @@ Following settings are defined with following template: `dbt_project_variable` (
 ###### Package
 
 - `lookback_window_days` (__DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS__) : number of days to look back for monitoring (default: `7`)
+- `lookback_incremental_billing_window_days` (__DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS__) : number of days to look back for monitoring (default: `3`)
 - `output_limit_size` (__DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE__) : limit size to use for the models (default: `1000`)
 - `output_partition_expiration_days` (__DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE__) : default table expiration in days for incremental models (default: `365` days)
 - `use_copy_partitions` (__DBT_BQ_MONITORING_USE_COPY_PARTITIONS__) : whether to use copy partitions or not (default: `true`)
@@ -370,6 +371,7 @@ The package provides the following datamarts that can be easily used to build mo
    - `most_expensive_users`
    - `most_repeated_jobs`
    - `most_repeated_models`
+   - `reservation_usage_per_minute`
    - `slowest_jobs`
 
 - storage

@@ -13,32 +13,15 @@
     partition_expiration_days = var('output_partition_expiration_days')
     )
 }}
-WITH jobs_timeline_per_minute AS (
-  SELECT
-  TIMESTAMP_TRUNC(period_start, MINUTE) AS minute,
-  reservation_id,
-  project_id,
-  SUM(period_slot_ms) AS period_slot_ms
-  FROM
-  {{ ref("information_schema_jobs_timeline") }}
-  WHERE
-  {% if is_incremental() %}
-  period_start >= TIMESTAMP_TRUNC(_dbt_max_partition, MINUTE)
-  {% else %}
-  period_start >= TIMESTAMP_SUB(
-    TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), MINUTE),
-    INTERVAL {{ var('lookback_window_days') }} DAY)
-  {% endif %}
-  GROUP BY ALL
-),
-
+WITH
 reservations_timeline AS (
 SELECT
   TIMESTAMP_TRUNC(period_start, MINUTE) AS minute,
   reservation_id,
   project_id,
   ANY_VALUE(slots_assigned) AS slots_assigned,
-  ANY_VALUE(slots_max_assigned) AS slots_max_assigned
+  ANY_VALUE(slots_max_assigned) AS slots_max_assigned,
+  ANY_VALUE(autoscale) AS autoscale
   FROM
   {{ ref("information_schema_reservations_timeline") }}
   WHERE
@@ -56,11 +39,12 @@ SELECT
   minute,
   reservation_id,
   project_id,
-  jobs.period_slot_ms,
+  jobs.total_slot_ms,
   res.slots_assigned,
   res.slots_max_assigned,
+  res.autoscale
 FROM
-  jobs_timeline_per_minute AS jobs
+  {{ ref('compute_cost_per_minute') }} AS jobs
 INNER JOIN
   reservations_timeline AS res
   USING (minute, reservation_id, project_id)

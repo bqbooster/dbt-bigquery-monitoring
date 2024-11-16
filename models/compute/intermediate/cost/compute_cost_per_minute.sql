@@ -30,5 +30,5 @@ SELECT
     COUNTIF(state = 'RUNNING') AS running,
     COUNTIF(state = 'PENDING') AS pending
   ) AS job_state
-FROM {{ jobs_done_incremental_minute() }}
+FROM {{ jobs_done_incremental_hourly() }}
 GROUP BY ALL

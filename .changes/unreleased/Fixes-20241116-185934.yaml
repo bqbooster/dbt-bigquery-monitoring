@@ -1,6 +1,0 @@
-kind: Fixes
-body: Fix composte cost per minute that would override latest hour because it is leveraging insert_overwrite.
-time: 2024-11-16T18:59:34.210365+01:00
-custom:
-    Author: Kayrnt
-    Issue: ""

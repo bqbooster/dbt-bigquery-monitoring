@@ -356,36 +356,51 @@ The package provides the following datamarts that can be easily used to build mo
 
 - global
 
-   - `daily_spend`
-   - `dbt_bigquery_monitoring_options`
+  - daily_spend
+  - dbt_bigquery_monitoring_options
 
 - compute
 
-   - `compute_billing_per_hour`
-   - `compute_cost_per_hour`
-    - `compute_cost_per_hour_view` (adds computed metrics)
-   - `compute_cost_per_minute`
-    - `compute_cost_per_minute_view` (adds computed metrics)
-   - `most_expensive_jobs`
-   - `most_expensive_models`
-   - `most_expensive_users`
-   - `most_repeated_jobs`
-   - `most_repeated_models`
-   - `reservation_usage_per_minute`
-   - `slowest_jobs`
+  - billing
+    - compute_billing_per_hour
+
+  - bi engine
+    - bi_engine_usage_per_minute
+    - bi_engine_usage_per_hour
+
+  - cost
+    - compute_cost_per_hour
+    - compute_cost_per_hour_view (adds computed metrics)
+    - compute_cost_per_minute
+    - compute_cost_per_minute_view (adds computed metrics)
+
+  - jobs
+    - most_expensive_jobs
+    - most_repeated_jobs
+    - slowest_jobs
+
+  - models
+    - most_expensive_models
+    - most_repeated_models
+
+  - reservations
+    - reservation_usage_per_minute
+
+  - users
+    - most_expensive_users
 
 - storage
 
-   - `dataset_with_better_pricing_on_logical_billing_model`
-   - `dataset_with_better_pricing_on_physical_billing_model`
-   - `dataset_with_cost`
-   - `most_expensive_tables`
-   - `partitions_monitoring`
-   - `read_heavy_tables`
-   - `storage_billing_per_hour`
-   - `table_with_better_pricing_on_logical_billing_model`
-   - `table_with_better_pricing_on_physical_billing_model`
-   - `unused_tables`
+  - dataset_with_better_pricing_on_logical_billing_model
+  - dataset_with_better_pricing_on_physical_billing_model
+  - dataset_with_cost
+  - most_expensive_tables
+  - partitions_monitoring
+  - read_heavy_tables
+  - storage_billing_per_hour
+  - table_with_better_pricing_on_logical_billing_model
+  - table_with_better_pricing_on_physical_billing_model
+  - unused_tables
 
 </details>
 

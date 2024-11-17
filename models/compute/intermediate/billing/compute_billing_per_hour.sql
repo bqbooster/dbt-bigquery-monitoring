@@ -19,8 +19,8 @@ SELECT
     {{ currency_to_symbol('currency') }} AS currency_symbol
 FROM {{ ref('gcp_billing_export_resource_v1') }}
 WHERE
-((service.description LIKE 'BigQuery' AND LOWER(sku.description) LIKE '%analysis%')
-OR (service.description LIKE 'BigQuery Reservation API'))
+((service.description = 'BigQuery' AND LOWER(sku.description) LIKE '%analysis%')
+OR (service.description IN ('BigQuery Reservation API', 'BigQuery BI Engine')))
 {% if is_incremental() %}
 AND TIMESTAMP_TRUNC(usage_start_time, HOUR) >= TIMESTAMP_SUB(_dbt_max_partition, INTERVAL {{ var('lookback_incremental_billing_window_days') }} DAY)
 {% endif %}

@@ -79,3 +79,29 @@ SELECT
   60.00 AS cost_at_list,
   "GOOGLE" AS transaction_type,
   "Google LLC" AS seller_name
+
+UNION ALL
+
+SELECT
+  "234567-890123-456789" AS billing_account_id,
+  STRUCT("202409" AS month) AS invoice,
+  "regular" AS cost_type,
+  STRUCT("650B-3C82-34DB" AS id, "BigQuery BI Engine" AS description) AS service,
+  STRUCT("C196-CE3B-FC44" AS id, "BigQuery BI Engine Flat Rate for US" AS description) AS sku,
+  TIMESTAMP("2024-09-15 00:00:00 UTC") AS usage_start_time,
+  TIMESTAMP("2024-09-15 23:59:59 UTC") AS usage_end_time,
+  STRUCT("another_project" AS id, "123456789" AS number, "Another Project" AS name, "/234567890/123456789/" AS ancestry_numbers) AS project,
+  [STRUCT("env" AS key, "development" AS value)] AS labels,
+  [STRUCT("priority" AS key, "high" AS value)] AS system_labels,
+  STRUCT("us-east1" AS location, "US" AS country, "us-east1" AS region, NULL AS zone) AS location,
+  50.75 AS cost,
+  "USD" AS currency,
+  1.2 AS currency_conversion_rate,
+  STRUCT(100.25 AS amount, "byte-seconds" AS unit, 100.25 AS amount_in_pricing_units, "byte-seconds" AS pricing_unit) AS usage,
+  [] AS credits,
+  STRUCT("54321" AS id, "Correction for incorrect pricing" AS description, "PRICE_CORRECTION" AS type, "PARTIAL_CORRECTION" AS mode) AS adjustment_info,
+  TIMESTAMP("2024-10-02 08:30:00 UTC") AS export_time,
+  [STRUCT("owner" AS key, "jane.smith" AS value, TRUE AS inherited, "organization/tag2" AS namespace)] AS tags,
+  60.00 AS cost_at_list,
+  "GOOGLE" AS transaction_type,
+  "Google LLC" AS seller_name

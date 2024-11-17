@@ -17,18 +17,19 @@
   {{ milliseconds_to_readable_time_udf() }}
 {%- endcall %}
 SELECT
-  minute,
+  TIMESTAMP_TRUNC(creation_time, MINUTE) AS minute,
   project_id,
   reservation_id,
-  SUM(ROUND(total_query_cost, 2)) AS total_query_cost,
-  SUM(ROUND(failing_query_cost, 2)) AS failing_query_cost,
+  bi_engine_statistics.bi_engine_mode,
+  SUM(ROUND(query_cost, 2)) AS total_query_cost,
+  SUM(IF(error_result IS NOT NULL, ROUND(query_cost, 2), 0)) AS failing_query_cost,
   SUM(total_slot_ms) AS total_slot_ms,
   MILLISECONDS_TO_READABLE_TIME_UDF(total_slot_ms, 2) AS total_slot_time,
-  SUM(query_count) AS query_count,
+  COUNT(*) AS query_count,
   STRUCT(
-    SUM(job_state.done) AS done,
-    SUM(job_state.running) AS running,
-    SUM(job_state.pending) AS pending
+    COUNTIF(state = 'DONE') AS done,
+    COUNTIF(state = 'RUNNING') AS running,
+    COUNTIF(state = 'PENDING') AS pending
   ) AS job_state
-FROM {{ ref('compute_rollup_per_minute') }}
+FROM {{ jobs_done_incremental_hourly() }}
 GROUP BY ALL

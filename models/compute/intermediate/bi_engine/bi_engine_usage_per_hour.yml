@@ -1,30 +1,32 @@
 version: 2
 
 models:
-  - name: compute_cost_per_minute
+  - name: bi_engine_usage_per_hour
     description: >
-      A model that stores the compute cost per minute.
+      A model that stores BI engine usage per hour.
     meta:
-      label: "Compute cost per minute"
+      label: "BI engine usage per hour"
       order_fields_by: "label"
-      group_label: "Compute cost"
+      group_label: "BI engine usage"
     columns:
-      - name: minute
-        description: The minute of the compute cost.
+      - name: hour
+        description: The hour of the compute cost.
       - name: project_id
         description: The project id of the job.
       - name: reservation_id
         description: The reservation id of the job.
+      - name: bi_engine_mode
+        description: The BI engine mode of the job.
       - name: total_query_cost
-        description: The total cost of all queries run during the minute.
+        description: The total cost of all queries run during the hour.
       - name: failing_query_cost
-        description: The total cost of all queries that failed during the minute.
+        description: The total cost of all queries that failed during the hour.
       - name: total_slot_ms
-        description: The total number of slot time milliseconds used by all queries during the minute.
+        description: The total number of slot time milliseconds used by all queries during the hour.
       - name: total_slot_time
         description: The total number of slot time in human readable format used by all queries during the hour.
       - name: query_count
-        description: The total number of queries run during the minute.
+        description: The total number of queries run during the hour.
       - name: job_state
         description: A struct containing the statistics per state.
         fields:

@@ -1,13 +1,13 @@
 version: 2
 
 models:
-  - name: compute_cost_per_minute
+  - name: compute_rollup_per_minute
     description: >
-      A model that stores the compute cost per minute.
+      A model that stores an intermediate rollup used for compute cost per minute.
     meta:
-      label: "Compute cost per minute"
+      label: "Compute rollup per minute"
       order_fields_by: "label"
-      group_label: "Compute cost"
+      group_label: "Compute rollup"
     columns:
       - name: minute
         description: The minute of the compute cost.
@@ -15,6 +15,8 @@ models:
         description: The project id of the job.
       - name: reservation_id
         description: The reservation id of the job.
+      - name: bi_engine_mode
+        description: The BI engine mode of the job.
       - name: total_query_cost
         description: The total cost of all queries run during the minute.
       - name: failing_query_cost

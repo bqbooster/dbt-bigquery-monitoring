@@ -65,7 +65,7 @@ Add the following to your `packages.yml` file:
 ```yml {"id":"01J6QQ78T6KQCXF8VPNH8BXBYM"}
 packages:
   - package: bqbooster/dbt_bigquery_monitoring
-    version: 0.13.0
+    version: 0.14.0
 ```
 
 ### Set up an output dataset

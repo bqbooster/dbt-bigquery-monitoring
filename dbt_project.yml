@@ -1,5 +1,5 @@
 name: "dbt_bigquery_monitoring"
-version: "0.13.0"
+version: "0.14.0"
 require-dbt-version: [">=1.3.0", "<2.0.0"]
 config-version: 2
 

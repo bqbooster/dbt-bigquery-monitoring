@@ -1,0 +1,89 @@
+version: 2
+
+models:
+  - name: query_with_better_pricing_using_on_demand_view
+    description: >
+      A model that combines job data with cost information that would cost less using on demand.
+    meta:
+      label: "Jobs with Cost"
+      order_fields_by: "label"
+      group_label: "Compute cost"
+    columns:
+      - name: bi_engine_statistics
+        description: The BI engine statistics.
+      - name: cache_hit
+        description: Indicates whether the cache was hit.
+      - name: creation_time
+        description: The creation time of the job.
+      - name: hour
+        description: The hour of the job creation time.
+      - name: destination_table
+        description: The destination table for the job.
+      - name: end_time
+        description: The end time of the job.
+      - name: error_result
+        description: The error result of the job.
+      - name: job_id
+        description: The unique identifier of the job.
+      - name: job_stages
+        description: The stages of the job.
+      - name: job_type
+        description: The type of the job.
+      - name: labels
+        description: The labels associated with the job.
+      - name: parent_job_id
+        description: The parent job's unique identifier.
+      - name: priority
+        description: The job's priority.
+      - name: project_id
+        description: The project's unique identifier.
+      - name: project_number
+        description: The project's number.
+      - name: query
+        description: The job's query
+      - name: referenced_tables
+        description: The tables referenced by the job.
+      - name: reservation_id
+        description: The reservation ID.
+      - name: start_time
+        description: The start time of the job.
+      - name: state
+        description: The state of the job.
+      - name: statement_type
+        description: The type of SQL statement.
+      - name: timeline
+        description: The job's timeline.
+      - name: total_bytes_billed
+        description: The total bytes billed for the job.
+      - name: total_bytes_processed
+        description: The total bytes processed by the job.
+      - name: total_modified_partitions
+        description: The total modified partitions.
+      - name: total_slot_ms
+        description: The total slot time in milliseconds.
+      - name: transaction_id
+        description: The transaction ID of the job.
+      - name: user_email
+        description: The email of the user who initiated the job.
+      - name: query_info
+        description: Additional query information.
+      - name: transferred_bytes
+        description: The total transferred bytes.
+      - name: materialized_view_statistics
+        description: Statistics for materialized views.
+      - name: avg_slots
+        description: The average slots used during the job.
+      - name: total_tb_billed
+        description: The total billed terabytes.
+      - name: total_time_seconds
+        description: The total time in seconds for the job.
+      - name: flat_pricing_query_cost
+        description: The query cost based on flat pricing.
+      - name: ondemand_query_cost
+        description: The query cost based on on-demand pricing.
+      - name: query_cost
+        description: The final query cost based on pricing choice.
+      - name: cost_savings
+        description: The cost savings for using on demand pricing compared to flat pricing.
+      - name: cost_savings_pct
+        description: The cost savings percentage for using on demand pricing compared to flat pricing.

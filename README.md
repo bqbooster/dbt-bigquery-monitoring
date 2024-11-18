@@ -378,6 +378,8 @@ The package provides the following datamarts that can be easily used to build mo
     - most_expensive_jobs
     - most_repeated_jobs
     - slowest_jobs
+    - query_with_better_pricing_using_flat_pricing_view
+    - query_with_better_pricing_using_on_demand_view
 
   - models
     - most_expensive_models

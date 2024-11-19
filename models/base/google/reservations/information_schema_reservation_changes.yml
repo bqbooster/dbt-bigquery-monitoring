@@ -37,14 +37,14 @@ models:
       \ is computed automatically based on available\n        resources."
     type: INTEGER
   - name: autoscale
-    description: 'Information about the autoscale capacity of the reservation. Fields
-      include the following:
-
-
-      current_slots: the number of slots added to the reservation by autoscaling.
-
-      max_slots: the maximum number of slots that could be added to the reservation
-      by autoscaling.'
+    description: "Information about the autoscale capacity of the reservation. Fields\
+      \ include the following:\n\ncurrent_slots: the number of slots added to the\
+      \ reservation by autoscaling.\n            \nNote: After users reduce max_slots,\
+      \ it may take a while before it can be propagated,\n                      so\
+      \ current_slots may stay in the original value and could be larger than max_slots\n\
+      \                      for that brief period (less than one minute).\n     \
+      \       \n\nmax_slots: the maximum number of slots that could be added to the\
+      \ reservation by autoscaling."
     type: STRUCT
   - name: edition
     description: The edition associated with this reservation. For more information

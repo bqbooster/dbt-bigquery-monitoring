@@ -21,29 +21,29 @@ models:
       \ the\n       tableId"
     type: STRING
   - name: BILLABLE_TOTAL_LOGICAL_USAGE
-    description: "The total logical usage, in MB second.\nReturns 0 if the dataset\
+    description: "The total logical usage, in MiB second.\nReturns 0 if the dataset\
       \ uses the physical storage\n     billing model."
     type: INT64
   - name: BILLABLE_ACTIVE_LOGICAL_USAGE
-    description: "The logical usage that is less than 90 days old, in MB\n     second.\n\
+    description: "The logical usage that is less than 90 days old, in MiB\n     second.\n\
       Returns 0 if the dataset uses the physical storage\n     billing model."
     type: INT64
   - name: BILLABLE_LONG_TERM_LOGICAL_USAGE
-    description: "The logical usage that is more than 90 days old, in MB\n     second.\n\
+    description: "The logical usage that is more than 90 days old, in MiB\n     second.\n\
       Returns 0 if the dataset uses the physical storage\n     billing model."
     type: INT64
   - name: BILLABLE_TOTAL_PHYSICAL_USAGE
-    description: "The total usage in MB second. This includes\n     physical bytes\
+    description: "The total usage in MiB second. This includes\n     physical bytes\
       \ used for fail-safe and\n     time travel storage.\nReturns 0 if the dataset\
       \ uses the logical storage\n     billing model."
     type: INT64
   - name: BILLABLE_ACTIVE_PHYSICAL_USAGE
-    description: "The physical usage that is less than 90 days old,\n     in MB second.\
+    description: "The physical usage that is less than 90 days old,\n     in MiB second.\
       \ This\n     includes physical bytes used for fail-safe and\n     time travel\
       \ storage.\nReturns 0 if the dataset uses the logical storage\n     billing\
       \ model."
     type: INT64
   - name: BILLABLE_LONG_TERM_PHYSICAL_USAGE
-    description: "The physical usage that is more than 90 days old,\n     in MB second.\n\
+    description: "The physical usage that is more than 90 days old,\n     in MiB second.\n\
       Returns 0 if the dataset uses the logical storage\n     billing model."
     type: INT64

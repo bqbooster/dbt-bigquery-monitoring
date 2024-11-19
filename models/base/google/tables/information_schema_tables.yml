@@ -28,6 +28,9 @@ models:
   - name: is_typed
     description: The value is always NO
     type: STRING
+  - name: is_change_history_enabled
+    description: "YES or NO depending on whether\n      change history\n      is enabled"
+    type: STRING
   - name: creation_time
     description: The table's creation time
     type: TIMESTAMP

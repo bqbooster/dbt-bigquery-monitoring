@@ -134,6 +134,22 @@ models:
     description: "Statistics of\n        materialized views considered in a query\
       \ job. (Preview)"
     type: RECORD
+  - name: query_info
+    description: "query_info.resource_warning : The warning message that appears if\
+      \ the resource usage during query processing is above the internal threshold\
+      \ of the system. A successful query job can have the resource_warning field\
+      \ populated. With resource_warning, you get additional data points to optimize\
+      \ your queries and to set up monitoring for performance trends of an equivalent\
+      \ set of queries by using query_hashes.\nquery_info.query_hashes.normalized_literals\
+      \ : Contains the hashes of the query. normalized_literals is a hexadecimal\n\
+      \        STRING hash that ignores comments, parameter values, UDFs, and literals.\n\
+      \        The hash value will differ when underlying views change, or if the\
+      \ query implicitly\n        references columns, such as SELECT *, and the table\
+      \ schema changes.\n        \n        This field appears for successful GoogleSQL\
+      \ queries that are not cache hits.\nquery_info.performance_insights : Performance\
+      \ insights for the job.\nquery_info.optimization_details : The history-based\
+      \ optimizations\n        for the job."
+    type: RECORD
   - name: job_creation_reason
     description: "job_creation_reason.code : Specifies the high level reason why a\
       \ job was created.\n        Possible values are:\n        \nREQUESTED: job creation\
@@ -144,18 +160,4 @@ models:
       \ from the query cannot fit in the in-line\n            response.\nOTHER: the\
       \ system has determined that the query needs to be executed as a\n         \
       \   job."
-    type: RECORD
-  - name: query_info
-    description: "query_info.resource_warning : The warning message that appears if\
-      \ the resource usage during query processing is above the internal threshold\
-      \ of the system. A successful query job can have the resource_warning field\
-      \ populated. With resource_warning, you get additional data points to optimize\
-      \ your queries and to set up monitoring for performance trends of an equivalent\
-      \ set of queries by using query_hashes.\nquery_info.query_hashes.normalized_literals\
-      \ : Contains the hashes of the query. normalized_literals is a hexadecimal\n\
-      \        STRING hash that ignores comments, parameter values, UDFs, and literals.\n\
-      \        \n        This field appears for successful GoogleSQL queries that\
-      \ are not cache hits.\nquery_info.performance_insights : Performance insights\
-      \ for the job.\nquery_info.optimization_details : The history-based optimizations\n\
-      \        for the job."
     type: RECORD

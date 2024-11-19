@@ -74,3 +74,6 @@ models:
     description: "Number of physical (compressed) bytes used by the fail-safe storage\n\
       \        (deleted or changed data)."
     type: INT64
+  - name: LAST_METADATA_INDEX_REFRESH_TIME
+    description: The last metadata index refresh time of the table.
+    type: TIMESTAMP

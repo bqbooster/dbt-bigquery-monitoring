@@ -39,3 +39,7 @@ models:
       \ This value is only visible in the secondary region.\nIf the dataset contains\
       \ a table with streaming data, the value of replication_time will not be accurate."
     type: TIMESTAMP
+  - name: sync_status
+    description: "The status of the sync\n      between the primary and secondary\
+      \ replica. Returns NULL if the replica is a\n      primary replica."
+    type: JSON

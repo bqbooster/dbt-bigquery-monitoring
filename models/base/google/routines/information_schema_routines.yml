@@ -60,3 +60,6 @@ models:
     description: "The DDL statement\n        that can be used to create the routine,\
       \ such as\n        CREATE FUNCTION\n        or CREATE PROCEDURE"
     type: STRING
+  - name: CONNECTION
+    description: "The connection name, if the routine has one. Otherwise\n      NULL"
+    type: STRING

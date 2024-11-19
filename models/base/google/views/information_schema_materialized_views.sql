@@ -34,11 +34,11 @@ The following permissions are required to query the INFORMATION_SCHEMA.MATERIALI
 
 
 
-      You might also be able to get
-        these permissions
-      with custom roles or
-      other predefined roles.
-    Access control with IAM -#}
+        You might also be able to get
+          these permissions
+        with custom roles or
+        other predefined roles.
+      Access control with IAM -#}
 
       WITH base AS (
       {% if project_list()|length > 0 -%}

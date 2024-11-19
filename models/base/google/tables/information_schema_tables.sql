@@ -16,7 +16,7 @@ Access control with IAM. -#}
       WITH base AS (
       {% if project_list()|length > 0 -%}
           {% for project in project_list() -%}
-            SELECT table_catalog, table_schema, table_name, table_type, is_insertable_into, is_typed, creation_time, base_table_catalog, base_table_schema, base_table_name, snapshot_time_ms, replica_source_catalog, replica_source_schema, replica_source_name, replication_status, replication_error, ddl, default_collation_name, upsert_stream_apply_watermark
+            SELECT table_catalog, table_schema, table_name, table_type, is_insertable_into, is_typed, is_change_history_enabled, creation_time, base_table_catalog, base_table_schema, base_table_name, snapshot_time_ms, replica_source_catalog, replica_source_schema, replica_source_name, replication_status, replication_error, ddl, default_collation_name, upsert_stream_apply_watermark
             FROM `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`TABLES`
           {% if not loop.last %}UNION ALL{% endif %}
           {% endfor %}
@@ -28,6 +28,7 @@ table_name,
 table_type,
 is_insertable_into,
 is_typed,
+is_change_history_enabled,
 creation_time,
 base_table_catalog,
 base_table_schema,
@@ -52,6 +53,7 @@ table_name,
 table_type,
 is_insertable_into,
 is_typed,
+is_change_history_enabled,
 creation_time,
 base_table_catalog,
 base_table_schema,

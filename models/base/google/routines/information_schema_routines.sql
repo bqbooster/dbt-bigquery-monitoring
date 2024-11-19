@@ -14,7 +14,7 @@ Access control with IAM. -#}
       WITH base AS (
       {% if project_list()|length > 0 -%}
           {% for project in project_list() -%}
-            SELECT specific_catalog, specific_schema, specific_name, routine_catalog, routine_schema, routine_name, routine_type, data_type, routine_body, routine_definition, external_language, is_deterministic, security_type, created, last_altered, ddl
+            SELECT specific_catalog, specific_schema, specific_name, routine_catalog, routine_schema, routine_name, routine_type, data_type, routine_body, routine_definition, external_language, is_deterministic, security_type, created, last_altered, ddl, connection
             FROM `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ROUTINES`
           {% if not loop.last %}UNION ALL{% endif %}
           {% endfor %}
@@ -35,7 +35,8 @@ is_deterministic,
 security_type,
 created,
 last_altered,
-ddl
+ddl,
+connection
           FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ROUTINES`
       {%- endif %}
       )
@@ -57,5 +58,6 @@ security_type,
 created,
 last_altered,
 ddl,
+connection,
       FROM
       base

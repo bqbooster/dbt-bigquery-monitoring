@@ -19,10 +19,6 @@ models:
     description: "(Partitioning column) Time when the session was last modified.\n\
       \        Partitioning is based on the UTC time of this timestamp."
     type: TIMESTAMP
-  - name: principal_subject
-    description: "(Clustering column) Principal\n        identifier of the user who\
-      \ ran the job."
-    type: STRING
   - name: project_id
     description: (Clustering column) ID of the project.
     type: STRING

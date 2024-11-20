@@ -134,6 +134,17 @@ models:
     description: "Statistics of\n        materialized views considered in a query\
       \ job. (Preview)"
     type: RECORD
+  - name: job_creation_reason
+    description: "job_creation_reason.code : Specifies the high level reason why a\
+      \ job was created.\n        Possible values are:\n        \nREQUESTED: job creation\
+      \ was requested.\nLONG_RUNNING: the query request ran beyond a system defined\
+      \ timeout\n            specified by the\n            timeoutMs\n           \
+      \ field in the QueryRequest. As a result it was considered a long running\n\
+      \            operation for which a job was created.\nLARGE_RESULTS: the results\
+      \ from the query cannot fit in the in-line\n            response.\nOTHER: the\
+      \ system has determined that the query needs to be executed as a\n         \
+      \   job."
+    type: RECORD
   - name: query_info
     description: "query_info.resource_warning : The warning message that appears if\
       \ the resource usage during query processing is above the internal threshold\
@@ -149,15 +160,4 @@ models:
       \ queries that are not cache hits.\nquery_info.performance_insights : Performance\
       \ insights for the job.\nquery_info.optimization_details : The history-based\
       \ optimizations\n        for the job."
-    type: RECORD
-  - name: job_creation_reason
-    description: "job_creation_reason.code : Specifies the high level reason why a\
-      \ job was created.\n        Possible values are:\n        \nREQUESTED: job creation\
-      \ was requested.\nLONG_RUNNING: the query request ran beyond a system defined\
-      \ timeout\n            specified by the\n            timeoutMs\n           \
-      \ field in the QueryRequest. As a result it was considered a long running\n\
-      \            operation for which a job was created.\nLARGE_RESULTS: the results\
-      \ from the query cannot fit in the in-line\n            response.\nOTHER: the\
-      \ system has determined that the query needs to be executed as a\n         \
-      \   job."
     type: RECORD

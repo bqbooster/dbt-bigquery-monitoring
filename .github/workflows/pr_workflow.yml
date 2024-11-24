@@ -1,5 +1,15 @@
 name: Pull Request testing
-on: [pull_request, workflow_dispatch]
+on:
+  pull_request:
+    paths:
+      - 'macros/**'
+      - 'models/**' 
+      - 'integration_tests/**'
+      - 'dbt_project.yml'
+      - 'packages.yml'
+      - 'config.py'
+      - 'tox.ini'
+  workflow_dispatch:
 
 # GitHub secrets
 env:

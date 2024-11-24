@@ -1,0 +1,35 @@
+name: Docs Test deployment
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/**'  # Only trigger when files in docs directory change
+
+jobs:
+  test-deploy:
+    name: Test deployment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Clone docs repository
+        run: |
+          git clone https://github.com/bqbooster/dbt-bigquery-monitoring-docs.git
+          
+      - name: Copy docs content
+        run: |
+          mkdir -p dbt-bigquery-monitoring-docs/docs
+          cp -r docs/* dbt-bigquery-monitoring-docs/docs/
+          
+      - name: Install dependencies and build
+        run: |
+          cd dbt-bigquery-monitoring-docs
+          yarn install --frozen-lockfile
+          yarn build

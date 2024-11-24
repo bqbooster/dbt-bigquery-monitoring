@@ -1,4 +1,4 @@
-{#- check if var('projects') is defined to materialize as a view else an ephemeral
+{#- check if var('projects') is defined to materialize as a view if empty else an ephemeral
     It avoids following BQ error:
     Within a standard SQL view, references to tables/views require explicit project IDs
     unless the entity is created in the same project that is issuing the query,

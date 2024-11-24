@@ -1,0 +1,6 @@
+kind: Fixes
+body: Rework models to use `project_id` prefix if possible and use `ephemeral` if relevant
+time: 2024-11-20T01:37:20.632189+01:00
+custom:
+    Author: Kayrnt
+    Issue: "74"

@@ -30,5 +30,5 @@ SELECT
   SUM(p.total_logical_bytes) AS sum_total_logical_bytes,
   MAX(p.last_modified_time) AS max_last_updated_time
 FROM {{ ref('information_schema_partitions') }} AS p
-INNER JOIN partition_expirations AS e USING (table_catalog, table_schema, table_name)
+LEFT JOIN partition_expirations AS e USING (table_catalog, table_schema, table_name)
 GROUP BY ALL

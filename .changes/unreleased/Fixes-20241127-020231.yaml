@@ -1,6 +1,0 @@
-kind: Fixes
-body: Restrain stg_partitions_monitoring to partitioned tables
-time: 2024-11-27T02:02:31.241732+01:00
-custom:
-    Author: Kayrnt
-    Issue: ""

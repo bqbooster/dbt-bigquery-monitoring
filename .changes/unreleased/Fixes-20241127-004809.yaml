@@ -1,6 +1,0 @@
-kind: Fixes
-body: Fix stg_partitions_monitoring that wasn't exhaustive because of a restriction on partition expiration based tables
-time: 2024-11-27T00:48:09.203729+01:00
-custom:
-    Author: Kayrnt
-    Issue: "79"

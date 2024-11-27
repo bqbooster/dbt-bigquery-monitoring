@@ -18,11 +18,12 @@ SELECT
   p.TABLE_SCHEMA AS dataset_id,
   p.table_name AS table_id,
   CASE
-    WHEN REGEXP_CONTAINS(p.partition_id, '^[0-9]{4}$') THEN 'YEAR'
-    WHEN REGEXP_CONTAINS(p.partition_id, '^[0-9]{6}$') THEN 'MONTH'
-    WHEN REGEXP_CONTAINS(p.partition_id, '^[0-9]{8}$') THEN 'DAY'
-    WHEN REGEXP_CONTAINS(p.partition_id, '^[0-9]{10}$') THEN 'HOUR'
-    END AS partition_type,
+    WHEN REGEXP_CONTAINS(p.partition_id, r'^[0-9]{4}$') THEN 'YEAR'
+    WHEN REGEXP_CONTAINS(p.partition_id, r'^[0-9]{6}$') THEN 'MONTH'
+    WHEN REGEXP_CONTAINS(p.partition_id, r'^[0-9]{8}$') THEN 'DAY'
+    WHEN REGEXP_CONTAINS(p.partition_id, r'^[0-9]{10}$') THEN 'HOUR'
+    WHEN REGEXP_CONTAINS(p.partition_id, r'^\d+$') THEN 'INTEGER'
+  END AS partition_type,
   e.partition_expiration_days,
   MIN(p.partition_id) AS earliest_partition_id,
   MAX(p.partition_id) AS latest_partition_id,
@@ -32,3 +33,4 @@ SELECT
 FROM {{ ref('information_schema_partitions') }} AS p
 LEFT JOIN partition_expirations AS e USING (table_catalog, table_schema, table_name)
 GROUP BY ALL
+HAVING partition_type IS NOT NULL

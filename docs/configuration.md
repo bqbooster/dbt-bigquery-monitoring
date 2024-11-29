@@ -59,7 +59,18 @@ vars:
   gcp_billing_export_table: 'my_table'
 ```
 
-### Customizing the package configuration
+## Add metadata to queries (Recommended but optional)
+
+To enhance your query metadata with dbt model information, the package provides a dedicated macro that leverage "dbt query comments" (the header set at the top of each query)
+To configure the query comments, add the following config to `dbt_project.yml`.
+
+```yaml
+query-comment:
+  comment: '{{ dbt_bigquery_monitoring.get_query_comment(node) }}'
+  job-label: True # Use query comment JSON as job labels
+```
+
+## Customizing the package configuration
 
 Settings details
 
@@ -98,14 +109,3 @@ Following settings are defined with following template: `dbt_project_variable` (
 - `gcp_billing_export_storage_project` (__DBT_BQ_MONITORING_GCP_BILLING_EXPORT_STORAGE_PROJECT__) : the GCP project where billing export data is stored (default: `'placeholder'` if `enable_gcp_billing_export` is `true`; otherwise `None`)
 - `gcp_billing_export_dataset` (__DBT_BQ_MONITORING_GCP_BILLING_EXPORT_DATASET__) : the dataset for GCP billing export data (default: `'placeholder'` if `enable_gcp_billing_export` is `true`; otherwise `None`)
 - `gcp_billing_export_table` (__DBT_BQ_MONITORING_GCP_BILLING_EXPORT_TABLE__) : the table for GCP billing export data (default: `'placeholder'` if `enable_gcp_billing_export` is `true`; otherwise `None`)
-
-### Add metadata to queries (Recommended but optional)
-
-To enhance your query metadata with dbt model information, the package provides a dedicated macro that leverage "dbt query comments" (the header set at the top of each query)
-To configure the query comments, add the following config to `dbt_project.yml`.
-
-```yaml
-query-comment:
-  comment: '{{ dbt_bigquery_monitoring.get_query_comment(node) }}'
-  job-label: True # Use query comment JSON as job labels
-```

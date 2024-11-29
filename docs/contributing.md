@@ -99,3 +99,9 @@ dbt base google models are generated in another dedicated project hosted in:
 https://github.com/bqbooster/dbt-bigquery-monitoring-parser
 
 It was separated to ensure that users don't install the parser (and tests) when they install the dbt package.
+
+## Documentation website
+
+Documentation is generated with Docusaurus and hosted on GitHub pages.
+The content is hosted directly in the `docs` folder of [the main repository](https://github.com/bqbooster/dbt-bigquery-monitoring).
+The template is hosted in a separate repository: [bqbooster/dbt-bigquery-monitoring-docs](https://github.com/bqbooster/dbt-bigquery-monitoring-docs).

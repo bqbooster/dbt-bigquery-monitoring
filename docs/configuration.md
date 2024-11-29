@@ -72,40 +72,46 @@ query-comment:
 
 ## Customizing the package configuration
 
-Settings details
+Following settings can be overriden to customize the package configuration.
+To do so, you can set the following variables in your `dbt_project.yml` file or use environment variables.
 
-Following settings are defined with following template: `dbt_project_variable` (__Environment variable__) : description (default if any).
+### Environment
 
-### Optional settings
+| Variable | Environment Variable | Description | Default |
+|----------|-------------------|-------------|---------|
+| `input_gcp_projects` | `DBT_BQ_MONITORING_GCP_PROJECTS` | List of GCP projects to monitor | `[]` |
+| `bq_region` | `DBT_BQ_MONITORING_REGION` | Region where the monitored projects are located | `us` |
 
-#### Environment
+### Pricing
 
-- `input_gcp_projects` (__DBT_BQ_MONITORING_GCP_PROJECTS__) : list of GCP projects to monitor (default: `[]`)
-- `bq_region` (__DBT_BQ_MONITORING_REGION__) : region where the monitored projects are located (default: `us`)
+| Variable | Environment Variable | Description | Default |
+|----------|-------------------|-------------|---------|
+| `use_flat_pricing` | `DBT_BQ_MONITORING_USE_FLAT_PRICING` | Whether to use flat pricing or not | `true` |
+| `per_billed_tb_price` | `DBT_BQ_MONITORING_PER_BILLED_TB_PRICE` | Price in US dollars per billed TB of data processed | `6.25` |
+| `free_tb_per_month` | `DBT_BQ_MONITORING_FREE_TB_PER_MONTH` | Free on demand compute quota TB per month | `1` |
+| `hourly_slot_price` | `DBT_BQ_MONITORING_HOURLY_SLOT_PRICE` | Hourly price in US dollars per slot per hour | `0.04` |
+| `active_logical_storage_gb_price` | `DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE` | Monthly price in US dollars per active logical storage GB | `0.02` |
+| `long_term_logical_storage_gb_price` | `DBT_BQ_MONITORING_LONG_TERM_LOGICAL_STORAGE_GB_PRICE` | Monthly price in US dollars per long term logical storage GB | `0.01` |
+| `active_physical_storage_gb_price` | `DBT_BQ_MONITORING_ACTIVE_PHYSICAL_STORAGE_GB_PRICE` | Monthly price in US dollars per active physical storage GB | `0.04` |
+| `long_term_physical_storage_gb_price` | `DBT_BQ_MONITORING_LONG_TERM_PHYSICAL_STORAGE_GB_PRICE` | Monthly price in US dollars per long term physical storage GB | `0.02` |
+| `bi_engine_gb_hourly_price` | `DBT_BQ_MONITORING_BI_ENGINE_GB_HOURLY_PRICE` | Hourly price in US dollars per BI engine GB of memory | `0.0416` |
+| `free_storage_gb_per_month` | `DBT_BQ_MONITORING_FREE_STORAGE_GB_PER_MONTH` | Free storage GB per month | `10` |
 
-#### Pricing
+### Package
 
-- `use_flat_pricing` (__DBT_BQ_MONITORING_USE_FLAT_PRICING__) : whether to use flat pricing or not (default: `true`)
-- `per_billed_tb_price` (__DBT_BQ_MONITORING_PER_BILLED_TB_PRICE__) : price in US dollars per billed TB of data processed (default: `6,25`)
-- `free_tb_per_month` (__DBT_BQ_MONITORING_FREE_TB_PER_MONTH__) : free on demand compute quota TB per month (default: `1`)
-- `hourly_slot_price` (__DBT_BQ_MONITORING_HOURLY_SLOT_PRICE__) : hourly price in US dollars per slot per hour (default: `0.04`)
-- `active_logical_storage_gb_price` (__DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE__) : monthly price in US dollars per active logical storage GB (default: `0.02`)
-- `long_term_logical_storage_gb_price` (__DBT_BQ_MONITORING_LONG_TERM_LOGICAL_STORAGE_GB_PRICE__) : monthly price in US dollars per long term logical storage GB (default: `0.01`)
-- `active_physical_storage_gb_price` (__DBT_BQ_MONITORING_ACTIVE_PHYSICAL_STORAGE_GB_PRICE__) : monthly price in US dollars per active physical storage GB (default: `0.04`)
-- `long_term_physical_storage_gb_price` (__DBT_BQ_MONITORING_LONG_TERM_PHYSICAL_STORAGE_GB_PRICE__) : monthly price in US dollars per long term physical storage GB (default: `0.02`)
-- `bi_engine_gb_hourly_price` (__DBT_BQ_MONITORING_BI_ENGINE_GB_HOURLY_PRICE__): hourly price in US dollars per BI engine GB of memory (default: `0.0416`)
-- `free_storage_gb_per_month` (__DBT_BQ_MONITORING_FREE_STORAGE_GB_PER_MONTH__) : free storage GB per month (default: `10`)
-
-#### Package
-
-- `lookback_window_days` (__DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS__) : number of days to look back for monitoring (default: `7`)
-- `lookback_incremental_billing_window_days` (__DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS__) : number of days to look back for monitoring (default: `3`)
-- `output_limit_size` (__DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE__) : limit size to use for the models (default: `1000`)
-- `output_partition_expiration_days` (__DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE__) : default table expiration in days for incremental models (default: `365` days)
-- `use_copy_partitions` (__DBT_BQ_MONITORING_USE_COPY_PARTITIONS__) : whether to use copy partitions or not (default: `true`)
+| Variable | Environment Variable | Description | Default |
+|----------|-------------------|-------------|---------|
+| `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Number of days to look back for monitoring | `7` |
+| `lookback_incremental_billing_window_days` | `DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS` | Number of days to look back for monitoring | `3` |
+| `output_limit_size` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Limit size to use for the models | `1000` |
+| `output_partition_expiration_days` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Default table expiration in days for incremental models | `365` days |
+| `use_copy_partitions` | `DBT_BQ_MONITORING_USE_COPY_PARTITIONS` | Whether to use copy partitions or not | `true` |
 
 #### GCP Billing export
-- `enable_gcp_billing_export` (__DBT_BQ_MONITORING_ENABLE_GCP_BILLING_EXPORT__) : toggle to enable GCP billing export monitoring (default: `false`)
-- `gcp_billing_export_storage_project` (__DBT_BQ_MONITORING_GCP_BILLING_EXPORT_STORAGE_PROJECT__) : the GCP project where billing export data is stored (default: `'placeholder'` if `enable_gcp_billing_export` is `true`; otherwise `None`)
-- `gcp_billing_export_dataset` (__DBT_BQ_MONITORING_GCP_BILLING_EXPORT_DATASET__) : the dataset for GCP billing export data (default: `'placeholder'` if `enable_gcp_billing_export` is `true`; otherwise `None`)
-- `gcp_billing_export_table` (__DBT_BQ_MONITORING_GCP_BILLING_EXPORT_TABLE__) : the table for GCP billing export data (default: `'placeholder'` if `enable_gcp_billing_export` is `true`; otherwise `None`)
+
+| Variable | Environment Variable | Description | Default |
+|----------|-------------------|-------------|---------|
+| `enable_gcp_billing_export` | `DBT_BQ_MONITORING_ENABLE_GCP_BILLING_EXPORT` | Toggle to enable GCP billing export monitoring | `false` |
+| `gcp_billing_export_storage_project` | `DBT_BQ_MONITORING_GCP_BILLING_EXPORT_STORAGE_PROJECT` | The GCP project where billing export data is stored | `'placeholder'` if enabled, `None` otherwise |
+| `gcp_billing_export_dataset` | `DBT_BQ_MONITORING_GCP_BILLING_EXPORT_DATASET` | The dataset for GCP billing export data | `'placeholder'` if enabled, `None` otherwise |
+| `gcp_billing_export_table` | `DBT_BQ_MONITORING_GCP_BILLING_EXPORT_TABLE` | The table for GCP billing export data | `'placeholder'` if enabled, `None` otherwise |

@@ -30,6 +30,7 @@ jobs:
           
       - name: Copy docs content
         run: |
+          mkdir -p dbt-bigquery-monitoring-docs/docs
           cp -r docs/* dbt-bigquery-monitoring-docs/docs/
           
       - name: Install dependencies and build

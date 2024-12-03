@@ -21,6 +21,7 @@ SELECT
   project_id,
   reservation_id,
   bi_engine_mode,
+  client_type,
   SUM(ROUND(total_query_cost, 2)) AS total_query_cost,
   SUM(ROUND(failing_query_cost, 2)) AS failing_query_cost,
   SUM(total_slot_ms) AS total_slot_ms,

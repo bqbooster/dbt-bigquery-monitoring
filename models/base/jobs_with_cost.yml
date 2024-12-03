@@ -85,3 +85,5 @@ models:
         description: The query cost based on on-demand pricing.
       - name: query_cost
         description: The final query cost based on pricing choice.
+      - name: client_type
+        description: The client type.

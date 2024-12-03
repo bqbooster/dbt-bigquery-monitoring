@@ -60,6 +60,14 @@ SELECT
   SELECT JSON_VALUE(string_element, '$')
   FROM UNNEST(JSON_QUERY_ARRAY(dbt_info, '$.node_tags')) AS string_element
   ), NULL) AS node_tags,
+  CASE
+  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'dbt_invocation_id' AND value IS NOT NULL) THEN 'dbt'
+  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key LIKE 'looker-%' AND value IS NOT NULL) THEN 'Looker'
+  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'sheets_trigger' AND value = 'user') THEN 'Google connected sheets - manual'
+  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'sheets_trigger' AND value = 'schedule') THEN 'Google connected sheets - scheduled'
+  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'data_source_id' AND value = 'scheduled_query') THEN 'Scheduled query'
+  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'client_type') THEN (SELECT value FROM UNNEST(labels) WHERE key = 'client_type' LIMIT 1)
+  END AS client_type,
   FROM base
 ),
 

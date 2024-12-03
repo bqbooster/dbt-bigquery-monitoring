@@ -17,6 +17,8 @@ models:
         description: The reservation id of the job.
       - name: bi_engine_mode
         description: The BI engine mode of the job.
+      - name: client_type
+        description: The client type of the job.
       - name: total_query_cost
         description: The total cost of all queries run during the minute.
       - name: failing_query_cost

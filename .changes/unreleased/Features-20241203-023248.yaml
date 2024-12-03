@@ -1,0 +1,6 @@
+kind: Features
+body: Add client type support to breakdown by type of workload
+time: 2024-12-03T02:32:48.336083+01:00
+custom:
+    Author: Kayrnt
+    Issue: "68"

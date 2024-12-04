@@ -1,0 +1,212 @@
+version: 2
+models:
+  - name: jobs_from_audit_logs
+    description: Job details extracted from BigQuery audit logs
+    columns:
+      - name: bi_engine_statistics
+        description: "If the project is configured to use the BI Engine SQL Interface, then this field contains BiEngineStatistics. Otherwise NULL."
+        type: RECORD
+        
+      - name: billing_tier
+        description: "The billing tier for this job"
+        type: STRING
+
+      - name: cache_hit
+        description: "Whether the query results of this job were from a cache"
+        type: BOOLEAN
+
+      - name: caller_ip_address
+        description: "IP address of the caller"
+        type: STRING
+        
+      - name: caller_supplied_user_agent
+        description: "User agent string supplied by the caller"
+        type: STRING
+
+      - name: config_labels 
+        description: "Labels configured for the job"
+        type: RECORD
+
+      - name: config_type
+        description: "Configuration type of the job"
+        type: STRING
+
+      - name: create_disposition
+        description: "Create disposition for destination table"
+        type: STRING
+
+      - name: creation_time
+        description: "Creation time of this job"
+        type: TIMESTAMP
+
+      - name: dataset_id
+        description: "ID of the dataset"
+        type: STRING
+
+      - name: default_dataset
+        description: "Default dataset for the query"
+        type: STRING
+
+      - name: destination_table
+        description: "Destination table for results, if any"
+        type: STRING
+
+      - name: end_time
+        description: "The end time of this job"
+        type: TIMESTAMP
+
+      - name: error_result
+        description: "Details of any errors"
+        type: RECORD
+        
+      - name: is_query_truncated
+        description: "Whether the query was truncated"
+        type: BOOLEAN
+
+      - name: job_id
+        description: "The ID of the job"
+        type: STRING
+
+      - name: job_stages
+        description: "Query stages of the job"
+        type: RECORD
+
+      - name: job_state
+        description: "Current state of the job"
+        type: STRING
+
+      - name: job_type
+        description: "The type of the job (QUERY, LOAD, EXTRACT, COPY)"
+        type: STRING
+
+      - name: labels
+        description: "Labels applied to the job"
+        type: RECORD
+
+      - name: location
+        description: "Location where the job executed"
+        type: STRING
+
+      - name: materialized_view_statistics
+        description: "Statistics of materialized views considered in query"
+        type: RECORD
+
+      - name: method_name
+        description: "Name of the method called"
+        type: STRING
+
+      - name: output_row_count
+        description: "Number of rows output by the job"
+        type: STRING
+
+      - name: parent_job_id
+        description: "ID of the parent job, if any"
+        type: STRING
+
+      - name: priority
+        description: "The priority of this job (INTERACTIVE or BATCH)"
+        type: STRING
+
+      - name: project_id
+        description: "The ID of the project"
+        type: STRING
+
+      - name: project_number
+        description: "The number of the project"
+        type: INTEGER
+
+      - name: protopayload_auditlog_metadata_json
+        description: "Raw metadata JSON from audit log"
+        type: STRING
+
+      - name: query
+        description: "SQL query text"
+        type: STRING
+
+      - name: query_info
+        description: "Additional query information including resource warnings and optimization details"
+        type: RECORD
+
+      - name: query_statement
+        description: "The full query statement"
+        type: STRING
+
+      - name: referenced_tables
+        description: "Array of tables referenced by the job"
+        type: RECORD
+
+      - name: referenced_views
+        description: "Array of views referenced by the job"
+        type: RECORD
+
+      - name: reservation_id
+        description: "Name of the primary reservation assigned to this job"
+        type: STRING
+
+      - name: resource_name
+        description: "Name of the resource"
+        type: STRING
+
+      - name: service_name
+        description: "Name of the service"
+        type: STRING
+
+      - name: start_time
+        description: "The start time of this job"
+        type: TIMESTAMP
+
+      - name: state
+        description: "Running state of the job (PENDING, RUNNING, DONE)"
+        type: STRING
+
+      - name: statement_type
+        description: "The type of query statement"
+        type: STRING
+
+      - name: timeline
+        description: "Query timeline of the job"
+        type: RECORD
+
+      - name: timestamp
+        description: "Timestamp of the audit log entry"
+        type: TIMESTAMP
+
+      - name: total_billed_bytes
+        description: "Total bytes billed for the job"
+        type: INTEGER
+
+      - name: total_bytes_billed
+        description: "Total bytes billed (from original schema)"
+        type: INTEGER
+
+      - name: total_bytes_processed
+        description: "Total bytes processed by the job"
+        type: INTEGER
+
+      - name: total_modified_partitions
+        description: "Total number of partitions modified"
+        type: INTEGER
+
+      - name: total_output_bytes
+        description: "Total bytes output by the job"
+        type: INTEGER
+
+      - name: total_slot_ms
+        description: "Slot milliseconds for the job"
+        type: INTEGER
+
+      - name: transaction_id
+        description: "ID of the transaction in which this job ran"
+        type: STRING
+
+      - name: transferred_bytes
+        description: "Total bytes transferred for cross-cloud queries"
+        type: INTEGER
+
+      - name: user_email
+        description: "Email address or service account of the user who ran the job"
+        type: STRING
+
+      - name: write_disposition
+        description: "Write disposition for destination table"
+        type: STRING

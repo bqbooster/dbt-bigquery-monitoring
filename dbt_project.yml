@@ -67,3 +67,9 @@ vars:
   gcp_billing_export_dataset: "{{ env_var('DBT_BQ_MONITORING_GCP_BILLING_EXPORT_DATASET', 'placeholder') if var('enable_gcp_billing_export') | as_bool else None }}"
   gcp_billing_export_table: "{{ env_var('DBT_BQ_MONITORING_GCP_BILLING_EXPORT_TABLE', 'placeholder') if var('enable_gcp_billing_export') | as_bool else None }}"
 
+  # GCP BigQuery cloud audit (as an alternative to INFORMATION_SCHEMA.JOBS)
+  # The values are configured during the export setup in the GCP Console
+  enable_gcp_bigquery_audit_logs: "{{ env_var('DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS', false) }}"
+  gcp_bigquery_audit_logs_storage_project: "{{ env_var('DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_STORAGE_PROJECT', 'placeholder') if var('enable_gcp_bigquery_audit_logs') | as_bool else None }}"
+  gcp_bigquery_audit_logs_dataset: "{{ env_var('DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_DATASET', 'placeholder') if var('enable_gcp_bigquery_audit_logs') | as_bool else None }}"
+  gcp_bigquery_audit_logs_table: "{{ env_var('DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_TABLE', 'placeholder') if var('enable_gcp_bigquery_audit_logs') | as_bool else None }}"

@@ -4,12 +4,27 @@
     )
 }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs -#}
-WITH base AS (
+WITH
+source AS (
+  SELECT *
+ {%- if enable_gcp_bigquery_audit_logs() %}
+  FROM {{ ref('jobs_from_audit_logs') }}
+ {%- else %}
+  FROM {{ ref('information_schema_jobs') }}
+ {%- endif %}
+),
+
+base AS (
 SELECT
   bi_engine_statistics,
   cache_hit,
   creation_time,
-  TIMESTAMP_TRUNC(creation_time, HOUR) AS hour,
+  {%- if enable_gcp_bigquery_audit_logs() %}
+  TIMESTAMP_TRUNC(timestamp, HOUR)
+ {%- else %}
+  TIMESTAMP_TRUNC(creation_time, HOUR)
+ {%- endif %}
+   AS hour,
   destination_table,
   end_time,
   error_result,
@@ -39,8 +54,7 @@ SELECT
   query_info,
   transferred_bytes,
   materialized_view_statistics
-FROM
-  {{ ref('information_schema_jobs') }}
+FROM source
 {#- Prevent to duplicate costs as script contains query #}
 WHERE statement_type != 'SCRIPT'
 ),

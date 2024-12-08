@@ -1,6 +1,6 @@
 {{
    config(
-    materialized = "ephemeral",
+    materialized = "table",
     enabled = enable_gcp_bigquery_audit_logs()
     )
 }}
@@ -51,9 +51,23 @@ SELECT
     -- project_number is not available in the audit logs, so we default to NULL
     NULL AS project_number,
     JSON_VALUE(protopayload_auditlog.metadataJson, '$.jobChange.job.jobConfig.queryConfig.query') AS query,
-    SPLIT(
-        JSON_QUERY(protopayload_auditlog.metadataJson, '$.jobChange.job.jobStats.queryStats.referencedTables'),
-        '","'
+    -- referenced tables is like "projects/<project>/datasets/<dataset>/tables/<table>"
+    -- the expected return type is ARRAY<STRUCT<project_id STRING, dataset_id STRING, table_id STRING>>
+    ARRAY(
+      SELECT AS STRUCT
+        SPLIT(table_ref, '/')[OFFSET(1)] as project_id,
+        SPLIT(table_ref, '/')[OFFSET(3)] as dataset_id,
+        SPLIT(table_ref, '/')[OFFSET(5)] as table_id
+      FROM UNNEST(
+        COALESCE(
+          JSON_VALUE_ARRAY(
+            protopayload_auditlog.metadataJson,
+            '$.jobChange.job.jobStats.queryStats.referencedTables'
+          ),
+          []  -- Return empty array if NULL
+        )
+      ) as table_ref
+      WHERE table_ref IS NOT NULL
     ) AS referenced_tables,
     JSON_VALUE(protopayload_auditlog.metadataJson, '$.jobChange.job.jobStats.reservation') AS reservation_id,
     TIMESTAMP(JSON_VALUE(protopayload_auditlog.metadataJson,

@@ -17,10 +17,16 @@ clean-targets:
 vars:
   output_partition_expiration_days: 1
   lookback_window_days: 1
+  # billing logs
   enable_gcp_billing_export: true
   gcp_billing_export_storage_project: '{{ target.project }}'
   gcp_billing_export_dataset:  '{{ target.dataset }}'
   gcp_billing_export_table: 'gcp_billing_export_fixture'
+  # audit logs
+  # We are using DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS to set enable_gcp_bigquery_audit_logs
+  gcp_bigquery_audit_logs_storage_project: '{{ target.project }}'
+  gcp_bigquery_audit_logs_dataset: '{{ target.dataset }}'
+  gcp_bigquery_audit_logs_table: 'gcp_bigquery_audit_logs_fixture'
 
 query-comment:
   comment: '{{ dbt_bigquery_monitoring.get_query_comment(node) }}'

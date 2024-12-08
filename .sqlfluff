@@ -1,0 +1,11 @@
+[sqlfluff]
+exclude_rules = ST07, AM04, CV03, LT05, ST06, RF04, AM06, ST05, LT02, CP02, LT07
+dialect = bigquery
+templater = dbt
+
+[sqlfluff:indentation]
+tab_space_size = 2
+
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = upper
+

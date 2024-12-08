@@ -1,4 +1,4 @@
-name: Pull Request testing
+name: Pull Request testing - Lint dbt models using SQLFluff
 on:
   pull_request:
     paths:
@@ -8,7 +8,6 @@ on:
       - 'dbt_project.yml'
       - 'packages.yml'
       - 'config.py'
-      - 'tox.ini'
   workflow_dispatch:
 
 # GitHub secrets
@@ -23,44 +22,12 @@ env:
 
 concurrency:
   cancel-in-progress: true
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: pr-lint-models-${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  integration-bigquery:
-    runs-on: ubuntu-latest
-    environment:
-      name: Approve Integration Tests
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }} # Check out the code of the PR
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install tox
-        run: python3 -m pip install tox
-
-      - name: Write keyfile if secret is defined
-        run: |
-          if [ -z "${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }}" ]; then
-            echo "Error: DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT is not defined."
-          else
-            echo ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }} | base64 -d > ./integration_tests/keyfile.json  
-          fi
-
-      - name: Run All models on BigQuery
-        run: tox -e bigquery
-
   sqlfluff-lint-models:
     name: Lint dbt models using SQLFluff
     runs-on: ubuntu-latest
-    environment:
-      name: Approve Integration Tests
 
     steps:
       - name: Checkout branch

@@ -37,10 +37,28 @@ To enable the "project mode", you'll need to define explicitly one mandatory set
 
 ```yml
 vars:
+  enable_gcp_bigquery_audit_logs: true
+  gcp_bigquery_audit_logs_storage_project: 'my-gcp-project'
+  gcp_bigquery_audit_logs_dataset: 'my_dataset'
+  gcp_bigquery_audit_logs_table: 'my_table'
+```
+
+
+
+### BigQuery audit logs mode
+
+In this mode, the package will monitor all the jobs that written to a GCP BigQuery Audit logs table instead of using `INFORMATION_SCHEMA.JOBS` one.
+
+To enable the "cloud audit logs mode", you'll need to define explicitly one mandatory setting to set in the `dbt_project.yml` file:
+
+```yml
+vars:
   # dbt bigquery monitoring vars
   bq_region: 'us'
-  input_gcp_projects: [ 'my-gcp-project', 'my-gcp-project-2' ]
+  cloud_audit_logs_table: 'my-gcp-project.my_dataset.my_table'
 ```
+
+[You might use environment variable as well](#gcp-bigquery-audit-logs-configuration).
 
 ### GCP Billing export
 
@@ -107,7 +125,7 @@ To do so, you can set the following variables in your `dbt_project.yml` file or 
 | `output_partition_expiration_days` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Default table expiration in days for incremental models | `365` days |
 | `use_copy_partitions` | `DBT_BQ_MONITORING_USE_COPY_PARTITIONS` | Whether to use copy partitions or not | `true` |
 
-#### GCP Billing export
+#### GCP Billing export configuration
 
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
@@ -115,3 +133,14 @@ To do so, you can set the following variables in your `dbt_project.yml` file or 
 | `gcp_billing_export_storage_project` | `DBT_BQ_MONITORING_GCP_BILLING_EXPORT_STORAGE_PROJECT` | The GCP project where billing export data is stored | `'placeholder'` if enabled, `None` otherwise |
 | `gcp_billing_export_dataset` | `DBT_BQ_MONITORING_GCP_BILLING_EXPORT_DATASET` | The dataset for GCP billing export data | `'placeholder'` if enabled, `None` otherwise |
 | `gcp_billing_export_table` | `DBT_BQ_MONITORING_GCP_BILLING_EXPORT_TABLE` | The table for GCP billing export data | `'placeholder'` if enabled, `None` otherwise |
+
+#### GCP BigQuery Audit logs configuration
+
+See [GCP BigQuery Audit logs](#bigquery-audit-logs-mode) for more information.
+
+| Variable | Environment Variable | Description | Default |
+|----------|-------------------|-------------|---------|
+| `enable_gcp_bigquery_audit_logs` | `DBT_BQ_MONITORING_ENABLE_GCP_BIGQUERY_AUDIT_LOGS` | Toggle to enable GCP BigQuery Audit logs monitoring | `false` |
+| `gcp_bigquery_audit_logs_storage_project` | `DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_STORAGE_PROJECT` | The GCP project where BigQuery Audit logs data is stored | `'placeholder'` if enabled, `None` otherwise |
+| `gcp_bigquery_audit_logs_dataset` | `DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_DATASET` | The dataset for BigQuery Audit logs data | `'placeholder'` if enabled, `None` otherwise |
+| `gcp_bigquery_audit_logs_table` | `DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_TABLE` | The table for BigQuery Audit logs data | `'placeholder'` if enabled, `None` otherwise |

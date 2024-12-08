@@ -1,0 +1,58 @@
+version: 2
+
+models:
+  - name: bigquery_audit_logs
+    description: >
+      This model maps BigQuery audit logs containing detailed information about query execution or data access
+    columns:
+      - name: logName
+        data_type: string
+        description: "The resource name of the log entry in the format projects/[PROJECT_ID]/logs/cloudaudit.googleapis.com"
+      - name: resource
+        data_type: record
+        description: "Contains information about the resource that produced this log entry, including project_id, labels, and type"
+      - name: protopayload_auditlog
+        data_type: record
+        description: "Contains the audit logging data specific to BigQuery operations, including serviceData and methodName"
+      - name: textPayload
+        data_type: string
+        description: "A text description of the log entry, if applicable"
+      - name: timestamp
+        data_type: timestamp
+        description: "The time at which the logged action took place"
+      - name: receiveTimestamp
+        data_type: timestamp
+        description: "The time when Cloud Logging received the log entry"
+      - name: severity
+        data_type: string
+        description: "The severity level of the log entry (DEBUG, INFO, NOTICE, WARNING, ERROR, CRITICAL, ALERT, EMERGENCY)"
+      - name: insertId
+        data_type: string
+        description: "A unique identifier for the log entry used for deduplication"
+      - name: httpRequest
+        data_type: record
+        description: "Information about the HTTP request associated with this log entry, if applicable"
+      - name: operation
+        data_type: record
+        description: "Information about an operation associated with the log entry, including id, producer, and first/last entries"
+      - name: trace
+        data_type: string
+        description: "The cloud trace ID associated with the log entry for request tracing"
+      - name: spanId
+        data_type: string
+        description: "ID of the span within the trace, used for request tracing"
+      - name: traceSampled
+        data_type: boolean
+        description: "Indicates if this trace was sampled for trace storage and analysis"
+      - name: sourceLocation
+        data_type: record
+        description: "Source code location information associated with the log entry, including file, line, and function"
+      - name: split
+        data_type: record
+        description: "Split information for log entries that were split due to size limitations"
+      - name: labels
+        data_type: record
+        description: "User-defined labels associated with the resource that generated the log entry"
+      - name: errorGroups
+        data_type: record
+        description: "Information about error groups when the log entry represents an error"

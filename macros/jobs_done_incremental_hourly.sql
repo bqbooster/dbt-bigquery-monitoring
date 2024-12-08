@@ -9,10 +9,18 @@ FROM
 WHERE
 {% if is_incremental() %}
 creation_time >= TIMESTAMP_TRUNC(_dbt_max_partition, HOUR)
+  {%- if enable_gcp_bigquery_audit_logs() %}
+AND hour BETWEEN TIMESTAMP_SUB(TIMESTAMP_TRUNC(_dbt_max_partition, HOUR), INTERVAL 6 HOUR) AND TIMESTAMP_TRUNC(_dbt_max_partition, HOUR)
+  {% endif %}
 {% else %}
 creation_time >= TIMESTAMP_SUB(
   TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR),
   INTERVAL {{ var('lookback_window_days') }} DAY)
+  {%- if enable_gcp_bigquery_audit_logs() %}
+AND hour >= TIMESTAMP_SUB(TIMESTAMP_TRUNC(TIMESTAMP_SUB(
+TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR),
+INTERVAL {{ var('lookback_window_days') }} DAY), HOUR), INTERVAL 6 HOUR)
+  {% endif %}
 {% endif %}
 AND state = 'DONE'
 )

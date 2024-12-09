@@ -4,12 +4,29 @@
     )
 }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs -#}
-WITH base AS (
+WITH
+source AS (
+  SELECT *,
+ {%- if enable_gcp_bigquery_audit_logs() %}
+  FROM {{ ref('jobs_from_audit_logs') }}
+ {%- else %}
+  NULL AS caller_supplied_user_agent,
+  FROM {{ ref('information_schema_jobs') }}
+ {%- endif %}
+),
+
+base AS (
 SELECT
   bi_engine_statistics,
   cache_hit,
+  caller_supplied_user_agent,
   creation_time,
-  TIMESTAMP_TRUNC(creation_time, HOUR) AS hour,
+  {%- if enable_gcp_bigquery_audit_logs() %}
+  TIMESTAMP_TRUNC(timestamp, HOUR)
+ {%- else %}
+  TIMESTAMP_TRUNC(creation_time, HOUR)
+ {%- endif %}
+   AS hour,
   destination_table,
   end_time,
   error_result,
@@ -39,8 +56,7 @@ SELECT
   query_info,
   transferred_bytes,
   materialized_view_statistics
-FROM
-  {{ ref('information_schema_jobs') }}
+FROM source
 {#- Prevent to duplicate costs as script contains query #}
 WHERE statement_type != 'SCRIPT'
 ),
@@ -67,6 +83,19 @@ SELECT
   WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'sheets_trigger' AND value = 'schedule') THEN 'Google connected sheets - scheduled'
   WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'data_source_id' AND value = 'scheduled_query') THEN 'Scheduled query'
   WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'client_type') THEN (SELECT value FROM UNNEST(labels) WHERE key = 'client_type' LIMIT 1)
+  {%- if enable_gcp_bigquery_audit_logs() %}
+  WHEN caller_supplied_user_agent LIKE 'dbt%' THEN 'dbt run'
+  WHEN caller_supplied_user_agent LIKE 'Fivetran%' THEN 'Fivetran'
+  WHEN caller_supplied_user_agent LIKE 'gcloud-golang-bigquery%' AND user_email LIKE 'rudderstack%' THEN 'Rudderstack'
+  WHEN caller_supplied_user_agent LIKE 'gcloud-golang%' OR caller_supplied_user_agent LIKE 'google-api-go%' THEN 'Golang Client'
+  WHEN caller_supplied_user_agent LIKE 'gcloud-node%' THEN 'Node Client'
+  WHEN caller_supplied_user_agent LIKE 'gl-python%' THEN 'Python Client'
+  WHEN caller_supplied_user_agent LIKE 'google-cloud-sdk%' THEN 'Google Cloud SDK'
+  WHEN caller_supplied_user_agent LIKE 'Hightouch%' THEN 'Hightouch'
+  WHEN caller_supplied_user_agent LIKE 'Mozilla%' THEN 'Web console'
+  WHEN caller_supplied_user_agent LIKE 'SimbaJDBCDriver%' THEN 'Java Client'
+  ELSE coalesce(caller_supplied_user_agent, 'Unknown')
+  {% endif %}
   END AS client_type,
   FROM base
 ),

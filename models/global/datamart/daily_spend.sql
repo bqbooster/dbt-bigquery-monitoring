@@ -10,7 +10,7 @@
     },
     )
 }}
-with compute_cost as (
+WITH compute_cost AS (
   {#- we use the billing export if possible else fallback to the estimated comput cost #}
   {%- if enable_gcp_billing_export() %}
   SELECT day,
@@ -22,15 +22,15 @@ with compute_cost as (
   {% endif %}
   GROUP BY ALL
   {%- else %}
-  select
+  SELECT
     day,
-    'compute' as cost_category,
-    SUM(total_query_cost) as cost
-  from {{ ref('compute_cost_per_hour_view') }}
+    'compute' AS cost_category,
+    SUM(total_query_cost) AS cost
+  FROM {{ ref('compute_cost_per_hour_view') }}
   {% if is_incremental() %}
-    where hour >= TIMESTAMP_SUB(_dbt_max_partition, interval 1 day)
+    WHERE hour >= TIMESTAMP_SUB(_dbt_max_partition, INTERVAL 1 DAY)
   {% endif %}
-  group by all
+  GROUP BY ALL
   {% endif %}
 )
 {%- if enable_gcp_billing_export() %}
@@ -47,15 +47,15 @@ storage_cost AS (
   GROUP BY day
 )
 {%- endif %}
-select
+SELECT
   day,
   cost_category,
-  SUM(cost) as cost
-from (
-  select * from compute_cost
+  SUM(cost) AS cost
+FROM (
+  SELECT * FROM compute_cost
   {%- if enable_gcp_billing_export() %}
   UNION ALL
   SELECT * FROM storage_cost
   {%- endif %}
 )
-group by all
+GROUP BY ALL

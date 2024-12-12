@@ -5,7 +5,7 @@
 {% macro jobs_done_incremental_hourly() -%}
 (SELECT *
 FROM
-  {{ ref('jobs_by_project_with_cost') }}
+  {{ ref('jobs_with_cost') }}
 WHERE
 {% if is_incremental() %}
 creation_time >= TIMESTAMP_TRUNC(_dbt_max_partition, HOUR)

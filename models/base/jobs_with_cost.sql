@@ -7,7 +7,18 @@
 WITH
 source AS (
   SELECT *,
- {%- if enable_gcp_bigquery_audit_logs() %}
+ {%- if enable_gcp_bigquery_audit_logs() and should_combine_audit_logs_and_information_schema() %}
+  FROM {{ ref('combined_jobs_inputs') }}
+ {%- elif enable_gcp_bigquery_audit_logs() %}
+  NULL AS job_stages,
+  NULL AS parent_job_id,
+  NULL AS timeline,
+  NULL AS total_bytes_billed,
+  NULL AS total_bytes_processed,
+  NULL AS transaction_id,
+  NULL AS query_info,
+  NULL AS transferred_bytes,
+  NULL AS materialized_view_statistics,
   FROM {{ ref('jobs_from_audit_logs') }}
  {%- else %}
   NULL AS caller_supplied_user_agent,
@@ -21,7 +32,9 @@ SELECT
   cache_hit,
   caller_supplied_user_agent,
   creation_time,
-  {%- if enable_gcp_bigquery_audit_logs() %}
+  {%- if enable_gcp_bigquery_audit_logs() and should_combine_audit_logs_and_information_schema() %}
+  hour
+  {%- elif enable_gcp_bigquery_audit_logs() %}
   TIMESTAMP_TRUNC(timestamp, HOUR)
  {%- else %}
   TIMESTAMP_TRUNC(creation_time, HOUR)

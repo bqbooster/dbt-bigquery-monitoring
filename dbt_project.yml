@@ -73,3 +73,4 @@ vars:
   gcp_bigquery_audit_logs_storage_project: "{{ env_var('DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_STORAGE_PROJECT', 'placeholder') if var('enable_gcp_bigquery_audit_logs') | as_bool else None }}"
   gcp_bigquery_audit_logs_dataset: "{{ env_var('DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_DATASET', 'placeholder') if var('enable_gcp_bigquery_audit_logs') | as_bool else None }}"
   gcp_bigquery_audit_logs_table: "{{ env_var('DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_TABLE', 'placeholder') if var('enable_gcp_bigquery_audit_logs') | as_bool else None }}"
+  should_combine_audit_logs_and_information_schema: "{{ env_var('DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA', false) }}"

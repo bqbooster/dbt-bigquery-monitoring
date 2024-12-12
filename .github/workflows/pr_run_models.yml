@@ -51,11 +51,34 @@ jobs:
             echo ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }} | base64 -d > ./integration_tests/keyfile.json  
           fi
 
-      - name: Run All models on BigQuery
+      - name: Setup dbt dependencies
         run: | 
           cd integration_tests
           dbt deps
+
+      - name: Setup dbt fixtures
+        run: | 
+          cd integration_tests
           dbt run -s tag:fixtures
+
+      - name: Run all models once
+        run: | 
+          cd integration_tests
           dbt build -s dbt_bigquery_monitoring --full-refresh --empty
+
+      - name: Run all models again to test incremental
+        run: |       
+          cd integration_tests
           dbt build -s dbt_bigquery_monitoring --empty
-          DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=True dbt run -s jobs_from_audit_logs+ --full-refresh --empty
+
+      - name: Run all models again with cloud audit logs
+        run: |       
+          cd integration_tests
+          DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
+          dbt run -s jobs_from_audit_logs+ --full-refresh --empty
+
+      - name: Run all models again to test incremental with cloud audit logs
+        run: |       
+          cd integration_tests
+          DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
+          dbt run -s jobs_from_audit_logs+ --empty

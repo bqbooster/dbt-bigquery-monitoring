@@ -1,29 +1,39 @@
 {{
    config(
-    materialized = "table",
+    materialized = "view",
     enabled = enable_gcp_bigquery_audit_logs()
     )
 }}
 SELECT
     -- bi_engine_statistics is not available in the audit logs, so we default to NULL
-    CAST(NULL AS STRUCT<bi_engine_mode STRING, acceleration_mode STRING, bi_engine_reasons STRUCT<code STRING, message STRING>>) AS bi_engine_statistics,
+    CAST(NULL AS STRUCT<bi_engine_mode STRING, acceleration_mode STRING, bi_engine_reasons ARRAY<STRUCT<code STRING, message STRING>>>) AS bi_engine_statistics,
     CAST(JSON_VALUE(protopayload_auditlog.metadataJson,
             '$.jobChange.job.jobStats.queryStats.cacheHit') AS BOOL) AS cache_hit,
     TIMESTAMP(JSON_VALUE(protopayload_auditlog.metadataJson,
             '$.jobChange.job.jobStats.createTime')) AS creation_time,
-    COALESCE(JSON_VALUE(protopayload_auditlog.metadataJson, '$.jobChange.job.jobConfig.queryConfig.destinationTable'),
-        JSON_VALUE(protopayload_auditlog.metadataJson, '$.jobChange.job.jobConfig.loadConfig.destinationTable')
-    ) AS destination_table,
+    -- destination table is like "projects/<project>/datasets/<dataset>/tables/<table>" in either $.jobChange.job.jobConfig.queryConfig.destinationTable or $.jobChange.job.jobConfig.loadConfig.destinationTable from protopayload_auditlog.metadataJson
+    -- the expected return type is STRUCT<project_id STRING, dataset_id STRING, table_id STRING>
+   (SELECT AS STRUCT
+        SPLIT(table_ref, '/')[OFFSET(1)] as project_id,
+        SPLIT(table_ref, '/')[OFFSET(3)] as dataset_id,
+        SPLIT(table_ref, '/')[OFFSET(5)] as table_id
+  FROM (
+  SELECT
+    COALESCE(
+      JSON_EXTRACT_SCALAR(protopayload_auditlog.metadataJson, '$.jobChange.job.jobConfig.queryConfig.destinationTable'),
+      JSON_EXTRACT_SCALAR(protopayload_auditlog.metadataJson, '$.jobChange.job.jobConfig.loadConfig.destinationTable')
+    ) table_ref)) AS destination_table,
     TIMESTAMP(JSON_VALUE(protopayload_auditlog.metadataJson,
             '$.jobChange.job.jobStats.endTime')) AS end_time,
     STRUCT(
-    JSON_VALUE(protopayload_auditlog.metadataJson, '$.jobChange.job.jobStatus.errorResult.code') AS code,
+    JSON_VALUE(protopayload_auditlog.metadataJson, '$.jobChange.job.jobStatus.errorResult.code') AS reason,
+    CAST(NULL AS STRING) AS location,
+    CAST(NULL AS STRING) AS debug_info,
     JSON_VALUE(protopayload_auditlog.metadataJson, '$.jobChange.job.jobStatus.errorResult.message') AS message
     ) as error_result,
     SPLIT(
         JSON_VALUE(protopayload_auditlog.metadataJson, '$.jobChange.job.jobName'), '/'
     )[SAFE_OFFSET(3)] AS job_id,
-    JSON_QUERY(protopayload_auditlog.metadataJson, '$.jobChange.job.jobStats.stages') AS job_stages,
     JSON_VALUE(protopayload_auditlog.metadataJson, '$.jobChange.job.jobConfig.type') AS job_type,
     ARRAY(
     SELECT
@@ -43,8 +53,7 @@ SELECT
           )
       ))
   ) AS labels,
-    -- parent_job_id is not available in the audit logs, so we default to NULL
-    NULL AS parent_job_id,
+
     JSON_VALUE(protopayload_auditlog.metadataJson,
         '$.jobChange.job.jobConfig.queryConfig.priority') AS priority,
     resource.labels.project_id,
@@ -74,22 +83,10 @@ SELECT
             '$.jobChange.job.jobStats.startTime')) AS start_time,
     JSON_VALUE(protopayload_auditlog.metadataJson, '$.jobChange.job.jobStatus.jobState') AS state,
     JSON_VALUE(protopayload_auditlog.metadataJson, '$.jobChange.job.jobConfig.queryConfig.statementType') AS statement_type,
-    JSON_QUERY(protopayload_auditlog.metadataJson, '$.jobChange.job.jobStats.timeline') AS timeline,
-    -- total_bytes_billed is not available in the audit logs, so we default to NULL
-    NULL AS total_bytes_billed,
-    JSON_VALUE(protopayload_auditlog.metadataJson, '$.jobChange.job.jobStats.queryStats.totalBytesProcessed') AS total_bytes_processed,
     -- total_modified_partitions is not available in the audit logs, so we default to NULL
     NULL AS total_modified_partitions,
     CAST(JSON_VALUE(protopayload_auditlog.metadataJson, '$.jobChange.job.jobStats.totalSlotMs') AS INT64) AS total_slot_ms,
-    -- transaction_id is not available in the audit logs, so we default to NULL
-    NULL AS transaction_id,
     protopayload_auditlog.authenticationInfo.principalEmail AS user_email,
-    -- query_info is not available in the audit logs, so we default to NULL
-    NULL AS query_info,
-    -- transferred_bytes is not available in the audit logs, so we default to NULL
-    NULL AS transferred_bytes,
-    -- materialized_view_statistics is not available in the audit logs, so we default to NULL
-    NULL AS materialized_view_statistics,
 
     protopayload_auditlog.requestMetadata.callerIp AS caller_ip_address,
     protopayload_auditlog.requestMetadata.callerSuppliedUserAgent AS caller_supplied_user_agent,

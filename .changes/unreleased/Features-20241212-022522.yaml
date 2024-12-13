@@ -1,6 +1,0 @@
-kind: Features
-body: Allow to combine audit logs and information schema jobs table to have the best of both worlds
-time: 2024-12-12T02:25:22.048577+01:00
-custom:
-    Author: Kayrnt
-    Issue: ""

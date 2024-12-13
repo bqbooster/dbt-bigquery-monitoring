@@ -13,7 +13,7 @@
 WITH compute_cost AS (
   {#- we use the billing export if possible else fallback to the estimated comput cost #}
   {%- if enable_gcp_billing_export() %}
-  SELECT day,
+  SELECT TIMESTAMP_TRUNC(hour, DAY) AS day,
     'compute' AS cost_category,
     SUM(compute_cost) AS cost
   FROM {{ ref('compute_billing_per_hour') }}
@@ -37,7 +37,7 @@ WITH compute_cost AS (
 ,
 storage_cost AS (
   SELECT
-    day,
+    TIMESTAMP_TRUNC(HOUR, DAY) AS day,
     'storage' AS cost_category,
     SUM(storage_cost) AS cost
   FROM {{ ref('storage_billing_per_hour') }}
@@ -52,10 +52,14 @@ SELECT
   cost_category,
   SUM(cost) AS cost
 FROM (
-  SELECT * FROM compute_cost
+  SELECT
+day,
+cost_category,
+cost
+FROM compute_cost
   {%- if enable_gcp_billing_export() %}
   UNION ALL
-  SELECT * FROM storage_cost
+  SELECT day, cost_category, cost FROM storage_cost AS s
   {%- endif %}
 )
 GROUP BY ALL

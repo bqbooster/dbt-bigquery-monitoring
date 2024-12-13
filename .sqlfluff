@@ -1,5 +1,5 @@
 [sqlfluff]
-exclude_rules = ST07, AM04, CV03, LT05, ST06, RF04, AM06, ST05, LT02, CP02, LT07
+exclude_rules = ST07, AM04, CV03, LT05, ST06, RF04, AM06, ST05, LT02, CP02, LT07, LT14, RF01
 dialect = bigquery
 templater = dbt
 

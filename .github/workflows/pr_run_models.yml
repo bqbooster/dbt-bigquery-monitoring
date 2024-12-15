@@ -12,13 +12,13 @@ on:
 
 # GitHub secrets
 env:
-  DBT_PROFILES_DIR: .
   GITHUB_SHA_OVERRIDE: ${{ github.event.pull_request.head.sha }} # We need the commit hash of the pull request branch's head, the GITHUB_SHA env var is always the base branch in a pull_request_target trigger
   DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }}
   DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT }}
   DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT }}
   DBT_ENV_SECRET_BIGQUERY_TEST_LOCATION: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_LOCATION }}
   DBT_BQ_MONITORING_GCP_PROJECTS: ${{ secrets.DBT_BQ_MONITORING_GCP_PROJECTS }}
+  DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
 
 concurrency:
   cancel-in-progress: true
@@ -35,11 +35,6 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }} # Check out the code of the PR
       
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
       - name: Install Python packages
         run: python -m pip install dbt-bigquery~=1.8.2 sqlfluff-templater-dbt
 
@@ -53,32 +48,52 @@ jobs:
 
       - name: Setup dbt dependencies
         run: | 
-          cd integration_tests
-          dbt deps
+          docker run -i \
+          -v $(pwd)/integration_tests:/usr/app/ \
+          -v $(pwd)/keyfile.json:/usr/app/keyfile.json \
+          $DOCKER_REGISTRY/dbt-bigquery-monitoring-base:main \
+          -c "dbt deps"
 
       - name: Setup dbt fixtures
-        run: | 
-          cd integration_tests
-          dbt run -s tag:fixtures
+        run: |
+          docker run -i \
+          -v $(pwd)/integration_tests:/usr/app/ \
+          -v $(pwd)/keyfile.json:/usr/app/keyfile.json \
+          $DOCKER_REGISTRY/dbt-bigquery-monitoring-base:main \
+          -c "dbt run -s tag:fixtures"
 
       - name: Run all models once
         run: | 
-          cd integration_tests
-          dbt build -s dbt_bigquery_monitoring --full-refresh --empty
+          docker run -i \
+          -v $(pwd)/integration_tests:/usr/app/ \
+          -v $(pwd)/keyfile.json:/usr/app/keyfile.json \
+          $DOCKER_REGISTRY/dbt-bigquery-monitoring-base:main \
+          -c "dbt build -s dbt_bigquery_monitoring --full-refresh --empty"
 
       - name: Run all models again to test incremental
         run: |       
-          cd integration_tests
-          dbt build -s dbt_bigquery_monitoring --empty
+          docker run -i \
+          -v $(pwd)/integration_tests:/usr/app/ \
+          -v $(pwd)/keyfile.json:/usr/app/keyfile.json \
+          $DOCKER_REGISTRY/dbt-bigquery-monitoring-base:main \
+          -c "dbt build -s dbt_bigquery_monitoring --empty"
 
       - name: Run all models again with cloud audit logs
-        run: |       
-          cd integration_tests
-          DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
-          dbt run -s jobs_from_audit_logs+ --full-refresh --empty
+        run: |
+          docker run -i \
+          -e DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true \
+          -e DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
+          -v $(pwd)/integration_tests:/usr/app/ \
+          -v $(pwd)/keyfile.json:/usr/app/keyfile.json \
+          $DOCKER_REGISTRY/dbt-bigquery-monitoring-base:main \
+          -c "dbt run -s jobs_from_audit_logs+ --full-refresh --empty"
 
       - name: Run all models again to test incremental with cloud audit logs
         run: |       
-          cd integration_tests
-          DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
-          dbt run -s jobs_from_audit_logs+ --empty
+          docker run -i \
+          -e DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true \
+          -e DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
+          -v $(pwd)/integration_tests:/usr/app/ \
+          -v $(pwd)/keyfile.json:/usr/app/keyfile.json \
+          $DOCKER_REGISTRY/dbt-bigquery-monitoring-base:main \
+          -c "dbt run -s jobs_from_audit_logs+ --empty"

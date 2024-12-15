@@ -14,6 +14,9 @@ clean-targets:
   - target
   - dbt_packages
 
+models:
+  +start: Jan 1 2017  
+
 vars:
   output_partition_expiration_days: 1
   lookback_window_days: 1

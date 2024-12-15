@@ -9,6 +9,10 @@ on:
       - 'Dockerfile'
       - 'Makefile'
 
+env:
+  DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+  IMAGE_NAME: dbt-bigquery-monitoring-base
+
 jobs:
   build-base-image:
     name: Build base image
@@ -25,5 +29,10 @@ jobs:
 
       - name: Build base image
         run: |
-          make build
+          docker build -t $(IMAGE_NAME):{{ github.branch }} .
+
+      - name: Push base image
+        run: |
+          docker tag $IMAGE_NAME:{{ github.branch }} $DOCKER_REGISTRY/$IMAGE_NAME:{{ github.branch }}
+	        docker push $DOCKER_REGISTRY/$IMAGE_NAME:main
 

@@ -9,7 +9,10 @@ There are two ways to monitor BigQuery jobs:
 - Using the BigQuery audit logs
 - Using the `INFORMATION_SCHEMA.JOBS` table
 
-## How to choose
+dbt-bigquery-monitoring supports both methods and goes further by providing a unified way to monitor both by offering a configuration that will combine the two sources.
+See `should_combine_audit_logs_and_information_schema` in the [configuration](/configuration) if you want to combine the two sources.
+
+## What's in there?
 
 Each of the solution has its advantages and disadvantages. Here is a comparison table to help you choose the right one for your use case:
 
@@ -18,9 +21,7 @@ Each of the solution has its advantages and disadvantages. Here is a comparison 
 | Max retention | User defined | 6 months |
 | Detailed User information | ✅ | ❌ |
 | BI Engine | ❌ | ✅ |
-| Insights | ❌ | ✅ |
-
-At some point, a mode to combine both solutions could be implemented.
+| Jobs insights | ❌ | ✅ |
 
 ## Audit logs
 

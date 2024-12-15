@@ -1,0 +1,6 @@
+kind: Docs
+body: Improve the documentation regarding combining audit logs with information schema jobs data
+time: 2024-12-15T17:00:28.333756+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

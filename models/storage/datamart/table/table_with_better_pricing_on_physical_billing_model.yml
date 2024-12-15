@@ -1,4 +1,4 @@
-version: 2
+gversion: 2
 
 models:
   - name: table_with_better_pricing_on_physical_billing_model

@@ -1,0 +1,29 @@
+name: Build base image for CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'Dockerfile'
+      - 'Makefile'
+
+jobs:
+  build-base-image:
+    name: Build base image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }} # Check out the code of the PR
+
+      - name: Build base image
+        run: |
+          make build
+

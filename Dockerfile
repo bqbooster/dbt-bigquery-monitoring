@@ -39,7 +39,6 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rust.sh \
 
 # Add Cargo to PATH
 ENV PATH="/root/.cargo/bin:${PATH}"
-RUN cargo
 
 # Update pip and install Python dependencies
 RUN python -m pip install --no-cache-dir --upgrade pip setuptools wheel
@@ -53,4 +52,4 @@ RUN pip install --no-cache-dir \
     && rm -rf /usr/local/share/doc /root/.cache/
 
 WORKDIR /usr/app/
-ENTRYPOINT ["zsh"]
+ENTRYPOINT ["bash"]

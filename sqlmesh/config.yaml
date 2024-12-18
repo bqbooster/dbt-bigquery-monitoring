@@ -1,0 +1,29 @@
+gateways:
+  bq:
+    connection:
+      type: bigquery
+      project: {{ env_var('PROJECT', 'project-to-update') }}
+      execution_project: {{ env_var('EXECUTION_PROJECT', 'execution-project-to-update') }}
+      location: {{ env_var('LOCATION', 'US') }}
+      method: {{ env_var('METHOD', 'oauth') }}
+      priority: {{ env_var('PRIORITY', 'interactive') }}
+      keyfile: {{ env_var('GOOGLE_APPLICATION_CREDENTIALS', 'gcp_credentials.json') }}
+
+    state_connection:
+      type: duckdb
+      database: bq_local_state.db
+      
+  local:
+    connection:
+      type: duckdb
+      database: test.db
+
+    state_connection:
+      type: duckdb
+      database: duckdb_local_state.db
+
+default_gateway: local
+
+model_defaults:
+  dialect: bigquery
+  start: 2024-12-01

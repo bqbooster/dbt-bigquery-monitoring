@@ -1,0 +1,188 @@
+test_unused_tables:
+  model: dbt_cou.unused_tables
+  inputs:
+    dbt_cou.table_reference_incremental:
+      rows:
+      - project_id: "my-project"
+        dataset_id: "my_dataset"
+        table_id: "my_table"
+        day: "2022-01-01"
+      - project_id: "my-project"
+        dataset_id: "my_dataset"
+        table_id: "my_table"
+        day: "2023-01-01"
+      - project_id: "my-project"
+        dataset_id: "my_dataset"
+        table_id: "my_table_2"
+        day: "2022-01-01"
+
+    dbt_cou.table_and_storage_with_cost:
+      rows:
+      - project_id: "my-project"
+        dataset_id: "my_dataset"
+        table_id: "my_table"
+        is_insertable_into: "YES"
+        is_typed: "NO"
+        ddl: "CREATE TABLE my_table"
+        default_collation_name: "utf8"
+        project_number: 123456
+        creation_time: "2022-01-01T00:00:00"
+        deleted: false
+        storage_last_modified_time: "2022-01-01T12:00:00"
+        total_rows: 1000
+        total_partitions: 1
+        total_logical_bytes: 1073741824
+        active_logical_bytes: 1073741824
+        long_term_logical_bytes: 0
+        total_physical_bytes: 536870912
+        active_physical_bytes: 536870912
+        long_term_physical_bytes: 0
+        time_travel_physical_bytes: 53687091
+        fail_safe_physical_bytes: 26843545
+        table_type: "BASE TABLE"
+        active_logical_bytes_cost: 0.02
+        long_term_logical_bytes_cost: 0.0
+        active_physical_bytes_cost: 0.04
+        time_travel_physical_bytes_cost: 0.004
+        fail_safe_physical_bytes_cost: 0.002
+        long_term_physical_bytes_cost: 0.0
+        factored_table_id: "my_table"
+        total_logical_tb: 0.001
+        total_physical_tb: 0.0005
+        logical_cost_monthly_forecast: 0.02
+        physical_cost_monthly_forecast: 0.04
+        physical_cost_monthly_forecast_with_zero_time_travel_and_fail_safe: 0.034
+        time_travel_per_active_byte_ratio: 0.1
+        fail_safe_per_active_byte_ratio: 0.05
+        active_compression_ratio: 2.0
+        long_term_compression_ratio: null
+        prefer_physical_pricing_model: false
+        storage_pricing_model_difference: 0.02
+
+      - project_id: "my-project"
+        dataset_id: "my_dataset"
+        table_id: "my_table_2"
+        is_insertable_into: "YES"
+        is_typed: "NO"
+        ddl: "CREATE TABLE my_table2"
+        default_collation_name: "utf8"
+        project_number: 123456
+        creation_time: "2022-01-01T00:00:00"
+        deleted: false
+        storage_last_modified_time: "2022-01-01T12:00:00"
+        total_rows: 1000
+        total_partitions: 1
+        total_logical_bytes: 1073741824
+        active_logical_bytes: 1073741824
+        long_term_logical_bytes: 0
+        total_physical_bytes: 536870912
+        active_physical_bytes: 536870912
+        long_term_physical_bytes: 0
+        time_travel_physical_bytes: 53687091
+        fail_safe_physical_bytes: 26843545
+        table_type: "BASE TABLE"
+        active_logical_bytes_cost: 0.02
+        long_term_logical_bytes_cost: 0.0
+        active_physical_bytes_cost: 0.04
+        time_travel_physical_bytes_cost: 0.004
+        fail_safe_physical_bytes_cost: 0.002
+        long_term_physical_bytes_cost: 0.0
+        factored_table_id: "my_table"
+        total_logical_tb: 0.001
+        total_physical_tb: 0.0005
+        logical_cost_monthly_forecast: 0.02
+        physical_cost_monthly_forecast: 0.04
+        physical_cost_monthly_forecast_with_zero_time_travel_and_fail_safe: 0.034
+        time_travel_per_active_byte_ratio: 0.1
+        fail_safe_per_active_byte_ratio: 0.05
+        active_compression_ratio: 2.0
+        long_term_compression_ratio: null
+        prefer_physical_pricing_model: false
+        storage_pricing_model_difference: 0.02
+
+  outputs:
+    query:
+      rows:
+      - last_used_date: "2023-01-01"
+        project_id: "my-project"
+        dataset_id: "my_dataset"
+        table_id: "my_table"
+        is_insertable_into: "YES"
+        is_typed: "NO"
+        ddl: "CREATE TABLE my_table"
+        default_collation_name: "utf8"
+        project_number: 123456
+        creation_time: "2022-01-01T00:00:00"
+        deleted: false
+        storage_last_modified_time: "2022-01-01T12:00:00"
+        total_rows: 1000
+        total_partitions: 1
+        total_logical_bytes: 1073741824
+        active_logical_bytes: 1073741824
+        long_term_logical_bytes: 0
+        total_physical_bytes: 536870912
+        active_physical_bytes: 536870912
+        long_term_physical_bytes: 0
+        time_travel_physical_bytes: 53687091
+        fail_safe_physical_bytes: 26843545
+        table_type: "BASE TABLE"
+        active_logical_bytes_cost: 0.02
+        long_term_logical_bytes_cost: 0.0
+        active_physical_bytes_cost: 0.04
+        time_travel_physical_bytes_cost: 0.004
+        fail_safe_physical_bytes_cost: 0.002
+        long_term_physical_bytes_cost: 0.0
+        factored_table_id: "my_table"
+        total_logical_tb: 0.001
+        total_physical_tb: 0.0005
+        logical_cost_monthly_forecast: 0.02
+        physical_cost_monthly_forecast: 0.04
+        physical_cost_monthly_forecast_with_zero_time_travel_and_fail_safe: 0.034
+        time_travel_per_active_byte_ratio: 0.1
+        fail_safe_per_active_byte_ratio: 0.05
+        active_compression_ratio: 2.0
+        long_term_compression_ratio: null
+        prefer_physical_pricing_model: false
+        storage_pricing_model_difference: 0.02
+
+      - last_used_date: "2022-01-01"
+        project_id: "my-project"
+        dataset_id: "my_dataset"
+        table_id: "my_table_2"
+        is_insertable_into: "YES"
+        is_typed: "NO"
+        ddl: "CREATE TABLE my_table2"
+        default_collation_name: "utf8"
+        project_number: 123456
+        creation_time: "2022-01-01T00:00:00"
+        deleted: false
+        storage_last_modified_time: "2022-01-01T12:00:00"
+        total_rows: 1000
+        total_partitions: 1
+        total_logical_bytes: 1073741824
+        active_logical_bytes: 1073741824
+        long_term_logical_bytes: 0
+        total_physical_bytes: 536870912
+        active_physical_bytes: 536870912
+        long_term_physical_bytes: 0
+        time_travel_physical_bytes: 53687091
+        fail_safe_physical_bytes: 26843545
+        table_type: "BASE TABLE"
+        active_logical_bytes_cost: 0.02
+        long_term_logical_bytes_cost: 0.0
+        active_physical_bytes_cost: 0.04
+        time_travel_physical_bytes_cost: 0.004
+        fail_safe_physical_bytes_cost: 0.002
+        long_term_physical_bytes_cost: 0.0
+        factored_table_id: "my_table"
+        total_logical_tb: 0.001
+        total_physical_tb: 0.0005
+        logical_cost_monthly_forecast: 0.02
+        physical_cost_monthly_forecast: 0.04
+        physical_cost_monthly_forecast_with_zero_time_travel_and_fail_safe: 0.034
+        time_travel_per_active_byte_ratio: 0.1
+        fail_safe_per_active_byte_ratio: 0.05
+        active_compression_ratio: 2.0
+        long_term_compression_ratio: null
+        prefer_physical_pricing_model: false
+        storage_pricing_model_difference: 0.02

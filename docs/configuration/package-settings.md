@@ -1,117 +1,21 @@
 ---
-sidebar_position: 4
-slug: /configuration
+sidebar_position: 4.4
+slug: /configuration/package-settings
 ---
 
-# Configuration
-
-Settings have default values that can be overriden using:
-
-- dbt project variables (and therefore also by CLI variable override)
-- environment variables
-
-Please note that the default region is `us` and there's no way, at the time of writing, to query cross region tables but you might run that project in each region you want to monitor and [then replicate the tables to a central region](https://cloud.google.com/bigquery/docs/data-replication) to build an aggregated view.
-
-To know which region is related to a job, in the BQ UI, use the `Job history` (bottom panel), take a job and look at `Location` field when clicking on a job. You can also access the region of a dataset/table by opening the details panel of it and check the `Data location` field.
-
-## Modes
-
-### Region mode (default)
-
-In this mode, the package will monitor all the GCP projects in the region specified in the `dbt_project.yml` file.
-
-```yml
-vars:
-  # dbt bigquery monitoring vars
-  bq_region: 'us'
-```
-
-**Requirements**
-
-- Execution project needs to be the same as the storage project else you'll need to use the second mode.
-- If you have multiple GCP Projects in the same region, you should use the "project mode" (with `input_gcp_projects` setting to specify them) as else you will run into errors such as: `Within a standard SQL view, references to tables/views require explicit project IDs unless the entity is created in the same project that is issuing the query, but these references are not project-qualified: "region-us.INFORMATION_SCHEMA.JOBS"`.
-
-### Project mode
-
-To enable the "project mode", you'll need to define explicitly one mandatory setting to set in the `dbt_project.yml` file:
-
-```yml
-vars:
-  # dbt bigquery monitoring vars
-  input_gcp_projects: [ 'my-gcp-project', 'my-gcp-project-2' ]
-```
-
-##### GCP Billing export
-GCP Billing export is a feature that allows you to export your billing data to BigQuery. It allows the package to track the real cost of your queries and storage overtime.
-To enable on GCP end, you can follow the [official documentation](https://cloud.google.com/billing/docs/how-to/export-data-bigquery) to set up the export.
-Then enable the GCP billing export monitoring in the package, you'll need to define the following settings in the `dbt_project.yml` file:
-
-```yml
-vars:
-  enable_gcp_bigquery_audit_logs: true
-  gcp_bigquery_audit_logs_storage_project: 'my-gcp-project'
-  gcp_bigquery_audit_logs_dataset: 'my_dataset'
-  gcp_bigquery_audit_logs_table: 'my_table'
-```
-
-
-
-### BigQuery audit logs mode
-
-In this mode, the package will monitor all the jobs that written to a GCP BigQuery Audit logs table instead of using `INFORMATION_SCHEMA.JOBS` one.
-
-To enable the "cloud audit logs mode", you'll need to define explicitly one mandatory setting to set in the `dbt_project.yml` file:
-
-```yml
-vars:
-  # dbt bigquery monitoring vars
-  bq_region: 'us'
-  cloud_audit_logs_table: 'my-gcp-project.my_dataset.my_table'
-```
-
-[You might use environment variable as well](#gcp-bigquery-audit-logs-configuration).
-
-### GCP Billing export
-
-GCP Billing export is a feature that allows you to export your billing data to BigQuery. It allows the package to track the real cost of your queries and storage overtime.
-
-To enable on GCP end, you can follow the [official documentation](https://cloud.google.com/billing/docs/how-to/export-data-bigquery) to set up the export.
-
-Then enable the GCP billing export monitoring in the package, you'll need to define the following settings in the `dbt_project.yml` file:
-
-```yml
-vars:
-  # dbt bigquery monitoring vars
-  enable_gcp_billing_export: true
-  gcp_billing_export_storage_project: 'my-gcp-project'
-  gcp_billing_export_dataset: 'my_dataset'
-  gcp_billing_export_table: 'my_table'
-```
-
-## Add metadata to queries (Recommended but optional)
-
-To enhance your query metadata with dbt model information, the package provides a dedicated macro that leverage "dbt query comments" (the header set at the top of each query)
-To configure the query comments, add the following config to `dbt_project.yml`.
-
-```yaml
-query-comment:
-  comment: '{{ dbt_bigquery_monitoring.get_query_comment(node) }}'
-  job-label: True # Use query comment JSON as job labels
-```
-
-## Customizing the package configuration
+# Customizing the package settings
 
 Following settings can be overriden to customize the package configuration.
 To do so, you can set the following variables in your `dbt_project.yml` file or use environment variables.
 
-### Environment
+## Environment
 
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
 | `input_gcp_projects` | `DBT_BQ_MONITORING_GCP_PROJECTS` | List of GCP projects to monitor | `[]` |
 | `bq_region` | `DBT_BQ_MONITORING_REGION` | Region where the monitored projects are located | `us` |
 
-### Pricing
+## Pricing
 
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
@@ -126,7 +30,9 @@ To do so, you can set the following variables in your `dbt_project.yml` file or 
 | `bi_engine_gb_hourly_price` | `DBT_BQ_MONITORING_BI_ENGINE_GB_HOURLY_PRICE` | Hourly price in US dollars per BI engine GB of memory | `0.0416` |
 | `free_storage_gb_per_month` | `DBT_BQ_MONITORING_FREE_STORAGE_GB_PER_MONTH` | Free storage GB per month | `10` |
 
-### Package
+## Package
+
+These settings are used to configure how dbt will run and materialize the models.
 
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
@@ -136,7 +42,9 @@ To do so, you can set the following variables in your `dbt_project.yml` file or 
 | `output_partition_expiration_days` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Default table expiration in days for incremental models | `365` days |
 | `use_copy_partitions` | `DBT_BQ_MONITORING_USE_COPY_PARTITIONS` | Whether to use copy partitions or not | `true` |
 
-#### GCP Billing export configuration
+### GCP Billing export configuration
+
+See [GCP Billing export](/configuration/gcp-billing) for more information.
 
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
@@ -145,9 +53,9 @@ To do so, you can set the following variables in your `dbt_project.yml` file or 
 | `gcp_billing_export_dataset` | `DBT_BQ_MONITORING_GCP_BILLING_EXPORT_DATASET` | The dataset for GCP billing export data | `'placeholder'` if enabled, `None` otherwise |
 | `gcp_billing_export_table` | `DBT_BQ_MONITORING_GCP_BILLING_EXPORT_TABLE` | The table for GCP billing export data | `'placeholder'` if enabled, `None` otherwise |
 
-#### GCP BigQuery Audit logs configuration
+### GCP BigQuery Audit logs configuration
 
-See [GCP BigQuery Audit logs](#bigquery-audit-logs-mode) for more information.
+See [GCP BigQuery Audit logs](/configuration/audit-logs) for more information.
 
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|

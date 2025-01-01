@@ -10,8 +10,6 @@ slug: /contributing
 You're free to use the environment management tools you prefer but if you're familiar with those, you can use the following:
 
 - pipx (to isolate the global tools from your local environment)
-- tox (to run the tests)
-- pre-commit (to run the linter)
 - SQLFluff (to lint SQL)
 - changie (to generate CHANGELOG entries)
 
@@ -27,19 +25,11 @@ pipx ensurepath
 Then you'll be able to install tox, pre-commit and sqlfluff with pipx:
 
 ```bash
-pipx install tox
-pipx install pre-commit
 pipx install sqlfluff
 ```
 
 To install changie, there are few options depending on your OS.
 See the [installation guide](https://changie.dev/guide/installation/) for more details.
-
-To configure pre-commit hooks:
-
-```bash
-pre-commit install
-```
 
 To configure your dbt profile, run following command and follow the prompts:
 
@@ -52,7 +42,7 @@ dbt init
 - Fork the repo
 - Create a branch from `main`
 - Make your changes
-- Run `tox` to run the tests
+- Run the tests
 - Create your changelog entry with `changie new` (don't edit directly the CHANGELOG.md)
 - Commit your changes (it will run the linter through pre-commit)
 - Push your branch and open a PR on the repository
@@ -71,27 +61,27 @@ We use SQLFluff to keep SQL style consistent. By installing `pre-commit` per the
 
 Lint all models in the /models directory:
 ```bash
-tox -e lint_all
+sqlfluff lint
 ```
 
 Fix all models in the /models directory:
 ```bash
-tox -e fix_all
+sqlfluff fix
 ```
 
 Lint (or subsitute lint to fix) a specific model:
 ```bash
-tox -e lint -- models/path/to/model.sql
+sqlfluff lint -- models/path/to/model.sql
 ```
 
 Lint (or subsitute lint to fix) a specific directory:
 ```bash
-tox -e lint -- models/path/to/directory
+sqlfluff lint -- models/path/to/directory
 ```
 
 #### Rules
 
-Enforced rules are defined within `tox.ini`. To view the full list of available rules and their configuration, see the [SQLFluff documentation](https://docs.sqlfluff.com/en/stable/rules.html).
+Enforced rules are defined within `.sqlfluff`. To view the full list of available rules and their configuration, see the [SQLFluff documentation](https://docs.sqlfluff.com/en/stable/rules.html).
 
 ## Generation of dbt base google models
 

@@ -1,0 +1,26 @@
+test_jobs_from_audit_logs:
+  model: dbt_cou.jobs_from_audit_logs
+  inputs:
+    dbt_cou.bigquery_audit_logs:
+      rows:
+      - project_id: "my-project"
+        dataset_id: "my_dataset"
+        table_id: "my_table"
+        day: "2022-01-01"
+      - project_id: "my-project"
+        dataset_id: "my_dataset"
+        table_id: "my_table"
+        day: "2023-01-01"
+      - project_id: "my-project"
+        dataset_id: "my_dataset"
+        table_id: "my_table_2"
+        day: "2022-01-01"
+
+
+  outputs:
+    query:
+      rows:
+      - last_used_date: "2023-01-01"
+        project_id: "my-project"
+        dataset_id: "my_dataset"
+        

@@ -1,0 +1,6 @@
+kind: Fixes
+body: Protect get_query_comment against potential undefined
+time: 2025-01-05T00:30:40.27033+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

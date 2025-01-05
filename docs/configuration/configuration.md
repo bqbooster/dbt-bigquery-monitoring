@@ -61,6 +61,7 @@ To configure the query comments, add the following config to `dbt_project.yml`.
 ```yaml
 query-comment:
   comment: '{{ dbt_bigquery_monitoring.get_query_comment(node) }}'
-  job-label: True # Use query comment JSON as job labels
+  job-label: true # Use query comment JSON as job labels
 ```
 
+To get more details about query comments, please refer to the [dbt documentation](https://docs.getdbt.com/reference/project-configs/query-comment).

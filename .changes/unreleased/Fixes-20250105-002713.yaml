@@ -1,6 +1,0 @@
-kind: Fixes
-body: Fix materialized_as_view_if_explicit_projects macro as not working as intended in region mode
-time: 2025-01-05T00:27:13.276091+01:00
-custom:
-    Author: Kayrnt
-    Issue: ""

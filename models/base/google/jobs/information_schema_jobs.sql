@@ -1,5 +1,5 @@
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs -#}
-{# Required role/permissions: 
+{# Required role/permissions:
 
       To get the permission that you need to query the INFORMATION_SCHEMA.JOBS view,
 
@@ -24,7 +24,10 @@ WITH base AS (
   {% endfor %}
 {%- else %}
   SELECT
-bi_engine_statistics,
+ STRUCT(
+  bi_engine_statistics.bi_engine_mode AS bi_engine_mode,
+  bi_engine_statistics.bi_engine_reasons AS bi_engine_reasons,
+  bi_engine_statistics.acceleration_mode AS acceleration_mode) AS bi_engine_statistics,
 cache_hit,
 creation_time,
 destination_table,

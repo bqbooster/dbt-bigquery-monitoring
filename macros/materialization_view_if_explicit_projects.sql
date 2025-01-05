@@ -5,7 +5,7 @@
     but these references are not project-qualified: "region-XXX.INFORMATION_SCHEMA.XXX"
  -#}
 {% macro materialized_as_view_if_explicit_projects() -%}
-  {% if var('input_gcp_projects', []) | length == 0 %}
+  {% if project_list() | length == 0 %}
     {{ return('ephemeral') }}
   {% else %}
     {{ return('view') }}

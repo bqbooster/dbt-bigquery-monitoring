@@ -30,7 +30,7 @@ models:
 vars:
   # Environment configuration
   bq_region: "{{ env_var('DBT_BQ_MONITORING_REGION', 'us') }}"
-  input_gcp_projects: "{{ env_var('DBT_BQ_MONITORING_GCP_PROJECTS') }}" # example: ['my-gcp-project', 'my-gcp-project2']
+  input_gcp_projects: "{{ env_var('DBT_BQ_MONITORING_GCP_PROJECTS', '') }}" # example: ['my-gcp-project', 'my-gcp-project2']
   # https://cloud.google.com/bigquery/pricing#pricing
   # On-demand compute (analysis) pricing
   use_flat_pricing: "{{ env_var('DBT_BQ_MONITORING_USE_FLAT_PRICING', true) }}"

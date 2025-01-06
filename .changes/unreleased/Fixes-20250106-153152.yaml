@@ -1,0 +1,6 @@
+kind: Fixes
+body: Fix DBT_BQ_MONITORING_GCP_PROJECTS being required while it should not for region mode
+time: 2025-01-06T15:31:52.975763+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

@@ -1,6 +1,6 @@
-{{ config(materialization='project_by_project_table') }}
+{{ config(materialization='project_by_project_table', partition_by='creation_time') }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs -#}
-{# Required role/permissions: 
+{# Required role/permissions:
 
       To get the permission that you need to query the INFORMATION_SCHEMA.JOBS view,
 

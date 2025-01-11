@@ -5,13 +5,17 @@
   {% set existing_relation = load_relation(this) %}
   {% set tmp_relation = make_temp_relation(this) %}
   {% set projects = project_list() %}
-  {% set partition_by = config.get('partition_by') %}
+  {% set partition_by = config.get('input_partition_by') %}
 
   {{ run_hooks(pre_hooks) }}
 
   -- Create the table if it doesn't exist
   {% if existing_relation is none %}
-    {% set build_sql = create_table_as(False, target_relation, sql) %}
+    {% if partition_by is not none %}
+      {% set build_sql = create_table_as(False, target_relation, sql, partition_by=partition_by) %}
+    {% else %}
+      {% set build_sql = create_table_as(False, target_relation, sql) %}
+    {% endif %}
     {% do run_query(build_sql) %}
   {% else %}
     {% if partition_by is not none %}

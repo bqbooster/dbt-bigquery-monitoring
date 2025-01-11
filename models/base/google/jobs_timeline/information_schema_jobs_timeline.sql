@@ -1,4 +1,4 @@
-{{ config(materialization='project_by_project_table') }}
+{{ config(materialization=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs-timeline -#}
 {# Required role/permissions: To query the INFORMATION_SCHEMA.JOBS_TIMELINE view, you need the
 bigquery.jobs.listAll Identity and Access Management (IAM) permission for the project.

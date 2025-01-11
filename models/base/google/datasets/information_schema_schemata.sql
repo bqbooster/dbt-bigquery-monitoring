@@ -1,4 +1,4 @@
-{{ config(materialization='project_by_project_table') }}
+{{ config(materialization=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-datasets-schemata -#}
 
 SELECT catalog_name, schema_name, schema_owner, creation_time, last_modified_time, location, ddl, default_collation_name

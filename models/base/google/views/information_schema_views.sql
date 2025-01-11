@@ -1,4 +1,4 @@
-{{ config(materialization='project_by_project_table') }}
+{{ config(materialization=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-views -#}
 {# Required role/permissions: To get view metadata, you need the following Identity and Access Management (IAM)
 permissions:

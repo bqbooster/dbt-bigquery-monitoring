@@ -1,4 +1,4 @@
-{{ config(materialization='project_by_project_table', partition_by='creation_time') }}
+{{ config(materialized=dbt_bigquery_monitoring_materialization(), partition_by={'field': 'creation_time', 'data_type': 'timestamp', 'granularity': 'hour'}) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs -#}
 {# Required role/permissions:
 

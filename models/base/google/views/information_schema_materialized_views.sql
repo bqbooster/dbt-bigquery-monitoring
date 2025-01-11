@@ -1,6 +1,6 @@
-{{ config(materialization='project_by_project_table') }}
+{{ config(materialization=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-materialized-views -#}
-{# Required role/permissions: 
+{# Required role/permissions:
 
       To get the permissions that you need to query the INFORMATION_SCHEMA.MATERIALIZED_VIEWS view,
 
@@ -28,7 +28,7 @@ Required permissions
 The following permissions are required to query the INFORMATION_SCHEMA.MATERIALIZED_VIEWS view:
 
 
- bigquery.tables.get 
+ bigquery.tables.get
 
 
  bigquery.tables.list

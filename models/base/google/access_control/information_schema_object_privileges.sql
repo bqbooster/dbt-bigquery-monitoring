@@ -1,4 +1,4 @@
-{{ config(materialization='project_by_project_table') }}
+{{ config(materialization=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-object-privileges -#}
 {# Required role/permissions: To query the INFORMATION_SCHEMA.OBJECT_PRIVILEGES view, you need following
 Identity and Access Management (IAM) permissions:

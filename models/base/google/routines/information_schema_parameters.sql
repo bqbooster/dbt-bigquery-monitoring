@@ -1,4 +1,4 @@
-{{ config(materialization='project_by_project_table') }}
+{{ config(materialization=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-parameters -#}
 {# Required role/permissions: To query the INFORMATION_SCHEMA.PARAMETERS view, you need the following
 Identity and Access Management (IAM) permissions:

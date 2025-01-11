@@ -1,4 +1,4 @@
-{{ config(materialization='project_by_project_table') }}
+{{ config(materialization=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-vector-index-columns -#}
 {# Required role/permissions: To see vector index metadata, you need the
 bigquery.tables.get or bigquery.tables.list Identity and Access Management (IAM)

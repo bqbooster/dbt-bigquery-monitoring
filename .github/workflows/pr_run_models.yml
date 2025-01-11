@@ -41,7 +41,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install Python packages
-        run: python -m pip install dbt-bigquery~=1.8.2 sqlfluff-templater-dbt
+        run: python -m pip install dbt-bigquery~=1.9.1 sqlfluff-templater-dbt
 
       - name: Write keyfile if secret is defined
         run: |

@@ -7,19 +7,5 @@ roles/bigquery.jobUser
 For more information about granular BigQuery permissions, see
 roles and permissions. -#}
 
-WITH base AS (
-  SELECT
-option_name,
-option_description,
-option_type,
-option_value
+SELECT option_name, option_description, option_type, option_value
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ORGANIZATION_OPTIONS`
-)
-
-SELECT
-option_name,
-option_description,
-option_type,
-option_value,
-FROM
-base

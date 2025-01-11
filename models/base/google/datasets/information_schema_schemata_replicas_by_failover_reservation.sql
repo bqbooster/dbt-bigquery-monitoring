@@ -20,35 +20,5 @@
         roles.
        -#}
 
-WITH base AS (
-  SELECT
-failover_reservation_project_id,
-failover_reservation_name,
-catalog_name,
-schema_name,
-replica_name,
-location,
-replica_primary_assigned,
-replica_primary_assignment_complete,
-creation_time,
-creation_complete,
-replication_time,
-sync_status
+SELECT failover_reservation_project_id, failover_reservation_name, catalog_name, schema_name, replica_name, location, replica_primary_assigned, replica_primary_assignment_complete, creation_time, creation_complete, replication_time, sync_status
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`SCHEMATA_REPLICAS_BY_FAILOVER_RESERVATION`
-)
-
-SELECT
-failover_reservation_project_id,
-failover_reservation_name,
-catalog_name,
-schema_name,
-replica_name,
-location,
-replica_primary_assigned,
-replica_primary_assignment_complete,
-creation_time,
-creation_complete,
-replication_time,
-sync_status,
-FROM
-base

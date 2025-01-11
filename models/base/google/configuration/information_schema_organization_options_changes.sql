@@ -15,21 +15,5 @@
 
    -#}
 
-WITH base AS (
-  SELECT
-update_time,
-username,
-updated_options,
-project_id,
-project_number
+SELECT update_time, username, updated_options, project_id, project_number
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ORGANIZATION_OPTIONS_CHANGES`
-)
-
-SELECT
-update_time,
-username,
-updated_options,
-project_id,
-project_number,
-FROM
-base

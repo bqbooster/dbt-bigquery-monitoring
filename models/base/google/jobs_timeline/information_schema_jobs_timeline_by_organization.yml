@@ -9,9 +9,6 @@ models:
   - name: period_slot_ms
     description: Slot milliseconds consumed in this period.
     type: INTEGER
-  - name: period_shuffle_ram_usage_ratio
-    description: Shuffle usage ratio in the selected time period.
-    type: FLOAT
   - name: project_id
     description: (Clustering column) ID of the project.
     type: STRING
@@ -41,6 +38,13 @@ models:
     description: "The type of query statement, if valid. For example,\n          SELECT,\
       \ INSERT, UPDATE, or\n          DELETE."
     type: STRING
+  - name: priority
+    description: "The priority of this job. Valid values include INTERACTIVE and\n\
+      \      BATCH."
+    type: STRING
+  - name: parent_job_id
+    description: ID of the parent job, if any.
+    type: STRING
   - name: job_creation_time
     description: "(Partitioning column) Creation time of this job. Partitioning\n\
       \        is based on the UTC time of this timestamp."
@@ -63,6 +67,12 @@ models:
     description: The edition associated with the reservation assigned to this job.
       For more information about editions, see Introduction to BigQuery editions.
     type: STRING
+  - name: total_bytes_billed
+    description: "If the project is configured to use on-demand\n        pricing,\
+      \ then this field contains the total bytes billed for the\n        job. If the\
+      \ project is configured to use flat-rate\n        pricing, then you are not\
+      \ billed for bytes. This field is\n        not configurable."
+    type: INTEGER
   - name: total_bytes_processed
     description: Total bytes processed by the job.
     type: INTEGER
@@ -72,6 +82,9 @@ models:
   - name: cache_hit
     description: Whether the query results of this job were from a cache.
     type: BOOLEAN
+  - name: period_shuffle_ram_usage_ratio
+    description: Shuffle usage ratio in the selected time period.
+    type: FLOAT
   - name: period_estimated_runnable_units
     description: Units of work that can be scheduled immediately in this period. Additional
       slots for these units of work accelerate your query, provided no other query

@@ -1,4 +1,5 @@
-{# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-partitions -#}
+
+    {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-partitions -#}
     {# Required role/permissions: To query the INFORMATION_SCHEMA.PARTITIONS view, you need the following
 Identity and Access Management (IAM) permissions:
 bigquery.tables.get
@@ -14,23 +15,14 @@ Access control with IAM. -#}
 
     
     {% set preflight_sql -%}
-    {% if project_list()|length > 0 -%}
-    {% for project in project_list() -%}
-    SELECT
-    CONCAT('`', CATALOG_NAME, '`.`', SCHEMA_NAME, '`') AS SCHEMA_NAME
-    FROM `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`SCHEMATA`
-    {% if not loop.last %}UNION ALL{% endif %}
-    {% endfor %}
-    {%- else %}
     SELECT
     CONCAT('`', CATALOG_NAME, '`.`', SCHEMA_NAME, '`') AS SCHEMA_NAME
     FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`SCHEMATA`
-    {%- endif %}
     {%- endset %}
     {% set results = run_query(preflight_sql) %}
     {% set dataset_list = results | map(attribute='SCHEMA_NAME') | list %}
     {%- if dataset_list | length == 0 -%}
-    {{ log("No datasets found in the project list", info=True) }}
+    {{ log("No datasets found in the project list", info=False) }}
     {%- endif -%}
     
     WITH base AS (
@@ -39,29 +31,14 @@ Access control with IAM. -#}
       LIMIT 0
     {%- else %}
     {% for dataset in dataset_list -%}
-      SELECT
-table_catalog,
-table_schema,
-table_name,
-partition_id,
-total_rows,
-total_logical_bytes,
-last_modified_time,
-storage_tier
+      SELECT table_catalog, table_schema, table_name, partition_id, total_rows, total_logical_bytes, last_modified_time, storage_tier
       FROM {{ dataset | trim }}.`INFORMATION_SCHEMA`.`PARTITIONS`
     {% if not loop.last %}UNION ALL{% endif %}
     {% endfor %}
     {%- endif -%}
     )
-
-SELECT
-    table_catalog,
-table_schema,
-table_name,
-partition_id,
-total_rows,
-total_logical_bytes,
-last_modified_time,
-storage_tier,
+    SELECT
+    table_catalog, table_schema, table_name, partition_id, total_rows, total_logical_bytes, last_modified_time, storage_tier,
     FROM
     base
+    

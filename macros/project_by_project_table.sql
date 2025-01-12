@@ -5,14 +5,24 @@
 {% set projects = project_list() %}
 {%- set raw_partition_by = config.get('partition_by', none) -%}
 {%- set partition_config = adapter.parse_partition_by(raw_partition_by) -%}
+{%- set full_refresh_mode = (should_full_refresh()) -%}
 
 {{ run_hooks(pre_hooks) }}
 
--- Create the table if it doesn't exist
-{% if existing_relation is none %}
+-- Create the table if it doesn't exist or if we're in full-refresh mode
+{% if existing_relation is none or full_refresh_mode %}
   {% call statement('main') -%}
     {% if partition_config is not none %}
       {% set build_sql = create_table_as(False, target_relation, sql) %}
+      -- Add partition expiration to the table to 180 days like information_schema tables
+      {% set partition_expiration_sql %}
+        ALTER TABLE {{ target_relation }}
+        SET OPTIONS (
+          expiration_timestamp = 180
+        )
+      {% endset %}
+      {{ partition_expiration_sql }}
+      {% do run_query(partition_expiration_sql) %}
     {% else %}
       {% set build_sql = create_table_as(False, target_relation, sql) %}
     {% endif %}
@@ -68,7 +78,6 @@
 {{ run_hooks(post_hooks) }}
 {% set should_revoke = should_revoke(old_relation, full_refresh_mode=True) %}
 {% do apply_grants(target_relation, grant_config, should_revoke) %}
-{%- set full_refresh_mode = (should_full_refresh()) -%}
 {% do persist_docs(target_relation, model) %}
 
 {{ return({'relations': [target_relation]}) }}

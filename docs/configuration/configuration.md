@@ -45,6 +45,7 @@ vars:
 
 ### Project mode
 
+Project mode is useful when you have multiple GCP projects or you want to store the dbt-bigquery-monitoring models in a project different from the one used for execution.
 To enable the "project mode", you'll need to define explicitly one mandatory setting to set in the `dbt_project.yml` file:
 
 ```yml
@@ -52,6 +53,13 @@ vars:
   # dbt bigquery monitoring vars
   input_gcp_projects: [ 'my-gcp-project', 'my-gcp-project-2' ]
 ```
+
+:::warning
+
+When using the "project mode", the package will create intermediate tables to avoid issues from BigQuery when too many projects are used.
+That process is done only on tables that are project related. The package leverages a custom materialiation (`project_by_project_table`) designed specifically for that need that can found in the `macros` folder.
+
+:::
 
 ## Add metadata to queries (Recommended but optional)
 

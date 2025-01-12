@@ -1,6 +1,6 @@
-{{ config(materialization=dbt_bigquery_monitoring_materialization()) }}
+{{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-schemata-replicas -#}
-{# Required role/permissions:
+{# Required role/permissions: 
 
       To get the permissions that you need to query the INFORMATION_SCHEMA.SCHEMATA_REPLICAS view,
 
@@ -21,5 +21,15 @@
         roles.
        -#}
 
-SELECT catalog_name, schema_name, replica_name, location, replica_primary_assigned, replica_primary_assignment_complete, creation_time, creation_complete, replication_time, sync_status
+SELECT
+catalog_name,
+schema_name,
+replica_name,
+location,
+replica_primary_assigned,
+replica_primary_assignment_complete,
+creation_time,
+creation_complete,
+replication_time,
+sync_status
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`SCHEMATA_REPLICAS`

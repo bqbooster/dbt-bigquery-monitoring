@@ -5,5 +5,10 @@ IAM role roles/bigquery.admin includes the permissions that you
 need to create a configuration.For more information about granular BigQuery permissions, see
 roles and permissions. -#}
 
-SELECT update_time, username, updated_options, project_id, project_number
+SELECT
+update_time,
+username,
+updated_options,
+project_id,
+project_number
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`PROJECT_OPTIONS_CHANGES`

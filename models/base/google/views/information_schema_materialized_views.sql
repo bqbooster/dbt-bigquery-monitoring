@@ -1,6 +1,6 @@
-{{ config(materialization=dbt_bigquery_monitoring_materialization()) }}
+{{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-materialized-views -#}
-{# Required role/permissions:
+{# Required role/permissions: 
 
       To get the permissions that you need to query the INFORMATION_SCHEMA.MATERIALIZED_VIEWS view,
 
@@ -28,7 +28,7 @@ Required permissions
 The following permissions are required to query the INFORMATION_SCHEMA.MATERIALIZED_VIEWS view:
 
 
- bigquery.tables.get
+ bigquery.tables.get 
 
 
  bigquery.tables.list
@@ -41,5 +41,11 @@ The following permissions are required to query the INFORMATION_SCHEMA.MATERIALI
         other predefined roles.
       Access control with IAM -#}
 
-SELECT table_catalog, table_schema, table_name, last_refresh_time, refresh_watermark, last_refresh_status
+SELECT
+table_catalog,
+table_schema,
+table_name,
+last_refresh_time,
+refresh_watermark,
+last_refresh_status
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`MATERIALIZED_VIEWS`

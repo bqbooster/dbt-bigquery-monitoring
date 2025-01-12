@@ -54,15 +54,23 @@
   {% for project in projects %}
     {% set project_sql = sql | replace('`region-', '`' ~ project | trim ~ '`.`region-') %}
     {% if existing_relation is not none and partition_config is not none and max_partition_value is not none and max_partition_value | length > 0 %}
-      {% set project_sql = project_sql + ' WHERE ' ~ partition_config.field ~ ' >= "' ~ max_partition_value ~ '"' %}
+      {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= TIMESTAMP_TRUNC("' ~ max_partition_value ~ '", HOUR)' %}
+      {% set insert_sql %}
+        DELETE FROM {{ target_relation }}
+        {{ where_condition }};
+
+        INSERT INTO {{ target_relation }}
+        {{ project_sql }}
+        {{ where_condition }}
+      {% endset %}
     {% else %}
        {#- bigquery doesn't allow more than 4000 partitions per insert so if we have hourly tables it's ~ 166 days -#}
       {% set project_sql = project_sql + ' WHERE ' ~ partition_config.field ~ ' >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 166 DAY)' %}
+      {% set insert_sql %}
+        INSERT INTO {{ target_relation }}
+        {{ project_sql }}
+      {% endset %}
     {% endif %}
-    {% set insert_sql %}
-      INSERT INTO {{ target_relation }}
-      {{ project_sql }}
-    {% endset %}
     {% do all_insert_sql.append(insert_sql) %}
   {% endfor %}
   {% call statement('insert') -%}

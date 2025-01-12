@@ -2,7 +2,6 @@
 
 {% set target_relation = this %}
 {% set existing_relation = load_relation(this) %}
-{% set tmp_relation = make_temp_relation(this) %}
 {% set projects = project_list() %}
 {%- set raw_partition_by = config.get('partition_by', none) -%}
 {%- set partition_config = adapter.parse_partition_by(raw_partition_by) -%}
@@ -83,6 +82,10 @@
 
 {{ log("Materialization complete", info=True) }}
 {{ run_hooks(post_hooks) }}
+{% set should_revoke = should_revoke(old_relation, full_refresh_mode=True) %}
+{% do apply_grants(target_relation, grant_config, should_revoke) %}
+{%- set full_refresh_mode = (should_full_refresh()) -%}
+{% do persist_docs(target_relation, model) %}
 
 {{ return({'relations': [target_relation]}) }}
 

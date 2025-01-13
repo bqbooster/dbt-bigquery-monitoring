@@ -1,6 +1,0 @@
-kind: Fixes
-body: Fix the full refresh mode for information_schema table that are not partitioned
-time: 2025-01-13T21:32:36.651386+01:00
-custom:
-    Author: Kayrnt
-    Issue: ""

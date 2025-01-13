@@ -14,18 +14,20 @@ clean-targets:
 models:
   +start: Jan 1 2017
   dbt_bigquery_monitoring:
-    +tags:
-      - "dbt-bigquery-monitoring"
-    +on_schema_change: "append_new_columns"
-    compute:
+    information_schema:
+      +materialized: "{{ var('google_information_schema_model_materialization', 'placeholder') if var('google_information_schema_model_materialization', 'placeholder') != 'placeholder' else 'ephemeral' }}"
       +tags:
-        - "dbt-bigquery-monitoring-compute"
-    storage:
+        - "dbt-bigquery-monitoring-information-schema"
+    monitoring:
       +tags:
-        - "dbt-bigquery-monitoring-storage"
-    base:
-      google:
-        +materialized: "{{ var('google_information_schema_model_materialization', 'placeholder') if var('google_information_schema_model_materialization', 'placeholder') != 'placeholder' else 'ephemeral' }}"
+        - "dbt-bigquery-monitoring"
+      +on_schema_change: "append_new_columns"
+      compute:
+        +tags:
+          - "dbt-bigquery-monitoring-compute"
+      storage:
+        +tags:
+          - "dbt-bigquery-monitoring-storage"
 
 vars:
   # Environment configuration

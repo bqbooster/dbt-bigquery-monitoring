@@ -13,33 +13,29 @@
 
 -- Create the table if it doesn't exist or if we're in full-refresh mode
 {% if existing_relation is none or full_refresh_mode %}
-  {% call statement('main') -%}
-    {% if partition_config is not none %}
-      {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}
-    {% else %}
-      {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}
-    {% endif %}
-    {{ build_sql }}
-  {%- endcall %}
+  {% if partition_config is not none %}
+    {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}
+  {% else %}
+    {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}
+  {% endif %}
+  {{ build_sql }}
+  {% do run_query(build_sql) %}
 {% else %}
-  {% call statement('main') -%}
-      SELECT 1
-  {%- endcall %}
-    {% if partition_config is not none %}
-      -- Get the maximum partition value
-      {% set max_partition_sql %}
-        SELECT FORMAT_TIMESTAMP("%F %T", MAX({{ partition_config.field }})) as max_partition
-        FROM {{ target_relation }}
-        WHERE {{ partition_config.field }} IS NOT NULL
-      {% endset %}
-    {% else %}
-      -- Truncate the table if partition_by is not defined
-      {% set truncate_sql %}
-        TRUNCATE TABLE {{ target_relation }}
-      {% endset %}
-      {{ truncate_sql }}
-      {% do run_query(truncate_sql) %}
-    {% endif %}
+  {% if partition_config is not none %}
+    -- Get the maximum partition value
+    {% set max_partition_sql %}
+      SELECT FORMAT_TIMESTAMP("%F %T", MAX({{ partition_config.field }})) as max_partition
+      FROM {{ target_relation }}
+      WHERE {{ partition_config.field }} IS NOT NULL
+    {% endset %}
+  {% else %}
+    -- Truncate the table if partition_by is not defined
+    {% set truncate_sql %}
+      TRUNCATE TABLE {{ target_relation }}
+    {% endset %}
+    {{ truncate_sql }}
+    {% do run_query(truncate_sql) %}
+  {% endif %}
   {% if partition_config is not none %}
     {% set max_partition_result = run_query(max_partition_sql) %}
     {% if max_partition_result|length > 0 %}
@@ -81,13 +77,15 @@
         INSERT INTO {{ target_relation }}
         {{ project_sql }}
       {% endset %}
-      
+
     {% endif %}
     {% do all_insert_sql.append(insert_sql) %}
   {% endfor %}
-  {% call statement('insert') -%}
+
+  {% call statement('main') -%}
     {{ all_insert_sql | join(';\n') }}
   {%- endcall %}
+  
 {% endif %}
 
 {{ run_hooks(post_hooks) }}

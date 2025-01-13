@@ -1,0 +1,6 @@
+kind: Fixes
+body: Fix the number of inserts for stats by using the right statement as main
+time: 2025-01-13T22:22:59.91323+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

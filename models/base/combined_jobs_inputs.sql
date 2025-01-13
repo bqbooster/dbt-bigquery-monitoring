@@ -7,7 +7,7 @@
 
 SELECT
   COALESCE(TIMESTAMP_TRUNC(a.timestamp, HOUR), TIMESTAMP_TRUNC(j.creation_time, HOUR)) AS hour,
-  COALESCE(a.bi_engine_statistics, j.bi_engine_statistics) AS bi_engine_statistics,
+  j.bi_engine_statistics AS bi_engine_statistics, -- this field is only available in information schema
   COALESCE(a.cache_hit, j.cache_hit) AS cache_hit,
   a.caller_supplied_user_agent AS caller_supplied_user_agent, -- this field is only available in the audit logs
   COALESCE(a.creation_time, j.creation_time) AS creation_time,

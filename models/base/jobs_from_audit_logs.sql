@@ -5,8 +5,6 @@
     )
 }}
 SELECT
-    -- bi_engine_statistics is not available in the audit logs, so we default to NULL
-    CAST(NULL AS STRUCT<bi_engine_mode STRING, bi_engine_reasons ARRAY<STRUCT<code STRING, message STRING>>, acceleration_mode STRING>) AS bi_engine_statistics,
     CAST(JSON_VALUE(protopayload_auditlog.metadataJson,
             '$.jobChange.job.jobStats.queryStats.cacheHit') AS BOOL) AS cache_hit,
     TIMESTAMP(JSON_VALUE(protopayload_auditlog.metadataJson,

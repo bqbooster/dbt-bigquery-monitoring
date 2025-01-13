@@ -1,3 +1,4 @@
+{{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-schemata-replicas -#}
 {# Required role/permissions: 
 
@@ -20,15 +21,7 @@
         roles.
        -#}
 
-WITH base AS (
-  {% if project_list()|length > 0 -%}
-  {% for project in project_list() -%}
-  SELECT catalog_name, schema_name, replica_name, location, replica_primary_assigned, replica_primary_assignment_complete, creation_time, creation_complete, replication_time, sync_status
-  FROM `{{ project | trim }}`.`region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`SCHEMATA_REPLICAS`
-  {% if not loop.last %}UNION ALL{% endif %}
-  {% endfor %}
-{%- else %}
-  SELECT
+SELECT
 catalog_name,
 schema_name,
 replica_name,
@@ -40,19 +33,3 @@ creation_complete,
 replication_time,
 sync_status
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`SCHEMATA_REPLICAS`
-{%- endif %}
-)
-
-SELECT
-catalog_name,
-schema_name,
-replica_name,
-location,
-replica_primary_assigned,
-replica_primary_assignment_complete,
-creation_time,
-creation_complete,
-replication_time,
-sync_status,
-FROM
-base

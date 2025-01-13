@@ -41,6 +41,7 @@ These settings are used to configure how dbt will run and materialize the models
 | `output_limit_size` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Limit size to use for the models | `1000` |
 | `output_partition_expiration_days` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Default table expiration in days for incremental models | `365` days |
 | `use_copy_partitions` | `DBT_BQ_MONITORING_USE_COPY_PARTITIONS` | Whether to use copy partitions or not | `true` |
+| `google_information_schema_model_materialization` | `DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION` | Whether to use a specific materialization for information schema models. Note that it doesn't work in project mode as it will materialize intermediate tables to avoid issues from BQ when too many projects are used. | `ephemeral` |
 
 ### GCP Billing export configuration
 

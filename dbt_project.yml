@@ -14,14 +14,16 @@ clean-targets:
 models:
   +start: Jan 1 2017
   dbt_bigquery_monitoring:
+    +tags:
+      - "dbt-bigquery-monitoring"
     information_schema:
       +materialized: "{{ var('google_information_schema_model_materialization', 'placeholder') if var('google_information_schema_model_materialization', 'placeholder') != 'placeholder' else 'ephemeral' }}"
       +tags:
         - "dbt-bigquery-monitoring-information-schema"
     monitoring:
-      +tags:
-        - "dbt-bigquery-monitoring"
       +on_schema_change: "append_new_columns"
+      +tags:
+        - "dbt-bigquery-monitoring-datamarts"
       compute:
         +tags:
           - "dbt-bigquery-monitoring-compute"

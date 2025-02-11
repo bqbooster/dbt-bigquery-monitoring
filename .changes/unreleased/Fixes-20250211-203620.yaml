@@ -1,0 +1,6 @@
+kind: Fixes
+body: Move up the dbt-bigquery-monitoring tag should wrap also information schema for project_by_project_table materialization
+time: 2025-02-11T20:36:20.145886+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

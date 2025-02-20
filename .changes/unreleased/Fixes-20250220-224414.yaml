@@ -1,0 +1,6 @@
+kind: Fixes
+body: Fix audit logs upper bound for jobs models
+time: 2025-02-20T22:44:14.275418+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

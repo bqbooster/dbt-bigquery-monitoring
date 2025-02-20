@@ -26,6 +26,14 @@
     )
 {%- endmacro %}
 
+{% macro get_partition_logic() -%}
+  {% if is_incremental() %}
+    {{ get_partition_timestamp() }}
+  {% else %}
+    {{ lower_boundary_no_data() }}
+  {% endif %}
+{%- endmacro %}
+
 {#
   Returns done jobs within the specified time boundaries.
 #}
@@ -35,24 +43,14 @@
       FROM {{ ref('jobs_with_cost') }}
       WHERE
           {#- the table already exists, we read logs are above latest max partition or above lookback window #}
-          {% if is_incremental() %}
-            creation_time >= {{ get_partition_timestamp() }}
+            creation_time >= {{ get_partition_logic() }}
             {#- and if we enabled audit logs, we pushback to 6h before because of the potential delay of audit logs #}
             {% if enable_gcp_bigquery_audit_logs() %}
-              AND hour BETWEEN TIMESTAMP_SUB({{ get_partition_timestamp() }}, INTERVAL 6 HOUR)
-                         AND {{ get_partition_timestamp() }}
-            {% endif %}
-          {#- if the table doesn't exist, we start from the lookback window #}
-          {% else %}
-            creation_time >= {{ lower_boundary_no_data() }}
-            {#- if we enabled audit logs, we pushback to 6h before because of the potential delay of audit logs #}
-            {% if enable_gcp_bigquery_audit_logs() %}
-              AND hour >= TIMESTAMP_SUB(
-                           TIMESTAMP_TRUNC({{ lower_boundary_no_data() }}, HOUR),
+            AND hour >= TIMESTAMP_SUB(
+                           TIMESTAMP_TRUNC({{ get_partition_logic() }}, HOUR),
                            INTERVAL 6 HOUR
-                         )
+                        )
             {% endif %}
-          {% endif %}
-          AND state = 'DONE'
+            AND state = 'DONE'
     )
 {%- endmacro %}

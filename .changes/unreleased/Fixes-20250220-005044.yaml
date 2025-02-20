@@ -1,6 +1,0 @@
-kind: Fixes
-body: Fix job read when no data in existing table
-time: 2025-02-20T00:50:44.087745+01:00
-custom:
-    Author: Kayrnt
-    Issue: ""

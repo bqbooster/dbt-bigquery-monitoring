@@ -25,7 +25,13 @@ models:
     description: The total number of logical bytes in the partition
     type: INTEGER
   - name: LAST_MODIFIED_TIME
-    description: The time when the data was most recently written to the partition
+    description: "The most recent time that data was written to the partition. It\
+      \ is\n        used to calculate a partition's eligibility for long-term storage.\n\
+      \        After 90 days, the partition automatically transitions from active\n\
+      \        storage to long-term storage. For more information, see\n        BigQuery\
+      \ storage pricing.\n        This field is updated when data is inserted, loaded,\
+      \ streamed, or\n        modified within the partition. Modifications that involve\n\
+      \        record deletions might not be reflected."
     type: TIMESTAMP
   - name: STORAGE_TIER
     description: "The partition's storage tier:\n\nACTIVE: the partition is billed\

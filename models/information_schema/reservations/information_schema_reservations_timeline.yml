@@ -20,6 +20,9 @@ models:
   - name: ignore_idle_slots
     description: False if slot sharing is enabled, otherwise true.
     type: BOOL
+  - name: labels
+    description: Array of labels associated with the reservation.
+    type: RECORD
   - name: period_start
     description: Start time of this one-minute period.
     type: TIMESTAMP

@@ -5,6 +5,7 @@ SELECT
 autoscale,
 edition,
 ignore_idle_slots,
+labels,
 period_start,
 project_id,
 project_number,

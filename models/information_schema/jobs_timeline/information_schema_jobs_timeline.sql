@@ -1,4 +1,4 @@
-{{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
+{{ config(materialized=dbt_bigquery_monitoring_materialization(), partition_by={'field': 'job_creation_time', 'data_type': 'timestamp', 'granularity': 'hour'}, partition_expiration_days=180) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs-timeline -#}
 {# Required role/permissions: To query the INFORMATION_SCHEMA.JOBS_TIMELINE view, you need the
 bigquery.jobs.listAll Identity and Access Management (IAM) permission for the project.

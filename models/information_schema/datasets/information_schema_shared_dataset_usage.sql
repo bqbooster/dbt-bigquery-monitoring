@@ -16,6 +16,7 @@ linked_project_number,
 linked_dataset_id,
 subscriber_org_number,
 subscriber_org_display_name,
+job_principal_subject,
 num_rows_processed,
 total_bytes_processed
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`SHARED_DATASET_USAGE`

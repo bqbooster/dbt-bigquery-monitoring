@@ -4,8 +4,8 @@ models:
   description: dataset details with related information
   columns:
   - name: bi_engine_statistics
-    description: "If the project is configured to use the BI\n        Engine SQL Interface,\
-      \ then this field contains BiEngineStatistics.\n        Otherwise NULL."
+    description: "If the project is configured to use the BI\n        Engine, then\
+      \ this field contains BiEngineStatistics.\n        Otherwise NULL."
     type: RECORD
   - name: cache_hit
     description: "Whether the query results of this job were from a cache.\n     \
@@ -141,6 +141,10 @@ models:
   - name: materialized_view_statistics
     description: "Statistics of\n        materialized views considered in a query\
       \ job. (Preview)"
+    type: RECORD
+  - name: metadata_cache_statistics
+    description: Statistics for metadata column index usage for tables referenced
+      in a query job.
     type: RECORD
   - name: job_creation_reason
     description: "job_creation_reason.code : Specifies the high level reason why a\

@@ -1,4 +1,4 @@
-{{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
+{{ config(materialized=dbt_bigquery_monitoring_materialization(), partition_by={'field': 'creation_time', 'data_type': 'timestamp', 'granularity': 'hour'}, partition_expiration_days=180) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-sessions-by-user -#}
 {# Required role/permissions: To query the INFORMATION_SCHEMA.SESSIONS_BY_USER view, you need
 the bigquery.jobs.list Identity and Access Management (IAM) permission for the project.

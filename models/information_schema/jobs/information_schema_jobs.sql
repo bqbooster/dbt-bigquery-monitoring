@@ -48,6 +48,7 @@ transaction_id,
 user_email,
 transferred_bytes,
 materialized_view_statistics,
+metadata_cache_statistics,
 job_creation_reason,
 query_info
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`JOBS`

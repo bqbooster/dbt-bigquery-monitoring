@@ -1,0 +1,6 @@
+kind: Features
+body: Update the information schema models and fixes partitioning / clustering detection on those base tables
+time: 2025-03-25T21:27:07.210087+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

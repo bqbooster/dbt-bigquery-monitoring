@@ -49,7 +49,12 @@
     {% do run_query(truncate_sql) %}
   {% endif %}
 
-  -- Check if the schema has changed
+  -- Check if the schema has changed using a temporary table and if needed
+  {%- set tmp_relation = make_temp_relation(this) %}
+  {% set build_sql = create_table_as(False, tmp_relation, sql_no_data) %}
+  {% do run_query(build_sql) %}
+  {% set dest_columns = process_schema_changes('sync_all_columns', tmp_relation, existing_relation) %}
+
 {% endif %}
 
 {% set main_sql = [] %}

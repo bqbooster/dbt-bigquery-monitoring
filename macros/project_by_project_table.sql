@@ -24,11 +24,7 @@
       {% do log("Hard refreshing " ~ existing_relation ~ " because it is not replaceable") %}
       {{ adapter.drop_relation(existing_relation) }}
   {% endif %}
-  {% if partition_config is not none %}
-    {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}
-  {% else %}
-    {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}
-  {% endif %}
+  {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}
   {{ build_sql }}
   {% do run_query(build_sql) %}
 {% else %}
@@ -39,7 +35,12 @@
       FROM {{ target_relation }}
       WHERE {{ partition_config.field }} IS NOT NULL
     {% endset %}
-  {% else %}
+    -- find maximum partition value to insert only new data
+    {% set max_partition_result = run_query(max_partition_sql) %}
+    {% if max_partition_result|length > 0 %}
+      {% set max_partition_value = max_partition_result.columns[0].values()[0] %}
+    {% endif %}
+  {% else %} -- if  table exists
     -- Truncate the table if partition_by is not defined
     {% set truncate_sql %}
       TRUNCATE TABLE {{ target_relation }}
@@ -47,12 +48,8 @@
     {{ truncate_sql }}
     {% do run_query(truncate_sql) %}
   {% endif %}
-  {% if partition_config is not none %}
-    {% set max_partition_result = run_query(max_partition_sql) %}
-    {% if max_partition_result|length > 0 %}
-      {% set max_partition_value = max_partition_result.columns[0].values()[0] %}
-    {% endif %}
-  {% endif %}
+
+  -- Check if the schema has changed
 {% endif %}
 
 {% set main_sql = [] %}

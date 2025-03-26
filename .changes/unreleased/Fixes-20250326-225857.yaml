@@ -1,6 +1,0 @@
-kind: Fixes
-body: Ensure we have proper aligned columns to insert the data in project by project table
-time: 2025-03-26T22:58:57.441928+01:00
-custom:
-    Author: Kayrnt
-    Issue: ""

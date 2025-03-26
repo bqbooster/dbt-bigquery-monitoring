@@ -3,12 +3,15 @@
 -- If we have projects, process them one by one
 -- This materialization should only be used in project mode if it isn't the case please report a bug
 
-{% set target_relation = this %}
-{% set existing_relation = load_relation(this) %}
-{% set projects = project_list() %}
-{%- set raw_partition_by = config.get('partition_by', none) -%}
-{%- set partition_config = adapter.parse_partition_by(raw_partition_by) -%}
-{%- set full_refresh_mode = (should_full_refresh()) -%}
+-- grab current tables grants config for comparision later on
+  {%- set grant_config = config.get('grants') -%}
+
+  {% set existing_relation = load_relation(this) %}
+  {% set projects = project_list() %}
+  {%- set raw_partition_by = config.get('partition_by', none) -%}
+  {%- set partition_config = adapter.parse_partition_by(raw_partition_by) -%}
+  {%- set cluster_by = config.get('cluster_by', none) -%}
+  {%- set full_refresh_mode = (should_full_refresh()) -%}
 
 {{ run_hooks(pre_hooks) }}
 
@@ -16,6 +19,11 @@
 
 -- Create the table if it doesn't exist or if we're in full-refresh mode
 {% if existing_relation is none or full_refresh_mode %}
+  {#-- If the partition/cluster config has changed, then we must drop and recreate --#}
+  {% if not adapter.is_replaceable(existing_relation, partition_config, cluster_by) %}
+      {% do log("Hard refreshing " ~ existing_relation ~ " because it is not replaceable") %}
+      {{ adapter.drop_relation(existing_relation) }}
+  {% endif %}
   {% if partition_config is not none %}
     {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}
   {% else %}

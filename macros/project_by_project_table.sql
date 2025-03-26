@@ -63,7 +63,7 @@
   {% if existing_relation is not none %}
     {#- with partitioned data special where condition #}
     {% if partition_config is not none and max_partition_value is not none and max_partition_value | length > 0 %}
-      {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= TIMESTAMP_TRUNC("' ~ max_partition_value ~ '", HOUR)' %}
+      {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= GREATEST(TIMESTAMP_TRUNC("' ~ max_partition_value ~ '", HOUR), TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 166 DAY))' %}
     {% else %}
       {% set where_condition = 'WHERE TRUE' %}
     {% endif %}

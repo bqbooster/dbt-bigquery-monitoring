@@ -1,0 +1,6 @@
+kind: Fixes
+body: Ensure that the incremental case won't try to insert more than 4000 partitions per statement
+time: 2025-03-26T23:25:52.858055+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

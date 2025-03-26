@@ -1,0 +1,6 @@
+kind: Fixes
+body: Support hard refreshing tables when the partitioning / clustering changes
+time: 2025-03-26T21:48:59.162114+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

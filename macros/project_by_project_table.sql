@@ -3,12 +3,15 @@
 -- If we have projects, process them one by one
 -- This materialization should only be used in project mode if it isn't the case please report a bug
 
-{% set target_relation = this %}
-{% set existing_relation = load_relation(this) %}
-{% set projects = project_list() %}
-{%- set raw_partition_by = config.get('partition_by', none) -%}
-{%- set partition_config = adapter.parse_partition_by(raw_partition_by) -%}
-{%- set full_refresh_mode = (should_full_refresh()) -%}
+-- grab current tables grants config for comparision later on
+  {%- set grant_config = config.get('grants') -%}
+
+  {% set existing_relation = load_relation(this) %}
+  {% set projects = project_list() %}
+  {%- set raw_partition_by = config.get('partition_by', none) -%}
+  {%- set partition_config = adapter.parse_partition_by(raw_partition_by) -%}
+  {%- set cluster_by = config.get('cluster_by', none) -%}
+  {%- set full_refresh_mode = (should_full_refresh()) -%}
 
 {{ run_hooks(pre_hooks) }}
 
@@ -16,11 +19,12 @@
 
 -- Create the table if it doesn't exist or if we're in full-refresh mode
 {% if existing_relation is none or full_refresh_mode %}
-  {% if partition_config is not none %}
-    {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}
-  {% else %}
-    {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}
+  {#-- If the partition/cluster config has changed, then we must drop and recreate --#}
+  {% if not adapter.is_replaceable(existing_relation, partition_config, cluster_by) %}
+      {% do log("Hard refreshing " ~ existing_relation ~ " because it is not replaceable") %}
+      {{ adapter.drop_relation(existing_relation) }}
   {% endif %}
+  {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}
   {{ build_sql }}
   {% do run_query(build_sql) %}
 {% else %}
@@ -31,7 +35,12 @@
       FROM {{ target_relation }}
       WHERE {{ partition_config.field }} IS NOT NULL
     {% endset %}
-  {% else %}
+    -- find maximum partition value to insert only new data
+    {% set max_partition_result = run_query(max_partition_sql) %}
+    {% if max_partition_result|length > 0 %}
+      {% set max_partition_value = max_partition_result.columns[0].values()[0] %}
+    {% endif %}
+  {% else %} -- if  table exists
     -- Truncate the table if partition_by is not defined
     {% set truncate_sql %}
       TRUNCATE TABLE {{ target_relation }}
@@ -39,12 +48,13 @@
     {{ truncate_sql }}
     {% do run_query(truncate_sql) %}
   {% endif %}
-  {% if partition_config is not none %}
-    {% set max_partition_result = run_query(max_partition_sql) %}
-    {% if max_partition_result|length > 0 %}
-      {% set max_partition_value = max_partition_result.columns[0].values()[0] %}
-    {% endif %}
-  {% endif %}
+
+  -- Check if the schema has changed using a temporary table and if needed
+  {%- set tmp_relation = make_temp_relation(this) %}
+  {% set build_sql = create_table_as(False, tmp_relation, sql_no_data) %}
+  {% do run_query(build_sql) %}
+  {% set dest_columns = process_schema_changes('sync_all_columns', tmp_relation, existing_relation) %}
+
 {% endif %}
 
 {% set main_sql = [] %}
@@ -53,7 +63,7 @@
   {% if existing_relation is not none %}
     {#- with partitioned data special where condition #}
     {% if partition_config is not none and max_partition_value is not none and max_partition_value | length > 0 %}
-      {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= TIMESTAMP_TRUNC("' ~ max_partition_value ~ '", HOUR)' %}
+      {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= GREATEST(TIMESTAMP_TRUNC("' ~ max_partition_value ~ '", HOUR), TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 166 DAY))' %}
     {% else %}
       {% set where_condition = 'WHERE TRUE' %}
     {% endif %}

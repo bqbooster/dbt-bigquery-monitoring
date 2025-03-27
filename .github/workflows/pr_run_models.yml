@@ -82,3 +82,16 @@ jobs:
           cd integration_tests
           DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
           dbt run -s jobs_from_audit_logs+ --empty
+
+      # Disable until billing is enabled as DML is not available in the free tier
+      # - name: Run all models again in project mode
+      #   run: |       
+      #     cd integration_tests
+      #     DBT_BQ_MONITORING_GCP_PROJECTS="['${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT }}']" \
+      #     dbt build -s dbt_bigquery_monitoring --full-refresh --empty
+
+      # - name: Run all models again in project mode
+      #   run: |       
+      #     cd integration_tests
+      #     DBT_BQ_MONITORING_GCP_PROJECTS="['${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT }}']" \
+      #     dbt build -s dbt_bigquery_monitoring --empty

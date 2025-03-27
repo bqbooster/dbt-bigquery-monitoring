@@ -1,0 +1,6 @@
+kind: Fixes
+body: Fix target_relation regression in project_by_project_table materialization
+time: 2025-03-27T10:42:25.001834+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

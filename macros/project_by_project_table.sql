@@ -6,6 +6,7 @@
 -- grab current tables grants config for comparision later on
   {%- set grant_config = config.get('grants') -%}
 
+  {% set target_relation = this %}
   {% set existing_relation = load_relation(this) %}
   {% set projects = project_list() %}
   {%- set raw_partition_by = config.get('partition_by', none) -%}

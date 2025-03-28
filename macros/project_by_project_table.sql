@@ -60,27 +60,29 @@
 
 {% set main_sql = [] %}
 
-{#- Incremental case -#}
-  {% if existing_relation is not none %}
-    {#- with partitioned data special where condition #}
-    {% if partition_config is not none and max_partition_value is not none and max_partition_value | length > 0 %}
-      {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= GREATEST(TIMESTAMP_TRUNC("' ~ max_partition_value ~ '", HOUR), TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 166 DAY))' %}
-    {% else %}
-      {% set where_condition = 'WHERE TRUE' %}
-    {% endif %}
+{#- Incremental case or full refresh if existing -#}
+{% if existing_relation is not none %}
+  {#- with partitioned data special where condition #}
+  {% if partition_config is not none and max_partition_value is not none and max_partition_value | length > 0 %}
+    {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= GREATEST(TIMESTAMP_TRUNC("' ~ max_partition_value ~ '", HOUR), TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 166 DAY))' %}
+  {% elif partition_config is not none %}
+    {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 166 DAY)' %}
+  {% else %}
+    {% set where_condition = 'WHERE TRUE' %}
+  {% endif %}
 
-    {#- Delete from statement when incremental case -#}
-    {#- That statement is common to all projects -#}
-    {% set delete_sql %}
-          DELETE FROM {{ target_relation }}
-          {{ where_condition }}
-    {% endset %}
-    {% do main_sql.append(delete_sql) %}
+  {#- Delete from statement when incremental case -#}
+  {#- That statement is common to all projects -#}
+  {% set delete_sql %}
+        DELETE FROM {{ target_relation }}
+        {{ where_condition }}
+  {% endset %}
+  {% do main_sql.append(delete_sql) %}
 {% endif %}
 
 {% for project in projects %}
   {% set project_sql = sql | replace('`region-', '`' ~ project | trim ~ '`.`region-') %}
-  {#- Incremental case -#}
+  {#- Incremental case or full refresh if existing -#}
   {% if existing_relation is not none %}
 
     {#- with regular data where condition #}
@@ -92,7 +94,7 @@
 
   {% else %}
 
-    {#- "Full-refresh" case -#}
+    {#- "Full-refresh" case with no existing table -#}
     {% if partition_config is not none %}
 
       {#- bigquery doesn't allow more than 4000 partitions per insert so if we have hourly tables it's ~ 166 days -#}

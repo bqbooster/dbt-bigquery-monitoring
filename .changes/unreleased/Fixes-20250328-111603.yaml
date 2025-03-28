@@ -1,6 +1,0 @@
-kind: Fixes
-body: Fix an incremental case where we would still insert more than 4000 partitions per statement on existing tables with full refresh
-time: 2025-03-28T11:16:03.953432+01:00
-custom:
-    Author: Kayrnt
-    Issue: ""

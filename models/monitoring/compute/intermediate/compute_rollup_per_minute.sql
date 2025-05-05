@@ -24,6 +24,7 @@ SELECT
   client_type,
   SUM(ROUND(query_cost, 2)) AS total_query_cost,
   SUM(IF(error_result IS NOT NULL, ROUND(query_cost, 2), 0)) AS failing_query_cost,
+  SUM(total_bytes_processed) AS total_bytes_processed,
   SUM(total_slot_ms) AS total_slot_ms,
   MILLISECONDS_TO_READABLE_TIME_UDF(total_slot_ms, 2) AS total_slot_time,
   COUNT(*) AS query_count,

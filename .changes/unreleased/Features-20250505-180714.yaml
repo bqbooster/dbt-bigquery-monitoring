@@ -1,0 +1,6 @@
+kind: Features
+body: Add total_bytes_processed to compute cost per hour model and upstream models
+time: 2025-05-05T18:07:14.822431+02:00
+custom:
+    Author: Kayrnt
+    Issue: ""

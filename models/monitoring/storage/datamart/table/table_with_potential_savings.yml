@@ -24,5 +24,7 @@ models:
         description: The forecasted monthly storage cost for the table under the logical billing model.
       - name: physical_cost_monthly_forecast
         description: The forecasted monthly storage cost for the table under the physical billing model.
-      - name: storage_pricing_model_difference
-        description: The difference in storage cost between the logical and physical pricing models.
+      - name: optimal_storage_billing_model
+        description: The optimal storage billing model for this table (LOGICAL or PHYSICAL) to minimize the costs
+      - name: potential_savings
+        description: Potential savings leveraging the right storage billing model

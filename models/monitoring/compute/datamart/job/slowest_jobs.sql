@@ -1,15 +1,13 @@
 {{
    config(
-    materialized='table',
+    materialized='view',
     )
 }}
-{%- call set_sql_header(config) %}
-  {{ milliseconds_to_readable_time_udf() }}
-{%- endcall %}
 SELECT
-  * EXCEPT (total_time_seconds, rank),
-  milliseconds_to_readable_time_udf(total_time_seconds * 1000, 2) AS total_run_time
-FROM {{ ref('slowest_jobs_incremental') }}
-WHERE total_time_seconds IS NOT NULL
+  hour,
+query,
+j.*
+FROM {{ ref('jobs_costs_incremental') }}, UNNEST(jobs) AS j
+WHERE j.rank_duration <= {{ var('output_limit_size') }}
 ORDER BY total_time_seconds DESC
 LIMIT {{ var('output_limit_size') }}

@@ -20,3 +20,4 @@ keyfile.json
 tmp_html_content.html
 # custom
 test_scripts/
+dbt_internal_packages/

@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: table_with_better_pricing_on_logical_billing_model
+  - name: dataset_with_potential_savings
     description: >
       A model that identifies tables with a better pricing model under logical billing, 
       compared to physical billing, by evaluating the difference in storage costs.

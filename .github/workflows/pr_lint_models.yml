@@ -12,7 +12,7 @@ on:
 
 # GitHub secrets
 env:
-  DBT_PROFILES_DIR: ./integration_tests
+  DBT_PROFILES_DIR: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/integration_tests
   GITHUB_SHA_OVERRIDE: ${{ github.event.pull_request.head.sha }} # We need the commit hash of the pull request branch's head, the GITHUB_SHA env var is always the base branch in a pull_request_target trigger
   DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }}
   DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT }}
@@ -41,7 +41,7 @@ jobs:
           python-version: '3.11'    
 
       - name: Install Python packages
-        run: python -m pip install dbt-bigquery~=1.9.1 sqlfluff-templater-dbt
+        run: python -m pip install dbt-bigquery~=1.9.1 sqlfluff-templater-dbt google-cloud-bigquery==3.31.0
 
       - name: Write keyfile if secret is defined
         run: |
@@ -82,15 +82,52 @@ jobs:
           tr -s '\n' ' ')
           )"
 
+      # ---- USEFUL FOR DEBUGGING profiles.yml and VPN config ----
+      # - name: Expose workflow directory structure and CI/CD files
+      #   # Show folder structue and that required files are present.
+      #   # Mainly for sanity/debugging.
+      #   run: |
+      #     echo "Home directory (~):"
+      #     echo ~
+      #     echo " "
+      #     echo "Present working directory:"
+      #     pwd
+      #     echo " "
+      #     echo "Present working directory contents:"
+      #     ls -lh
+      #     echo " "
+      #     echo "Check /integration_tests folder contents for dummy profiles.yml"
+      #     ls -lh ./integration_tests
+
+      # ---- USEFUL FOR DEBUGGING CONNECTION ISSUES ----
+      # - name: Check dbt can connect to data warehouse and compile on its own.
+      #   # Call dbt separately here to try and catch a more verbose version of
+      #   # errors related to connection and profiles.yml issues since SQLFluff
+      #   # returns very unclear errors when this occurs.
+      #   shell: bash -l {0}
+      #   run : |
+      #     dbt compile
+
       - name: Lint dbt models
         if: steps.get_files_to_lint.outputs.lintees != ''
         shell: bash -l {0}
         run: |
           sqlfluff lint --format github-annotation --annotation-level failure --nofail ${{ steps.get_files_to_lint.outputs.lintees }} > annotations.json
-          sed -i '/^\[/!d' annotations.json # see https://github.com/sqlfluff/sqlfluff/issues/2244
+
+      # This step forces the presence of an empty annotations file in the case
+      - name: Force pass because no SQL edited.
+        if: steps.get_files_to_lint.outputs.lintees == ''
+        shell: bash -l {0}
+        run: |
+          echo "[]" > annotations.json
+      
+      - name: Output annotations for debugging
+        shell: bash -l {0}
+        run: |
+          cat annotations.json
 
       - name: Annotate
-        uses: yuzutech/annotations-action@v0.4.0
+        uses: yuzutech/annotations-action@v0.5.0
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           title: "SQLFluff Lint"

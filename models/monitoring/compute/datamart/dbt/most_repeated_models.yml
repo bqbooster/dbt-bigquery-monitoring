@@ -3,7 +3,7 @@ version: 2
 models:
   - name: most_repeated_models
     description: >
-      A model that stores information about the most repeated models.
+      A model that stores information about the most repeated dbt models.
     meta:
       label: "Most Repeated Models"
       order_fields_by: "label"

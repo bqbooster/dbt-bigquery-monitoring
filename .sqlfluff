@@ -2,10 +2,15 @@
 exclude_rules = ST07, AM04, CV03, LT05, ST06, RF04, AM06, ST05, LT02, CP02, LT07, LT14, RF01
 dialect = bigquery
 templater = dbt
+max_line_length = 120
 
 [sqlfluff:indentation]
 tab_space_size = 2
+indent_unit = space
 
 [sqlfluff:rules:capitalisation.keywords]
 capitalisation_policy = upper
+
+[sqlfluff:rules:capitalisation.functions]
+extended_capitalisation_policy = upper
 

@@ -3,7 +3,7 @@ version: 2
 models:
   - name: most_expensive_models
     description: >
-      A model that aggregates data on the most expensive DBT models.
+      A model that aggregates data on the most expensive dbt models.
     meta:
       label: "Most Expensive Models"
       order_fields_by: "label"

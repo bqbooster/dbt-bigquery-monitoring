@@ -13,9 +13,6 @@
     partition_expiration_days = var('output_partition_expiration_days')
     )
 }}
-{%- call set_sql_header(config) %}
-  {{ milliseconds_to_readable_time_udf() }}
-{%- endcall %}
 SELECT
   minute,
   project_id,
@@ -24,7 +21,6 @@ SELECT
   SUM(ROUND(failing_query_cost, 2)) AS failing_query_cost,
   SUM(total_bytes_processed) AS total_bytes_processed,
   SUM(total_slot_ms) AS total_slot_ms,
-  MILLISECONDS_TO_READABLE_TIME_UDF(total_slot_ms, 2) AS total_slot_time,
   SUM(query_count) AS query_count,
   STRUCT(
     SUM(job_state.done) AS done,

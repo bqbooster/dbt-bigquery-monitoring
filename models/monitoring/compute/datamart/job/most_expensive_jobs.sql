@@ -1,20 +1,13 @@
 {{
    config(
-    materialized='table',
+    materialized='view',
     )
 }}
-{%- call set_sql_header(config) %}
-  {{ milliseconds_to_readable_time_udf() }}
-{%- endcall %}
-SELECT
+  SELECT
   hour,
-  project_id,
-  job_id,
-  query,
-  query_cost,
-  user_email,
-  total_slot_ms,
-  milliseconds_to_readable_time_udf(total_slot_ms, 2) AS total_slot_time
-FROM {{ ref('most_expensive_jobs_incremental') }}
+query,
+j.*
+FROM {{ ref('jobs_costs_incremental') }}, UNNEST(jobs) AS j
+WHERE j.rank_cost <= {{ var('output_limit_size') }}
 ORDER BY query_cost DESC
 LIMIT {{ var('output_limit_size') }}

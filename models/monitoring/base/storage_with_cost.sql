@@ -16,8 +16,8 @@ SELECT
   total_rows,
   total_partitions,
   total_logical_bytes,
-  IF(s.deleted = false, active_logical_bytes, 0) AS active_logical_bytes,
-  IF(s.deleted = false, long_term_logical_bytes, 0) AS long_term_logical_bytes,
+  IF(deleted = false, active_logical_bytes, 0) AS active_logical_bytes,
+  IF(deleted = false, long_term_logical_bytes, 0) AS long_term_logical_bytes,
   total_physical_bytes,
   active_physical_bytes,
   long_term_physical_bytes,
@@ -60,16 +60,16 @@ tables_with_billing_model_cost AS (
 
 with_dataset_options AS (
   SELECT
-    *,
-    storage_billing_model,
-    IF(storage_billing_model = "LOGICAL", logical_cost_monthly_forecast, physical_cost_monthly_forecast) AS cost_monthly_forecast,
-    IF(logical_cost_monthly_forecast > physical_cost_monthly_forecast, "PHYSICAL", "LOGICAL") AS optimal_storage_billing_model
-    ABS(logical_cost_monthly_forecast - physical_cost_monthly_forecast) AS storage_pricing_model_difference
-  FROM tables_with_billing_model_cost
-  JOIN {{ ref('dataset_options') }} USING (project_id, dataset_id)
+    t.*,
+    d.storage_billing_model,
+    IF(d.storage_billing_model = "LOGICAL", t.logical_cost_monthly_forecast, t.physical_cost_monthly_forecast) AS cost_monthly_forecast,
+    IF(t.logical_cost_monthly_forecast > t.physical_cost_monthly_forecast, "PHYSICAL", "LOGICAL") AS optimal_storage_billing_model,
+    ABS(t.logical_cost_monthly_forecast - t.physical_cost_monthly_forecast) AS storage_pricing_model_difference
+  FROM tables_with_billing_model_cost AS t
+  INNER JOIN {{ ref('dataset_options') }} AS d USING (project_id, dataset_id)
 )
 
 SELECT
   *,
-  IF(storage_billing_model != optimal_storage_billing_model, storage_pricing_model_difference, NULL) AS potential_savings
+  IF(storage_billing_model != optimal_storage_billing_model, storage_pricing_model_difference, null) AS potential_savings
 FROM with_dataset_options

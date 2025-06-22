@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: bi_engine_materialized_view_analysis
+    description: >
+      Analyzes BI Engine usage and materialized view effectiveness across projects.
+      Identifies performance improvements from BigQuery's acceleration features.
+    meta:
+      label: "BI Engine & Materialized View Analysis"
+      order_fields_by: "label"
+      group_label: "Advanced optimization"
+    columns:
+      - name: project_id
+        description: BigQuery project ID
+      - name: bi_engine_mode
+        description: BI Engine acceleration mode used
+      - name: bi_engine_queries
+        description: Number of queries using BI Engine
+      - name: bi_engine_avg_slot_seconds
+        description: Average slot seconds for BI Engine queries
+      - name: bi_engine_cache_hit_percentage
+        description: Cache hit percentage for BI Engine queries
+      - name: bi_engine_performance_tier
+        description: Performance classification for BI Engine usage
+      - name: bi_engine_reasons
+        description: Reasons for BI Engine acceleration decisions
+      - name: queries_using_materialized_views
+        description: Number of queries leveraging materialized views
+      - name: avg_slot_seconds_with_mv
+        description: Average slot seconds for queries using materialized views
+      - name: mv_tables_used
+        description: List of materialized view tables being used
+      - name: optimization_recommendation
+        description: Specific recommendation for BI Engine and MV optimization 

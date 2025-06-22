@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: job_failure_analysis
+    description: >
+      Analyzes BigQuery job failures by error patterns, affected users, and cost impact.
+      Identifies the most common error reasons and messages to help with debugging and prevention.
+    meta:
+      label: "Job Failure Analysis"
+      order_fields_by: "label"
+      group_label: "Compute reliability"
+    columns:
+      - name: error_reason
+        description: The error reason code from BigQuery error_result
+      - name: error_message
+        description: The specific error message from BigQuery error_result
+      - name: error_count
+        description: Number of times this error pattern occurred
+      - name: top_affected_projects
+        description: Projects most affected by this error pattern
+      - name: top_affected_users
+        description: Users most affected by this error pattern
+      - name: total_failed_cost
+        description: Total cost of queries that failed with this error
+      - name: avg_slot_seconds
+        description: Average slot seconds used by failed jobs
+      - name: first_occurrence
+        description: When this error pattern was first seen
+      - name: last_occurrence
+        description: When this error pattern was last seen
+      - name: duration_hours
+        description: How long this error pattern has been occurring 

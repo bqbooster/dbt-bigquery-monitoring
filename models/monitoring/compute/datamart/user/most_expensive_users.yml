@@ -23,3 +23,7 @@ models:
         description: The total slot time in human-readable format used by the user's queries and day.
       - name: query_count
         description: The total number of queries run by the user and day.
+      - name: total_slot_seconds_per_query
+        description: The total slot seconds per query used by the user and day.
+      - name: cache_hit_ratio
+        description: The cache hit ratio for the user and day.

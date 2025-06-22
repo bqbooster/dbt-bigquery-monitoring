@@ -21,7 +21,22 @@ SELECT
   COUNTIF(cache_hit) AS cache_hit,
   SUM(query_cost) AS total_query_cost,
   SUM(total_slot_ms) AS total_slot_ms,
-  COUNT(*) AS query_count
+  COUNT(*) AS query_count,
+  -- Enhanced dbt model tracking
+  COUNTIF(error_result IS NOT NULL) AS failed_runs,
+  SUM(total_bytes_processed) AS total_bytes_processed,
+  SUM(total_bytes_billed) AS total_bytes_billed,
+  AVG(total_time_seconds) AS avg_duration_seconds,
+  MAX(total_time_seconds) AS max_duration_seconds,
+  MIN(total_time_seconds) AS min_duration_seconds,
+  -- Model complexity indicators
+  AVG(total_slot_ms) AS avg_slot_ms,
+  -- Performance percentiles
+  PERCENTILE_CONT(total_time_seconds, 0.5) OVER (PARTITION BY hour) AS median_duration_seconds,
+  PERCENTILE_CONT(total_time_seconds, 0.9) OVER (PARTITION BY hour) AS p90_duration_seconds,
+  -- Resource efficiency
+  SUM(total_bytes_processed) / NULLIF(SUM(total_slot_ms), 0) AS bytes_per_slot_ms,
+
 FROM
   {{ jobs_done_incremental_hourly() }}
 WHERE dbt_model_name IS NOT NULL

@@ -19,16 +19,28 @@ models:
         description: The BI engine mode of the job.
       - name: client_type
         description: The client type of the job.
+      - name: edition
+        description: The BigQuery edition used for the jobs.
       - name: total_query_cost
         description: The total cost of all queries run during the hour.
       - name: failing_query_cost
         description: The total cost of all queries that failed during the hour.
+      - name: total_bytes_processed
+        description: The total bytes processed during the hour.
+      - name: total_bytes_billed
+        description: The total bytes billed during the hour.
       - name: total_slot_ms
         description: The total number of slot time milliseconds used by all queries during the hour.
       - name: total_slot_time
         description: The total number of slot time in human readable format used by all queries during the hour.
       - name: query_count
         description: The total number of queries run during the hour.
+      - name: unique_users
+        description: The number of unique users during the hour.
+      - name: unique_sessions
+        description: The number of unique sessions during the hour.
+      - name: cache_hits
+        description: The number of cache hits during the hour.
       - name: job_state
         description: A struct containing the state of the job.
         fields:
@@ -37,5 +49,29 @@ models:
           - name: pending
             description: Indicates if the job is pending.
           - name: running
-            description: Indicates if the job is running.      
+            description: Indicates if the job is running.
+      - name: job_types
+        data_type: record
+        description: Array of job types with their counts, aggregated from minute data
+        fields:
+          - name: value
+            data_type: string
+            description: Job type (QUERY, LOAD, EXTRACT, COPY, etc.)
+          - name: count
+            data_type: int64
+            description: Number of jobs of this type
+      - name: statement_types
+        data_type: record
+        description: Array of SQL statement types with their counts, aggregated from minute data
+        fields:
+          - name: value
+            data_type: string
+            description: Statement type (SELECT, INSERT, UPDATE, DELETE, CREATE_TABLE, etc.)
+          - name: count
+            data_type: int64
+            description: Number of statements of this type
+      - name: avg_duration_seconds
+        description: Average duration of jobs in seconds during the hour.
+      - name: median_duration_seconds
+        description: Median duration of jobs in seconds during the hour.      
             

@@ -9,8 +9,6 @@ models:
       order_fields_by: "label"
       group_label: "Compute cost"
     columns:
-      - name: day
-        description: The day of the compute cost.
       - name: hour
         description: The hour of the compute cost.
       - name: project_id
@@ -21,6 +19,8 @@ models:
         description: The total cost of all queries run during the hour.
       - name: failing_query_cost
         description: The total cost of all queries that failed during the hour.
+      - name: total_bytes_processed
+        description: The total bytes processed during the hour.
       - name: total_slot_ms
         description: The total number of slot time milliseconds used by all queries during the hour.
       - name: total_slot_time

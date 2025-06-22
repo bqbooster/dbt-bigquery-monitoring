@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: reservation_usage_per_minute
+    description: >
+      A model that stores reservation usage metrics per minute, providing insights into 
+      reservation efficiency, utilization patterns, and autoscaling behavior.
+    meta:
+      label: "Reservation Usage per Minute"
+      order_fields_by: "label"
+      group_label: "Reservation Management"
+    columns:
+      - name: minute
+        description: The minute of the reservation usage.
+      - name: reservation_id
+        description: The unique identifier of the reservation.
+      - name: project_id
+        description: The project ID associated with the reservation.
+      - name: total_slot_ms
+        description: The total slot milliseconds used during the minute.
+      - name: slots_assigned
+        description: The number of slots assigned to the reservation.
+      - name: slots_max_assigned
+        description: The maximum number of slots that can be assigned through autoscaling.
+      - name: autoscale
+        description: Whether autoscaling is enabled for the reservation.
+      - name: total_query_cost
+        description: The total cost of all queries run during the minute.
+      - name: query_count
+        description: The total number of queries run during the minute.
+      - name: unique_users
+        description: The number of unique users during the minute.
+      - name: cache_hits
+        description: The number of cache hits during the minute.
+      - name: slot_utilization_ratio
+        description: The ratio of slots used to slots assigned (utilization efficiency).
+      - name: max_slot_utilization_ratio
+        description: The ratio of slots used to maximum slots available (shows potential for autoscaling).
+      - name: utilization_category
+        description: Categorical classification of utilization level (High/Medium/Low/Very Low Utilization).
+      - name: autoscaling_status
+        description: Status of autoscaling for the reservation (Autoscaling Active/Available/Fixed Capacity).

@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: reservation_usage_per_hour
+    description: >
+      A model that stores reservation usage metrics aggregated per hour, providing insights into 
+      reservation efficiency, utilization patterns, and autoscaling behavior.
+    meta:
+      label: "Reservation Usage per Hour"
+      order_fields_by: "label"
+      group_label: "Reservation Management"
+    columns:
+      - name: hour
+        description: The hour of the reservation usage.
+      - name: reservation_id
+        description: The unique identifier of the reservation.
+      - name: project_id
+        description: The project ID associated with the reservation.
+      - name: total_slot_ms
+        description: The total slot milliseconds used during the hour.
+      - name: slots_assigned
+        description: The number of slots assigned to the reservation.
+      - name: slots_max_assigned
+        description: The maximum number of slots that can be assigned through autoscaling.
+      - name: autoscale
+        description: Whether autoscaling is enabled for the reservation.
+      - name: total_query_cost
+        description: The total cost of all queries run during the hour.
+      - name: query_count
+        description: The total number of queries run during the hour.
+      - name: unique_users
+        description: The number of unique users during the hour.
+      - name: cache_hits
+        description: The number of cache hits during the hour.
+      - name: slot_utilization_ratio
+        description: The ratio of slots used to slots assigned (utilization efficiency).
+      - name: max_slot_utilization_ratio
+        description: The ratio of slots used to maximum slots available (shows potential for autoscaling).
+      - name: utilization_category
+        description: Categorical classification of utilization level (High/Medium/Low/Very Low Utilization).
+      - name: autoscaling_status
+        description: Status of autoscaling for the reservation (Autoscaling Active/Available/Fixed Capacity). 

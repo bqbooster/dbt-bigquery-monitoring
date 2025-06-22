@@ -23,4 +23,32 @@ models:
       - name: query_count
         data_type: int64
         description: The total number of queries run during the hour.
+      - name: cache_hit
+        data_type: int64
+        description: Number of queries that were cache hits
+      - name: failed_queries
+        data_type: int64
+        description: Number of queries that failed
+      - name: projects_used
+        data_type: int64
+        description: Number of distinct projects used by the user
+      - name: reservations_used
+        data_type: int64
+        description: Number of distinct reservations used by the user (only counts non-NULL reservation_ids)
+      - name: avg_duration_seconds
+        data_type: float64
+        description: Average query duration in seconds
+      - name: total_bytes_processed
+        data_type: int64
+        description: Total bytes processed across all queries
+      - name: job_types
+        data_type: record
+        description: Array of job types with their counts, dynamically captured
+        fields:
+          - name: value
+            data_type: string
+            description: Job type (QUERY, LOAD, EXTRACT, COPY, etc.)
+          - name: count
+            data_type: int64
+            description: Number of jobs of this type
 

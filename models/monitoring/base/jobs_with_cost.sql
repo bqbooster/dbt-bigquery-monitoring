@@ -112,9 +112,11 @@ SELECT
   WHEN caller_supplied_user_agent LIKE 'Mozilla%' THEN 'Web console'
   WHEN caller_supplied_user_agent LIKE 'SimbaJDBCDriver%' THEN 'Java Client'
   ELSE coalesce(caller_supplied_user_agent, 'Unknown')
+  {%- else %}
+  ELSE 'Unknown'
   {% endif %}
   END AS client_type,
-  FROM base
+FROM base
 ),
 
 base_with_all_pricing AS (

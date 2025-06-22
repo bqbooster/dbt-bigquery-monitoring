@@ -32,8 +32,8 @@ SELECT
   -- Model complexity indicators
   AVG(total_slot_ms) AS avg_slot_ms,
   -- Performance percentiles
-  PERCENTILE_CONT(total_time_seconds, 0.5) AS median_duration_seconds,
-  PERCENTILE_CONT(total_time_seconds, 0.9) AS p90_duration_seconds,
+  APPROX_QUANTILES(total_time_seconds, 100)[OFFSET(50)] AS median_duration_seconds,
+  APPROX_QUANTILES(total_time_seconds, 100)[OFFSET(90)] AS p90_duration_seconds,
   -- Resource efficiency
   SUM(total_bytes_processed) / NULLIF(SUM(total_slot_ms), 0) AS bytes_per_slot_ms
 FROM

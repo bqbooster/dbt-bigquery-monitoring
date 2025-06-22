@@ -14,7 +14,10 @@
 {% set final_sql = union_sqls | join('\nUNION ALL\n') %}
 
 {% call statement('main') -%}
-  {{ create_view_as(target_relation, final_sql) }}
+  CREATE OR REPLACE VIEW `{{ this.database }}`.`{{ this.schema }}`.`{{ this.identifier }}`
+  AS (
+  {{ final_sql }}
+  )
 {%- endcall %}
 
 {% set target_relation = this.incorporate(type='view') %}

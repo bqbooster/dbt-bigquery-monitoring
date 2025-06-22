@@ -11,8 +11,8 @@ slot_capacity,
 target_job_concurrency,
 autoscale,
 edition,
-primarylocation,
-secondarylocation,
-originalprimarylocation,
+primary_location,
+secondary_location,
+original_primary_location,
 labels
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`RESERVATIONS`

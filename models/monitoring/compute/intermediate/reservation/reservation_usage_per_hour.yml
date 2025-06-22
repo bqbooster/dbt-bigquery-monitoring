@@ -28,10 +28,6 @@ models:
         description: The total cost of all queries run during the hour.
       - name: query_count
         description: The total number of queries run during the hour.
-      - name: unique_users
-        description: The number of unique users during the hour.
-      - name: cache_hits
-        description: The number of cache hits during the hour.
       - name: slot_utilization_ratio
         description: The ratio of slots used to slots assigned (utilization efficiency).
       - name: max_slot_utilization_ratio

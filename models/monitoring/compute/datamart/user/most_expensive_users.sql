@@ -4,7 +4,7 @@
     )
 }}
 SELECT
-  TIMESTAMP_TRUNC(hour, DAY) AS day,
+  TIMESTAMP_TRUNC(HOUR, DAY) AS day,
   user_email,
   ROUND(SUM(total_query_cost) / NULLIF(SUM(query_count), 0), 4) AS avg_query_cost,
   ROUND(SUM(total_query_cost), 2) AS total_query_cost,

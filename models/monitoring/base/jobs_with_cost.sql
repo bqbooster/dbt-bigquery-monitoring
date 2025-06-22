@@ -19,6 +19,8 @@ source AS (
   NULL AS query_info,
   NULL AS transferred_bytes,
   NULL AS materialized_view_statistics,
+  NULL AS edition,
+  NULL AS session_info,
   FROM {{ ref('jobs_from_audit_logs') }}
  {%- else %}
   NULL AS caller_supplied_user_agent,
@@ -41,6 +43,7 @@ SELECT
  {%- endif %}
    AS hour,
   destination_table,
+  edition,
   end_time,
   error_result,
   job_id,
@@ -56,6 +59,7 @@ SELECT
   REPLACE(REPLACE(REGEXP_EXTRACT(query, r'^(\/\* \{+?[\w\W]+?\} \*\/)'), '/', ''), '*', '') AS dbt_info,
   referenced_tables,
   reservation_id,
+  session_info,
   start_time,
   state,
   statement_type,

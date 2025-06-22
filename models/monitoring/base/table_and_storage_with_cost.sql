@@ -17,7 +17,13 @@ WITH
  )
 
 SELECT
-t.*,
-s.*
+  t.project_id,
+  t.dataset_id,
+  t.table_id,
+  t.default_collation_name,
+  t.is_insertable_into,
+  t.is_typed,
+  t.ddl,
+  s.* EXCEPT (project_id, dataset_id, table_id)
 FROM information_schema_tables AS t
 INNER JOIN {{ ref('storage_with_cost') }} AS s USING (project_id, dataset_id, table_id)

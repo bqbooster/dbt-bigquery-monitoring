@@ -22,9 +22,9 @@ WITH model_aggregates AS (
 
 SELECT
   dbt_model_name,
-  {{ top_sum('aggregated_project_ids') }} AS project_ids,
-  {{ top_sum('aggregated_reservation_ids') }} AS reservation_ids,
-  {{ top_sum('aggregated_user_emails') }} AS user_emails,
+  {{ top_sum_from_count('aggregated_project_ids') }} AS project_ids,
+  {{ top_sum_from_count('aggregated_reservation_ids') }} AS reservation_ids,
+  {{ top_sum_from_count('aggregated_user_emails') }} AS user_emails,
   cache_hit_ratio,
   total_query_cost,
   total_slot_ms,

@@ -13,6 +13,7 @@ SELECT
   COALESCE(a.creation_time, j.creation_time) AS creation_time,
   COALESCE(a.destination_table, j.destination_table) AS destination_table,
   COALESCE(a.end_time, j.end_time) AS end_time,
+  j.edition AS edition, -- this field is only available in information schema
   COALESCE(a.error_result, j.error_result) AS error_result,
   COALESCE(a.job_id, j.job_id) AS job_id,
   j.job_stages AS job_stages, -- this field is only available in the information schema
@@ -25,6 +26,7 @@ SELECT
   COALESCE(a.query, j.query) AS query,
   COALESCE(a.referenced_tables, j.referenced_tables) AS referenced_tables,
   COALESCE(a.reservation_id, j.reservation_id) AS reservation_id,
+  j.session_info AS session_info, -- this field is only available in information schema
   COALESCE(a.start_time, j.start_time) AS start_time,
   COALESCE(a.state, j.state) AS state,
   COALESCE(a.statement_type, j.statement_type) AS statement_type,

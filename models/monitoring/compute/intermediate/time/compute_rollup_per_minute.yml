@@ -69,7 +69,7 @@ models:
             description: Statement type (SELECT, INSERT, UPDATE, DELETE, CREATE_TABLE, etc.)
           - name: count
             data_type: int64
-                         description: Number of statements of this type
+            description: Number of statements of this type
       - name: avg_duration_seconds
         description: Average duration of jobs in seconds during the minute.
       - name: median_duration_seconds

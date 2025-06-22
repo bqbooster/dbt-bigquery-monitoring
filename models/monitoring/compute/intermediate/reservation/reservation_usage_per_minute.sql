@@ -46,8 +46,6 @@ SELECT
   -- Enhanced metrics
   jobs.total_query_cost,
   jobs.query_count,
-  jobs.unique_users,
-  jobs.cache_hits,
   -- Reservation efficiency calculations
   SAFE_DIVIDE(jobs.total_slot_ms, res.slots_assigned * 60 * 1000) AS slot_utilization_ratio,
   SAFE_DIVIDE(jobs.total_slot_ms, res.slots_max_assigned * 60 * 1000) AS max_slot_utilization_ratio,
@@ -60,8 +58,8 @@ SELECT
   END AS utilization_category,
   -- Autoscaling effectiveness
   CASE
-    WHEN res.autoscale AND res.slots_max_assigned > res.slots_assigned THEN 'Autoscaling Active'
-    WHEN res.autoscale AND res.slots_max_assigned = res.slots_assigned THEN 'Autoscaling Available'
+    WHEN res.autoscale IS NOT NULL AND res.slots_max_assigned > res.slots_assigned THEN 'Autoscaling Active'
+    WHEN res.autoscale IS NOT NULL AND res.slots_max_assigned = res.slots_assigned THEN 'Autoscaling Available'
     ELSE 'Fixed Capacity'
   END AS autoscaling_status
 FROM

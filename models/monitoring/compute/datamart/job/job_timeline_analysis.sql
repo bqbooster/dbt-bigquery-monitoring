@@ -53,7 +53,7 @@ slot_utilization AS (
     SUM(period_slot_ms) / NULLIF(job_duration_seconds * 1000, 0) AS slot_utilization_ratio
   FROM timeline_base
   WHERE state = 'DONE'
-  GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12
+  GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 ),
 
 job_performance_analysis AS (
@@ -104,7 +104,7 @@ aggregated_insights AS (
     SUM(total_bytes_processed) AS total_bytes_processed,
     AVG(CASE WHEN cache_hit THEN 1.0 ELSE 0.0 END) AS cache_hit_rate
   FROM job_performance_analysis
-  GROUP BY 1,2,3,4,5,6,7,8
+  GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 )
 
 SELECT

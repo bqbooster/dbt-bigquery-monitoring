@@ -41,6 +41,6 @@ SELECT
   APPROX_TOP_SUM(statement_type, 1, 30) AS statement_types,
   -- Performance metrics
   AVG(total_time_seconds) AS avg_duration_seconds,
-  PERCENTILE_CONT(total_time_seconds, 0.5) OVER (PARTITION BY TIMESTAMP_TRUNC(creation_time, MINUTE), project_id) AS median_duration_seconds
+  PERCENTILE_CONT(total_time_seconds, 0.5) AS median_duration_seconds
 FROM {{ jobs_done_incremental_hourly() }}
 GROUP BY ALL

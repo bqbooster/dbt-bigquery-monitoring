@@ -16,5 +16,5 @@ WITH last_used_date AS (
 SELECT
  ts.*,
  lud.last_used_date
-FROM {{ ref('table_and_storage_with_cost') }} AS ts
+FROM {{ ref('storage_with_cost') }} AS ts
 LEFT JOIN last_used_date AS lud USING (project_id, dataset_id, table_id)

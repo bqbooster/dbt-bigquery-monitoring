@@ -50,17 +50,28 @@ models:
     description: The edition associated with this reservation. For more information
       about editions, see Introduction to BigQuery editions.
     type: STRING
-  - name: primaryLocation
+  - name: primary_location
     description: The current location of the reservation's primary replica. This field
       is only set for reservations using the managed disaster recovery feature.
     type: STRING
-  - name: secondaryLocation
+  - name: secondary_location
     description: The current location of the reservation's secondary replica. This
       field is only set for reservations using the managed disaster recovery feature.
     type: STRING
-  - name: originalPrimaryLocation
+  - name: original_primary_location
     description: The location where the reservation was originally created.
     type: STRING
   - name: labels
     description: Array of labels associated with the reservation.
     type: RECORD
+  - name: max_slots
+    description: "The maximum number of slots that this reservation can use, which\
+      \ includes\n      baseline slots (slot_capacity), idle slots (if ignore_idle_slots\
+      \ is false), and\n      autoscale slots. This field is specified by users for\
+      \ using the reservation predictability feature."
+    type: INTEGER
+  - name: scaling_mode
+    description: The scaling mode for the reservation, which determines how the reservation
+      scales from baseline to max_slots. This field is specified by users for using
+      the reservation predictability feature.
+    type: STRING

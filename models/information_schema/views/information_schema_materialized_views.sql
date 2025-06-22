@@ -2,12 +2,18 @@
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-materialized-views -#}
 {# Required role/permissions: 
 
-      To get the permissions that you need to query the INFORMATION_SCHEMA.MATERIALIZED_VIEWS view,
+      To get the permissions that
+      you need to query the INFORMATION_SCHEMA.MATERIALIZED_VIEWS view,
 
       ask your administrator to grant you the
 
 
-  BigQuery Metadata Viewer  (roles/bigquery.metadataViewer) IAM role on your project or dataset.
+
+
+      BigQuery Metadata Viewer  (roles/bigquery.metadataViewer)
+     IAM role on your project or dataset.
+
+
 
 
 

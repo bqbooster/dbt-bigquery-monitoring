@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 slug: /using-the-package
 ---
 
@@ -7,7 +7,7 @@ slug: /using-the-package
 
 ## Google INFORMATION_SCHEMA tables
 
-Following models are available to query the INFORMATION_SCHEMA tables. They are materialized as `ephemeral` in dbt so it acts as a "source" but let you access multiple multiple project based tables using a single `ref`.
+Following models are available to query the INFORMATION_SCHEMA tables. They are materialized as `ephemeral` (or incremental tables in project mode) in dbt so it acts as a "source" but let you access multiple project based tables using a single `ref`.
 
 ### Example
 

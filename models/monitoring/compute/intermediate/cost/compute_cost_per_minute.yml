@@ -19,6 +19,8 @@ models:
         description: The total cost of all queries run during the minute.
       - name: failing_query_cost
         description: The total cost of all queries that failed during the minute.
+      - name: total_bytes_processed
+        description: The total bytes processed during the minute.
       - name: total_slot_ms
         description: The total number of slot time milliseconds used by all queries during the minute.
       - name: total_slot_time

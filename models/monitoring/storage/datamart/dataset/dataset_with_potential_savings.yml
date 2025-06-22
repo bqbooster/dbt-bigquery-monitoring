@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: dataset_with_potential_savings
+    description: >
+      A model that identifies tables with a better pricing model under logical billing, 
+      compared to physical billing, by evaluating the difference in storage costs.
+    meta:
+      label: "Better Pricing Model (Logical)"
+      order_fields_by: "label"
+      group_label: "Storage cost optimization"
+    columns:
+      - name: project_id
+        description: The ID of the BigQuery project.
+      - name: dataset_id
+        description: The ID of the dataset containing the table.
+      - name: table_id
+        description: The ID of the table being analyzed.
+      - name: total_logical_tb
+        description: The total size of the table in terabytes, as calculated by logical bytes.
+      - name: total_physical_tb
+        description: The total size of the table in terabytes, as calculated by physical bytes.
+      - name: logical_cost_monthly_forecast
+        description: The forecasted monthly storage cost for the table under the logical billing model.
+      - name: physical_cost_monthly_forecast
+        description: The forecasted monthly storage cost for the table under the physical billing model.
+      - name: storage_pricing_model_difference
+        description: The difference between the storage pricing model and the default pricing model
+      - name: logical_part_potential_savings
+        description: The part of potential savings for the storage of the dataset that would benefit from logical billing model
+      - name: physical_part_potential_savings
+        description: The part of potential savings for the storage of the dataset that would benefit from logical billing model
+      - name: potential_savings
+        description: Potential savings leveraging the right storage billing model on each table of the 

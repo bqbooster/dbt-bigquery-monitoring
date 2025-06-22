@@ -1,12 +1,18 @@
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-schemata-replicas-by-failover-reservation -#}
 {# Required role/permissions: 
 
-      To get the permissions that you need to query the INFORMATION_SCHEMA.SCHEMATA_REPLICAS_BY_FAILOVER_RESERVATION view,
+      To get the permissions that
+      you need to query the INFORMATION_SCHEMA.SCHEMATA_REPLICAS_BY_FAILOVER_RESERVATION view,
 
       ask your administrator to grant you the
 
 
-  BigQuery Resource Viewer  (roles/bigquery.resourceViewer) IAM role on the project.
+
+
+      BigQuery Resource Viewer  (roles/bigquery.resourceViewer)
+     IAM role on the project.
+
+
 
 
 

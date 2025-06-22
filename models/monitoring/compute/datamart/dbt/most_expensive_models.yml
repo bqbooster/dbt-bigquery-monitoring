@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: most_expensive_models
+    description: >
+      A model that aggregates data on the most expensive dbt models.
+    meta:
+      label: "Most Expensive Models"
+      order_fields_by: "label"
+      group_label: "Compute cost"
+    columns:
+      - name: dbt_model_name
+        description: The name of the DBT model.
+      - name: project_ids
+        description: The top aggregated project IDs associated with the model.
+      - name: reservation_ids
+        description: The top aggregated reservation IDs associated with the model.
+      - name: user_emails
+        description: The top aggregated user emails associated with the model.
+      - name: cache_hit_ratio
+        description: The cache hit ratio for the model.
+      - name: total_query_cost
+        description: The total query cost for the model.
+      - name: total_slot_ms
+        description: The total slot time milliseconds for the model.
+      - name: total_slot_time
+        description: The total slot time in human-readable format for the model.
+      - name: query_count
+        description: The total query count for the model.
+        

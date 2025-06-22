@@ -1,0 +1,6 @@
+kind: Features
+body: Ensure minute-to-hour model consistency by adding missing metrics to rollup and cost models, creating reservation_usage_per_hour model, and standardizing schema definitions across all intermediate models
+time: 2025-06-22T16:38:27.000000Z
+custom:
+    Author: Kayrnt
+    Issue: ""

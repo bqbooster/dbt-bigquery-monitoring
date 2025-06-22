@@ -11,7 +11,6 @@
   'per_billed_tb_price',
   'free_tb_per_month',
   'hourly_slot_price',
-  'prefer_physical_pricing_model',
   'active_logical_storage_gb_price',
   'long_term_logical_storage_gb_price',
   'active_physical_storage_gb_price',

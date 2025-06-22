@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: most_repeated_models
+    description: >
+      A model that stores information about the most repeated dbt models.
+    meta:
+      label: "Most Repeated Models"
+      order_fields_by: "label"
+      group_label: "Compute cost"
+    columns:
+      - name: dbt_model_name
+        description: The name of the DBT model.
+      - name: project_ids
+        description: The top aggregated project IDs.
+      - name: reservation_ids
+        description: The top aggregated reservation IDs.
+      - name: user_emails
+        description: The top aggregated user emails.
+      - name: cache_hit_ratio
+        description: The ratio of cache hits.
+      - name: total_query_cost
+        description: The total query cost.
+      - name: total_slot_ms
+        description: The total number of slot time milliseconds.
+      - name: total_slot_time
+        description: The total slot time in human-readable format.
+      - name: amount
+        description: The total amount of occurrences.
+        

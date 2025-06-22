@@ -1,13 +1,9 @@
 {{
    config(
-    materialized='table',
+    materialized='view',
     )
 }}
 SELECT *
-FROM {{ ref('table_and_storage_with_cost') }}
-{%- if var('prefer_physical_pricing_model') %}
-ORDER BY physical_cost_monthly_forecast DESC
-{%- else %}
-ORDER BY logical_cost_monthly_forecast DESC
-{%- endif %}
+FROM {{ ref('storage_with_cost') }}
+ORDER BY cost_monthly_forecast DESC
 LIMIT {{ var('output_limit_size') }}

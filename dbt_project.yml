@@ -43,7 +43,6 @@ vars:
   # Capacity compute (analysis) pricing
   hourly_slot_price: "{{ env_var('DBT_BQ_MONITORING_HOURLY_SLOT_PRICE', 0.04) }}"
   # https://cloud.google.com/bigquery/pricing#storage
-  prefer_physical_pricing_model: "{{ env_var('DBT_BQ_MONITORING_PREFER_PHYSICAL_PRICING_MODEL', true) }}"
   active_logical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE', 0.02) }}"
   long_term_logical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_LONG_TERM_LOGICAL_STORAGE_GB_PRICE', 0.01) }}"
   active_physical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_ACTIVE_PHYSICAL_STORAGE_GB_PRICE', 0.04) }}"

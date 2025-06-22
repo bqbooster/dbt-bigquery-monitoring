@@ -1,0 +1,68 @@
+version: 2
+
+models:
+  - name: jobs_costs_incremental
+    description: ""
+    columns:
+      - name: hour
+        data_type: timestamp
+        description: The hour of the compute cost.
+
+      - name: dbt_model_name
+        data_type: string
+        description: Dbt model name
+
+      - name: project_ids
+        data_type: record
+        description: Array of GCP projects used to run the model and how many times.
+
+      - name: project_ids.value
+        data_type: string
+        description: GCP Project name
+
+      - name: project_ids.count
+        data_type: int64
+        description: Number of occurences of related GCP project
+
+      - name: reservation_ids
+        data_type: record
+        description: Array of reservation used to run the model and how many times.
+
+      - name: reservation_ids.value
+        data_type: string
+        description: BigQuery Reservation id
+
+      - name: reservation_ids.count
+        data_type: int64
+        description: Number of occurences of related reservation
+
+      - name: user_emails
+        data_type: record
+        description: Array of user emails used to run the model and how many times.
+
+      - name: user_emails.value
+        data_type: string
+        description: User email
+
+      - name: user_emails.count
+        data_type: int64
+        description: Number of occurences of related user email
+
+      - name: cache_hit
+        data_type: int64
+        description: "Whether the query results of this job were from a cache.\n     \
+          \   If you have a multi-query statement\n        job, cache_hit for your parent\
+          \ query is\n        NULL."
+
+      - name: total_query_cost
+        data_type: float64
+        description: The total cost of all queries run during the hour.
+
+      - name: total_slot_ms
+        data_type: int64
+        description: The total number of slot time milliseconds used by all queries during the hour.
+
+      - name: query_count
+        data_type: int64
+        description: The total number of queries run during the hour.
+

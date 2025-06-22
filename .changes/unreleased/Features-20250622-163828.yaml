@@ -1,0 +1,6 @@
+kind: Features
+body: Update materialization logic to return 'project_by_project_view' when explicit projects are provided, ensuring proper handling of project references in views
+time: 2025-06-22T16:38:28.000000Z
+custom:
+    Author: Kayrnt
+    Issue: ""

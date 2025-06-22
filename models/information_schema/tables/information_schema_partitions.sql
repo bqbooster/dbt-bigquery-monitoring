@@ -2,7 +2,6 @@
 {# Required role/permissions: To query the INFORMATION_SCHEMA.PARTITIONS view, you need the following
 Identity and Access Management (IAM) permissions:
 bigquery.tables.get
-bigquery.tables.getData
 bigquery.tables.list
 Each of the following predefined IAM roles includes the preceding
 permissions:

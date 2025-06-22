@@ -13,8 +13,10 @@ user_email,
 target_job_concurrency,
 autoscale,
 edition,
-primarylocation,
-secondarylocation,
-originalprimarylocation,
-labels
+primary_location,
+secondary_location,
+original_primary_location,
+labels,
+max_slots,
+scaling_mode
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`RESERVATION_CHANGES`

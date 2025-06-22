@@ -8,6 +8,7 @@
       "data_type": "timestamp",
       "copy_partitions": should_use_copy_partitions()
     },
+    partition_expiration_days = var('lookback_window_days')
     )
 }}
 SELECT
@@ -22,4 +23,4 @@ WHERE creation_time > _dbt_max_partition
 {% else %}
 WHERE creation_time > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {{ var('lookback_window_days') }} DAY)
 {% endif %}
-GROUP BY 1, 2, 3, 4
+GROUP BY ALL

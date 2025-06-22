@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: job_timeline_analysis
+    description: >
+      Advanced job performance analysis using JOBS_TIMELINE data to analyze
+      slot utilization patterns, queue times, and job efficiency metrics.
+    meta:
+      label: "Job Timeline Analysis"
+      order_fields_by: "label"
+      group_label: "Advanced analytics"
+    columns:
+      - name: project_id
+        description: BigQuery project ID
+      - name: user_email
+        description: User who executed the jobs
+      - name: job_type
+        description: Type of job (QUERY, LOAD, etc.)
+      - name: statement_type
+        description: SQL statement type (SELECT, INSERT, etc.)
+      - name: pricing_model
+        description: Pricing model used (reservation name or 'on-demand')
+      - name: queue_performance
+        description: Classification of queue waiting time
+      - name: slot_efficiency
+        description: Classification of slot utilization efficiency
+      - name: duration_category
+        description: Classification of job duration
+      - name: job_count
+        description: Number of jobs in this category
+      - name: avg_duration_seconds
+        description: Average job duration in seconds
+      - name: avg_queue_seconds
+        description: Average queue time in seconds
+      - name: avg_slot_seconds
+        description: Average slot seconds used per job
+      - name: total_slot_seconds
+        description: Total slot seconds across all jobs
+      - name: avg_slot_utilization_pct
+        description: Average slot utilization percentage
+      - name: avg_bytes_per_slot_ms
+        description: Data processing efficiency (bytes per slot millisecond)
+      - name: total_gb_processed
+        description: Total gigabytes processed
+      - name: cache_hit_rate_pct
+        description: Cache hit rate percentage
+      - name: optimization_recommendation
+        description: Specific recommendation for performance optimization 

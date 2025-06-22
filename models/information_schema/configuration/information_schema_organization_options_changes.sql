@@ -1,12 +1,18 @@
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-organization-options-changes -#}
 {# Required role/permissions: 
 
-      To get the permission that you need to get the configuration changes,
+      To get the permission that
+      you need to get the configuration changes,
 
       ask your administrator to grant you the
 
 
-  BigQuery Admin  (roles/bigquery.admin) IAM role on your organization.
+
+
+      BigQuery Admin  (roles/bigquery.admin)
+     IAM role on your organization.
+
+
 
 
 

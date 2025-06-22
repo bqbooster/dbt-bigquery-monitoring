@@ -2,12 +2,18 @@
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-schemata-replicas -#}
 {# Required role/permissions: 
 
-      To get the permissions that you need to query the INFORMATION_SCHEMA.SCHEMATA_REPLICAS view,
+      To get the permissions that
+      you need to query the INFORMATION_SCHEMA.SCHEMATA_REPLICAS view,
 
       ask your administrator to grant you the
 
 
-  BigQuery Data Viewer  (roles/bigquery.dataViewer) IAM role on the project.
+
+
+      BigQuery Data Viewer  (roles/bigquery.dataViewer)
+     IAM role on the project.
+
+
 
 
 

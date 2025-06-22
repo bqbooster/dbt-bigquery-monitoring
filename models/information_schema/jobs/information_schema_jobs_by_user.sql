@@ -2,12 +2,18 @@
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs-by-user -#}
 {# Required role/permissions: 
 
-      To get the permission that you need to query the INFORMATION_SCHEMA.JOBS_BY_USER view,
+      To get the permission that
+      you need to query the INFORMATION_SCHEMA.JOBS_BY_USER view,
 
       ask your administrator to grant you the
 
 
-  BigQuery User  (roles/bigquery.user) IAM role on your project.
+
+
+      BigQuery User  (roles/bigquery.user)
+     IAM role on your project.
+
+
 
 
 
@@ -50,6 +56,11 @@ user_email,
 transferred_bytes,
 materialized_view_statistics,
 metadata_cache_statistics,
+search_statistics,
+query_dialect,
+continuous,
+vector_search_statistics,
+continuous_query_info,
 job_creation_reason,
 query_info
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`JOBS_BY_USER`

@@ -68,7 +68,7 @@ models:
     description: Indicates whether or not the table is deleted.
     type: BOOLEAN
   - name: TABLE_TYPE
-    description: "The type of table. For example, EXTERNAL or\n      BASE TABLE."
+    description: The type of table. For example, BASE TABLE.
     type: STRING
   - name: FAIL_SAFE_PHYSICAL_BYTES
     description: "Number of physical (compressed) bytes used by the fail-safe storage\n\

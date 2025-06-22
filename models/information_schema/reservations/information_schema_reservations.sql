@@ -14,5 +14,7 @@ edition,
 primary_location,
 secondary_location,
 original_primary_location,
-labels
+labels,
+max_slots,
+scaling_mode
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`RESERVATIONS`

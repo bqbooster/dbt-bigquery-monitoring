@@ -28,7 +28,7 @@ models:
     type: RECORD
   - name: job_id
     description: "The ID of the job if a job was created. Otherwise, the query ID\
-      \ of a query using short\n        query mode. For example, bquxjob_1234."
+      \ of a query using optional\n        job creation mode. For example, bquxjob_1234."
     type: STRING
   - name: job_stages
     description: "Query\n          stages of the job.\n\n        Note: This column's\
@@ -39,7 +39,7 @@ models:
   - name: job_type
     description: "The type of the job. Can be QUERY, LOAD, EXTRACT,\n        COPY,\
       \ or NULL. A NULL value\n        indicates an internal job, such as a script\
-      \ job statement evaluation\n        or a materialized view refresh."
+      \ job statement evaluation."
     type: STRING
   - name: labels
     description: Array of labels applied to the job as key-value pairs.
@@ -137,6 +137,29 @@ models:
   - name: metadata_cache_statistics
     description: Statistics for metadata column index usage for tables referenced
       in a query job.
+    type: RECORD
+  - name: search_statistics
+    description: "Statistics for a search\n        query."
+    type: RECORD
+  - name: query_dialect
+    description: "This field will be available sometime in May, 2025.\n      The query\
+      \ dialect used for the job. Valid values include: \n\nGOOGLE_SQL: Job was requested\
+      \ to use GoogleSQL.\nLEGACY_SQL: Job was requested to use LegacySQL.\nDEFAULT_LEGACY_SQL:\
+      \ No query dialect was specified in the job request.\n            BigQuery used\
+      \ the default value of LegacySQL.\nDEFAULT_GOOGLE_SQL: No query dialect was\
+      \ specified in the job request.\n            BigQuery used the default value\
+      \ of GoogleSQL.\n\nThis field is only populated for query jobs. The default\
+      \ selection of query dialect can be controlled by the configuration settings."
+    type: STRING
+  - name: continuous
+    description: Whether the job is a continuous query.
+    type: BOOLEAN
+  - name: vector_search_statistics
+    description: "Statistics for a vector\n          search query."
+    type: RECORD
+  - name: continuous_query_info
+    description: 'continuous_query_info.output_watermark : Represents the point up
+      to which the continuous query has successfully processed data.'
     type: RECORD
   - name: job_creation_reason
     description: "job_creation_reason.code : Specifies the high level reason why a\

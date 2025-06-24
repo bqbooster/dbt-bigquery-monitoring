@@ -5,42 +5,66 @@ models:
   columns:
   - name: change_timestamp
     description: Time when the change occurred.
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: project_id
     description: ID of the administration project.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: project_number
     description: Number of the administration project.
-    type: INTEGER
+    config:
+      meta:
+        type: INTEGER
   - name: assignment_id
     description: ID that uniquely identifies the assignment.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: reservation_name
     description: Name of the reservation that the assignment uses.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: job_type
     description: "The type of job that can use the reservation. Can be\n        PIPELINE\
       \ or QUERY."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: assignee_id
     description: ID that uniquely identifies the assignee resource.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: assignee_number
     description: Number that uniquely identifies the assignee resource.
-    type: INTEGER
+    config:
+      meta:
+        type: INTEGER
   - name: assignee_type
     description: "Type of assignee resource. Can be organization,\n        folder\
       \ or project."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: action
     description: "Type of event that occurred with the assignment. Can be\n      \
       \  CREATE, UPDATE, or DELETE."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: user_email
     description: "Email address of the user or subject of the workforce identity\n\
       \        federation that made the change. google for changes\n        made by\
       \ Google. NULL if the email address is unknown."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: state
     description: "State of the assignment. Can be PENDING or\n        ACTIVE."
-    type: STRING
+    config:
+      meta:
+        type: STRING

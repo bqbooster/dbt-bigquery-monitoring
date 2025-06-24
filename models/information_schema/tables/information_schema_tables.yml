@@ -5,50 +5,72 @@ models:
   columns:
   - name: table_catalog
     description: The project ID of the project that contains the dataset.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: table_schema
     description: "The name of the dataset that contains the table or view. Also referred\n\
       \        to as the datasetId."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: table_name
     description: "The name of the table or view. Also referred to as the\n       \
       \ tableId."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: table_type
     description: "The table type; one of the following:\n\nBASE TABLE: A standard\n\
       \            table\nCLONE: A\n            table clone\nSNAPSHOT: A\n       \
       \     table snapshot\nVIEW: A\n            view\nMATERIALIZED VIEW: A\n    \
       \        materialized view\n            or materialized view replica\nEXTERNAL:\
       \ A table that references an\n            external data source"
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: is_insertable_into
     description: "YES or NO depending on whether the table\n        supports DML INSERT\n\
       \        statements"
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: is_typed
     description: The value is always NO
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: is_change_history_enabled
     description: "YES or NO depending on whether\n      change history\n      is enabled"
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: creation_time
     description: The table's creation time
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: base_table_catalog
     description: "For table clones\n      and table snapshots,\n        the base table's\
       \ project. Applicable only to\n        tables with table_type set to CLONE or\n\
       \        SNAPSHOT."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: base_table_schema
     description: "For table clones\n      and table snapshots,\n        the base table's\
       \ dataset. Applicable only to tables with\n        table_type set to CLONE or\n\
       \        SNAPSHOT."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: base_table_name
     description: "For table clones\n      and table snapshots,\n        the base table's\
       \ name. Applicable only to tables with\n        table_type set to CLONE or\n\
       \        SNAPSHOT."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: snapshot_time_ms
     description: "For table clones\n      and table snapshots,\n        the time when\
       \ the clone\n        or snapshot\n        operation was run on the base table\
@@ -56,19 +78,27 @@ models:
       \  field contains the time travel timestamp. Otherwise, the\n        snapshot_time_ms\
       \ field is the same as the\n        creation_time field. Applicable only to\n\
       \        tables with table_type set to CLONE or\n        SNAPSHOT."
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: replica_source_catalog
     description: "For\n      materialized view replicas,\n        the base materialized\
       \ view's project."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: replica_source_schema
     description: "For\n      materialized view replicas,\n        the base materialized\
       \ view's dataset."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: replica_source_name
     description: "For\n      materialized view replicas,\n        the base materialized\
       \ view's name."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: replication_status
     description: "For\n      materialized view replicas,\n        the status of the\
       \ replication from the base materialized view to the\n        materialized view\
@@ -80,22 +110,32 @@ models:
       \ the\n          materialized view.\nUNSUPPORTED_CONFIGURATION: There is an\
       \ issue with\n          the replica's\n          prerequisites\n          other\
       \ than source materialized view authorization."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: replication_error
     description: "If replication_status indicates a replication issue for a\n    \
       \  materialized view replica,\n        replication_error provides further details\
       \ about the issue."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: ddl
     description: "The DDL statement\n        that can be used to recreate the table,\
       \ such as\n        CREATE TABLE\n        or CREATE VIEW"
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: default_collation_name
     description: "The name of the default collation specification\n        if it exists;\
       \ otherwise, NULL."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: upsert_stream_apply_watermark
     description: "For tables that use change data capture (CDC), the time when row\n\
       \        modifications were last applied. For more information, see\n      \
       \  Monitor table upsert operation progress."
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP

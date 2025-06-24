@@ -1,0 +1,6 @@
+kind: Fixes
+body: Move type to config.meta.type to avoid linter warnings
+time: 2025-06-24T22:47:51.601625+02:00
+custom:
+    Author: Kayrnt
+    Issue: "124"

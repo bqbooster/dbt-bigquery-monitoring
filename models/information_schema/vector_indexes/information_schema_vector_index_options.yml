@@ -5,23 +5,37 @@ models:
   columns:
   - name: index_catalog
     description: The name of the project that contains the dataset.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: index_schema
     description: The name of the dataset that contains the vector index.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: table_name
     description: The name of the table that the vector index is created on.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: index_name
     description: The name of the vector index.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: option_name
     description: "The name of the option used in the data definition language statement\n\
       \      (DDL) to create the vector index."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: option_type
     description: The option data type.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: option_value
     description: The option value.
-    type: STRING
+    config:
+      meta:
+        type: STRING

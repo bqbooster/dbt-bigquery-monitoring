@@ -5,37 +5,55 @@ models:
   columns:
   - name: change_timestamp
     description: Time when the change occurred.
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: project_id
     description: ID of the administration project.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: project_number
     description: Number of the administration project.
-    type: INTEGER
+    config:
+      meta:
+        type: INTEGER
   - name: reservation_name
     description: User provided reservation name.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: ignore_idle_slots
     description: "If false, any query using this reservation can use unused idle slots\n\
       \        from other capacity commitments."
-    type: BOOL
+    config:
+      meta:
+        type: BOOL
   - name: action
     description: "Type of event that occurred with the reservation. Can be\n     \
       \   CREATE, UPDATE, or DELETE."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: slot_capacity
     description: Baseline of the reservation.
-    type: INTEGER
+    config:
+      meta:
+        type: INTEGER
   - name: user_email
     description: "Email address of the user or subject of the workforce identity\n\
       \        federation that made the change. google for changes\n        made by\
       \ Google. NULL if the email address is unknown."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: target_job_concurrency
     description: "The target number of queries that can execute simultaneously, which\
       \ is\n        limited by available resources. If zero,\n        then this value\
       \ is computed automatically based on available\n        resources."
-    type: INTEGER
+    config:
+      meta:
+        type: INTEGER
   - name: autoscale
     description: "Information about the autoscale capacity of the reservation. Fields\
       \ include the following:\n\ncurrent_slots: the number of slots added to the\
@@ -45,33 +63,49 @@ models:
       \                      for that brief period (less than one minute).\n     \
       \       \n\nmax_slots: the maximum number of slots that could be added to the\
       \ reservation by autoscaling."
-    type: STRUCT
+    config:
+      meta:
+        type: STRUCT
   - name: edition
     description: The edition associated with this reservation. For more information
       about editions, see Introduction to BigQuery editions.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: primary_location
     description: The current location of the reservation's primary replica. This field
       is only set for reservations using the managed disaster recovery feature.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: secondary_location
     description: The current location of the reservation's secondary replica. This
       field is only set for reservations using the managed disaster recovery feature.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: original_primary_location
     description: The location where the reservation was originally created.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: labels
     description: Array of labels associated with the reservation.
-    type: RECORD
+    config:
+      meta:
+        type: RECORD
   - name: max_slots
     description: "The maximum number of slots that this reservation can use, which\
       \ includes\n      baseline slots (slot_capacity), idle slots (if ignore_idle_slots\
       \ is false), and\n      autoscale slots. This field is specified by users for\
       \ using the reservation predictability feature."
-    type: INTEGER
+    config:
+      meta:
+        type: INTEGER
   - name: scaling_mode
     description: The scaling mode for the reservation, which determines how the reservation
       scales from baseline to max_slots. This field is specified by users for using
       the reservation predictability feature.
-    type: STRING
+    config:
+      meta:
+        type: STRING

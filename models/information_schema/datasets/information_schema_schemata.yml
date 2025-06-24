@@ -5,27 +5,43 @@ models:
   columns:
   - name: CATALOG_NAME
     description: The name of the project that contains the dataset
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: SCHEMA_NAME
     description: The dataset's name also referred to as the datasetId
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: SCHEMA_OWNER
     description: The value is always NULL
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: CREATION_TIME
     description: The dataset's creation time
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: LAST_MODIFIED_TIME
     description: The dataset's last modified time
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: LOCATION
     description: The dataset's geographic location
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: DDL
     description: "The CREATE SCHEMA\n        DDL statement that can be used to create\
       \ the dataset"
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: DEFAULT_COLLATION_NAME
     description: "The name of the default collation specification\n        if it exists;\
       \ otherwise, NULL."
-    type: STRING
+    config:
+      meta:
+        type: STRING

@@ -5,20 +5,32 @@ models:
   columns:
   - name: index_catalog
     description: The name of the project that contains the dataset.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: index_schema
     description: The name of the dataset that contains the vector index.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: table_name
     description: The name of the table that the vector index is created on.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: index_name
     description: The name of the vector index.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: index_column_name
     description: The name of the indexed column.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: index_field_path
     description: "The full path of the expanded indexed field, starting with the column\n\
       \          name. Fields are separated by a period."
-    type: STRING
+    config:
+      meta:
+        type: STRING

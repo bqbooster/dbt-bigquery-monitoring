@@ -5,13 +5,21 @@ models:
   columns:
   - name: OPTION_NAME
     description: Option ID for the specified configuration setting.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: OPTION_DESCRIPTION
     description: The option description.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: OPTION_TYPE
     description: The data type of the OPTION_VALUE.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: OPTION_VALUE
     description: The current value of the option.
-    type: STRING
+    config:
+      meta:
+        type: STRING

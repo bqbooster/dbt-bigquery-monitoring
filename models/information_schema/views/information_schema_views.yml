@@ -5,21 +5,33 @@ models:
   columns:
   - name: TABLE_CATALOG
     description: The name of the project that contains the dataset
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: TABLE_SCHEMA
     description: "The name of the dataset that contains the view also referred to\
       \ as the\n        dataset id"
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: TABLE_NAME
     description: The name of the view also referred to as the table id
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: VIEW_DEFINITION
     description: The SQL query that defines the view
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: CHECK_OPTION
     description: The value returned is always NULL
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: USE_STANDARD_SQL
     description: "YES if the view was created by using a\n        GoogleSQL query;\
       \ NO if useLegacySql\n        is set to true"
-    type: STRING
+    config:
+      meta:
+        type: STRING

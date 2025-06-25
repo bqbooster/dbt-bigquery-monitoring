@@ -6,20 +6,32 @@ models:
   - name: SPECIFIC_CATALOG
     description: "The name of the project that contains the routine where the\n  \
       \    option is defined"
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: SPECIFIC_SCHEMA
     description: "The name of the dataset that contains the routine where the option\n\
       \      is defined"
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: SPECIFIC_NAME
     description: The name of the routine
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: OPTION_NAME
     description: One of the name values in the options table
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: OPTION_TYPE
     description: One of the data type values in the options table
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: OPTION_VALUE
     description: One of the value options in the options table
-    type: STRING
+    config:
+      meta:
+        type: STRING

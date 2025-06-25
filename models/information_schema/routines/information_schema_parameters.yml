@@ -6,35 +6,55 @@ models:
   - name: SPECIFIC_CATALOG
     description: "The name of the project that contains the dataset in which the\n\
       \      routine containing the parameter is defined"
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: SPECIFIC_SCHEMA
     description: "The name of the dataset that contains the routine in which the\n\
       \      parameter is defined"
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: SPECIFIC_NAME
     description: The name of the routine in which the parameter is defined
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: ORDINAL_POSITION
     description: The 1-based position of the parameter, or 0 for the return value
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: PARAMETER_MODE
     description: "The mode of the parameter, either IN, OUT,\n      INOUT, or NULL"
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: IS_RESULT
     description: Whether the parameter is the result of the function, either YES or
       NO
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: PARAMETER_NAME
     description: The name of the parameter
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: DATA_TYPE
     description: "The type of the parameter, will be ANY TYPE if\n      defined as\
       \ an any type"
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: PARAMETER_DEFAULT
     description: "The default value of the parameter as a SQL literal value,\n   \
       \   always NULL"
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: IS_AGGREGATE
     description: Whether this is an aggregate parameter, always NULL
-    type: STRING
+    config:
+      meta:
+        type: STRING

@@ -5,59 +5,89 @@ models:
   columns:
   - name: change_timestamp
     description: Time when the change occurred.
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: project_id
     description: ID of the administration project.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: project_number
     description: Number of the administration project.
-    type: INTEGER
+    config:
+      meta:
+        type: INTEGER
   - name: capacity_commitment_id
     description: ID that uniquely identifies the capacity commitment.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: commitment_plan
     description: Commitment plan of the capacity commitment.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: state
     description: "State the capacity commitment is in. Can be PENDING or\n       \
       \ ACTIVE."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: slot_count
     description: Slot count associated with the capacity commitment.
-    type: INTEGER
+    config:
+      meta:
+        type: INTEGER
   - name: action
     description: "Type of event that occurred with the capacity commitment. Can be\n\
       \        CREATE, UPDATE, or DELETE."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: user_email
     description: "Email address of the user or subject of the workforce identity\n\
       \        federation that made the change. google for changes\n        made by\
       \ Google. NULL if the email address is unknown."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: commitment_start_time
     description: "The start of the current commitment period. Only applicable for\n\
       \        ACTIVE capacity commitments, otherwise this is\n        NULL."
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: commitment_end_time
     description: "The end of the current commitment period. Only applicable for\n\
       \        ACTIVE capacity commitments, otherwise this is\n        NULL."
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: failure_status
     description: "For a FAILED commitment plan, provides the failure\n        reason,\
       \ otherwise this is NULL. RECORD\n        consists of code and message."
-    type: RECORD
+    config:
+      meta:
+        type: RECORD
   - name: renewal_plan
     description: "The plan this capacity commitment is converted to after\n      \
       \  commitment_end_time passes. After the plan is changed,\n        the committed\
       \ period is extended according to the commitment plan. Only\n        applicable\
       \ for ANNUAL and TRIAL\n        commitments, otherwise this is NULL."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: edition
     description: The edition associated with this reservation. For more information
       about editions, see Introduction to BigQuery editions.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: is_flat_rate
     description: Whether the commitment is associated with the legacy flat-rate capacity
       model or an edition. If FALSE, the current commitment is associated with an
       edition. If TRUE, the commitment is the legacy flat-rate capacity model.
-    type: BOOL
+    config:
+      meta:
+        type: BOOL

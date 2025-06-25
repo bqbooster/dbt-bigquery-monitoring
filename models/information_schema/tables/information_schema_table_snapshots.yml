@@ -5,22 +5,36 @@ models:
   columns:
   - name: table_catalog
     description: The name of the project that contains the table snapshot
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: table_schema
     description: The name of the dataset that contains the table snapshot
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: table_name
     description: The name of the table snapshot
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: base_table_catalog
     description: The name of the project that contains the base table
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: base_table_schema
     description: The name of the dataset that contains the base table
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: base_table_name
     description: The name of the base table
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: snapshot_time
     description: The time that the table snapshot was created
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP

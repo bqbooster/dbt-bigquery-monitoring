@@ -5,16 +5,24 @@ models:
   columns:
   - name: index_catalog
     description: The name of the project that contains the dataset.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: index_schema
     description: The name of the dataset that contains the index.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: table_name
     description: The name of the table that the index is created on.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: index_name
     description: The name of the vector index.
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: index_status
     description: "The status of the index: ACTIVE, PENDING\n          DISABLEMENT,\
       \ TEMPORARILY DISABLED, or\n          PERMANENTLY DISABLED.\n          \nACTIVE\
@@ -31,41 +39,63 @@ models:
       \ queries and you aren't charged\n              for the vector index storage.\n\
       PERMANENTLY DISABLED means that there is an\n              incompatible schema\
       \ change on the indexed table."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: creation_time
     description: The time the index was created.
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: last_modification_time
     description: "The last time the index configuration was modified. For example,\n\
       \          deleting an indexed column."
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: last_refresh_time
     description: "The last time the table data was indexed. A NULL value\n       \
       \   means the index is not yet available."
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: disable_time
     description: "The time the status of the index was set to DISABLED. The\n    \
       \      value is NULL if the index status is not\n          DISABLED."
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: disable_reason
     description: "The reason the index was disabled. NULL if the index\n        status\
       \ is not DISABLED."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: DDL
     description: "The data definition language (DDL) statement used to create the\n\
       \      index."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: coverage_percentage
     description: "The approximate percentage of table data that has been indexed.\n\
       \      0% means the index is not usable in a VECTOR_SEARCH query,\n      even\
       \ if some data has already been indexed."
-    type: INTEGER
+    config:
+      meta:
+        type: INTEGER
   - name: unindexed_row_count
     description: The number of rows in the table that have not been indexed.
-    type: INTEGER
+    config:
+      meta:
+        type: INTEGER
   - name: total_logical_bytes
     description: The number of billable logical bytes for the index.
-    type: INTEGER
+    config:
+      meta:
+        type: INTEGER
   - name: total_storage_bytes
     description: The number of billable storage bytes for the index.
-    type: INTEGER
+    config:
+      meta:
+        type: INTEGER

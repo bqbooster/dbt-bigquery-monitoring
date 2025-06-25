@@ -6,24 +6,36 @@ models:
   - name: TABLE_CATALOG
     description: "The name of the project that contains the dataset. Also referred\
       \ to\n        as the projectId."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: TABLE_SCHEMA
     description: "The name of the dataset that contains the materialized view. Also\n\
       \        referred to as the datasetId."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: TABLE_NAME
     description: "The name of the materialized view. Also referred to as the\n   \
       \     tableId."
-    type: STRING
+    config:
+      meta:
+        type: STRING
   - name: LAST_REFRESH_TIME
     description: The time when this materialized view was last refreshed.
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: REFRESH_WATERMARK
     description: "The refresh watermark of the materialized view. The data contained\
       \ in\n        materialized view base tables up to this time are included in\
       \ the\n        materialized view cache."
-    type: TIMESTAMP
+    config:
+      meta:
+        type: TIMESTAMP
   - name: LAST_REFRESH_STATUS
     description: "Error result of the last automatic refresh job as an ErrorProto\n\
       \        object. If present, indicates that the last automatic refresh was unsuccessful."
-    type: RECORD
+    config:
+      meta:
+        type: RECORD

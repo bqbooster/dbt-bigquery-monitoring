@@ -5,10 +5,11 @@ models:
     description: >
       A model that stores reservation usage metrics aggregated per hour, providing insights into 
       reservation efficiency, utilization patterns, and autoscaling behavior.
-    meta:
-      label: "Reservation Usage per Hour"
-      order_fields_by: "label"
-      group_label: "Reservation Management"
+    config:
+      meta:
+        label: "Reservation Usage per Hour"
+        order_fields_by: "label"
+        group_label: "Reservation Management"
     columns:
       - name: hour
         description: The hour of the reservation usage.
@@ -35,4 +36,4 @@ models:
       - name: utilization_category
         description: Categorical classification of utilization level (High/Medium/Low/Very Low Utilization).
       - name: autoscaling_status
-        description: Status of autoscaling for the reservation (Autoscaling Active/Available/Fixed Capacity). 
+        description: Status of autoscaling for the reservation (Autoscaling Active/Available/Fixed Capacity).

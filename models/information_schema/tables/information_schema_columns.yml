@@ -1,108 +1,82 @@
 version: 2
 models:
-- name: information_schema_columns
-  description: dataset details with related information
-  columns:
-  - name: TABLE_CATALOG
-    description: The project ID of the project that contains the dataset
-    config:
-      meta:
-        type: STRING
-  - name: TABLE_SCHEMA
-    description: "The name of the dataset that contains the table also referred to\
-      \ as\n        the datasetId"
-    config:
-      meta:
-        type: STRING
-  - name: TABLE_NAME
-    description: The name of the table or view also referred to as the tableId
-    config:
-      meta:
-        type: STRING
-  - name: COLUMN_NAME
-    description: The name of the column
-    config:
-      meta:
-        type: STRING
-  - name: ORDINAL_POSITION
-    description: "The 1-indexed offset of the column within the table; if it's a pseudo\n\
-      \        column such as _PARTITIONTIME or _PARTITIONDATE, the value is\n   \
-      \     NULL"
-    config:
-      meta:
-        type: INT64
-  - name: IS_NULLABLE
-    description: "YES or NO depending on whether the column's\n        mode allows\
-      \ NULL values"
-    config:
-      meta:
-        type: STRING
-  - name: DATA_TYPE
-    description: The column's GoogleSQL data type
-    config:
-      meta:
-        type: STRING
-  - name: IS_GENERATED
-    description: The value is always NEVER
-    config:
-      meta:
-        type: STRING
-  - name: GENERATION_EXPRESSION
-    description: The value is always NULL
-    config:
-      meta:
-        type: STRING
-  - name: IS_STORED
-    description: The value is always NULL
-    config:
-      meta:
-        type: STRING
-  - name: IS_HIDDEN
-    description: "YES or NO depending on whether the column is\n      a pseudo column\
-      \ such as _PARTITIONTIME or _PARTITIONDATE"
-    config:
-      meta:
-        type: STRING
-  - name: IS_UPDATABLE
-    description: The value is always NULL
-    config:
-      meta:
-        type: STRING
-  - name: IS_SYSTEM_DEFINED
-    description: "YES or NO depending on whether the column is\n      a pseudo column\
-      \ such as _PARTITIONTIME or _PARTITIONDATE"
-    config:
-      meta:
-        type: STRING
-  - name: IS_PARTITIONING_COLUMN
-    description: "YES or NO depending on whether the column is\n        a partitioning\
-      \ column"
-    config:
-      meta:
-        type: STRING
-  - name: CLUSTERING_ORDINAL_POSITION
-    description: "The 1-indexed offset of the column within the table's\n        clustering\
-      \ columns; the value is NULL if the table is not a\n        clustered table"
-    config:
-      meta:
-        type: INT64
-  - name: COLLATION_NAME
-    description: "The name of the collation specification\n        if it exists; otherwise,\
-      \ NULL\n\n        If a STRING or ARRAY<STRING> is passed\n        in, the collation\
-      \ specification is returned if it exists; otherwise\n        NULL is returned"
-    config:
-      meta:
-        type: STRING
-  - name: COLUMN_DEFAULT
-    description: "The default value of the\n        column if it exists; otherwise,\
-      \ the value is NULL"
-    config:
-      meta:
-        type: STRING
-  - name: ROUNDING_MODE
-    description: "The mode of rounding that's used for values written to the field\
-      \ if its\n        type is a parameterized NUMERIC or BIGNUMERIC;\n        otherwise,\
-      \ the value is NULL"
-    config:
-      meta:
-        type: STRING
+  - name: information_schema_columns
+    description: dataset details with related information
+    columns:
+      - name: TABLE_CATALOG
+        description: The project ID of the project that contains the dataset
+        data_type: STRING
+      - name: TABLE_SCHEMA
+        description:
+          "The name of the dataset that contains the table also referred to\
+          \ as\n        the datasetId"
+        data_type: STRING
+      - name: TABLE_NAME
+        description: The name of the table or view also referred to as the tableId
+        data_type: STRING
+      - name: COLUMN_NAME
+        description: The name of the column
+        data_type: STRING
+      - name: ORDINAL_POSITION
+        description:
+          "The 1-indexed offset of the column within the table; if it's a pseudo\n\
+          \        column such as _PARTITIONTIME or _PARTITIONDATE, the value is\n   \
+          \     NULL"
+        data_type: INT64
+      - name: IS_NULLABLE
+        description:
+          "YES or NO depending on whether the column's\n        mode allows\
+          \ NULL values"
+        data_type: STRING
+      - name: DATA_TYPE
+        description: The column's GoogleSQL data type
+        data_type: STRING
+      - name: IS_GENERATED
+        description: The value is always NEVER
+        data_type: STRING
+      - name: GENERATION_EXPRESSION
+        description: The value is always NULL
+        data_type: STRING
+      - name: IS_STORED
+        description: The value is always NULL
+        data_type: STRING
+      - name: IS_HIDDEN
+        description:
+          "YES or NO depending on whether the column is\n      a pseudo column\
+          \ such as _PARTITIONTIME or _PARTITIONDATE"
+        data_type: STRING
+      - name: IS_UPDATABLE
+        description: The value is always NULL
+        data_type: STRING
+      - name: IS_SYSTEM_DEFINED
+        description:
+          "YES or NO depending on whether the column is\n      a pseudo column\
+          \ such as _PARTITIONTIME or _PARTITIONDATE"
+        data_type: STRING
+      - name: IS_PARTITIONING_COLUMN
+        description:
+          "YES or NO depending on whether the column is\n        a partitioning\
+          \ column"
+        data_type: STRING
+      - name: CLUSTERING_ORDINAL_POSITION
+        description:
+          "The 1-indexed offset of the column within the table's\n        clustering\
+          \ columns; the value is NULL if the table is not a\n        clustered table"
+        data_type: INT64
+      - name: COLLATION_NAME
+        description:
+          "The name of the collation specification\n        if it exists; otherwise,\
+          \ NULL\n\n        If a STRING or ARRAY<STRING> is passed\n        in, the collation\
+          \ specification is returned if it exists; otherwise\n        NULL is returned"
+        data_type: STRING
+      - name: COLUMN_DEFAULT
+        description:
+          "The default value of the\n        column if it exists; otherwise,\
+          \ the value is NULL"
+        data_type: STRING
+      - name: ROUNDING_MODE
+        description:
+          "The mode of rounding that's used for values written to the field\
+          \ if its\n        type is a parameterized NUMERIC or BIGNUMERIC;\n        otherwise,\
+          \ the value is NULL"
+        data_type: STRING

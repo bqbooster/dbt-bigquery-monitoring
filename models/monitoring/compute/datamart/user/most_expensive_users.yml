@@ -4,10 +4,11 @@ models:
   - name: most_expensive_users
     description: >
       A model that calculates the most expensive users based on query cost.
-    meta:
-      label: "Most Expensive Users"
-      order_fields_by: "label"
-      group_label: "Compute cost"
+    config:
+      meta:
+        label: "Most Expensive Users"
+        order_fields_by: "label"
+        group_label: "Compute cost"
     columns:
       - name: day
         description: The day of the data.

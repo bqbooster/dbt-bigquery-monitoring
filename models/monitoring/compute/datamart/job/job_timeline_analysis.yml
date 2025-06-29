@@ -5,10 +5,11 @@ models:
     description: >
       Advanced job performance analysis using JOBS_TIMELINE data to analyze
       slot utilization patterns, queue times, and job efficiency metrics.
-    meta:
-      label: "Job Timeline Analysis"
-      order_fields_by: "label"
-      group_label: "Advanced analytics"
+    config:
+      meta:
+        label: "Job Timeline Analysis"
+        order_fields_by: "label"
+        group_label: "Advanced analytics"
     columns:
       - name: project_id
         description: BigQuery project ID
@@ -45,4 +46,4 @@ models:
       - name: cache_hit_rate_pct
         description: Cache hit rate percentage
       - name: optimization_recommendation
-        description: Specific recommendation for performance optimization 
+        description: Specific recommendation for performance optimization

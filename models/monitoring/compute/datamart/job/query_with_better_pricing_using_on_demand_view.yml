@@ -4,10 +4,11 @@ models:
   - name: query_with_better_pricing_using_on_demand_view
     description: >
       A model that combines job data with cost information that would cost less using on demand.
-    meta:
-      label: "Jobs with Cost"
-      order_fields_by: "label"
-      group_label: "Compute cost"
+    config:
+      meta:
+        label: "Jobs with Cost"
+        order_fields_by: "label"
+        group_label: "Compute cost"
     columns:
       - name: bi_engine_statistics
         description: The BI engine statistics.

@@ -4,10 +4,11 @@ models:
   - name: unused_tables
     description: >
       A model that selects data from table_and_storage_with_cost with a LEFT JOIN on table_reference_incremental.
-    meta:
-      label: "Most Expensive Tables"
-      order_fields_by: "label"
-      group_label: "Storage cost"
+    config:
+      meta:
+        label: "Most Expensive Tables"
+        order_fields_by: "label"
+        group_label: "Storage cost"
     columns:
       - name: is_insertable_into
         description: Indicates if the table is insertable.

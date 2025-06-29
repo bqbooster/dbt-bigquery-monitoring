@@ -4,10 +4,11 @@ models:
   - name: slowest_jobs
     description: >
       A model that stores information about the slowest jobs.
-    meta:
-      label: "Slowest Jobs"
-      order_fields_by: "label"
-      group_label: "Compute cost"
+    config:
+      meta:
+        label: "Slowest Jobs"
+        order_fields_by: "label"
+        group_label: "Compute cost"
     columns:
       - name: hour
         description: The hour of the job execution.
@@ -25,4 +26,3 @@ models:
         description: The total number of slot time milliseconds used by the job.
       - name: total_run_time
         description: The total run time of the job in a human-readable format.
-        

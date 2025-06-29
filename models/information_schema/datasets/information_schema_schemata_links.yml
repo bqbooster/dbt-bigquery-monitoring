@@ -1,43 +1,32 @@
 version: 2
 models:
-- name: information_schema_schemata_links
-  description: dataset details with related information
-  columns:
-  - name: CATALOG_NAME
-    description: The name of the project that contains the source dataset.
-    config:
-      meta:
-        type: STRING
-  - name: SCHEMA_NAME
-    description: "The name of the source dataset. The dataset name is also referred\
-      \ to as\n     the datasetId."
-    config:
-      meta:
-        type: STRING
-  - name: LINKED_SCHEMA_CATALOG_NUMBER
-    description: The project number of the project that contains the linked dataset.
-    config:
-      meta:
-        type: STRING
-  - name: LINKED_SCHEMA_CATALOG_NAME
-    description: The project name of the project that contains the linked dataset.
-    config:
-      meta:
-        type: STRING
-  - name: LINKED_SCHEMA_NAME
-    description: "The name of the linked dataset. The dataset name is also referred\
-      \ to as\n     the datasetId."
-    config:
-      meta:
-        type: STRING
-  - name: LINKED_SCHEMA_CREATION_TIME
-    description: The time when the linked dataset was created.
-    config:
-      meta:
-        type: TIMESTAMP
-  - name: LINKED_SCHEMA_ORG_DISPLAY_NAME
-    description: The display name of the organization in which the linked dataset
-      is created.
-    config:
-      meta:
-        type: STRING
+  - name: information_schema_schemata_links
+    description: dataset details with related information
+    columns:
+      - name: CATALOG_NAME
+        description: The name of the project that contains the source dataset.
+        data_type: STRING
+      - name: SCHEMA_NAME
+        description:
+          "The name of the source dataset. The dataset name is also referred\
+          \ to as\n     the datasetId."
+        data_type: STRING
+      - name: LINKED_SCHEMA_CATALOG_NUMBER
+        description: The project number of the project that contains the linked dataset.
+        data_type: STRING
+      - name: LINKED_SCHEMA_CATALOG_NAME
+        description: The project name of the project that contains the linked dataset.
+        data_type: STRING
+      - name: LINKED_SCHEMA_NAME
+        description:
+          "The name of the linked dataset. The dataset name is also referred\
+          \ to as\n     the datasetId."
+        data_type: STRING
+      - name: LINKED_SCHEMA_CREATION_TIME
+        description: The time when the linked dataset was created.
+        data_type: TIMESTAMP
+      - name: LINKED_SCHEMA_ORG_DISPLAY_NAME
+        description:
+          The display name of the organization in which the linked dataset
+          is created.
+        data_type: STRING

@@ -1,134 +1,98 @@
 version: 2
 models:
-- name: information_schema_jobs_timeline
-  description: dataset details with related information
-  columns:
-  - name: period_start
-    description: Start time of this period.
-    config:
-      meta:
-        type: TIMESTAMP
-  - name: period_slot_ms
-    description: Slot milliseconds consumed in this period.
-    config:
-      meta:
-        type: INTEGER
-  - name: project_id
-    description: (Clustering column) ID of the project.
-    config:
-      meta:
-        type: STRING
-  - name: project_number
-    description: Number of the project.
-    config:
-      meta:
-        type: INTEGER
-  - name: user_email
-    description: "(Clustering column) Email address or service account of\n      \
-      \    the user who ran the job."
-    config:
-      meta:
-        type: STRING
-  - name: job_id
-    description: ID of the job. For example, bquxjob_1234.
-    config:
-      meta:
-        type: STRING
-  - name: job_type
-    description: "The type of the job. Can be QUERY, LOAD,\n          EXTRACT, COPY,\
-      \ or null. Job\n          type null indicates an internal job, such as script\
-      \ job\n          statement evaluation or materialized view refresh."
-    config:
-      meta:
-        type: STRING
-  - name: statement_type
-    description: "The type of query statement, if valid. For example,\n          SELECT,\
-      \ INSERT, UPDATE, or\n          DELETE."
-    config:
-      meta:
-        type: STRING
-  - name: priority
-    description: "The priority of this job. Valid values include INTERACTIVE and\n\
-      \      BATCH."
-    config:
-      meta:
-        type: STRING
-  - name: parent_job_id
-    description: ID of the parent job, if any.
-    config:
-      meta:
-        type: STRING
-  - name: job_creation_time
-    description: "(Partitioning column) Creation time of this job. Partitioning\n\
-      \        is based on the UTC time of this timestamp."
-    config:
-      meta:
-        type: TIMESTAMP
-  - name: job_start_time
-    description: Start time of this job.
-    config:
-      meta:
-        type: TIMESTAMP
-  - name: job_end_time
-    description: End time of this job.
-    config:
-      meta:
-        type: TIMESTAMP
-  - name: state
-    description: "Running state of the job at the end of this period. Valid states\n\
-      \        include PENDING, RUNNING, and\n        DONE."
-    config:
-      meta:
-        type: STRING
-  - name: reservation_id
-    description: "Name of the primary reservation assigned to this job at the end\
-      \ of\n        this period, if applicable."
-    config:
-      meta:
-        type: STRING
-  - name: edition
-    description: The edition associated with the reservation assigned to this job.
-      For more information about editions, see Introduction to BigQuery editions.
-    config:
-      meta:
-        type: STRING
-  - name: total_bytes_billed
-    description: "If the project is configured to use on-demand\n        pricing,\
-      \ then this field contains the total bytes billed for the\n        job. If the\
-      \ project is configured to use flat-rate\n        pricing, then you are not\
-      \ billed for bytes and this field is\n        informational only."
-    config:
-      meta:
-        type: INTEGER
-  - name: total_bytes_processed
-    description: Total bytes processed by the job.
-    config:
-      meta:
-        type: INTEGER
-  - name: error_result
-    description: "Details of error (if any) as an \nErrorProto."
-    config:
-      meta:
-        type: RECORD
-  - name: cache_hit
-    description: Whether the query results of this job were from a cache.
-    config:
-      meta:
-        type: BOOLEAN
-  - name: period_shuffle_ram_usage_ratio
-    description: Shuffle usage ratio in the selected time period.
-    config:
-      meta:
-        type: FLOAT
-  - name: period_estimated_runnable_units
-    description: Units of work that can be scheduled immediately in this period. Additional
-      slots for these units of work accelerate your query, provided no other query
-      in the reservation needs additional slots.
-    config:
-      meta:
-        type: INTEGER
-  - name: transaction_id
-    description: "ID of the transaction\n        in which this job ran, if any. (Preview)"
-    config:
-      meta:
-        type: STRING
+  - name: information_schema_jobs_timeline
+    description: dataset details with related information
+    columns:
+      - name: period_start
+        description: Start time of this period.
+        data_type: TIMESTAMP
+      - name: period_slot_ms
+        description: Slot milliseconds consumed in this period.
+        data_type: INTEGER
+      - name: project_id
+        description: (Clustering column) ID of the project.
+        data_type: STRING
+      - name: project_number
+        description: Number of the project.
+        data_type: INTEGER
+      - name: user_email
+        description:
+          "(Clustering column) Email address or service account of\n      \
+          \    the user who ran the job."
+        data_type: STRING
+      - name: job_id
+        description: ID of the job. For example, bquxjob_1234.
+        data_type: STRING
+      - name: job_type
+        description:
+          "The type of the job. Can be QUERY, LOAD,\n          EXTRACT, COPY,\
+          \ or null. Job\n          type null indicates an internal job, such as script\
+          \ job\n          statement evaluation or materialized view refresh."
+        data_type: STRING
+      - name: statement_type
+        description:
+          "The type of query statement, if valid. For example,\n          SELECT,\
+          \ INSERT, UPDATE, or\n          DELETE."
+        data_type: STRING
+      - name: priority
+        description:
+          "The priority of this job. Valid values include INTERACTIVE and\n\
+          \      BATCH."
+        data_type: STRING
+      - name: parent_job_id
+        description: ID of the parent job, if any.
+        data_type: STRING
+      - name: job_creation_time
+        description:
+          "(Partitioning column) Creation time of this job. Partitioning\n\
+          \        is based on the UTC time of this timestamp."
+        data_type: TIMESTAMP
+      - name: job_start_time
+        description: Start time of this job.
+        data_type: TIMESTAMP
+      - name: job_end_time
+        description: End time of this job.
+        data_type: TIMESTAMP
+      - name: state
+        description:
+          "Running state of the job at the end of this period. Valid states\n\
+          \        include PENDING, RUNNING, and\n        DONE."
+        data_type: STRING
+      - name: reservation_id
+        description:
+          "Name of the primary reservation assigned to this job at the end\
+          \ of\n        this period, if applicable."
+        data_type: STRING
+      - name: edition
+        description:
+          The edition associated with the reservation assigned to this job.
+          For more information about editions, see Introduction to BigQuery editions.
+        data_type: STRING
+      - name: total_bytes_billed
+        description:
+          "If the project is configured to use on-demand\n        pricing,\
+          \ then this field contains the total bytes billed for the\n        job. If the\
+          \ project is configured to use flat-rate\n        pricing, then you are not\
+          \ billed for bytes and this field is\n        informational only."
+        data_type: INTEGER
+      - name: total_bytes_processed
+        description: Total bytes processed by the job.
+        data_type: INTEGER
+      - name: error_result
+        description: "Details of error (if any) as an \nErrorProto."
+        data_type: RECORD
+      - name: cache_hit
+        description: Whether the query results of this job were from a cache.
+        data_type: BOOLEAN
+      - name: period_shuffle_ram_usage_ratio
+        description: Shuffle usage ratio in the selected time period.
+        data_type: FLOAT
+      - name: period_estimated_runnable_units
+        description:
+          Units of work that can be scheduled immediately in this period. Additional
+          slots for these units of work accelerate your query, provided no other query
+          in the reservation needs additional slots.
+        data_type: INTEGER
+      - name: transaction_id
+        description: "ID of the transaction\n        in which this job ran, if any. (Preview)"
+        data_type: STRING

@@ -4,10 +4,11 @@ models:
   - name: compute_cost_per_hour_view
     description: >
       An enriched view over the model that stores the compute cost per hour.
-    meta:
-      label: "Compute cost per hour"
-      order_fields_by: "label"
-      group_label: "Compute cost"
+    config:
+      meta:
+        label: "Compute cost per hour"
+        order_fields_by: "label"
+        group_label: "Compute cost"
     columns:
       - name: year
         description: The year of the compute cost.
@@ -29,4 +30,3 @@ models:
         description: The total number of slot time in human readable format used by all queries during the hour.
       - name: query_count
         description: The total number of queries run during the hour.
-            

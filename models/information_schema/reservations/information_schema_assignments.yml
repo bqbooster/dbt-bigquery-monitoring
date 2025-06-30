@@ -1,52 +1,36 @@
 version: 2
 models:
-- name: information_schema_assignments
-  description: dataset details with related information
-  columns:
-  - name: ddl
-    description: The DDL statement used to create this assignment.
-    config:
-      meta:
-        type: STRING
-  - name: project_id
-    description: ID of the administration project.
-    config:
-      meta:
-        type: STRING
-  - name: project_number
-    description: Number of the administration project.
-    config:
-      meta:
-        type: INTEGER
-  - name: assignment_id
-    description: ID that uniquely identifies the assignment.
-    config:
-      meta:
-        type: STRING
-  - name: reservation_name
-    description: Name of the reservation that the assignment uses.
-    config:
-      meta:
-        type: STRING
-  - name: job_type
-    description: "The type of job that can use the reservation. Can be\n        PIPELINE,\
-      \ QUERY, CONTINUOUS,\n        ML_EXTERNAL, or BACKGROUND."
-    config:
-      meta:
-        type: STRING
-  - name: assignee_id
-    description: ID that uniquely identifies the assignee resource.
-    config:
-      meta:
-        type: STRING
-  - name: assignee_number
-    description: Number that uniquely identifies the assignee resource.
-    config:
-      meta:
-        type: INTEGER
-  - name: assignee_type
-    description: "Type of assignee resource. Can be organization,\n        folder\
-      \ or project."
-    config:
-      meta:
-        type: STRING
+  - name: information_schema_assignments
+    description: dataset details with related information
+    columns:
+      - name: ddl
+        description: The DDL statement used to create this assignment.
+        data_type: STRING
+      - name: project_id
+        description: ID of the administration project.
+        data_type: STRING
+      - name: project_number
+        description: Number of the administration project.
+        data_type: INTEGER
+      - name: assignment_id
+        description: ID that uniquely identifies the assignment.
+        data_type: STRING
+      - name: reservation_name
+        description: Name of the reservation that the assignment uses.
+        data_type: STRING
+      - name: job_type
+        description:
+          "The type of job that can use the reservation. Can be\n        PIPELINE,\
+          \ QUERY, CONTINUOUS,\n        ML_EXTERNAL, or BACKGROUND."
+        data_type: STRING
+      - name: assignee_id
+        description: ID that uniquely identifies the assignee resource.
+        data_type: STRING
+      - name: assignee_number
+        description: Number that uniquely identifies the assignee resource.
+        data_type: INTEGER
+      - name: assignee_type
+        description:
+          "Type of assignee resource. Can be organization,\n        folder\
+          \ or project."
+        data_type: STRING

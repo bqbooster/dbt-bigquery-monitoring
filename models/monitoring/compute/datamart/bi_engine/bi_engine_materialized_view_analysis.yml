@@ -5,10 +5,11 @@ models:
     description: >
       Analyzes BI Engine usage and materialized view effectiveness across projects.
       Identifies performance improvements from BigQuery's acceleration features.
-    meta:
-      label: "BI Engine & Materialized View Analysis"
-      order_fields_by: "label"
-      group_label: "Advanced optimization"
+    config:
+      meta:
+        label: "BI Engine & Materialized View Analysis"
+        order_fields_by: "label"
+        group_label: "Advanced optimization"
     columns:
       - name: project_id
         description: BigQuery project ID
@@ -31,4 +32,4 @@ models:
       - name: mv_tables_used
         description: List of materialized view tables being used
       - name: optimization_recommendation
-        description: Specific recommendation for BI Engine and MV optimization 
+        description: Specific recommendation for BI Engine and MV optimization

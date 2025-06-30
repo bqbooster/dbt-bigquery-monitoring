@@ -5,10 +5,11 @@ models:
     description: >
       A model that stores reservation usage metrics per minute, providing insights into 
       reservation efficiency, utilization patterns, and autoscaling behavior.
-    meta:
-      label: "Reservation Usage per Minute"
-      order_fields_by: "label"
-      group_label: "Reservation Management"
+    config:
+      meta:
+        label: "Reservation Usage per Minute"
+        order_fields_by: "label"
+        group_label: "Reservation Management"
     columns:
       - name: minute
         description: The minute of the reservation usage.

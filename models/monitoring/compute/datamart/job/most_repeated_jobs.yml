@@ -4,10 +4,11 @@ models:
   - name: most_repeated_jobs
     description: >
       A model that stores information about the most repeated jobs.
-    meta:
-      label: "Most Repeated Jobs"
-      order_fields_by: "label"
-      group_label: "Compute cost"
+    config:
+      meta:
+        label: "Most Repeated Jobs"
+        order_fields_by: "label"
+        group_label: "Compute cost"
     columns:
       - name: query
         description: The SQL query.
@@ -27,4 +28,3 @@ models:
         description: The total slot time in human-readable format.
       - name: query_count
         description: The total query count for the model.
-        

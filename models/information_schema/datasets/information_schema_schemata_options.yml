@@ -1,34 +1,25 @@
 version: 2
 models:
-- name: information_schema_schemata_options
-  description: dataset details with related information
-  columns:
-  - name: CATALOG_NAME
-    description: The name of the project that contains the dataset
-    config:
-      meta:
-        type: STRING
-  - name: SCHEMA_NAME
-    description: The name of the dataset, also referred to as the datasetId
-    config:
-      meta:
-        type: STRING
-  - name: OPTION_NAME
-    description: "The name of the option. For a list of supported options, see the\n\
-      \      schema options list.\n      The storage_billing_model option is only\
-      \ displayed for\n      datasets that have been updated after December 1, 2022.\
-      \ For datasets that\n      were last updated before that date, the storage billing\
-      \ model is\n      LOGICAL."
-    config:
-      meta:
-        type: STRING
-  - name: OPTION_TYPE
-    description: The data type of the option
-    config:
-      meta:
-        type: STRING
-  - name: OPTION_VALUE
-    description: The value of the option
-    config:
-      meta:
-        type: STRING
+  - name: information_schema_schemata_options
+    description: dataset details with related information
+    columns:
+      - name: CATALOG_NAME
+        description: The name of the project that contains the dataset
+        data_type: STRING
+      - name: SCHEMA_NAME
+        description: The name of the dataset, also referred to as the datasetId
+        data_type: STRING
+      - name: OPTION_NAME
+        description:
+          "The name of the option. For a list of supported options, see the\n\
+          \      schema options list.\n      The storage_billing_model option is only\
+          \ displayed for\n      datasets that have been updated after December 1, 2022.\
+          \ For datasets that\n      were last updated before that date, the storage billing\
+          \ model is\n      LOGICAL."
+        data_type: STRING
+      - name: OPTION_TYPE
+        description: The data type of the option
+        data_type: STRING
+      - name: OPTION_VALUE
+        description: The value of the option
+        data_type: STRING

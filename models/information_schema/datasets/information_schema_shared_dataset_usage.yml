@@ -1,97 +1,67 @@
 version: 2
 models:
-- name: information_schema_shared_dataset_usage
-  description: dataset details with related information
-  columns:
-  - name: project_id
-    description: (Clustering column) The ID of the project that contains the shared
-      dataset.
-    config:
-      meta:
-        type: STRING
-  - name: dataset_id
-    description: (Clustering column) The ID of the shared dataset.
-    config:
-      meta:
-        type: STRING
-  - name: table_id
-    description: The ID of the accessed table.
-    config:
-      meta:
-        type: STRING
-  - name: data_exchange_id
-    description: The resource path of the data exchange.
-    config:
-      meta:
-        type: STRING
-  - name: listing_id
-    description: The resource path of the listing.
-    config:
-      meta:
-        type: STRING
-  - name: job_start_time
-    description: (Partitioning column) The start time of this job.
-    config:
-      meta:
-        type: TIMESTAMP
-  - name: job_end_time
-    description: The end time of this job.
-    config:
-      meta:
-        type: TIMESTAMP
-  - name: job_id
-    description: The job ID. For example, bquxjob_1234.
-    config:
-      meta:
-        type: STRING
-  - name: job_project_number
-    description: The number of the project this job belongs to.
-    config:
-      meta:
-        type: INTEGER
-  - name: job_location
-    description: The location of the job.
-    config:
-      meta:
-        type: STRING
-  - name: linked_project_number
-    description: The project number of the subscriber's project.
-    config:
-      meta:
-        type: INTEGER
-  - name: linked_dataset_id
-    description: The linked dataset ID of the subscriber's dataset.
-    config:
-      meta:
-        type: STRING
-  - name: subscriber_org_number
-    description: "The organization number in which the job ran. This is the organization\
-      \ number of the\n     subscriber. This field is empty for projects that don't\
-      \ have an organization."
-    config:
-      meta:
-        type: INTEGER
-  - name: subscriber_org_display_name
-    description: "A human-readable string that refers to the organization in which\
-      \ the job ran. This is the\n     organization number of the subscriber. This\
-      \ field is empty for projects that don't have an organization."
-    config:
-      meta:
-        type: STRING
-  - name: job_principal_subject
-    description: "The principal identifier (user email ID, service account, group\
-      \ email ID, domain) of users who\n      execute jobs and queries against linked\
-      \ datasets."
-    config:
-      meta:
-        type: STRING
-  - name: num_rows_processed
-    description: The number of rows processed from this table by the job.
-    config:
-      meta:
-        type: INTEGER
-  - name: total_bytes_processed
-    description: The total bytes processed from this table by the job.
-    config:
-      meta:
-        type: INTEGER
+  - name: information_schema_shared_dataset_usage
+    description: dataset details with related information
+    columns:
+      - name: project_id
+        description:
+          (Clustering column) The ID of the project that contains the shared
+          dataset.
+        data_type: STRING
+      - name: dataset_id
+        description: (Clustering column) The ID of the shared dataset.
+        data_type: STRING
+      - name: table_id
+        description: The ID of the accessed table.
+        data_type: STRING
+      - name: data_exchange_id
+        description: The resource path of the data exchange.
+        data_type: STRING
+      - name: listing_id
+        description: The resource path of the listing.
+        data_type: STRING
+      - name: job_start_time
+        description: (Partitioning column) The start time of this job.
+        data_type: TIMESTAMP
+      - name: job_end_time
+        description: The end time of this job.
+        data_type: TIMESTAMP
+      - name: job_id
+        description: The job ID. For example, bquxjob_1234.
+        data_type: STRING
+      - name: job_project_number
+        description: The number of the project this job belongs to.
+        data_type: INTEGER
+      - name: job_location
+        description: The location of the job.
+        data_type: STRING
+      - name: linked_project_number
+        description: The project number of the subscriber's project.
+        data_type: INTEGER
+      - name: linked_dataset_id
+        description: The linked dataset ID of the subscriber's dataset.
+        data_type: STRING
+      - name: subscriber_org_number
+        description:
+          "The organization number in which the job ran. This is the organization\
+          \ number of the\n     subscriber. This field is empty for projects that don't\
+          \ have an organization."
+        data_type: INTEGER
+      - name: subscriber_org_display_name
+        description:
+          "A human-readable string that refers to the organization in which\
+          \ the job ran. This is the\n     organization number of the subscriber. This\
+          \ field is empty for projects that don't have an organization."
+        data_type: STRING
+      - name: job_principal_subject
+        description:
+          "The principal identifier (user email ID, service account, group\
+          \ email ID, domain) of users who\n      execute jobs and queries against linked\
+          \ datasets."
+        data_type: STRING
+      - name: num_rows_processed
+        description: The number of rows processed from this table by the job.
+        data_type: INTEGER
+      - name: total_bytes_processed
+        description: The total bytes processed from this table by the job.
+        data_type: INTEGER

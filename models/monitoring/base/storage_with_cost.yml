@@ -4,159 +4,160 @@ models:
   - name: storage_with_cost
     description: >
       A model that calculates storage costs for tables in BigQuery.
-    meta:
-      label: "Storage cost"
-      order_fields_by: "label"
-      group_label: "Storage cost"  
+    config:
+      meta:
+        label: "Storage cost"
+        order_fields_by: "label"
+        group_label: "Storage cost"
     columns:
       - name: project_id
         description: The project ID of the project that contains the dataset
-        type: STRING
+        data_type: STRING
 
       - name: project_number
         description: The project number of the project that contains the dataset
-        type: INT64
+        data_type: INT64
 
       - name: dataset_id
         description: The name of the dataset that contains the table or materialized view, also referred to as the datasetId
-        type: STRING
+        data_type: STRING
 
       - name: table_id
         description: The name of the table or materialized view, also referred to as the tableId
-        type: STRING
+        data_type: STRING
 
       - name: creation_time
         description: The table's creation time
-        type: TIMESTAMP
+        data_type: TIMESTAMP
 
       - name: deleted
         description: Indicates whether or not the table is deleted
-        type: BOOLEAN
+        data_type: BOOLEAN
 
       - name: storage_last_modified_time
         description: The most recent time that data was written to the table.
-        type: TIMESTAMP
+        data_type: TIMESTAMP
 
       - name: total_rows
         description: The total number of rows in the table or materialized view
-        type: INT64
+        data_type: INT64
 
       - name: total_partitions
         description: The number of partitions present in the table or materialized view. Unpartitioned tables return 0.
-        type: INT64
+        data_type: INT64
 
       - name: total_logical_bytes
         description: Total number of logical (uncompressed) bytes in the table or materialized view
-        type: INT64
+        data_type: INT64
 
       - name: active_logical_bytes
         description: Number of logical (uncompressed) bytes that are less than 90 days old
-        type: INT64
+        data_type: INT64
 
       - name: long_term_logical_bytes
         description: Number of logical (uncompressed) bytes that are more than 90 days old
-        type: INT64
+        data_type: INT64
 
       - name: total_physical_bytes
         description: Total number of physical (compressed) bytes used for storage, including active, long term, and time travel (deleted or changed data) bytes
-        type: INT64
+        data_type: INT64
 
       - name: active_physical_bytes
         description: Number of physical (compressed) bytes less than 90 days old, including time travel (deleted or changed data) bytes
-        type: INT64
+        data_type: INT64
 
       - name: long_term_physical_bytes
         description: Number of physical (compressed) bytes more than 90 days old
-        type: INT64
+        data_type: INT64
 
       - name: time_travel_physical_bytes
         description: Number of physical (compressed) bytes used by time travel storage (deleted or changed data)
-        type: INT64
+        data_type: INT64
 
       - name: table_type
         description: The type of table. For example, `EXTERNAL` or `BASE TABLE`
-        type: STRING
+        data_type: STRING
 
       - name: active_logical_bytes_cost
         description: The cost of the active logical bytes cost part of the storage in the reference currency (default values are in dollars). This active data is data that is less than 90 days old. The logical bytes are the data counted as raw (uncompressed) bytes.
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: long_term_logical_bytes_cost
         description: The long term cost of the active logical bytes cost part of the storage in the reference currency (default values are in dollars). This long term data is data that is more than 90 days old. The logical bytes are the data counted as raw (uncompressed) bytes.
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: active_physical_bytes_cost
         description: The cost of the active physical bytes cost part of the storage in the reference currency (default values are in dollars). This active data is data that is less than 90 days old. The physical bytes are the data counted as compressed bytes.
-        type: FLOAT64
-      
+        data_type: FLOAT64
+
       - name: long_term_physical_bytes_cost
         description: The long term cost of the active physical bytes cost part of the storage in the reference currency (default values are in dollars). This long term data is data that is more than 90 days old. The physical bytes are the data counted as compressed bytes.
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: time_travel_physical_bytes_cost
         description: The cost of the time travel physical bytes cost part of the storage in the reference currency (default values are in dollars). This time travel data is the historical data (that has been deleted or changed). The default time travel window is 7 days. The physical bytes are the data counted as compressed bytes.
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: fail_safe_physical_bytes_cost
         description: The cost of the fail safe physical bytes cost part of the storage in the reference currency (default values are in dollars). This time travel data is the historical data (that has been deleted or changed). The default time travel window is 7 days. The physical bytes are the data counted as compressed bytes.
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: factored_table_id
         description: The factored table id
-        type: STRING
+        data_type: STRING
 
       - name: total_logical_tb
         description: Total number of logical (uncompressed) terabytes in the table or materialized view
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: total_physical_tb
         description: Total number of physical (compressed) terabytes used for storage, including active, long term, and time travel (deleted or changed data) terabytes
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: logical_cost_monthly_forecast
         description: The forecasted cost of the logical bytes cost part of the storage in the reference currency (default values are in dollars). The logical bytes are the data counted as raw (uncompressed) bytes.
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: physical_cost_monthly_forecast
         description: The forecasted cost of the physical bytes cost part of the storage in the reference currency (default values are in dollars). The physical bytes are the data counted as compressed bytes.
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: physical_cost_monthly_forecast_with_zero_time_travel_and_fail_safe
         description: The forecasted cost of the physical bytes cost part of the storage in the reference currency (default values are in dollars) with zero time travel and fail safe. The physical bytes are the data counted as compressed bytes.
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: time_travel_per_active_byte_ratio
         description: The ratio of time travel bytes to active bytes
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: fail_safe_per_active_byte_ratio
         description: The ratio of fail safe bytes to active bytes
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: active_compression_ratio
         description: The ratio of active physical bytes to active logical bytes
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: long_term_compression_ratio
         description: The ratio of long term physical bytes to long term logical bytes
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: storage_pricing_model_difference
         description: The difference between the storage pricing model and the default pricing model
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: storage_billing_model
         description: The storage billing model used for this table (LOGICAL or PHYSICAL)
-        type: STRING
-      
+        data_type: STRING
+
       - name: optimal_storage_billing_model
         description: The optimal storage billing model for this table (LOGICAL or PHYSICAL) to minimize the costs
-        type: STRING
+        data_type: STRING
 
       - name: cost_monthly_forecast
         description: Current monthly forecasted cost for the table based on the storage billing model
-        type: FLOAT64
+        data_type: FLOAT64
 
       - name: potential_savings
         description: Potential savings leveraging the right storage billing model
-        type: FLOAT64
+        data_type: FLOAT64

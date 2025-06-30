@@ -4,10 +4,11 @@ models:
   - name: compute_rollup_per_hour
     description: >
       A model that stores the compute cost per hour.
-    meta:
-      label: "Compute cost per hour"
-      order_fields_by: "label"
-      group_label: "Compute cost"
+    config:
+      meta:
+        label: "Compute cost per hour"
+        order_fields_by: "label"
+        group_label: "Compute cost"
     columns:
       - name: hour
         description: The hour of the compute cost.
@@ -43,35 +44,40 @@ models:
         description: The number of cache hits during the hour.
       - name: job_state
         description: A struct containing the state of the job.
-        fields:
-          - name: done
-            description: Indicates if the job is done.
-          - name: pending
-            description: Indicates if the job is pending.
-          - name: running
-            description: Indicates if the job is running.
+        config:
+          meta:
+            fields:
+              - name: done
+                description: Indicates if the job is done.
+              - name: pending
+                description: Indicates if the job is pending.
+              - name: running
+                description: Indicates if the job is running.
       - name: job_types
         data_type: record
         description: Array of job types with their counts, aggregated from minute data
-        fields:
-          - name: value
-            data_type: string
-            description: Job type (QUERY, LOAD, EXTRACT, COPY, etc.)
-          - name: count
-            data_type: int64
-            description: Number of jobs of this type
+        config:
+          meta:
+            fields:
+              - name: value
+                data_type: string
+                description: Job type (QUERY, LOAD, EXTRACT, COPY, etc.)
+              - name: count
+                data_type: int64
+                description: Number of jobs of this type
       - name: statement_types
         data_type: record
         description: Array of SQL statement types with their counts, aggregated from minute data
-        fields:
-          - name: value
-            data_type: string
-            description: Statement type (SELECT, INSERT, UPDATE, DELETE, CREATE_TABLE, etc.)
-          - name: count
-            data_type: int64
-            description: Number of statements of this type
+        config:
+          meta:
+            fields:
+              - name: value
+                data_type: string
+                description: Statement type (SELECT, INSERT, UPDATE, DELETE, CREATE_TABLE, etc.)
+              - name: count
+                data_type: int64
+                description: Number of statements of this type
       - name: avg_duration_seconds
         description: Average duration of jobs in seconds during the hour.
       - name: median_duration_seconds
-        description: Median duration of jobs in seconds during the hour.      
-            
+        description: Median duration of jobs in seconds during the hour.

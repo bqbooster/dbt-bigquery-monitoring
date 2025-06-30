@@ -4,10 +4,11 @@ models:
   - name: compute_cost_per_hour
     description: >
       A model that stores the compute cost per hour.
-    meta:
-      label: "Compute cost per hour"
-      order_fields_by: "label"
-      group_label: "Compute cost"
+    config:
+      meta:
+        label: "Compute cost per hour"
+        order_fields_by: "label"
+        group_label: "Compute cost"
     columns:
       - name: hour
         description: The hour of the compute cost.
@@ -29,11 +30,12 @@ models:
         description: The total number of queries run during the hour.
       - name: job_state
         description: A struct containing the state of the job.
-        fields:
-          - name: done
-            description: Indicates if the job is done.
-          - name: pending
-            description: Indicates if the job is pending.
-          - name: running
-            description: Indicates if the job is running.      
-            
+        config:
+          meta:
+            fields:
+              - name: done
+                description: Indicates if the job is done.
+              - name: pending
+                description: Indicates if the job is pending.
+              - name: running
+                description: Indicates if the job is running.

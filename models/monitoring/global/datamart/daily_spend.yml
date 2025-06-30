@@ -4,10 +4,11 @@ models:
   - name: daily_spend
     description: >
       A model that aggregates daily BigQuery costs.
-    meta:
-      label: "Daily Spend"
-      order_fields_by: "label"
-      group_label: "Global cost"
+    config:
+      meta:
+        label: "Daily Spend"
+        order_fields_by: "label"
+        group_label: "Global cost"
     columns:
       - name: day
         description: The day of the aggregated cost.
@@ -15,4 +16,3 @@ models:
         description: The category of the cost (e.g., "compute").
       - name: cost
         description: The total cost for the day in the specified category.
-        

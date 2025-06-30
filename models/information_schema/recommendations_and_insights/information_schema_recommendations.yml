@@ -1,90 +1,70 @@
 version: 2
 models:
-- name: information_schema_recommendations
-  description: dataset details with related information
-  columns:
-  - name: recommendation_id
-    description: Base64 encoded ID that contains the RecommendationID and recommender.
-    config:
-      meta:
-        type: STRING
-  - name: recommender
-    description: The type of recommendation. For example, google.bigquery.table.PartitionClusterRecommender
-      for partitioning and clustering recommendations.
-    config:
-      meta:
-        type: STRING
-  - name: subtype
-    description: The subtype of the recommendation.
-    config:
-      meta:
-        type: STRING
-  - name: project_id
-    description: The ID of the project.
-    config:
-      meta:
-        type: STRING
-  - name: project_number
-    description: The number of the project.
-    config:
-      meta:
-        type: STRING
-  - name: description
-    description: The description about the recommendation.
-    config:
-      meta:
-        type: STRING
-  - name: last_updated_time
-    description: This field represents the time when the recommendation was last created.
-    config:
-      meta:
-        type: TIMESTAMP
-  - name: target_resources
-    description: Fully qualified resource names this recommendation is targeting.
-    config:
-      meta:
-        type: STRING
-  - name: state
-    description: The state of the recommendation. For a list of possible values, see
-      State.
-    config:
-      meta:
-        type: STRING
-  - name: primary_impact
-    description: "The impact this recommendation can have when trying to optimize\
-      \ the primary category. Contains the following fields:\n      \ncategory: The\
-      \ category this recommendation is trying to optimize. For a list of possible\
-      \ values, see Category.\ncost_projection: This value may be populated if the\
-      \ recommendation can project the cost savings from this recommendation. Only\
-      \ present when the category is COST.\nsecurity_projection: Might be present\
-      \ when the category is SECURITY."
-    config:
-      meta:
-        type: RECORD
-  - name: priority
-    description: The priority of the recommendation. For a list of possible values,
-      see Priority.
-    config:
-      meta:
-        type: STRING
-  - name: associated_insight_ids
-    description: Full Insight names associated with the recommendation.Insight name
-      is the Base64 encoded representation of Insight type name & the Insight ID.
-      This can be used to query Insights view.
-    config:
-      meta:
-        type: STRING
-  - name: additional_details
-    description: "Additional Details about the recommendation.\n      \noverview:\
-      \ Overview of the recommendation in JSON format. The content of this field might\
-      \ change based on the recommender.\nstate_metadata: Metadata about the state\
-      \ of the recommendation in key-value pairs.\noperations: List of operations\
-      \ the user can perform on the target resources. This contains the following\
-      \ fields:\n\naction: The type of action the user must perform. This can be a\
-      \ free-text set by the system while generating the recommendation. Will always\
-      \ be populated.\nresource_type: The cloud resource type.\nresource: Fully qualified\
-      \ resource name.\npath: Path of the target field relative to the resource.\n\
-      value: Value of the path field."
-    config:
-      meta:
-        type: RECORD
+  - name: information_schema_recommendations
+    description: dataset details with related information
+    columns:
+      - name: recommendation_id
+        description: Base64 encoded ID that contains the RecommendationID and recommender.
+        data_type: STRING
+      - name: recommender
+        description:
+          The type of recommendation. For example, google.bigquery.table.PartitionClusterRecommender
+          for partitioning and clustering recommendations.
+        data_type: STRING
+      - name: subtype
+        description: The subtype of the recommendation.
+        data_type: STRING
+      - name: project_id
+        description: The ID of the project.
+        data_type: STRING
+      - name: project_number
+        description: The number of the project.
+        data_type: STRING
+      - name: description
+        description: The description about the recommendation.
+        data_type: STRING
+      - name: last_updated_time
+        description: This field represents the time when the recommendation was last created.
+        data_type: TIMESTAMP
+      - name: target_resources
+        description: Fully qualified resource names this recommendation is targeting.
+        data_type: STRING
+      - name: state
+        description:
+          The state of the recommendation. For a list of possible values, see
+          State.
+        data_type: STRING
+      - name: primary_impact
+        description:
+          "The impact this recommendation can have when trying to optimize\
+          \ the primary category. Contains the following fields:\n      \ncategory: The\
+          \ category this recommendation is trying to optimize. For a list of possible\
+          \ values, see Category.\ncost_projection: This value may be populated if the\
+          \ recommendation can project the cost savings from this recommendation. Only\
+          \ present when the category is COST.\nsecurity_projection: Might be present\
+          \ when the category is SECURITY."
+        data_type: RECORD
+      - name: priority
+        description:
+          The priority of the recommendation. For a list of possible values,
+          see Priority.
+        data_type: STRING
+      - name: associated_insight_ids
+        description:
+          Full Insight names associated with the recommendation.Insight name
+          is the Base64 encoded representation of Insight type name & the Insight ID.
+          This can be used to query Insights view.
+        data_type: STRING
+      - name: additional_details
+        description:
+          "Additional Details about the recommendation.\n      \noverview:\
+          \ Overview of the recommendation in JSON format. The content of this field might\
+          \ change based on the recommender.\nstate_metadata: Metadata about the state\
+          \ of the recommendation in key-value pairs.\noperations: List of operations\
+          \ the user can perform on the target resources. This contains the following\
+          \ fields:\n\naction: The type of action the user must perform. This can be a\
+          \ free-text set by the system while generating the recommendation. Will always\
+          \ be populated.\nresource_type: The cloud resource type.\nresource: Fully qualified\
+          \ resource name.\npath: Path of the target field relative to the resource.\n\
+          value: Value of the path field."
+        data_type: RECORD

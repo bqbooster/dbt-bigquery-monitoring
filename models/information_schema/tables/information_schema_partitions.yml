@@ -1,56 +1,44 @@
 version: 2
 models:
-- name: information_schema_partitions
-  description: dataset details with related information
-  columns:
-  - name: TABLE_CATALOG
-    description: The project ID of the project that contains the table
-    config:
-      meta:
-        type: STRING
-  - name: TABLE_SCHEMA
-    description: "The name of the dataset that contains the table, also referred to\
-      \ as\n        the datasetId"
-    config:
-      meta:
-        type: STRING
-  - name: TABLE_NAME
-    description: The name of the table, also referred to as the tableId
-    config:
-      meta:
-        type: STRING
-  - name: PARTITION_ID
-    description: "A single partition's ID. For unpartitioned tables, the value is\n\
-      \        NULL. For partitioned tables that contain rows with\n        NULL values\
-      \ in the partitioning column, the value is\n        __NULL__."
-    config:
-      meta:
-        type: STRING
-  - name: TOTAL_ROWS
-    description: The total number of rows in the partition
-    config:
-      meta:
-        type: INTEGER
-  - name: TOTAL_LOGICAL_BYTES
-    description: The total number of logical bytes in the partition
-    config:
-      meta:
-        type: INTEGER
-  - name: LAST_MODIFIED_TIME
-    description: "The most recent time that data was written to the partition. It\
-      \ is\n        used to calculate a partition's eligibility for long-term storage.\n\
-      \        After 90 days, the partition automatically transitions from active\n\
-      \        storage to long-term storage. For more information, see\n        BigQuery\
-      \ storage pricing.\n        This field is updated when data is inserted, loaded,\
-      \ streamed, or\n        modified within the partition. Modifications that involve\n\
-      \        record deletions might not be reflected."
-    config:
-      meta:
-        type: TIMESTAMP
-  - name: STORAGE_TIER
-    description: "The partition's storage tier:\n\nACTIVE: the partition is billed\
-      \ as\n            active storage\nLONG_TERM: the partition is billed as\n  \
-      \          long-term storage"
-    config:
-      meta:
-        type: STRING
+  - name: information_schema_partitions
+    description: dataset details with related information
+    columns:
+      - name: TABLE_CATALOG
+        description: The project ID of the project that contains the table
+        data_type: STRING
+      - name: TABLE_SCHEMA
+        description:
+          "The name of the dataset that contains the table, also referred to\
+          \ as\n        the datasetId"
+        data_type: STRING
+      - name: TABLE_NAME
+        description: The name of the table, also referred to as the tableId
+        data_type: STRING
+      - name: PARTITION_ID
+        description:
+          "A single partition's ID. For unpartitioned tables, the value is\n\
+          \        NULL. For partitioned tables that contain rows with\n        NULL values\
+          \ in the partitioning column, the value is\n        __NULL__."
+        data_type: STRING
+      - name: TOTAL_ROWS
+        description: The total number of rows in the partition
+        data_type: INTEGER
+      - name: TOTAL_LOGICAL_BYTES
+        description: The total number of logical bytes in the partition
+        data_type: INTEGER
+      - name: LAST_MODIFIED_TIME
+        description:
+          "The most recent time that data was written to the partition. It\
+          \ is\n        used to calculate a partition's eligibility for long-term storage.\n\
+          \        After 90 days, the partition automatically transitions from active\n\
+          \        storage to long-term storage. For more information, see\n        BigQuery\
+          \ storage pricing.\n        This field is updated when data is inserted, loaded,\
+          \ streamed, or\n        modified within the partition. Modifications that involve\n\
+          \        record deletions might not be reflected."
+        data_type: TIMESTAMP
+      - name: STORAGE_TIER
+        description:
+          "The partition's storage tier:\n\nACTIVE: the partition is billed\
+          \ as\n            active storage\nLONG_TERM: the partition is billed as\n  \
+          \          long-term storage"
+        data_type: STRING

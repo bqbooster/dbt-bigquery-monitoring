@@ -1,70 +1,50 @@
 version: 2
 models:
-- name: information_schema_assignment_changes
-  description: dataset details with related information
-  columns:
-  - name: change_timestamp
-    description: Time when the change occurred.
-    config:
-      meta:
-        type: TIMESTAMP
-  - name: project_id
-    description: ID of the administration project.
-    config:
-      meta:
-        type: STRING
-  - name: project_number
-    description: Number of the administration project.
-    config:
-      meta:
-        type: INTEGER
-  - name: assignment_id
-    description: ID that uniquely identifies the assignment.
-    config:
-      meta:
-        type: STRING
-  - name: reservation_name
-    description: Name of the reservation that the assignment uses.
-    config:
-      meta:
-        type: STRING
-  - name: job_type
-    description: "The type of job that can use the reservation. Can be\n        PIPELINE\
-      \ or QUERY."
-    config:
-      meta:
-        type: STRING
-  - name: assignee_id
-    description: ID that uniquely identifies the assignee resource.
-    config:
-      meta:
-        type: STRING
-  - name: assignee_number
-    description: Number that uniquely identifies the assignee resource.
-    config:
-      meta:
-        type: INTEGER
-  - name: assignee_type
-    description: "Type of assignee resource. Can be organization,\n        folder\
-      \ or project."
-    config:
-      meta:
-        type: STRING
-  - name: action
-    description: "Type of event that occurred with the assignment. Can be\n      \
-      \  CREATE, UPDATE, or DELETE."
-    config:
-      meta:
-        type: STRING
-  - name: user_email
-    description: "Email address of the user or subject of the workforce identity\n\
-      \        federation that made the change. google for changes\n        made by\
-      \ Google. NULL if the email address is unknown."
-    config:
-      meta:
-        type: STRING
-  - name: state
-    description: "State of the assignment. Can be PENDING or\n        ACTIVE."
-    config:
-      meta:
-        type: STRING
+  - name: information_schema_assignment_changes
+    description: dataset details with related information
+    columns:
+      - name: change_timestamp
+        description: Time when the change occurred.
+        data_type: TIMESTAMP
+      - name: project_id
+        description: ID of the administration project.
+        data_type: STRING
+      - name: project_number
+        description: Number of the administration project.
+        data_type: INTEGER
+      - name: assignment_id
+        description: ID that uniquely identifies the assignment.
+        data_type: STRING
+      - name: reservation_name
+        description: Name of the reservation that the assignment uses.
+        data_type: STRING
+      - name: job_type
+        description:
+          "The type of job that can use the reservation. Can be\n        PIPELINE\
+          \ or QUERY."
+        data_type: STRING
+      - name: assignee_id
+        description: ID that uniquely identifies the assignee resource.
+        data_type: STRING
+      - name: assignee_number
+        description: Number that uniquely identifies the assignee resource.
+        data_type: INTEGER
+      - name: assignee_type
+        description:
+          "Type of assignee resource. Can be organization,\n        folder\
+          \ or project."
+        data_type: STRING
+      - name: action
+        description:
+          "Type of event that occurred with the assignment. Can be\n      \
+          \  CREATE, UPDATE, or DELETE."
+        data_type: STRING
+      - name: user_email
+        description:
+          "Email address of the user or subject of the workforce identity\n\
+          \        federation that made the change. google for changes\n        made by\
+          \ Google. NULL if the email address is unknown."
+        data_type: STRING
+      - name: state
+        description: "State of the assignment. Can be PENDING or\n        ACTIVE."
+        data_type: STRING

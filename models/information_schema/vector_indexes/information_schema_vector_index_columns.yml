@@ -1,36 +1,25 @@
 version: 2
 models:
-- name: information_schema_vector_index_columns
-  description: dataset details with related information
-  columns:
-  - name: index_catalog
-    description: The name of the project that contains the dataset.
-    config:
-      meta:
-        type: STRING
-  - name: index_schema
-    description: The name of the dataset that contains the vector index.
-    config:
-      meta:
-        type: STRING
-  - name: table_name
-    description: The name of the table that the vector index is created on.
-    config:
-      meta:
-        type: STRING
-  - name: index_name
-    description: The name of the vector index.
-    config:
-      meta:
-        type: STRING
-  - name: index_column_name
-    description: The name of the indexed column.
-    config:
-      meta:
-        type: STRING
-  - name: index_field_path
-    description: "The full path of the expanded indexed field, starting with the column\n\
-      \          name. Fields are separated by a period."
-    config:
-      meta:
-        type: STRING
+  - name: information_schema_vector_index_columns
+    description: dataset details with related information
+    columns:
+      - name: index_catalog
+        description: The name of the project that contains the dataset.
+        data_type: STRING
+      - name: index_schema
+        description: The name of the dataset that contains the vector index.
+        data_type: STRING
+      - name: table_name
+        description: The name of the table that the vector index is created on.
+        data_type: STRING
+      - name: index_name
+        description: The name of the vector index.
+        data_type: STRING
+      - name: index_column_name
+        description: The name of the indexed column.
+        data_type: STRING
+      - name: index_field_path
+        description:
+          "The full path of the expanded indexed field, starting with the column\n\
+          \          name. Fields are separated by a period."
+        data_type: STRING

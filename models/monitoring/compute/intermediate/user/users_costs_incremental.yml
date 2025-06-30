@@ -44,11 +44,12 @@ models:
       - name: job_types
         data_type: record
         description: Array of job types with their counts, dynamically captured
-        fields:
-          - name: value
-            data_type: string
-            description: Job type (QUERY, LOAD, EXTRACT, COPY, etc.)
-          - name: count
-            data_type: int64
-            description: Number of jobs of this type
-
+        config:
+          meta:
+            fields:
+              - name: value
+                data_type: string
+                description: Job type (QUERY, LOAD, EXTRACT, COPY, etc.)
+              - name: count
+                data_type: int64
+                description: Number of jobs of this type

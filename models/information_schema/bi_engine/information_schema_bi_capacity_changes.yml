@@ -1,47 +1,38 @@
 version: 2
 models:
-- name: information_schema_bi_capacity_changes
-  description: dataset details with related information
-  columns:
-  - name: change_timestamp
-    description: "Timestamp when the current update to BI Engine capacity\n      \
-      \  was made."
-    config:
-      meta:
-        type: TIMESTAMP
-  - name: project_id
-    description: "The project ID of the project that contains BI Engine\n        capacity."
-    config:
-      meta:
-        type: STRING
-  - name: project_number
-    description: "The project number of the project that contains\n        BI Engine\
-      \ capacity."
-    config:
-      meta:
-        type: INTEGER
-  - name: bi_capacity_name
-    description: "The name of the object. Currently there can only be one capacity\
-      \ per\n        project, hence the name is always default."
-    config:
-      meta:
-        type: STRING
-  - name: size
-    description: BI Engine RAM in bytes.
-    config:
-      meta:
-        type: INTEGER
-  - name: user_email
-    description: "Email address of the user or subject of the workforce identity\n\
-      \        federation that made the change. google for changes\n        made by\
-      \ Google. NULL if the email address is unknown."
-    config:
-      meta:
-        type: STRING
-  - name: preferred_tables
-    description: "The set of preferred tables this BI Engine capacity must\n     \
-      \   be used for. If set to null, BI Engine\n        capacity is used\n     \
-      \   for all queries in the current project."
-    config:
-      meta:
-        type: REPEATED STRING
+  - name: information_schema_bi_capacity_changes
+    description: dataset details with related information
+    columns:
+      - name: change_timestamp
+        description:
+          "Timestamp when the current update to BI Engine capacity\n      \
+          \  was made."
+        data_type: TIMESTAMP
+      - name: project_id
+        description: "The project ID of the project that contains BI Engine\n        capacity."
+        data_type: STRING
+      - name: project_number
+        description:
+          "The project number of the project that contains\n        BI Engine\
+          \ capacity."
+        data_type: INTEGER
+      - name: bi_capacity_name
+        description:
+          "The name of the object. Currently there can only be one capacity\
+          \ per\n        project, hence the name is always default."
+        data_type: STRING
+      - name: size
+        description: BI Engine RAM in bytes.
+        data_type: INTEGER
+      - name: user_email
+        description:
+          "Email address of the user or subject of the workforce identity\n\
+          \        federation that made the change. google for changes\n        made by\
+          \ Google. NULL if the email address is unknown."
+        data_type: STRING
+      - name: preferred_tables
+        description:
+          "The set of preferred tables this BI Engine capacity must\n     \
+          \   be used for. If set to null, BI Engine\n        capacity is used\n     \
+          \   for all queries in the current project."
+        data_type: REPEATED STRING

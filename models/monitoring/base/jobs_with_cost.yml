@@ -4,10 +4,11 @@ models:
   - name: jobs_with_cost
     description: >
       A model that combines job data with cost information.
-    meta:
-      label: "Jobs with Cost"
-      order_fields_by: "label"
-      group_label: "Compute cost"
+    config:
+      meta:
+        label: "Jobs with Cost"
+        order_fields_by: "label"
+        group_label: "Compute cost"
     columns:
       - name: bi_engine_statistics
         description: The BI engine statistics.

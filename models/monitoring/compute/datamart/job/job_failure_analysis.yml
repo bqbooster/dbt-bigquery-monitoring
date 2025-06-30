@@ -5,10 +5,11 @@ models:
     description: >
       Analyzes BigQuery job failures by error patterns, affected users, and cost impact.
       Identifies the most common error reasons and messages to help with debugging and prevention.
-    meta:
-      label: "Job Failure Analysis"
-      order_fields_by: "label"
-      group_label: "Compute reliability"
+    config:
+      meta:
+        label: "Job Failure Analysis"
+        order_fields_by: "label"
+        group_label: "Compute reliability"
     columns:
       - name: error_reason
         description: The error reason code from BigQuery error_result
@@ -29,4 +30,4 @@ models:
       - name: last_occurrence
         description: When this error pattern was last seen
       - name: duration_hours
-        description: How long this error pattern has been occurring 
+        description: How long this error pattern has been occurring

@@ -1,52 +1,36 @@
 version: 2
 models:
-- name: information_schema_streaming_timeline_by_organization
-  description: dataset details with related information
-  columns:
-  - name: start_timestamp
-    description: "(Partitioning column) Start timestamp of the 1 minute interval\n\
-      \        for the aggregated statistics."
-    config:
-      meta:
-        type: TIMESTAMP
-  - name: project_id
-    description: (Clustering column) ID of the project.
-    config:
-      meta:
-        type: STRING
-  - name: project_number
-    description: Number of the project.
-    config:
-      meta:
-        type: INTEGER
-  - name: dataset_id
-    description: (Clustering column) ID of the dataset.
-    config:
-      meta:
-        type: STRING
-  - name: table_id
-    description: (Clustering column) ID of the table.
-    config:
-      meta:
-        type: STRING
-  - name: error_code
-    description: "Error code returned for the requests specified by this row. NULL\
-      \ for\n        successful requests."
-    config:
-      meta:
-        type: STRING
-  - name: total_requests
-    description: Total number of requests within the 1 minute interval.
-    config:
-      meta:
-        type: INTEGER
-  - name: total_rows
-    description: Total number of rows from all requests within the 1 minute interval.
-    config:
-      meta:
-        type: INTEGER
-  - name: total_input_bytes
-    description: Total number of bytes from all rows within the 1 minute interval.
-    config:
-      meta:
-        type: INTEGER
+  - name: information_schema_streaming_timeline_by_organization
+    description: dataset details with related information
+    columns:
+      - name: start_timestamp
+        description:
+          "(Partitioning column) Start timestamp of the 1 minute interval\n\
+          \        for the aggregated statistics."
+        data_type: TIMESTAMP
+      - name: project_id
+        description: (Clustering column) ID of the project.
+        data_type: STRING
+      - name: project_number
+        description: Number of the project.
+        data_type: INTEGER
+      - name: dataset_id
+        description: (Clustering column) ID of the dataset.
+        data_type: STRING
+      - name: table_id
+        description: (Clustering column) ID of the table.
+        data_type: STRING
+      - name: error_code
+        description:
+          "Error code returned for the requests specified by this row. NULL\
+          \ for\n        successful requests."
+        data_type: STRING
+      - name: total_requests
+        description: Total number of requests within the 1 minute interval.
+        data_type: INTEGER
+      - name: total_rows
+        description: Total number of rows from all requests within the 1 minute interval.
+        data_type: INTEGER
+      - name: total_input_bytes
+        description: Total number of bytes from all rows within the 1 minute interval.
+        data_type: INTEGER

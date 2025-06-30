@@ -5,7 +5,8 @@
     but these references are not project-qualified: "region-XXX.INFORMATION_SCHEMA.XXX"
  -#}
 {% macro materialized_as_view_if_explicit_projects() -%}
-  {% if project_list() | length > 0 %}
+  {%- set google_information_schema_model_materialization = dbt_bigquery_monitoring_materialization() %}
+  {% if project_list() | length > 0 and google_information_schema_model_materialization != 'project_by_project_table' %}
     {{ return('project_by_project_view') }}
   {% else %}
     {{ return('view') }}

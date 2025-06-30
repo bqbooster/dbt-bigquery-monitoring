@@ -1,0 +1,6 @@
+kind: Fixes
+body: Fix data duplication with project mode using default bq monitoring materialization
+time: 2025-06-30T22:38:59.60426+02:00
+custom:
+    Author: Kayrnt
+    Issue: "129"

@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - 'docs/**'  # Only trigger when files in docs directory change
+      - "docs/**" # Only trigger when files in docs directory change
 
 concurrency:
   group: "pages"
@@ -25,20 +25,24 @@ jobs:
           node-version: 18
           #cache: yarn
 
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
       - name: Clone docs repository
         run: |
           git clone https://github.com/bqbooster/dbt-bigquery-monitoring-docs.git
-          
+
       - name: Copy docs content
         run: |
           mkdir -p dbt-bigquery-monitoring-docs/docs
           cp -r docs/* dbt-bigquery-monitoring-docs/docs/
-          
+
       - name: Install dependencies and build
         run: |
           cd dbt-bigquery-monitoring-docs
-          yarn install --frozen-lockfile
-          yarn build
+          bun install
+          bun run build
 
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3

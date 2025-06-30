@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 6
 slug: /running-the-package
 ---
 
@@ -22,7 +22,7 @@ The granularity of the data partitioning is hourly so the most cost efficient wa
 ### I am just using datamarts (Recommended)
 
 If you plan to use the datamarts provided by the package, schedule running:
-```
+```bash
 dbt run -s +tag:dbt-bigquery-monitoring-datamarts
 ```
 
@@ -30,7 +30,7 @@ dbt run -s +tag:dbt-bigquery-monitoring-datamarts
 
 If you are planning to use the consolidated INFORMATION SCHEMA tables, schedule running:
 
-```
+```bash
 dbt run -s +tag:dbt-bigquery-monitoring-information-schema
 ```
 
@@ -38,7 +38,7 @@ dbt run -s +tag:dbt-bigquery-monitoring-information-schema
 
 If you are planning to use all tables, schedule running:
 
-```
+```bash
 dbt run -s +tag:dbt-bigquery-monitoring
 ```
 
@@ -58,5 +58,17 @@ To be sure, you just rely on the upstream dependency and run, for instance:
 ```
 dbt run -s +tag:dbt-bigquery-monitoring-compute
 ```
+
+:::tip
+
+The plugin doesn't behave very well in CI environments as it requires extensive rights to read the INFORMATION SCHEMA tables.
+I usually recommend to exclude the package from the CI runs and run it only in production environments.
+to do so you can use the `--exclude` option to exclude the package models from the CI runs:
+
+```bash
+dbt run --exclude tag:dbt-bigquery-monitoring
+```
+
+:::
 
 Read more about the usage of provided models in [using the package](/using-the-package).

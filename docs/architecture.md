@@ -1,14 +1,17 @@
 ---
-sidebar_position: 6
+sidebar_position: 2
 slug: /architecture
 ---
 
+# Architecture
+
 This package aims to bring an easy way to:
+
 - Access INFORMATION SCHEMA tables
 - Bridge different INFORMATION SCHEMA tables, audit logs and billing logs together
 - Create high level datamarts for queries and asset monitoring
 
-# High level overview
+## High level overview
 
 ```mermaid
 flowchart LR
@@ -47,11 +50,11 @@ flowchart LR
     information_schema_tables --> storage_with_cost
     information_schema_tables --> table_and_storage_with_cost
 
-	jobs_with_cost --> intermediate_tables
-	storage_with_cost --> intermediate_tables
-	gcp_billing_export_resource_v1 --> intermediate_tables
+    jobs_with_cost --> intermediate_tables
+    storage_with_cost --> intermediate_tables
+    gcp_billing_export_resource_v1 --> intermediate_tables
 
-   intermediate_tables --> datamarts_tables
+    intermediate_tables --> datamarts_tables
 
     classDef google fill:#f9d1c3,stroke:#e88366,color:#333
     classDef base fill:#c3e2f9,stroke:#66a9e8,color:#333

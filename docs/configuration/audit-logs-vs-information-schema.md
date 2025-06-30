@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4.1
+sidebar_position: 5.1
 slug: /audit-logs-vs-information-schema
 ---
 

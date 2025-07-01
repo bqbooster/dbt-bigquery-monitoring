@@ -1,3 +1,4 @@
+{{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-partitions -#}
 {# Required role/permissions: To query the INFORMATION_SCHEMA.PARTITIONS view, you need the following
 Identity and Access Management (IAM) permissions:
@@ -52,6 +53,6 @@ partition_id,
 total_rows,
 total_logical_bytes,
 last_modified_time,
-storage_tier,
+storage_tier
 FROM
 base

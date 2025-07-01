@@ -1,6 +1,0 @@
-kind: Fixes
-body: Use dataset level for indexes tables as required by the documentation
-time: 2025-07-01T23:23:56.595914+02:00
-custom:
-    Author: Kayrnt
-    Issue: "128"

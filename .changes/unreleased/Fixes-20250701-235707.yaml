@@ -1,6 +1,0 @@
-kind: Fixes
-body: Fix regressions regarding reservations fields (now builtin parser)
-time: 2025-07-01T23:57:07.603727+02:00
-custom:
-    Author: Kayrnt
-    Issue: ""

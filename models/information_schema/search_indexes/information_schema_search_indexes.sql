@@ -1,3 +1,4 @@
+{{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-indexes -#}
 {# Required role/permissions: To see search index metadata, you need the
 bigquery.tables.get or bigquery.tables.list Identity and Access Management (IAM)
@@ -47,7 +48,7 @@ unindexed_row_count,
 total_logical_bytes,
 total_storage_bytes,
 analyzer
-  FROM {{ dataset | trim }}.`INFORMATION_SCHEMA`.`PARTITIONS`
+  FROM {{ dataset | trim }}.`INFORMATION_SCHEMA`.`SEARCH_INDEXES`
 {% if not loop.last %}UNION ALL{% endif %}
 {% endfor %}
 {%- endif -%}
@@ -69,6 +70,6 @@ coverage_percentage,
 unindexed_row_count,
 total_logical_bytes,
 total_storage_bytes,
-analyzer,
+analyzer
 FROM
 base

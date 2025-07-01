@@ -1,40 +1,37 @@
 version: 2
 models:
-  - name: information_schema_key_column_usage
-    description: dataset details with related information
-    columns:
-      - name: CONSTRAINT_CATALOG
-        description: The constraint project name.
-        data_type: STRING
-      - name: CONSTRAINT_SCHEMA
-        description: The constraint dataset name.
-        data_type: STRING
-      - name: CONSTRAINT_NAME
-        description: The constraint name.
-        data_type: STRING
-      - name: TABLE_CATALOG
-        description: The project name of the constrained table.
-        data_type: STRING
-      - name: TABLE_SCHEMA
-        description: The name of the constrained table dataset.
-        data_type: STRING
-      - name: TABLE_NAME
-        description: The name of the constrained table.
-        data_type: STRING
-      - name: COLUMN_NAME
-        description: The name of the constrained column.
-        data_type: STRING
-      - name: ORDINAL_POSITION
-        description:
-          "The ordinal position of the column within the constraint key
+- name: information_schema_key_column_usage
+  columns:
+  - name: CONSTRAINT_CATALOG
+    description: The constraint project name.
+    data_type: STRING
+  - name: CONSTRAINT_SCHEMA
+    description: The constraint dataset name.
+    data_type: STRING
+  - name: CONSTRAINT_NAME
+    description: The constraint name.
+    data_type: STRING
+  - name: TABLE_CATALOG
+    description: The project name of the constrained table.
+    data_type: STRING
+  - name: TABLE_SCHEMA
+    description: The name of the constrained table dataset.
+    data_type: STRING
+  - name: TABLE_NAME
+    description: The name of the constrained table.
+    data_type: STRING
+  - name: COLUMN_NAME
+    description: The name of the constrained column.
+    data_type: STRING
+  - name: ORDINAL_POSITION
+    description: 'The ordinal position of the column within the constraint key
 
-          (starting at 1)."
-        data_type: INT64
-      - name: POSITION_IN_UNIQUE_CONSTRAINT
-        description:
-          "For foreign keys, the ordinal position of the column within the
+      (starting at 1).'
+    data_type: INT64
+  - name: POSITION_IN_UNIQUE_CONSTRAINT
+    description: 'For foreign keys, the ordinal position of the column within the
 
-          primary key constraint (starting at 1). This value is NULL
+      primary key constraint (starting at 1). This value is NULL
 
-          for primary key constraints."
-        data_type: INT64
+      for primary key constraints.'
+    data_type: INT64

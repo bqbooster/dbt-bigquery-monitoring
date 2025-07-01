@@ -1,28 +1,23 @@
 version: 2
 models:
-  - name: information_schema_organization_options_changes
-    description: dataset details with related information
-    columns:
-      - name: update_time
-        description: The time the configuration change occurred.
-        data_type: TIMESTAMP
-      - name: username
-        description:
-          "For first-party users, it's their user email. For third-party users,\
-          \ it's\n  the name that users set in the third-party identity provider."
-        data_type: STRING
-      - name: updated_options
-        description:
-          "A JSON object of the configuration options users updated in the\n\
-          \       change, containing the previous and the new values of updated fields."
-        data_type: JSON
-      - name: project_id
-        description:
-          "The project ID. This field is empty for organization-level\n   \
-          \   configuration changes."
-        data_type: STRING
-      - name: project_number
-        description:
-          "The project number. This field is empty for the organization-level\n\
-          \       configuration changes."
-        data_type: INTEGER
+- name: information_schema_organization_options_changes
+  columns:
+  - name: update_time
+    description: The time the configuration change occurred.
+    data_type: TIMESTAMP
+  - name: username
+    description: "For first-party users, it's their user email. For third-party users,\
+      \ it's\n  the name that users set in the third-party identity provider."
+    data_type: STRING
+  - name: updated_options
+    description: "A JSON object of the configuration options users updated in the\n\
+      \       change, containing the previous and the new values of updated fields."
+    data_type: JSON
+  - name: project_id
+    description: "The project ID. This field is empty for organization-level\n   \
+      \   configuration changes."
+    data_type: STRING
+  - name: project_number
+    description: "The project number. This field is empty for the organization-level\n\
+      \       configuration changes."
+    data_type: INTEGER

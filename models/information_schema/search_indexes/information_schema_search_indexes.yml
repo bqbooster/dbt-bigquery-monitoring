@@ -1,82 +1,74 @@
 version: 2
 models:
-  - name: information_schema_search_indexes
-    description: dataset details with related information
-    columns:
-      - name: index_catalog
-        description: The name of the project that contains the dataset.
-        data_type: STRING
-      - name: index_schema
-        description: The name of the dataset that contains the index.
-        data_type: STRING
-      - name: table_name
-        description: The name of the base table that the index is created on.
-        data_type: STRING
-      - name: index_name
-        description: The name of the index.
-        data_type: STRING
-      - name: index_status
-        description:
-          "The status of the index: ACTIVE, PENDING\n          DISABLEMENT,\
-          \ TEMPORARILY DISABLED, or\n          PERMANENTLY DISABLED.\n          \nACTIVE\
-          \ means that the index is\n               usable or being created. Refer to\
-          \ the coverage_percentage\n               to see the progress of index creation.\n\
-          PENDING DISABLEMENT means that the total\n              size of indexed base\
-          \ tables exceeds your organization's\n              limit; the index is\n  \
-          \            queued for deletion. While in this state, the index is usable in\n\
-          \              search queries and you are charged for the search index storage.\n\
-          \              \nTEMPORARILY DISABLED means that either the total\n        \
-          \      size of indexed base tables exceeds your organization's\n           \
-          \   limit, or the base\n              indexed table is smaller than 10GB. While\
-          \ in this state, the index\n              is not used in search queries and\
-          \ you are not charged for the\n              search index storage.\nPERMANENTLY\
-          \ DISABLED means that there is an\n              incompatible schema change\
-          \ on the base table, such as changing the\n              type of an indexed\
-          \ column from STRING to\n              INT64."
-        data_type: STRING
-      - name: creation_time
-        description: The time the index was created.
-        data_type: TIMESTAMP
-      - name: last_modification_time
-        description:
-          "The last time the index configuration was modified. For example,\n\
-          \          deleting an indexed column."
-        data_type: TIMESTAMP
-      - name: last_refresh_time
-        description:
-          "The last time the table data was indexed. A NULL value\n       \
-          \   means the index is not yet available."
-        data_type: TIMESTAMP
-      - name: disable_time
-        description:
-          "The time the status of the index was set to DISABLED. The\n    \
-          \      value is NULL if the index status is not\n          DISABLED."
-        data_type: TIMESTAMP
-      - name: disable_reason
-        description:
-          "The reason the index was disabled. NULL if the index\n        status\
-          \ is not DISABLED."
-        data_type: STRING
-      - name: DDL
-        description: The DDL statement used to create the index.
-        data_type: STRING
-      - name: coverage_percentage
-        description:
-          "The approximate percentage of table data that has been indexed.\
-          \ 0%\n        means the index is not usable in a SEARCH query, even if\n   \
-          \     some data has already been indexed."
-        data_type: INTEGER
-      - name: unindexed_row_count
-        description: The number of rows in the base table that have not been indexed.
-        data_type: INTEGER
-      - name: total_logical_bytes
-        description: The number of billable logical bytes for the index.
-        data_type: INTEGER
-      - name: total_storage_bytes
-        description: The number of billable storage bytes for the index.
-        data_type: INTEGER
-      - name: analyzer
-        description:
-          "The text analyzer\n        to use to generate tokens for the search\
-          \ index."
-        data_type: STRING
+- name: information_schema_search_indexes
+  columns:
+  - name: index_catalog
+    description: The name of the project that contains the dataset.
+    data_type: STRING
+  - name: index_schema
+    description: The name of the dataset that contains the index.
+    data_type: STRING
+  - name: table_name
+    description: The name of the base table that the index is created on.
+    data_type: STRING
+  - name: index_name
+    description: The name of the index.
+    data_type: STRING
+  - name: index_status
+    description: "The status of the index: ACTIVE, PENDING\n          DISABLEMENT,\
+      \ TEMPORARILY DISABLED, or\n          PERMANENTLY DISABLED.\n          \nACTIVE\
+      \ means that the index is\n               usable or being created. Refer to\
+      \ the coverage_percentage\n               to see the progress of index creation.\n\
+      PENDING DISABLEMENT means that the total\n              size of indexed base\
+      \ tables exceeds your organization's\n              limit; the index is\n  \
+      \            queued for deletion. While in this state, the index is usable in\n\
+      \              search queries and you are charged for the search index storage.\n\
+      \              \nTEMPORARILY DISABLED means that either the total\n        \
+      \      size of indexed base tables exceeds your organization's\n           \
+      \   limit, or the base\n              indexed table is smaller than 10GB. While\
+      \ in this state, the index\n              is not used in search queries and\
+      \ you are not charged for the\n              search index storage.\nPERMANENTLY\
+      \ DISABLED means that there is an\n              incompatible schema change\
+      \ on the base table, such as changing the\n              type of an indexed\
+      \ column from STRING to\n              INT64."
+    data_type: STRING
+  - name: creation_time
+    description: The time the index was created.
+    data_type: TIMESTAMP
+  - name: last_modification_time
+    description: "The last time the index configuration was modified. For example,\n\
+      \          deleting an indexed column."
+    data_type: TIMESTAMP
+  - name: last_refresh_time
+    description: "The last time the table data was indexed. A NULL value\n       \
+      \   means the index is not yet available."
+    data_type: TIMESTAMP
+  - name: disable_time
+    description: "The time the status of the index was set to DISABLED. The\n    \
+      \      value is NULL if the index status is not\n          DISABLED."
+    data_type: TIMESTAMP
+  - name: disable_reason
+    description: "The reason the index was disabled. NULL if the index\n        status\
+      \ is not DISABLED."
+    data_type: STRING
+  - name: DDL
+    description: The DDL statement used to create the index.
+    data_type: STRING
+  - name: coverage_percentage
+    description: "The approximate percentage of table data that has been indexed.\
+      \ 0%\n        means the index is not usable in a SEARCH query, even if\n   \
+      \     some data has already been indexed."
+    data_type: INTEGER
+  - name: unindexed_row_count
+    description: The number of rows in the base table that have not been indexed.
+    data_type: INTEGER
+  - name: total_logical_bytes
+    description: The number of billable logical bytes for the index.
+    data_type: INTEGER
+  - name: total_storage_bytes
+    description: The number of billable storage bytes for the index.
+    data_type: INTEGER
+  - name: analyzer
+    description: "The text analyzer\n        to use to generate tokens for the search\
+      \ index."
+    data_type: STRING

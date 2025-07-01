@@ -1,6 +1,0 @@
-kind: Fixes
-body: Fix reading the right tables in 'dataset' based tables (e.g. search indexes ones)
-time: 2025-07-01T23:58:21.79096+02:00
-custom:
-    Author: Kayrnt
-    Issue: ""

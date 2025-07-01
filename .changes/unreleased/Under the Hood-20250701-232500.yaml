@@ -1,6 +1,0 @@
-kind: Under the Hood
-body: Disable by default 'by folder' models as they are often problematic for users that don't have folders
-time: 2025-07-01T23:25:00.285482+02:00
-custom:
-    Author: Kayrnt
-    Issue: "128"

@@ -1,24 +1,21 @@
 version: 2
 models:
-  - name: information_schema_effective_project_options
-    description: dataset details with related information
-    columns:
-      - name: OPTION_NAME
-        description: Option ID for the specified configuration setting.
-        data_type: STRING
-      - name: OPTION_DESCRIPTION
-        description: The option description.
-        data_type: STRING
-      - name: OPTION_TYPE
-        description: The data type of the OPTION_VALUE.
-        data_type: STRING
-      - name: OPTION_SET_LEVEL
-        description:
-          The level in the hierarchy at which the setting is defined, with
-          possible values of DEFAULT, ORGANIZATION, or PROJECTS.
-        data_type: STRING
-      - name: OPTION_SET_ON_ID
-        description:
-          "Set value based on value of OPTION_SET_LEVEL:\n        \nIf DEFAULT,\
-          \ set to null.\nIf ORGANIZATION, set to \"\".\nIf PROJECT, set to ID."
-        data_type: STRING
+- name: information_schema_effective_project_options
+  columns:
+  - name: OPTION_NAME
+    description: Option ID for the specified configuration setting.
+    data_type: STRING
+  - name: OPTION_DESCRIPTION
+    description: The option description.
+    data_type: STRING
+  - name: OPTION_TYPE
+    description: The data type of the OPTION_VALUE.
+    data_type: STRING
+  - name: OPTION_SET_LEVEL
+    description: The level in the hierarchy at which the setting is defined, with
+      possible values of DEFAULT, ORGANIZATION, or PROJECTS.
+    data_type: STRING
+  - name: OPTION_SET_ON_ID
+    description: "Set value based on value of OPTION_SET_LEVEL:\n        \nIf DEFAULT,\
+      \ set to null.\nIf ORGANIZATION, set to \"\".\nIf PROJECT, set to ID."
+    data_type: STRING

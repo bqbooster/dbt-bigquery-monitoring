@@ -1,43 +1,41 @@
 version: 2
 models:
-  - name: information_schema_column_field_paths
-    description: dataset details with related information
-    columns:
-      - name: TABLE_CATALOG
-        description: The project ID of the project that contains the dataset
-        data_type: STRING
-      - name: TABLE_SCHEMA
-        description:
-          "The name of the dataset that contains the table also referred to\
-          \ as\n        the datasetId"
-        data_type: STRING
-      - name: TABLE_NAME
-        description: The name of the table or view also referred to as the tableId
-        data_type: STRING
-      - name: COLUMN_NAME
-        description: The name of the column
-        data_type: STRING
-      - name: FIELD_PATH
-        description:
-          "The path to a column nested\n        within a `RECORD` or `STRUCT`\
-          \ column"
-        data_type: STRING
-      - name: DATA_TYPE
-        description: "The column's GoogleSQL\n        data type"
-        data_type: STRING
-      - name: DESCRIPTION
-        description: The column's description
-        data_type: STRING
-      - name: COLLATION_NAME
-        description:
-          "The name of the collation specification\n        if it exists; otherwise,\
-          \ NULL\n\n        If a STRING, ARRAY<STRING>, or\n        STRING field in a\
-          \ STRUCT is passed in, the\n        collation specification is returned if it\
-          \ exists; otherwise,\n        NULL is returned"
-        data_type: STRING
-      - name: ROUNDING_MODE
-        description:
-          "The mode of rounding that's used when applying precision and scale\
-          \ to\n        parameterized NUMERIC or BIGNUMERIC values;\n        otherwise,\
-          \ the value is NULL"
-        data_type: STRING
+- name: information_schema_column_field_paths
+  columns:
+  - name: TABLE_CATALOG
+    description: The project ID of the project that contains the dataset
+    data_type: STRING
+  - name: TABLE_SCHEMA
+    description: "The name of the dataset that contains the table also referred to\
+      \ as\n        the datasetId"
+    data_type: STRING
+  - name: TABLE_NAME
+    description: The name of the table or view also referred to as the tableId
+    data_type: STRING
+  - name: COLUMN_NAME
+    description: The name of the column
+    data_type: STRING
+  - name: FIELD_PATH
+    description: "The path to a column nested\n        within a `RECORD` or `STRUCT`\
+      \ column"
+    data_type: STRING
+  - name: DATA_TYPE
+    description: "The column's GoogleSQL\n        data type"
+    data_type: STRING
+  - name: DESCRIPTION
+    description: The column's description
+    data_type: STRING
+  - name: COLLATION_NAME
+    description: "The name of the collation specification\n        if it exists; otherwise,\
+      \ NULL\n\n        If a STRING, ARRAY<STRING>, or\n        STRING field in a\
+      \ STRUCT is passed in, the\n        collation specification is returned if it\
+      \ exists; otherwise,\n        NULL is returned"
+    data_type: STRING
+  - name: ROUNDING_MODE
+    description: "The mode of rounding that's used when applying precision and scale\
+      \ to\n        parameterized NUMERIC or BIGNUMERIC values;\n        otherwise,\
+      \ the value is NULL"
+    data_type: STRING
+  - name: POLICY_TAGS
+    description: The list of policy tags that are attached to the column
+    data_type: ARRAY<STRING>

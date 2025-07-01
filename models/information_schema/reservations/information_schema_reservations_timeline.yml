@@ -1,65 +1,59 @@
 version: 2
 models:
-  - name: information_schema_reservations_timeline
-    description: dataset details with related information
-    columns:
-      - name: autoscale
-        description:
-          "Information about the autoscale capacity of the reservation. Fields\
-          \ include the following:\n\ncurrent_slots: the number of slots added to the\
-          \ reservation by autoscaling.\n            \nNote: After users reduce max_slots,\
-          \ it may take a while before it can be propagated,\n                      so\
-          \ current_slots may stay in the original value and could be larger than max_slots\n\
-          \                      for that brief period (less than one minute).\n     \
-          \       \n\nmax_slots: the maximum number of slots that could be added to the\
-          \ reservation by autoscaling."
-        data_type: STRUCT
-      - name: edition
-        description:
-          The edition associated with this reservation. For more information
-          about editions, see Introduction to BigQuery editions.
-        data_type: STRING
-      - name: ignore_idle_slots
-        description: False if slot sharing is enabled, otherwise true.
-        data_type: BOOL
-      - name: labels
-        description: Array of labels associated with the reservation.
-        data_type: RECORD
-      - name: period_start
-        description: Start time of this one-minute period.
-        data_type: TIMESTAMP
-      - name: project_id
-        description: ID of the reservation admin project.
-        data_type: STRING
-      - name: project_number
-        description: Number of the project.
-        data_type: INTEGER
-      - name: reservation_id
-        description: For joining with the jobs_timeline table. This is of the form project_id:location.reservation_name.
-        data_type: STRING
-      - name: reservation_name
-        description: The name of the reservation.
-        data_type: STRING
-      - name: slots_assigned
-        description: The number of slots assigned to this reservation.
-        data_type: INTEGER
-      - name: slots_max_assigned
-        description:
-          "The maximum slot capacity for this reservation, including slot\n\
-          \      sharing. If ignore_idle_slots is true, this is the same as slots_assigned,\
-          \ otherwise this is the total number of slots in all capacity commitments in\
-          \ the admin project."
-        data_type: INTEGER
-      - name: max_slots
-        description:
-          "The maximum number of slots that this reservation can use, which\
-          \ includes\n      baseline slots (slot_capacity), idle slots (if ignore_idle_slots\
-          \ is false), and\n      autoscale slots. This field is specified by users for\
-          \ using the reservation predictability feature."
-        data_type: INTEGER
-      - name: scaling_mode
-        description:
-          The scaling mode for the reservation, which determines how the reservation
-          scales from baseline to max_slots. This field is specified by users for using
-          the reservation predictability feature.
-        data_type: STRING
+- name: information_schema_reservations_timeline
+  columns:
+  - name: autoscale
+    description: "Information about the autoscale capacity of the reservation. Fields\
+      \ include the following:\n\ncurrent_slots: the number of slots added to the\
+      \ reservation by autoscaling.\n            \nNote: After users reduce max_slots,\
+      \ it may take a while before it can be propagated,\n                      so\
+      \ current_slots may stay in the original value and could be larger than max_slots\n\
+      \                      for that brief period (less than one minute).\n     \
+      \       \n\nmax_slots: the maximum number of slots that could be added to the\
+      \ reservation by autoscaling."
+    data_type: STRUCT
+  - name: edition
+    description: The edition associated with this reservation. For more information
+      about editions, see Introduction to BigQuery editions.
+    data_type: STRING
+  - name: ignore_idle_slots
+    description: False if slot sharing is enabled, otherwise true.
+    data_type: BOOL
+  - name: labels
+    description: Array of labels associated with the reservation.
+    data_type: RECORD
+  - name: period_start
+    description: Start time of this one-minute period.
+    data_type: TIMESTAMP
+  - name: project_id
+    description: ID of the reservation admin project.
+    data_type: STRING
+  - name: project_number
+    description: Number of the project.
+    data_type: INTEGER
+  - name: reservation_id
+    description: For joining with the jobs_timeline table. This is of the form project_id:location.reservation_name.
+    data_type: STRING
+  - name: reservation_name
+    description: The name of the reservation.
+    data_type: STRING
+  - name: slots_assigned
+    description: The number of slots assigned to this reservation.
+    data_type: INTEGER
+  - name: slots_max_assigned
+    description: "The maximum slot capacity for this reservation, including slot\n\
+      \      sharing. If ignore_idle_slots is true, this is the same as slots_assigned,\
+      \ otherwise this is the total number of slots in all capacity commitments in\
+      \ the admin project."
+    data_type: INTEGER
+  - name: max_slots
+    description: "The maximum number of slots that this reservation can use, which\
+      \ includes\n      baseline slots (slot_capacity), idle slots (if ignore_idle_slots\
+      \ is false), and\n      autoscale slots. This field is specified by users for\
+      \ using the reservation predictability feature."
+    data_type: INTEGER
+  - name: scaling_mode
+    description: The scaling mode for the reservation, which determines how the reservation
+      scales from baseline to max_slots. This field is specified by users for using
+      the reservation predictability feature.
+    data_type: STRING

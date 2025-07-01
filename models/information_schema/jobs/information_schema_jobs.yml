@@ -1,217 +1,188 @@
 version: 2
 models:
-  - name: information_schema_jobs
-    description: dataset details with related information
-    columns:
-      - name: bi_engine_statistics
-        description:
-          "If the project is configured to use the BI\n        Engine, then\
-          \ this field contains BiEngineStatistics.\n        Otherwise NULL."
-        data_type: RECORD
-      - name: cache_hit
-        description:
-          "Whether the query results of this job were from a cache.\n     \
-          \   If you have a multi-query statement\n        job, cache_hit for your parent\
-          \ query is\n        NULL."
-        data_type: BOOLEAN
-      - name: creation_time
-        description:
-          "(Partitioning column) Creation time of this job. Partitioning is\n\
-          \        based on the UTC time of this timestamp."
-        data_type: TIMESTAMP
-      - name: destination_table
-        description: "Destination table\n        for results, if any."
-        data_type: RECORD
-      - name: end_time
-        description:
-          "The end time of this job, in milliseconds since the epoch. This\
-          \ field represents the\n        time when the job enters the DONE state."
-        data_type: TIMESTAMP
-      - name: error_result
-        description: Details of any errors as ErrorProto objects.
-        data_type: RECORD
-      - name: job_id
-        description:
-          "The ID of the job if a job was created. Otherwise, the query ID\
-          \ of a query using optional\n        job creation mode. For example, bquxjob_1234."
-        data_type: STRING
-      - name: job_stages
-        description:
-          "Query\n          stages of the job.\n\n        Note: This column's\
-          \ values are empty for queries that read from tables with\n          row-level\
-          \ access policies. For more information, see best practices for row-level\n\
-          \          security in BigQuery."
-        data_type: RECORD
-      - name: job_type
-        description:
-          "The type of the job. Can be QUERY, LOAD, EXTRACT,\n        COPY,\
-          \ or NULL. A NULL value\n        indicates an internal job, such as a script\
-          \ job statement evaluation."
-        data_type: STRING
-      - name: labels
-        description: Array of labels applied to the job as key-value pairs.
-        data_type: RECORD
-      - name: parent_job_id
-        description: ID of the parent job, if any.
-        data_type: STRING
-      - name: priority
-        description:
-          "The priority of this job. Valid values include INTERACTIVE and\n\
-          \      BATCH."
-        data_type: STRING
-      - name: project_id
-        description: (Clustering column) The ID of the project.
-        data_type: STRING
-      - name: project_number
-        description: The number of the project.
-        data_type: INTEGER
-      - name: query
-        description:
-          "SQL query text. Only the JOBS_BY_PROJECT view has the query\n  \
-          \    column."
-        data_type: STRING
-      - name: referenced_tables
-        description:
-          "Array of tables\n        referenced by the job. Only populated for\
-          \ query jobs that are not cache hits."
-        data_type: RECORD
-      - name: reservation_id
-        description:
-          "Name of the primary reservation assigned to this job,\n        in\
-          \ the format\n        RESERVATION_ADMIN_PROJECT:RESERVATION_LOCATION.RESERVATION_NAME.\n\
-          \        In this output:\n        \nRESERVATION_ADMIN_PROJECT: the name of the\
-          \ Google Cloud project that\n            administers the reservation\nRESERVATION_LOCATION:\
-          \ the location of the reservation\nRESERVATION_NAME: the name of the reservation"
-        data_type: STRING
-      - name: edition
-        description:
-          The edition associated with the reservation assigned to this job.
-          For more information about editions, see Introduction to BigQuery editions.
-        data_type: STRING
-      - name: session_info
-        description: "Details about the session\n        in which this job ran, if any."
-        data_type: RECORD
-      - name: start_time
-        description:
-          "The start time of this job, in milliseconds since the epoch. This\
-          \ field represents the\n        time when the job transitions from the PENDING\
-          \ state to either\n        RUNNING or DONE."
-        data_type: TIMESTAMP
-      - name: state
-        description:
-          "Running state of the job. Valid states include PENDING, RUNNING,\
-          \ and\n        DONE."
-        data_type: STRING
-      - name: statement_type
-        description:
-          "The type of query statement. For example, DELETE, INSERT,\n    \
-          \    SCRIPT, SELECT, or UPDATE. See QueryStatementType\n        for list of\
-          \ valid values."
-        data_type: STRING
-      - name: timeline
-        description: "Query\n      timeline of the job. Contains snapshots of query execution."
-        data_type: RECORD
-      - name: total_bytes_billed
-        description:
-          "If the project is configured to use on-demand\n        pricing,\
-          \ then this field contains the total bytes billed for the\n        job. If the\
-          \ project is configured to use flat-rate\n        pricing, then you are not\
-          \ billed for bytes and this field is\n        informational only.\n\n      \
-          \  Note: This column's values are empty for queries that read from tables with\n\
-          \          row-level access policies. For more information, see best practices\
-          \ for row-level\n          security in BigQuery."
-        data_type: INTEGER
-      - name: total_bytes_processed
-        description:
-          "Total bytes processed by the job.\n\n        Note: This column's\
-          \ values are empty for queries that read from tables with\n          row-level\
-          \ access policies. For more information, see best practices for row-level\n\
-          \          security in BigQuery."
-        data_type: INTEGER
-      - name: total_modified_partitions
-        description:
-          "The total number of partitions the job modified. This field is\n\
-          \        populated for LOAD and QUERY jobs."
-        data_type: INTEGER
-      - name: total_slot_ms
-        description:
-          "Slot milliseconds for the job over its entire duration in the RUNNING\
-          \ state,\n        including retries."
-        data_type: INTEGER
-      - name: transaction_id
-        description: "ID of the transaction\n        in which this job ran, if any. (Preview)"
-        data_type: STRING
-      - name: user_email
-        description:
-          "(Clustering column) Email address or service account of the user\
-          \ who\n        ran the job."
-        data_type: STRING
-      - name: transferred_bytes
-        description:
-          Total bytes transferred for cross-cloud queries, such as BigQuery
-          Omni cross-cloud transfer jobs.
-        data_type: INTEGER
-      - name: materialized_view_statistics
-        description:
-          "Statistics of\n        materialized views considered in a query\
-          \ job. (Preview)"
-        data_type: RECORD
-      - name: metadata_cache_statistics
-        description:
-          Statistics for metadata column index usage for tables referenced
-          in a query job.
-        data_type: RECORD
-      - name: search_statistics
-        description: "Statistics for a search\n        query."
-        data_type: RECORD
-      - name: query_dialect
-        description:
-          "This field will be available sometime in May, 2025.\n      The query\
-          \ dialect used for the job. Valid values include: \n\nGOOGLE_SQL: Job was requested\
-          \ to use GoogleSQL.\nLEGACY_SQL: Job was requested to use LegacySQL.\nDEFAULT_LEGACY_SQL:\
-          \ No query dialect was specified in the job request.\n            BigQuery used\
-          \ the default value of LegacySQL.\nDEFAULT_GOOGLE_SQL: No query dialect was\
-          \ specified in the job request.\n            BigQuery used the default value\
-          \ of GoogleSQL.\n\nThis field is only populated for query jobs. The default\
-          \ selection of query dialect can be controlled by the configuration settings."
-        data_type: STRING
-      - name: continuous
-        description: Whether the job is a continuous query.
-        data_type: BOOLEAN
-      - name: vector_search_statistics
-        description: "Statistics for a vector\n          search query."
-        data_type: RECORD
-      - name: continuous_query_info
-        description:
-          "continuous_query_info.output_watermark : Represents the point up
-          to which the continuous query has successfully processed data."
-        data_type: RECORD
-      - name: job_creation_reason
-        description:
-          "job_creation_reason.code : Specifies the high level reason why a\
-          \ job was created.\n        Possible values are:\n        \nREQUESTED: job creation\
-          \ was requested.\nLONG_RUNNING: the query request ran beyond a system defined\
-          \ timeout\n            specified by the\n            timeoutMs\n           \
-          \ field in the QueryRequest. As a result it was considered a long running\n\
-          \            operation for which a job was created.\nLARGE_RESULTS: the results\
-          \ from the query cannot fit in the in-line\n            response.\nOTHER: the\
-          \ system has determined that the query needs to be executed as a\n         \
-          \   job."
-        data_type: RECORD
-      - name: query_info
-        description:
-          "query_info.resource_warning : The warning message that appears if\
-          \ the resource usage during query processing is above the internal threshold\
-          \ of the system. A successful query job can have the resource_warning field\
-          \ populated. With resource_warning, you get additional data points to optimize\
-          \ your queries and to set up monitoring for performance trends of an equivalent\
-          \ set of queries by using query_hashes.\nquery_info.query_hashes.normalized_literals\
-          \ : Contains the hashes of the query. normalized_literals is a hexadecimal\n\
-          \        STRING hash that ignores comments, parameter values, UDFs, and literals.\n\
-          \        The hash value will differ when underlying views change, or if the\
-          \ query implicitly\n        references columns, such as SELECT *, and the table\
-          \ schema changes.\n        \n        This field appears for successful GoogleSQL\
-          \ queries that are not cache hits.\nquery_info.performance_insights : Performance\
-          \ insights for the job.\nquery_info.optimization_details : The history-based\
-          \ optimizations\n        for the job."
-        data_type: RECORD
+- name: information_schema_jobs
+  columns:
+  - name: bi_engine_statistics
+    description: "If the project is configured to use the BI\n        Engine, then\
+      \ this field contains BiEngineStatistics.\n        Otherwise NULL."
+    data_type: RECORD
+  - name: cache_hit
+    description: "Whether the query results of this job were from a cache.\n     \
+      \   If you have a multi-query statement\n        job, cache_hit for your parent\
+      \ query is\n        NULL."
+    data_type: BOOLEAN
+  - name: creation_time
+    description: "(Partitioning column) Creation time of this job. Partitioning is\n\
+      \        based on the UTC time of this timestamp."
+    data_type: TIMESTAMP
+  - name: destination_table
+    description: "Destination table\n        for results, if any."
+    data_type: RECORD
+  - name: end_time
+    description: "The end time of this job, in milliseconds since the epoch. This\
+      \ field represents the\n        time when the job enters the DONE state."
+    data_type: TIMESTAMP
+  - name: error_result
+    description: Details of any errors as ErrorProto objects.
+    data_type: RECORD
+  - name: job_id
+    description: "The ID of the job if a job was created. Otherwise, the query ID\
+      \ of a query using optional\n        job creation mode. For example, bquxjob_1234."
+    data_type: STRING
+  - name: job_stages
+    description: "Query\n          stages of the job.\n\n        Note: This column's\
+      \ values are empty for queries that read from tables with\n          row-level\
+      \ access policies. For more information, see best practices for row-level\n\
+      \          security in BigQuery."
+    data_type: RECORD
+  - name: job_type
+    description: "The type of the job. Can be QUERY, LOAD, EXTRACT,\n        COPY,\
+      \ or NULL. A NULL value indicates a background\n        job."
+    data_type: STRING
+  - name: labels
+    description: Array of labels applied to the job as key-value pairs.
+    data_type: RECORD
+  - name: parent_job_id
+    description: ID of the parent job, if any.
+    data_type: STRING
+  - name: priority
+    description: "The priority of this job. Valid values include INTERACTIVE and\n\
+      \      BATCH."
+    data_type: STRING
+  - name: project_id
+    description: (Clustering column) The ID of the project.
+    data_type: STRING
+  - name: project_number
+    description: The number of the project.
+    data_type: INTEGER
+  - name: query
+    description: "SQL query text. Only the JOBS_BY_PROJECT view has the query\n  \
+      \    column."
+    data_type: STRING
+  - name: referenced_tables
+    description: "Array of tables\n        referenced by the job. Only populated for\
+      \ query jobs that are not cache hits."
+    data_type: RECORD
+  - name: reservation_id
+    description: "Name of the primary reservation assigned to this job,\n        in\
+      \ the format\n        RESERVATION_ADMIN_PROJECT:RESERVATION_LOCATION.RESERVATION_NAME.\n\
+      \        In this output:\n        \nRESERVATION_ADMIN_PROJECT: the name of the\
+      \ Google Cloud project that\n            administers the reservation\nRESERVATION_LOCATION:\
+      \ the location of the reservation\nRESERVATION_NAME: the name of the reservation"
+    data_type: STRING
+  - name: edition
+    description: The edition associated with the reservation assigned to this job.
+      For more information about editions, see Introduction to BigQuery editions.
+    data_type: STRING
+  - name: session_info
+    description: "Details about the session\n        in which this job ran, if any."
+    data_type: RECORD
+  - name: start_time
+    description: "The start time of this job, in milliseconds since the epoch. This\
+      \ field represents the\n        time when the job transitions from the PENDING\
+      \ state to either\n        RUNNING or DONE."
+    data_type: TIMESTAMP
+  - name: state
+    description: "Running state of the job. Valid states include PENDING, RUNNING,\
+      \ and\n        DONE."
+    data_type: STRING
+  - name: statement_type
+    description: "The type of query statement. For example, DELETE, INSERT,\n    \
+      \    SCRIPT, SELECT, or UPDATE. See QueryStatementType\n        for list of\
+      \ valid values."
+    data_type: STRING
+  - name: timeline
+    description: "Query\n      timeline of the job. Contains snapshots of query execution."
+    data_type: RECORD
+  - name: total_bytes_billed
+    description: "If the project is configured to use on-demand\n        pricing,\
+      \ then this field contains the total bytes billed for the\n        job. If the\
+      \ project is configured to use flat-rate\n        pricing, then you are not\
+      \ billed for bytes and this field is\n        informational only.\n\n      \
+      \  Note: This column's values are empty for queries that read from tables with\n\
+      \          row-level access policies. For more information, see best practices\
+      \ for row-level\n          security in BigQuery."
+    data_type: INTEGER
+  - name: total_bytes_processed
+    description: "Total bytes processed by the job.\n\n        Note: This column's\
+      \ values are empty for queries that read from tables with\n          row-level\
+      \ access policies. For more information, see best practices for row-level\n\
+      \          security in BigQuery."
+    data_type: INTEGER
+  - name: total_modified_partitions
+    description: "The total number of partitions the job modified. This field is\n\
+      \        populated for LOAD and QUERY jobs."
+    data_type: INTEGER
+  - name: total_slot_ms
+    description: "Slot milliseconds for the job over its entire duration in the RUNNING\
+      \ state,\n        including retries."
+    data_type: INTEGER
+  - name: transaction_id
+    description: "ID of the transaction\n        in which this job ran, if any. (Preview)"
+    data_type: STRING
+  - name: user_email
+    description: "(Clustering column) Email address or service account of the user\
+      \ who\n        ran the job."
+    data_type: STRING
+  - name: transferred_bytes
+    description: Total bytes transferred for cross-cloud queries, such as BigQuery
+      Omni cross-cloud transfer jobs.
+    data_type: INTEGER
+  - name: materialized_view_statistics
+    description: "Statistics of\n        materialized views considered in a query\
+      \ job. (Preview)"
+    data_type: RECORD
+  - name: metadata_cache_statistics
+    description: Statistics for metadata column index usage for tables referenced
+      in a query job.
+    data_type: RECORD
+  - name: search_statistics
+    description: "Statistics for a search\n        query."
+    data_type: RECORD
+  - name: query_dialect
+    description: "This field will be available sometime in May, 2025.\n      The query\
+      \ dialect used for the job. Valid values include: \n\nGOOGLE_SQL: Job was requested\
+      \ to use GoogleSQL.\nLEGACY_SQL: Job was requested to use LegacySQL.\nDEFAULT_LEGACY_SQL:\
+      \ No query dialect was specified in the job request.\n            BigQuery used\
+      \ the default value of LegacySQL.\nDEFAULT_GOOGLE_SQL: No query dialect was\
+      \ specified in the job request.\n            BigQuery used the default value\
+      \ of GoogleSQL.\n\nThis field is only populated for query jobs. The default\
+      \ selection of query dialect can be controlled by the configuration settings."
+    data_type: STRING
+  - name: continuous
+    description: Whether the job is a continuous query.
+    data_type: BOOLEAN
+  - name: vector_search_statistics
+    description: "Statistics for a vector\n          search query."
+    data_type: RECORD
+  - name: continuous_query_info
+    description: 'continuous_query_info.output_watermark : Represents the point up
+      to which the continuous query has successfully processed data.'
+    data_type: RECORD
+  - name: job_creation_reason
+    description: "job_creation_reason.code : Specifies the high level reason why a\
+      \ job was created.\n        Possible values are:\n        \nREQUESTED: job creation\
+      \ was requested.\nLONG_RUNNING: the query request ran beyond a system defined\
+      \ timeout\n            specified by the\n            timeoutMs\n           \
+      \ field in the QueryRequest. As a result it was considered a long running\n\
+      \            operation for which a job was created.\nLARGE_RESULTS: the results\
+      \ from the query cannot fit in the in-line\n            response.\nOTHER: the\
+      \ system has determined that the query needs to be executed as a\n         \
+      \   job."
+    data_type: RECORD
+  - name: query_info
+    description: "query_info.resource_warning : The warning message that appears if\
+      \ the resource usage during query processing is above the internal threshold\
+      \ of the system. A successful query job can have the resource_warning field\
+      \ populated. With resource_warning, you get additional data points to optimize\
+      \ your queries and to set up monitoring for performance trends of an equivalent\
+      \ set of queries by using query_hashes.\nquery_info.query_hashes.normalized_literals\
+      \ : Contains the hashes of the query. normalized_literals is a hexadecimal\n\
+      \        STRING hash that ignores comments, parameter values, UDFs, and literals.\n\
+      \        The hash value will differ when underlying views change, or if the\
+      \ query implicitly\n        references columns, such as SELECT *, and the table\
+      \ schema changes.\n        \n        This field appears for successful GoogleSQL\
+      \ queries that are not cache hits.\nquery_info.performance_insights : Performance\
+      \ insights for the job.\nquery_info.optimization_details : The history-based\
+      \ optimizations\n        for the job."
+    data_type: RECORD

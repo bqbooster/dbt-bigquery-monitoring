@@ -1,73 +1,64 @@
 version: 2
 models:
-  - name: information_schema_routines
-    description: dataset details with related information
-    columns:
-      - name: SPECIFIC_CATALOG
-        description:
-          "The name of the project that contains the dataset where the\n  \
-          \    routine is defined"
-        data_type: STRING
-      - name: SPECIFIC_SCHEMA
-        description: The name of the dataset that contains the routine
-        data_type: STRING
-      - name: SPECIFIC_NAME
-        description: The name of the routine
-        data_type: STRING
-      - name: ROUTINE_CATALOG
-        description:
-          "The name of the project that contains the dataset where the routine\n\
-          \      is defined"
-        data_type: STRING
-      - name: ROUTINE_SCHEMA
-        description: The name of the dataset that contains the routine
-        data_type: STRING
-      - name: ROUTINE_NAME
-        description: The name of the routine
-        data_type: STRING
-      - name: ROUTINE_TYPE
-        description:
-          "The routine type:\n\nFUNCTION: A BigQuery\n            persistent\
-          \ user-defined function\nPROCEDURE: A BigQuery\n            stored procedure\n\
-          TABLE FUNCTION: A BigQuery\n            table function."
-        data_type: STRING
-      - name: DATA_TYPE
-        description:
-          "The data type that the routine returns. NULL if the\n      routine\
-          \ is a stored procedure"
-        data_type: STRING
-      - name: ROUTINE_BODY
-        description:
-          "How the body of the routine is defined, either SQL or\n      EXTERNAL\
-          \ if the routine is a JavaScript user-defined\n      function"
-        data_type: STRING
-      - name: ROUTINE_DEFINITION
-        description: The definition of the routine
-        data_type: STRING
-      - name: EXTERNAL_LANGUAGE
-        description:
-          "JAVASCRIPT if the routine is a JavaScript\n        user-defined\
-          \ function or NULL if the routine was defined\n        with SQL"
-        data_type: STRING
-      - name: IS_DETERMINISTIC
-        description:
-          "YES if the routine is known to be deterministic,\n        NO if\
-          \ it is not, or NULL if unknown"
-        data_type: STRING
-      - name: SECURITY_TYPE
-        description: Security type of the routine, always NULL
-        data_type: STRING
-      - name: CREATED
-        description: The routine's creation time
-        data_type: TIMESTAMP
-      - name: LAST_ALTERED
-        description: The routine's last modification time
-        data_type: TIMESTAMP
-      - name: DDL
-        description:
-          "The DDL statement\n        that can be used to create the routine,\
-          \ such as\n        CREATE FUNCTION\n        or CREATE PROCEDURE"
-        data_type: STRING
-      - name: CONNECTION
-        description: "The connection name, if the routine has one. Otherwise\n      NULL"
-        data_type: STRING
+- name: information_schema_routines
+  columns:
+  - name: SPECIFIC_CATALOG
+    description: "The name of the project that contains the dataset where the\n  \
+      \    routine is defined"
+    data_type: STRING
+  - name: SPECIFIC_SCHEMA
+    description: The name of the dataset that contains the routine
+    data_type: STRING
+  - name: SPECIFIC_NAME
+    description: The name of the routine
+    data_type: STRING
+  - name: ROUTINE_CATALOG
+    description: "The name of the project that contains the dataset where the routine\n\
+      \      is defined"
+    data_type: STRING
+  - name: ROUTINE_SCHEMA
+    description: The name of the dataset that contains the routine
+    data_type: STRING
+  - name: ROUTINE_NAME
+    description: The name of the routine
+    data_type: STRING
+  - name: ROUTINE_TYPE
+    description: "The routine type:\n\nFUNCTION: A BigQuery\n            persistent\
+      \ user-defined function\nPROCEDURE: A BigQuery\n            stored procedure\n\
+      TABLE FUNCTION: A BigQuery\n            table function."
+    data_type: STRING
+  - name: DATA_TYPE
+    description: "The data type that the routine returns. NULL if the\n      routine\
+      \ is a stored procedure"
+    data_type: STRING
+  - name: ROUTINE_BODY
+    description: "How the body of the routine is defined, either SQL or\n      EXTERNAL\
+      \ if the routine is a JavaScript user-defined\n      function"
+    data_type: STRING
+  - name: ROUTINE_DEFINITION
+    description: The definition of the routine
+    data_type: STRING
+  - name: EXTERNAL_LANGUAGE
+    description: "JAVASCRIPT if the routine is a JavaScript\n        user-defined\
+      \ function or NULL if the routine was defined\n        with SQL"
+    data_type: STRING
+  - name: IS_DETERMINISTIC
+    description: "YES if the routine is known to be deterministic,\n        NO if\
+      \ it is not, or NULL if unknown"
+    data_type: STRING
+  - name: SECURITY_TYPE
+    description: Security type of the routine, always NULL
+    data_type: STRING
+  - name: CREATED
+    description: The routine's creation time
+    data_type: TIMESTAMP
+  - name: LAST_ALTERED
+    description: The routine's last modification time
+    data_type: TIMESTAMP
+  - name: DDL
+    description: "The DDL statement\n        that can be used to create the routine,\
+      \ such as\n        CREATE FUNCTION\n        or CREATE PROCEDURE"
+    data_type: STRING
+  - name: CONNECTION
+    description: "The connection name, if the routine has one. Otherwise\n      NULL"
+    data_type: STRING

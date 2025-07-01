@@ -1,17 +1,16 @@
 version: 2
 models:
-  - name: information_schema_project_options
-    description: dataset details with related information
-    columns:
-      - name: OPTION_NAME
-        description: Option ID for the specified configuration setting.
-        data_type: STRING
-      - name: OPTION_DESCRIPTION
-        description: The option description.
-        data_type: STRING
-      - name: OPTION_TYPE
-        description: The data type of the OPTION_VALUE.
-        data_type: STRING
-      - name: OPTION_VALUE
-        description: The current value of the option.
-        data_type: STRING
+- name: information_schema_project_options
+  columns:
+  - name: OPTION_NAME
+    description: Option ID for the specified configuration setting.
+    data_type: STRING
+  - name: OPTION_DESCRIPTION
+    description: The option description.
+    data_type: STRING
+  - name: OPTION_TYPE
+    description: The data type of the OPTION_VALUE.
+    data_type: STRING
+  - name: OPTION_VALUE
+    description: The current value of the option.
+    data_type: STRING

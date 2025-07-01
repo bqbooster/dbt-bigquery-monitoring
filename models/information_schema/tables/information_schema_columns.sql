@@ -31,5 +31,6 @@ is_partitioning_column,
 clustering_ordinal_position,
 collation_name,
 column_default,
-rounding_mode
+rounding_mode,
+policy_tags
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`COLUMNS`

@@ -22,5 +22,6 @@ field_path,
 data_type,
 description,
 collation_name,
-rounding_mode
+rounding_mode,
+policy_tags
 FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`COLUMN_FIELD_PATHS`

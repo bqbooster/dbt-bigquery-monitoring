@@ -1,44 +1,39 @@
 version: 2
 models:
-  - name: information_schema_capacity_commitments
-    description: dataset details with related information
-    columns:
-      - name: ddl
-        description: The DDL statement used to create this capacity commitment.
-        data_type: STRING
-      - name: project_id
-        description: ID of the administration project.
-        data_type: STRING
-      - name: project_number
-        description: Number of the administration project.
-        data_type: INTEGER
-      - name: capacity_commitment_id
-        description: ID that uniquely identifies the capacity commitment.
-        data_type: STRING
-      - name: commitment_plan
-        description: Commitment plan of the capacity commitment.
-        data_type: STRING
-      - name: state
-        description:
-          "State the capacity commitment is in. Can be PENDING or\n       \
-          \ ACTIVE."
-        data_type: STRING
-      - name: slot_count
-        description: Slot count associated with the capacity commitment.
-        data_type: INTEGER
-      - name: edition
-        description:
-          The edition associated with this reservation. For more information
-          about editions, see Introduction to BigQuery editions.
-        data_type: STRING
-      - name: is_flat_rate
-        description:
-          Whether the commitment is associated with the legacy flat-rate capacity
-          model or an edition. If FALSE, the current commitment is associated with an
-          edition. If TRUE, the commitment is the legacy flat-rate capacity model.
-        data_type: BOOL
-      - name: renewal_plan
-        description:
-          New commitment plan after the end of current commitment plan. You
-          can change the renewal plan for a commitment at any time until it expires.
-        data_type: STRING
+- name: information_schema_capacity_commitments
+  columns:
+  - name: ddl
+    description: The DDL statement used to create this capacity commitment.
+    data_type: STRING
+  - name: project_id
+    description: ID of the administration project.
+    data_type: STRING
+  - name: project_number
+    description: Number of the administration project.
+    data_type: INTEGER
+  - name: capacity_commitment_id
+    description: ID that uniquely identifies the capacity commitment.
+    data_type: STRING
+  - name: commitment_plan
+    description: Commitment plan of the capacity commitment.
+    data_type: STRING
+  - name: state
+    description: "State the capacity commitment is in. Can be PENDING or\n       \
+      \ ACTIVE."
+    data_type: STRING
+  - name: slot_count
+    description: Slot count associated with the capacity commitment.
+    data_type: INTEGER
+  - name: edition
+    description: The edition associated with this reservation. For more information
+      about editions, see Introduction to BigQuery editions.
+    data_type: STRING
+  - name: is_flat_rate
+    description: Whether the commitment is associated with the legacy flat-rate capacity
+      model or an edition. If FALSE, the current commitment is associated with an
+      edition. If TRUE, the commitment is the legacy flat-rate capacity model.
+    data_type: BOOL
+  - name: renewal_plan
+    description: New commitment plan after the end of current commitment plan. You
+      can change the renewal plan for a commitment at any time until it expires.
+    data_type: STRING

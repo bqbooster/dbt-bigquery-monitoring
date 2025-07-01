@@ -1,60 +1,52 @@
 version: 2
 models:
-  - name: information_schema_schemata_replicas_by_failover_reservation
-    description: dataset details with related information
-    columns:
-      - name: failover_reservation_project_id
-        description:
-          "The project ID of the failover reservation admin project if it's\n\
-          \      associated with the replica."
-        data_type: STRING
-      - name: failover_reservation_name
-        description:
-          "The name of the failover reservation if it's associated with the\n\
-          \      replica."
-        data_type: STRING
-      - name: catalog_name
-        description: The project ID of the project that contains the dataset.
-        data_type: STRING
-      - name: schema_name
-        description: The dataset ID of the dataset.
-        data_type: STRING
-      - name: replica_name
-        description: The name of the replica.
-        data_type: STRING
-      - name: location
-        description: The region or multi-region the replica was created in.
-        data_type: STRING
-      - name: replica_primary_assigned
-        description: If the value is TRUE, the replica has the primary assignment.
-        data_type: BOOL
-      - name: replica_primary_assignment_complete
-        description:
-          "If the value is TRUE, the primary assignment is complete.\n    \
-          \  If the value is FALSE, the replica is not (yet) the primary\n      replica,\
-          \ even if replica_primary_assigned equals\n      TRUE."
-        data_type: BOOL
-      - name: creation_time
-        description:
-          "The replica's creation\n      time. When the replica is first created,\
-          \ it is not fully synced with the primary replica until\n      creation_complete\
-          \ equals TRUE. The value of\n      creation_time is set before creation_complete\
-          \ equals\n      TRUE."
-        data_type: TIMESTAMP
-      - name: creation_complete
-        description:
-          "If the value is TRUE, the initial full sync of the\n        primary\
-          \ replica to the secondary replica is complete."
-        data_type: BOOL
-      - name: replication_time
-        description:
-          "The value for replication_time indicates the staleness\n      of\
-          \ the dataset.\nSome tables in the replica might be ahead of this timestamp.\
-          \ This value is only visible in the secondary region.\nIf the dataset contains\
-          \ a table with streaming data, the value of replication_time will not be accurate."
-        data_type: TIMESTAMP
-      - name: sync_status
-        description:
-          "The status of the sync\n      between the primary and secondary\
-          \ replica. Returns NULL if the replica is a\n      primary replica."
-        data_type: JSON
+- name: information_schema_schemata_replicas_by_failover_reservation
+  columns:
+  - name: failover_reservation_project_id
+    description: "The project ID of the failover reservation admin project if it's\n\
+      \      associated with the replica."
+    data_type: STRING
+  - name: failover_reservation_name
+    description: "The name of the failover reservation if it's associated with the\n\
+      \      replica."
+    data_type: STRING
+  - name: catalog_name
+    description: The project ID of the project that contains the dataset.
+    data_type: STRING
+  - name: schema_name
+    description: The dataset ID of the dataset.
+    data_type: STRING
+  - name: replica_name
+    description: The name of the replica.
+    data_type: STRING
+  - name: location
+    description: The region or multi-region the replica was created in.
+    data_type: STRING
+  - name: replica_primary_assigned
+    description: If the value is TRUE, the replica has the primary assignment.
+    data_type: BOOL
+  - name: replica_primary_assignment_complete
+    description: "If the value is TRUE, the primary assignment is complete.\n    \
+      \  If the value is FALSE, the replica is not (yet) the primary\n      replica,\
+      \ even if replica_primary_assigned equals\n      TRUE."
+    data_type: BOOL
+  - name: creation_time
+    description: "The replica's creation\n      time. When the replica is first created,\
+      \ it is not fully synced with the primary replica until\n      creation_complete\
+      \ equals TRUE. The value of\n      creation_time is set before creation_complete\
+      \ equals\n      TRUE."
+    data_type: TIMESTAMP
+  - name: creation_complete
+    description: "If the value is TRUE, the initial full sync of the\n        primary\
+      \ replica to the secondary replica is complete."
+    data_type: BOOL
+  - name: replication_time
+    description: "The value for replication_time indicates the staleness\n      of\
+      \ the dataset.\nSome tables in the replica might be ahead of this timestamp.\
+      \ This value is only visible in the secondary region.\nIf the dataset contains\
+      \ a table with streaming data, the value of replication_time will not be accurate."
+    data_type: TIMESTAMP
+  - name: sync_status
+    description: "The status of the sync\n      between the primary and secondary\
+      \ replica. Returns NULL if the replica is a\n      primary replica."
+    data_type: JSON

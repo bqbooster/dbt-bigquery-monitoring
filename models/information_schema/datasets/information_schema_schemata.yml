@@ -1,33 +1,30 @@
 version: 2
 models:
-  - name: information_schema_schemata
-    description: dataset details with related information
-    columns:
-      - name: CATALOG_NAME
-        description: The name of the project that contains the dataset
-        data_type: STRING
-      - name: SCHEMA_NAME
-        description: The dataset's name also referred to as the datasetId
-        data_type: STRING
-      - name: SCHEMA_OWNER
-        description: The value is always NULL
-        data_type: STRING
-      - name: CREATION_TIME
-        description: The dataset's creation time
-        data_type: TIMESTAMP
-      - name: LAST_MODIFIED_TIME
-        description: The dataset's last modified time
-        data_type: TIMESTAMP
-      - name: LOCATION
-        description: The dataset's geographic location
-        data_type: STRING
-      - name: DDL
-        description:
-          "The CREATE SCHEMA\n        DDL statement that can be used to create\
-          \ the dataset"
-        data_type: STRING
-      - name: DEFAULT_COLLATION_NAME
-        description:
-          "The name of the default collation specification\n        if it exists;\
-          \ otherwise, NULL."
-        data_type: STRING
+- name: information_schema_schemata
+  columns:
+  - name: CATALOG_NAME
+    description: The name of the project that contains the dataset
+    data_type: STRING
+  - name: SCHEMA_NAME
+    description: The dataset's name also referred to as the datasetId
+    data_type: STRING
+  - name: SCHEMA_OWNER
+    description: The value is always NULL
+    data_type: STRING
+  - name: CREATION_TIME
+    description: The dataset's creation time
+    data_type: TIMESTAMP
+  - name: LAST_MODIFIED_TIME
+    description: The dataset's last modified time
+    data_type: TIMESTAMP
+  - name: LOCATION
+    description: The dataset's geographic location
+    data_type: STRING
+  - name: DDL
+    description: "The CREATE SCHEMA\n        DDL statement that can be used to create\
+      \ the dataset"
+    data_type: STRING
+  - name: DEFAULT_COLLATION_NAME
+    description: "The name of the default collation specification\n        if it exists;\
+      \ otherwise, NULL."
+    data_type: STRING

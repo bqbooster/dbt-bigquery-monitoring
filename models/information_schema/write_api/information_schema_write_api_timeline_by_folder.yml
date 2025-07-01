@@ -1,42 +1,38 @@
 version: 2
 models:
-  - name: information_schema_write_api_timeline_by_folder
-    description: dataset details with related information
-    columns:
-      - name: start_timestamp
-        description:
-          "(Partitioning column) Start timestamp of the 1 minute interval\n\
-          \        for the aggregated statistics."
-        data_type: TIMESTAMP
-      - name: project_id
-        description: (Clustering column) ID of the project.
-        data_type: STRING
-      - name: project_number
-        description: Number of the project.
-        data_type: INTEGER
-      - name: dataset_id
-        description: (Clustering column) ID of the dataset.
-        data_type: STRING
-      - name: table_id
-        description: (Clustering column) ID of the table.
-        data_type: STRING
-      - name: stream_type
-        description:
-          "The stream type used \n      for the data ingestion with BigQuery\
-          \ Storage Write API. It is supposed to be one of \"DEFAULT\", \"COMMITTED\"\
-          , \"BUFFERED\", or \"PENDING\"."
-        data_type: STRING
-      - name: error_code
-        description:
-          "Error code returned for the requests specified by this row. \"OK\"\
-          \ for\n        successful requests."
-        data_type: STRING
-      - name: total_requests
-        description: Total number of requests within the 1 minute interval.
-        data_type: INTEGER
-      - name: total_rows
-        description: Total number of rows from all requests within the 1 minute interval.
-        data_type: INTEGER
-      - name: total_input_bytes
-        description: Total number of bytes from all rows within the 1 minute interval.
-        data_type: INTEGER
+- name: information_schema_write_api_timeline_by_folder
+  columns:
+  - name: start_timestamp
+    description: "(Partitioning column) Start timestamp of the 1 minute interval\n\
+      \        for the aggregated statistics."
+    data_type: TIMESTAMP
+  - name: project_id
+    description: (Clustering column) ID of the project.
+    data_type: STRING
+  - name: project_number
+    description: Number of the project.
+    data_type: INTEGER
+  - name: dataset_id
+    description: (Clustering column) ID of the dataset.
+    data_type: STRING
+  - name: table_id
+    description: (Clustering column) ID of the table.
+    data_type: STRING
+  - name: stream_type
+    description: "The stream type used \n      for the data ingestion with BigQuery\
+      \ Storage Write API. It is supposed to be one of \"DEFAULT\", \"COMMITTED\"\
+      , \"BUFFERED\", or \"PENDING\"."
+    data_type: STRING
+  - name: error_code
+    description: "Error code returned for the requests specified by this row. \"OK\"\
+      \ for\n        successful requests."
+    data_type: STRING
+  - name: total_requests
+    description: Total number of requests within the 1 minute interval.
+    data_type: INTEGER
+  - name: total_rows
+    description: Total number of rows from all requests within the 1 minute interval.
+    data_type: INTEGER
+  - name: total_input_bytes
+    description: Total number of bytes from all rows within the 1 minute interval.
+    data_type: INTEGER

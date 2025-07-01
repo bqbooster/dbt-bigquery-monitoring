@@ -1,41 +1,38 @@
 version: 2
 models:
-  - name: information_schema_table_constraints
-    description: dataset details with related information
-    columns:
-      - name: CONSTRAINT_CATALOG
-        description: The constraint project name.
-        data_type: STRING
-      - name: CONSTRAINT_SCHEMA
-        description: The constraint dataset name.
-        data_type: STRING
-      - name: CONSTRAINT_NAME
-        description: The constraint name.
-        data_type: STRING
-      - name: TABLE_CATALOG
-        description: The constrained table project name.
-        data_type: STRING
-      - name: TABLE_SCHEMA
-        description: The constrained table dataset name.
-        data_type: STRING
-      - name: TABLE_NAME
-        description: The constrained table name.
-        data_type: STRING
-      - name: CONSTRAINT_TYPE
-        description: "Either PRIMARY KEY or
+- name: information_schema_table_constraints
+  columns:
+  - name: CONSTRAINT_CATALOG
+    description: The constraint project name.
+    data_type: STRING
+  - name: CONSTRAINT_SCHEMA
+    description: The constraint dataset name.
+    data_type: STRING
+  - name: CONSTRAINT_NAME
+    description: The constraint name.
+    data_type: STRING
+  - name: TABLE_CATALOG
+    description: The constrained table project name.
+    data_type: STRING
+  - name: TABLE_SCHEMA
+    description: The constrained table dataset name.
+    data_type: STRING
+  - name: TABLE_NAME
+    description: The constrained table name.
+    data_type: STRING
+  - name: CONSTRAINT_TYPE
+    description: 'Either PRIMARY KEY or
 
-          FOREIGN KEY."
-        data_type: STRING
-      - name: IS_DEFERRABLE
-        description:
-          "YES or NO depending on if a constraint is\n      deferrable. Only\
-          \ NO is supported."
-        data_type: STRING
-      - name: INITIALLY_DEFERRED
-        description: Only NO is supported.
-        data_type: STRING
-      - name: ENFORCED
-        description:
-          "YES or NO depending on if the constraint is\nenforced. \nOnly NO\
-          \ is supported."
-        data_type: STRING
+      FOREIGN KEY.'
+    data_type: STRING
+  - name: IS_DEFERRABLE
+    description: "YES or NO depending on if a constraint is\n      deferrable. Only\
+      \ NO is supported."
+    data_type: STRING
+  - name: INITIALLY_DEFERRED
+    description: Only NO is supported.
+    data_type: STRING
+  - name: ENFORCED
+    description: "YES or NO depending on if the constraint is\nenforced. \nOnly NO\
+      \ is supported."
+    data_type: STRING

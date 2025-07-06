@@ -1,6 +1,0 @@
-kind: Features
-body: New variable system that ensure that variable priority is well respected to improve configuration consistency and fix options output
-time: 2025-07-07T00:19:04.948473+02:00
-custom:
-    Author: Kayrnt
-    Issue: ""

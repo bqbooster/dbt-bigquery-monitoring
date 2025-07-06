@@ -7,4 +7,4 @@ project_number,
 bi_capacity_name,
 size,
 preferred_tables
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`BI_CAPACITIES`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`BI_CAPACITIES`

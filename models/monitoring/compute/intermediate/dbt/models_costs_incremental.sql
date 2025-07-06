@@ -6,10 +6,10 @@
       "field": "hour",
       "data_type": "timestamp",
       "granularity": "hour",
-      "copy_partitions": should_use_copy_partitions()
+      "copy_partitions": dbt_bigquery_monitoring_variable_use_copy_partitions()
     },
     cluster_by = ["dbt_model_name"],
-    partition_expiration_days = var('lookback_window_days')
+    partition_expiration_days = dbt_bigquery_monitoring_variable_lookback_window_days()
     )
 }}
 SELECT

@@ -32,13 +32,13 @@ base_with_enriched_fields AS (
 SELECT
   *,
   -- Logical storage costs
-  active_logical_bytes / POW(1024, 3) * {{ var('active_logical_storage_gb_price') }} AS active_logical_bytes_cost,
-  long_term_logical_bytes / POW(1024, 3) * {{ var('long_term_logical_storage_gb_price') }} AS long_term_logical_bytes_cost,
+  active_logical_bytes / POW(1024, 3) * {{ dbt_bigquery_monitoring_variable_active_logical_storage_gb_price() }} AS active_logical_bytes_cost,
+  long_term_logical_bytes / POW(1024, 3) * {{ dbt_bigquery_monitoring_variable_long_term_logical_storage_gb_price() }} AS long_term_logical_bytes_cost,
   -- Physical storage costs
-  active_physical_bytes / POW(1024, 3) * {{ var('active_physical_storage_gb_price') }} AS active_physical_bytes_cost,
-  time_travel_physical_bytes / POW(1024, 3) * {{ var('active_physical_storage_gb_price') }} AS time_travel_physical_bytes_cost,
-  fail_safe_physical_bytes / POW(1024, 3) * {{ var('active_physical_storage_gb_price') }} AS fail_safe_physical_bytes_cost,
-  long_term_physical_bytes / POW(1024, 3) * {{ var('long_term_physical_storage_gb_price') }} AS long_term_physical_bytes_cost,
+  active_physical_bytes / POW(1024, 3) * {{ dbt_bigquery_monitoring_variable_active_physical_storage_gb_price() }} AS active_physical_bytes_cost,
+  time_travel_physical_bytes / POW(1024, 3) * {{ dbt_bigquery_monitoring_variable_active_physical_storage_gb_price() }} AS time_travel_physical_bytes_cost,
+  fail_safe_physical_bytes / POW(1024, 3) * {{ dbt_bigquery_monitoring_variable_active_physical_storage_gb_price() }} AS fail_safe_physical_bytes_cost,
+  long_term_physical_bytes / POW(1024, 3) * {{ dbt_bigquery_monitoring_variable_long_term_physical_storage_gb_price() }} AS long_term_physical_bytes_cost,
 FROM base
 ),
 

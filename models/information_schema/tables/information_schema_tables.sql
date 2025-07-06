@@ -35,4 +35,4 @@ replication_error,
 ddl,
 default_collation_name,
 upsert_stream_apply_watermark
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`TABLES`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`TABLES`

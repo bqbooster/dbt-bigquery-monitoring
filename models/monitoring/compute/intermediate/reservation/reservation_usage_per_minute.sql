@@ -7,10 +7,10 @@
       "field": "minute",
       "granularity": "hour",
       "data_type": "timestamp",
-      "copy_partitions": should_use_copy_partitions()
+      "copy_partitions": dbt_bigquery_monitoring_variable_use_copy_partitions()
     },
     cluster_by = ['minute', 'reservation_id', 'project_id'],
-    partition_expiration_days = var('output_partition_expiration_days')
+    partition_expiration_days = dbt_bigquery_monitoring_variable_output_partition_expiration_days()
     )
 }}
 WITH
@@ -30,7 +30,7 @@ SELECT
   {% else %}
   period_start >= TIMESTAMP_SUB(
     TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), MINUTE),
-    INTERVAL {{ var('lookback_window_days') }} DAY)
+    INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY)
   {% endif %}
   GROUP BY ALL
 )

@@ -11,4 +11,4 @@ job_type,
 assignee_id,
 assignee_number,
 assignee_type
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ASSIGNMENTS`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`ASSIGNMENTS`

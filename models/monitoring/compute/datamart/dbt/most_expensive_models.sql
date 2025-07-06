@@ -32,4 +32,4 @@ SELECT
   cache_hit
 FROM model_aggregates
 ORDER BY total_query_cost DESC
-LIMIT {{ var('output_limit_size') }}
+LIMIT {{ dbt_bigquery_monitoring_variable_output_limit_size() }}

@@ -1,7 +1,3 @@
 {% macro should_combine_audit_logs_and_information_schema() -%}
-{% if var('should_combine_audit_logs_and_information_schema') | lower == 'true' -%}
-  {{ return(true) }}
-{%- else -%}
-  {{ return(false) }}
-{%- endif %}
+  {{ return(dbt_bigquery_monitoring_variable_should_combine_audit_logs_and_information_schema()) }}
 {%- endmacro %}

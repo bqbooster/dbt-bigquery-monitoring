@@ -11,4 +11,4 @@ username,
 updated_options,
 project_id,
 project_number
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`PROJECT_OPTIONS_CHANGES`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`PROJECT_OPTIONS_CHANGES`

@@ -1,6 +1,6 @@
 {#-- retrieve the projects list --#}
 {% macro project_list() %}
-  {% set projects = var('input_gcp_projects', []) %}
+  {% set projects = dbt_bigquery_monitoring_variable_input_gcp_projects() %}
   {% if projects is iterable and projects is not string %}
      {{ return(projects) }}
   {#-- check if it's the string and it contains a "," --#}

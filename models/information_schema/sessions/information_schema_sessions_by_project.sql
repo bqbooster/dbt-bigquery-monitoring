@@ -18,4 +18,4 @@ project_id,
 project_number,
 session_id,
 user_email
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`SESSIONS_BY_PROJECT`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`SESSIONS_BY_PROJECT`

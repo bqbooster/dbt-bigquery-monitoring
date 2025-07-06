@@ -19,4 +19,4 @@ specific_name,
 option_name,
 option_type,
 option_value
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ROUTINE_OPTIONS`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`ROUTINE_OPTIONS`

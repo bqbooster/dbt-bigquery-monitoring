@@ -1,7 +1,7 @@
 {{
    config(
     materialized = "ephemeral",
-    enabled = enable_gcp_bigquery_audit_logs()
+    enabled = dbt_bigquery_monitoring_variable_enable_gcp_bigquery_audit_logs()
     )
 }}
 SELECT
@@ -23,4 +23,4 @@ SELECT
   labels,
   errorGroups
 FROM
- `{{ var('gcp_bigquery_audit_logs_storage_project') }}.{{ var('gcp_bigquery_audit_logs_dataset') }}.{{ var('gcp_bigquery_audit_logs_table') }}`
+ `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`

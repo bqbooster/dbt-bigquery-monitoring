@@ -12,4 +12,4 @@ slot_count,
 edition,
 is_flat_rate,
 renewal_plan
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`CAPACITY_COMMITMENTS`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`CAPACITY_COMMITMENTS`

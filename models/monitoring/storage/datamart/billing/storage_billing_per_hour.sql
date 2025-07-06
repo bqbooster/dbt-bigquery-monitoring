@@ -6,10 +6,10 @@
     partition_by={
       "field": "hour",
       "data_type": "timestamp",
-      "copy_partitions": should_use_copy_partitions()
+      "copy_partitions": dbt_bigquery_monitoring_variable_use_copy_partitions()
     },
-    enabled = enable_gcp_billing_export(),
-    partition_expiration_days = var('output_partition_expiration_days')
+    enabled = dbt_bigquery_monitoring_variable_enable_gcp_billing_export(),
+    partition_expiration_days = dbt_bigquery_monitoring_variable_output_partition_expiration_days()
     )
 }}
 SELECT
@@ -22,6 +22,6 @@ WHERE
 (service.description LIKE '%BigQuery%'
 AND LOWER(sku.description) LIKE '%storage%')
 {% if is_incremental() %}
-AND TIMESTAMP_TRUNC(usage_start_time, HOUR) >= TIMESTAMP_SUB(_dbt_max_partition, INTERVAL {{ var('lookback_incremental_billing_window_days') }} DAY)
+AND TIMESTAMP_TRUNC(usage_start_time, HOUR) >= TIMESTAMP_SUB(_dbt_max_partition, INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_incremental_billing_window_days() }} DAY)
 {% endif %}
 GROUP BY ALL

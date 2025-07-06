@@ -15,4 +15,4 @@ state,
 severity,
 associated_recommendation_ids,
 additional_details
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`INSIGHTS`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`INSIGHTS`

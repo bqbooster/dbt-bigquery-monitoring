@@ -1,7 +1,7 @@
 {{
    config(
     materialized = "ephemeral",
-    enabled = enable_gcp_billing_export()
+    enabled = dbt_bigquery_monitoring_variable_enable_gcp_billing_export()
     )
 }}
 SELECT
@@ -28,4 +28,4 @@ SELECT
   transaction_type,
   seller_name
 FROM
- `{{ var('gcp_billing_export_storage_project') }}.{{ var('gcp_billing_export_dataset') }}.{{ var('gcp_billing_export_table') }}`
+ `{{ dbt_bigquery_monitoring_variable_gcp_billing_export_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_billing_export_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_billing_export_table() }}`

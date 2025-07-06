@@ -15,4 +15,4 @@ slots_assigned,
 slots_max_assigned,
 max_slots,
 scaling_mode
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`RESERVATIONS_TIMELINE`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`RESERVATIONS_TIMELINE`

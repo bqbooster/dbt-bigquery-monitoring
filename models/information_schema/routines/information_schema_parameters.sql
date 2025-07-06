@@ -23,4 +23,4 @@ parameter_name,
 data_type,
 parameter_default,
 is_aggregate
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`PARAMETERS`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`PARAMETERS`

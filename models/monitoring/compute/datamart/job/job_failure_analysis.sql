@@ -44,4 +44,4 @@ SELECT
   DATETIME_DIFF(last_occurrence, first_occurrence, HOUR) AS duration_hours
 FROM error_patterns
 ORDER BY error_count DESC
-LIMIT {{ var('output_limit_size') }}
+LIMIT {{ dbt_bigquery_monitoring_variable_output_limit_size() }}

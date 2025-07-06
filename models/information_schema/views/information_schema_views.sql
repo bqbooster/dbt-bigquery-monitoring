@@ -20,4 +20,4 @@ table_name,
 view_definition,
 check_option,
 use_standard_sql
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`VIEWS`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`VIEWS`

@@ -27,4 +27,4 @@ constraint_type,
 is_deferrable,
 initially_deferred,
 enforced
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`TABLE_CONSTRAINTS`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`TABLE_CONSTRAINTS`

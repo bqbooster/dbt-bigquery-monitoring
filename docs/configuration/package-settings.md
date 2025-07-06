@@ -49,7 +49,7 @@ See [GCP Billing export](/configuration/gcp-billing) for more information.
 
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
-| `enable_gcp_billing_export` | `DBT_BQ_MONITORING_ENABLE_GCP_BILLING_EXPORT` | Toggle to enable GCP billing export monitoring | `false` |
+| `dbt_bigquery_monitoring_variable_enable_gcp_billing_export` | `DBT_BQ_MONITORING_dbt_bigquery_monitoring_variable_enable_gcp_billing_export` | Toggle to enable GCP billing export monitoring | `false` |
 | `gcp_billing_export_storage_project` | `DBT_BQ_MONITORING_GCP_BILLING_EXPORT_STORAGE_PROJECT` | The GCP project where billing export data is stored | `'placeholder'` if enabled, `None` otherwise |
 | `gcp_billing_export_dataset` | `DBT_BQ_MONITORING_GCP_BILLING_EXPORT_DATASET` | The dataset for GCP billing export data | `'placeholder'` if enabled, `None` otherwise |
 | `gcp_billing_export_table` | `DBT_BQ_MONITORING_GCP_BILLING_EXPORT_TABLE` | The table for GCP billing export data | `'placeholder'` if enabled, `None` otherwise |

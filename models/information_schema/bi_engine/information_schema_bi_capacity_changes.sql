@@ -9,4 +9,4 @@ bi_capacity_name,
 size,
 user_email,
 preferred_tables
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`BI_CAPACITY_CHANGES`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`BI_CAPACITY_CHANGES`

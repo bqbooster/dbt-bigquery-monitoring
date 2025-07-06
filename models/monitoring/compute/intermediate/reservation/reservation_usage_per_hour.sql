@@ -7,10 +7,10 @@
       "field": "hour",
       "granularity": "day",
       "data_type": "timestamp",
-      "copy_partitions": should_use_copy_partitions()
+      "copy_partitions": dbt_bigquery_monitoring_variable_use_copy_partitions()
     },
     cluster_by = ['hour', 'reservation_id', 'project_id'],
-    partition_expiration_days = var('output_partition_expiration_days')
+    partition_expiration_days = dbt_bigquery_monitoring_variable_output_partition_expiration_days()
     )
 }}
 

@@ -33,4 +33,4 @@ cache_hit,
 period_shuffle_ram_usage_ratio,
 period_estimated_runnable_units,
 transaction_id
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`JOBS_TIMELINE_BY_USER`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`JOBS_TIMELINE_BY_USER`

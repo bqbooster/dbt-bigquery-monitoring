@@ -7,9 +7,9 @@
 WITH
 source AS (
   SELECT *,
- {%- if enable_gcp_bigquery_audit_logs() and should_combine_audit_logs_and_information_schema() %}
+ {%- if dbt_bigquery_monitoring_variable_enable_gcp_bigquery_audit_logs() and should_combine_audit_logs_and_information_schema() %}
   FROM {{ ref('combined_jobs_inputs') }}
- {%- elif enable_gcp_bigquery_audit_logs() %}
+ {%- elif dbt_bigquery_monitoring_variable_enable_gcp_bigquery_audit_logs() %}
   NULL AS job_stages,
   NULL AS parent_job_id,
   NULL AS timeline,
@@ -34,9 +34,9 @@ SELECT
   cache_hit,
   caller_supplied_user_agent,
   creation_time,
-  {%- if enable_gcp_bigquery_audit_logs() and should_combine_audit_logs_and_information_schema() %}
+  {%- if dbt_bigquery_monitoring_variable_enable_gcp_bigquery_audit_logs() and should_combine_audit_logs_and_information_schema() %}
   hour
-  {%- elif enable_gcp_bigquery_audit_logs() %}
+  {%- elif dbt_bigquery_monitoring_variable_enable_gcp_bigquery_audit_logs() %}
   TIMESTAMP_TRUNC(timestamp, HOUR)
  {%- else %}
   TIMESTAMP_TRUNC(creation_time, HOUR)
@@ -100,7 +100,7 @@ SELECT
   WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'sheets_trigger' AND value = 'schedule') THEN 'Google connected sheets - scheduled'
   WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'data_source_id' AND value = 'scheduled_query') THEN 'Scheduled query'
   WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'client_type') THEN (SELECT value FROM UNNEST(labels) WHERE key = 'client_type' LIMIT 1)
-  {%- if enable_gcp_bigquery_audit_logs() %}
+  {%- if dbt_bigquery_monitoring_variable_enable_gcp_bigquery_audit_logs() %}
   WHEN caller_supplied_user_agent LIKE 'dbt%' THEN 'dbt run'
   WHEN caller_supplied_user_agent LIKE 'Fivetran%' THEN 'Fivetran'
   WHEN caller_supplied_user_agent LIKE 'gcloud-golang-bigquery%' AND user_email LIKE 'rudderstack%' THEN 'Rudderstack'
@@ -122,8 +122,8 @@ FROM base
 base_with_all_pricing AS (
 SELECT
   * EXCEPT (dbt_model_name),
-    total_slot_ms / (1000 * 60 * 60) * {{ var('hourly_slot_price') }} AS flat_pricing_query_cost,
-    total_tb_billed * {{ var('per_billed_tb_price') }} AS ondemand_query_cost,
+    total_slot_ms / (1000 * 60 * 60) * {{ dbt_bigquery_monitoring_variable_hourly_slot_price() }} AS flat_pricing_query_cost,
+    total_tb_billed * {{ dbt_bigquery_monitoring_variable_per_billed_tb_price() }} AS ondemand_query_cost,
     CASE
         WHEN dbt_model_name LIKE 'model.%' THEN 'model'
         WHEN dbt_model_name LIKE 'snapshot.%' THEN 'snapshot'
@@ -135,7 +135,7 @@ FROM base_with_enriched_fields
 
 SELECT
  *,
-{% if var('use_flat_pricing') -%}
+{% if dbt_bigquery_monitoring_variable_use_flat_pricing() -%}
   flat_pricing_query_cost AS query_cost
 {%- else -%}
   ondemand_query_cost AS query_cost

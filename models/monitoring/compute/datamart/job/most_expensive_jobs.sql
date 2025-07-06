@@ -8,6 +8,6 @@
 query,
 j.*
 FROM {{ ref('jobs_costs_incremental') }}, UNNEST(jobs) AS j
-WHERE j.rank_cost <= {{ var('output_limit_size') }}
+WHERE j.rank_cost <= {{ dbt_bigquery_monitoring_variable_output_limit_size() }}
 ORDER BY query_cost DESC
-LIMIT {{ var('output_limit_size') }}
+LIMIT {{ dbt_bigquery_monitoring_variable_output_limit_size() }}

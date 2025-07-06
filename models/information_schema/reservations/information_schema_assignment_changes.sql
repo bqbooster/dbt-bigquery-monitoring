@@ -14,4 +14,4 @@ assignee_type,
 action,
 user_email,
 state
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ASSIGNMENT_CHANGES`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`ASSIGNMENT_CHANGES`

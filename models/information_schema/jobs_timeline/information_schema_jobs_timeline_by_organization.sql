@@ -35,4 +35,4 @@ error_result,
 cache_hit,
 period_shuffle_ram_usage_ratio,
 period_estimated_runnable_units
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`JOBS_TIMELINE_BY_ORGANIZATION`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`JOBS_TIMELINE_BY_ORGANIZATION`

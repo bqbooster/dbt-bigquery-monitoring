@@ -25,8 +25,8 @@ WITH timeline_base AS (
     TIMESTAMP_DIFF(job_end_time, job_start_time, SECOND) AS job_duration_seconds,
     TIMESTAMP_DIFF(job_start_time, job_creation_time, SECOND) AS queue_time_seconds
   FROM {{ ref('information_schema_jobs_timeline') }}
-  WHERE job_creation_time >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {{ var('lookback_window_days') }} DAY)
-    AND period_start >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {{ var('lookback_window_days') }} DAY)
+  WHERE job_creation_time >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY)
+    AND period_start >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY)
 ),
 
 slot_utilization AS (
@@ -139,4 +139,4 @@ SELECT
   END AS optimization_recommendation
 FROM aggregated_insights
 ORDER BY total_slot_ms DESC
-LIMIT {{ var('output_limit_size') }}
+LIMIT {{ dbt_bigquery_monitoring_variable_output_limit_size() }}

@@ -61,4 +61,4 @@ SELECT
   END AS optimization_recommendation
 FROM bi_engine_performance
 ORDER BY total_queries DESC
-LIMIT {{ var('output_limit_size') }}
+LIMIT {{ dbt_bigquery_monitoring_variable_output_limit_size() }}

@@ -17,4 +17,4 @@ failure_status,
 renewal_plan,
 edition,
 is_flat_rate
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`CAPACITY_COMMITMENT_CHANGES`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`CAPACITY_COMMITMENT_CHANGES`

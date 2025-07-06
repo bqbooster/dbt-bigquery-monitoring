@@ -6,9 +6,9 @@
     partition_by = {
       "field": "day",
       "data_type": "timestamp",
-      "copy_partitions": should_use_copy_partitions()
+      "copy_partitions": dbt_bigquery_monitoring_variable_use_copy_partitions()
     },
-    partition_expiration_days = var('lookback_window_days')
+    partition_expiration_days = dbt_bigquery_monitoring_variable_lookback_window_days()
     )
 }}
 SELECT
@@ -21,6 +21,6 @@ FROM {{ ref('jobs_by_project_with_cost') }}, UNNEST(referenced_tables) AS rt
 {% if is_incremental() %}
 WHERE creation_time > _dbt_max_partition
 {% else %}
-WHERE creation_time > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {{ var('lookback_window_days') }} DAY)
+WHERE creation_time > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY)
 {% endif %}
 GROUP BY ALL

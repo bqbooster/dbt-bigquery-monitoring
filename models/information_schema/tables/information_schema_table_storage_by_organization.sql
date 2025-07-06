@@ -36,4 +36,4 @@ deleted,
 table_type,
 fail_safe_physical_bytes,
 last_metadata_index_refresh_time
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`TABLE_STORAGE_BY_ORGANIZATION`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`TABLE_STORAGE_BY_ORGANIZATION`

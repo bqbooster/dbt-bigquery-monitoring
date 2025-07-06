@@ -44,4 +44,4 @@ SELECT
   IF(storage_billing_model != optimal_storage_billing_model, storage_pricing_model_difference, NULL) AS potential_savings
 FROM with_optimal
 ORDER BY potential_savings DESC
-LIMIT {{ var('output_limit_size') }}
+LIMIT {{ dbt_bigquery_monitoring_variable_output_limit_size() }}

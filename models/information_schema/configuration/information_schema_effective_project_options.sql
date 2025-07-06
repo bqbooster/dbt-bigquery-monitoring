@@ -12,4 +12,4 @@ option_description,
 option_type,
 option_set_level,
 option_set_on_id
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`EFFECTIVE_PROJECT_OPTIONS`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`EFFECTIVE_PROJECT_OPTIONS`

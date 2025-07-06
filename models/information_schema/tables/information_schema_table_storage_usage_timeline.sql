@@ -25,4 +25,4 @@ billable_long_term_logical_usage,
 billable_total_physical_usage,
 billable_active_physical_usage,
 billable_long_term_physical_usage
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`TABLE_STORAGE_USAGE_TIMELINE`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`TABLE_STORAGE_USAGE_TIMELINE`

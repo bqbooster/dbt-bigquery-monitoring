@@ -1,5 +1,5 @@
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-organization-options-changes -#}
-{# Required role/permissions: 
+{# Required role/permissions:
 
       To get the permission that
       you need to get the configuration changes,
@@ -27,4 +27,4 @@ username,
 updated_options,
 project_id,
 project_number
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ORGANIZATION_OPTIONS_CHANGES`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`ORGANIZATION_OPTIONS_CHANGES`

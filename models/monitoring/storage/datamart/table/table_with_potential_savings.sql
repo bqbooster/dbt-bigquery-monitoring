@@ -18,4 +18,4 @@ WHERE
 table_type = 'BASE TABLE'
 AND potential_savings > 0
 ORDER BY storage_pricing_model_difference DESC
-LIMIT {{ var('output_limit_size') }}
+LIMIT {{ dbt_bigquery_monitoring_variable_output_limit_size() }}

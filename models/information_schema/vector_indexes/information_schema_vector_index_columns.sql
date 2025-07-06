@@ -20,4 +20,4 @@ table_name,
 index_name,
 index_column_name,
 index_field_path
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`VECTOR_INDEX_COLUMNS`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`VECTOR_INDEX_COLUMNS`

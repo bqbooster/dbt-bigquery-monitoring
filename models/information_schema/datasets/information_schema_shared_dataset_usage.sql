@@ -19,4 +19,4 @@ subscriber_org_display_name,
 job_principal_subject,
 num_rows_processed,
 total_bytes_processed
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`SHARED_DATASET_USAGE`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`SHARED_DATASET_USAGE`

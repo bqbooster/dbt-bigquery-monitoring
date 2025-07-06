@@ -9,7 +9,7 @@
 {% macro lower_boundary_no_data() -%}
     TIMESTAMP_SUB(
         TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR),
-        INTERVAL {{ var('lookback_window_days') }} DAY
+        INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY
     )
 {%- endmacro %}
 
@@ -45,7 +45,7 @@
           {#- the table already exists, we read logs are above latest max partition or above lookback window #}
             creation_time >= {{ get_partition_logic() }}
             {#- and if we enabled audit logs, we pushback to 6h before because of the potential delay of audit logs #}
-            {% if enable_gcp_bigquery_audit_logs() %}
+            {% if dbt_bigquery_monitoring_variable_enable_gcp_bigquery_audit_logs() %}
             AND hour >= TIMESTAMP_SUB(
                            TIMESTAMP_TRUNC({{ get_partition_logic() }}, HOUR),
                            INTERVAL 6 HOUR

@@ -12,4 +12,4 @@ error_code,
 total_requests,
 total_rows,
 total_input_bytes
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`WRITE_API_TIMELINE_BY_FOLDER`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`WRITE_API_TIMELINE_BY_FOLDER`

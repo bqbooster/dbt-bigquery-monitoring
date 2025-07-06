@@ -24,4 +24,4 @@ description,
 collation_name,
 rounding_mode,
 policy_tags
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`COLUMN_FIELD_PATHS`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`COLUMN_FIELD_PATHS`

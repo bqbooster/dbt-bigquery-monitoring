@@ -14,4 +14,4 @@ object_name,
 object_type,
 privilege_type,
 grantee
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`OBJECT_PRIVILEGES`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`OBJECT_PRIVILEGES`

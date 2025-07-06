@@ -6,13 +6,13 @@
     partition_by={
       "field": "day",
       "data_type": "timestamp",
-      "copy_partitions": should_use_copy_partitions()
+      "copy_partitions": dbt_bigquery_monitoring_variable_use_copy_partitions()
     },
     )
 }}
 WITH compute_cost AS (
   {#- we use the billing export if possible else fallback to the estimated comput cost #}
-  {%- if enable_gcp_billing_export() %}
+  {%- if dbt_bigquery_monitoring_variable_enable_gcp_billing_export() %}
   SELECT TIMESTAMP_TRUNC(hour, DAY) AS day,
     'compute' AS cost_category,
     SUM(compute_cost) AS cost
@@ -33,7 +33,7 @@ WITH compute_cost AS (
   GROUP BY ALL
   {% endif %}
 )
-{%- if enable_gcp_billing_export() %}
+{%- if dbt_bigquery_monitoring_variable_enable_gcp_billing_export() %}
 ,
 storage_cost AS (
   SELECT
@@ -57,7 +57,7 @@ day,
 cost_category,
 cost
 FROM compute_cost
-  {%- if enable_gcp_billing_export() %}
+  {%- if dbt_bigquery_monitoring_variable_enable_gcp_billing_export() %}
   UNION ALL
   SELECT day, cost_category, cost FROM storage_cost AS s
   {%- endif %}

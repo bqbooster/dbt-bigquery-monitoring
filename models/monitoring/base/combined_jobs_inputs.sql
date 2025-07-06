@@ -1,7 +1,7 @@
 {{
    config(
     materialized = "ephemeral",
-    enabled = enable_gcp_bigquery_audit_logs() and should_combine_audit_logs_and_information_schema()
+    enabled = dbt_bigquery_monitoring_variable_enable_gcp_bigquery_audit_logs() and should_combine_audit_logs_and_information_schema()
     )
 }}
 
@@ -47,7 +47,7 @@ SELECT
   {% else %}
   j.creation_time >= TIMESTAMP_SUB(TIMESTAMP_TRUNC(TIMESTAMP_SUB(
   TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR),
-  INTERVAL {{ var('lookback_window_days') }} DAY), HOUR), INTERVAL 6 HOUR)
+  INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY), HOUR), INTERVAL 6 HOUR)
   {% endif %}
   AND (a.project_id = j.project_id AND a.job_id = j.job_id)
  WHERE
@@ -56,5 +56,5 @@ SELECT
   {% else %}
   a.timestamp >= TIMESTAMP_SUB(
    TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR),
-   INTERVAL {{ var('lookback_window_days') }} DAY)
+   INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY)
   {% endif %}

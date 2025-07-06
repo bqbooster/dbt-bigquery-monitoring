@@ -15,4 +15,4 @@ primary_impact,
 priority,
 associated_insight_ids,
 additional_details
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`RECOMMENDATIONS`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`RECOMMENDATIONS`

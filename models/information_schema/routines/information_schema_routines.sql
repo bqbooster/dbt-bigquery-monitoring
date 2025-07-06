@@ -30,4 +30,4 @@ created,
 last_altered,
 ddl,
 connection
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`ROUTINES`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`ROUTINES`

@@ -29,4 +29,4 @@ coverage_percentage,
 unindexed_row_count,
 total_logical_bytes,
 total_storage_bytes
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`VECTOR_INDEXES`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`VECTOR_INDEXES`

@@ -1,7 +1,7 @@
 {{
    config(
     materialized = "view",
-    enabled = enable_gcp_bigquery_audit_logs()
+    enabled = dbt_bigquery_monitoring_variable_enable_gcp_bigquery_audit_logs()
     )
 }}
 SELECT

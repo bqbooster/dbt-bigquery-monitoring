@@ -14,4 +14,4 @@ base_table_catalog,
 base_table_schema,
 base_table_name,
 snapshot_time
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`TABLE_SNAPSHOTS`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`TABLE_SNAPSHOTS`

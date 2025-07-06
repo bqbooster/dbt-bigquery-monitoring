@@ -17,7 +17,6 @@ models:
     +tags:
       - "dbt-bigquery-monitoring"
     information_schema:
-      +materialized: "{{ var('google_information_schema_model_materialization', 'placeholder') if var('google_information_schema_model_materialization', 'placeholder') != 'placeholder' else 'ephemeral' }}"
       +tags:
         - "dbt-bigquery-monitoring-information-schema"
     monitoring:
@@ -30,51 +29,3 @@ models:
       storage:
         +tags:
           - "dbt-bigquery-monitoring-storage"
-
-vars:
-  # Environment configuration
-  bq_region: "{{ env_var('DBT_BQ_MONITORING_REGION', 'us') }}"
-  input_gcp_projects: "{{ env_var('DBT_BQ_MONITORING_GCP_PROJECTS', '') }}" # example: ['my-gcp-project', 'my-gcp-project2']
-  # https://cloud.google.com/bigquery/pricing#pricing
-  # On-demand compute (analysis) pricing
-  use_flat_pricing: "{{ env_var('DBT_BQ_MONITORING_USE_FLAT_PRICING', true) }}"
-  per_billed_tb_price: "{{ env_var('DBT_BQ_MONITORING_PER_BILLED_TB_PRICE', 6.25) }}"
-  free_tb_per_month: "{{ env_var('DBT_BQ_MONITORING_FREE_TB_PER_MONTH', 1) }}"
-  # Capacity compute (analysis) pricing
-  hourly_slot_price: "{{ env_var('DBT_BQ_MONITORING_HOURLY_SLOT_PRICE', 0.04) }}"
-  # https://cloud.google.com/bigquery/pricing#storage
-  active_logical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE', 0.02) }}"
-  long_term_logical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_LONG_TERM_LOGICAL_STORAGE_GB_PRICE', 0.01) }}"
-  active_physical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_ACTIVE_PHYSICAL_STORAGE_GB_PRICE', 0.04) }}"
-  long_term_physical_storage_gb_price: "{{ env_var('DBT_BQ_MONITORING_LONG_TERM_PHYSICAL_STORAGE_GB_PRICE', 0.02) }}"
-  free_storage_gb_per_month: "{{ env_var('DBT_BQ_MONITORING_FREE_STORAGE_GB_PER_MONTH', 10) }}"
-  # BI Engine pricing
-  bi_engine_gb_hourly_price: "{{ env_var('DBT_BQ_MONITORING_BI_ENGINE_GB_HOURLY_PRICE', 0.0416) }}"
-
-  # Project input configuration
-  # The number of days to look back for regular tables, you might use up to 180 days usually.
-  # Expiration on intermediate tables is aligned so that it can store data as old your maximum lookback window as it's partitioned by time.
-  lookback_window_days: "{{ env_var('DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS', 7) }}"
-  # Billing data can be late, a safe window is to refresh data for the past 3 days but you can increase it for exceptional cases
-  lookback_incremental_billing_window_days: "{{ env_var('DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS', 3) }}"
-  # Project output configuration
-  output_materialization: "{{ env_var('DBT_BQ_MONITORING_OUTPUT_MATERIALIZATION', 'table') }}"
-  output_limit_size: "{{ env_var('DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE', 1000) }}"
-  output_partition_expiration_days: "{{ env_var('DBT_BQ_MONITORING_TABLE_EXPIRATION_DAYS', 365) }}"
-  use_copy_partitions: "{{ env_var('DBT_BQ_MONITORING_USE_COPY_PARTITIONS', true) }}"
-  google_information_schema_model_materialization: "{{ env_var('DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION', 'placeholder') }}"
-
-  # GCP Billing export (required for storage cost monitoring over time)
-  # The values are configured during the export setup in the GCP Console
-  enable_gcp_billing_export: "{{ env_var('DBT_BQ_MONITORING_ENABLE_GCP_BILLING_EXPORT', false) }}"
-  gcp_billing_export_storage_project: "{{ env_var('DBT_BQ_MONITORING_GCP_BILLING_EXPORT_STORAGE_PROJECT', 'placeholder') if var('enable_gcp_billing_export') | as_bool else None }}"
-  gcp_billing_export_dataset: "{{ env_var('DBT_BQ_MONITORING_GCP_BILLING_EXPORT_DATASET', 'placeholder') if var('enable_gcp_billing_export') | as_bool else None }}"
-  gcp_billing_export_table: "{{ env_var('DBT_BQ_MONITORING_GCP_BILLING_EXPORT_TABLE', 'placeholder') if var('enable_gcp_billing_export') | as_bool else None }}"
-
-  # GCP BigQuery cloud audit (as an alternative to INFORMATION_SCHEMA.JOBS)
-  # The values are configured during the export setup in the GCP Console
-  enable_gcp_bigquery_audit_logs: "{{ env_var('DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS', false) }}"
-  gcp_bigquery_audit_logs_storage_project: "{{ env_var('DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_STORAGE_PROJECT', 'placeholder') if var('enable_gcp_bigquery_audit_logs') | as_bool else None }}"
-  gcp_bigquery_audit_logs_dataset: "{{ env_var('DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_DATASET', 'placeholder') if var('enable_gcp_bigquery_audit_logs') | as_bool else None }}"
-  gcp_bigquery_audit_logs_table: "{{ env_var('DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_TABLE', 'placeholder') if var('enable_gcp_bigquery_audit_logs') | as_bool else None }}"
-  should_combine_audit_logs_and_information_schema: "{{ env_var('DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA', false) }}"

@@ -17,7 +17,7 @@ Access control with IAM. -#}
 {% set preflight_sql -%}
 SELECT
 CONCAT('`', CATALOG_NAME, '`.`', SCHEMA_NAME, '`') AS SCHEMA_NAME
-FROM `region-{{ var('bq_region') }}`.`INFORMATION_SCHEMA`.`SCHEMATA`
+FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`SCHEMATA`
 {%- endset %}
 {% set results = run_query(preflight_sql) %}
 {% set dataset_list = results | map(attribute='SCHEMA_NAME') | list %}

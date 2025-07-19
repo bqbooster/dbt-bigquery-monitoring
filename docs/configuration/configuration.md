@@ -54,6 +54,44 @@ vars:
   input_gcp_projects: [ 'my-gcp-project', 'my-gcp-project-2' ]
 ```
 
+#### Supported Input Formats
+
+The `input_gcp_projects` setting accepts multiple input formats for maximum flexibility:
+
+**1. dbt project variables (dbt_project.yml):**
+```yml
+vars:
+  input_gcp_projects: "single-project"                    # Single project as string
+  input_gcp_projects: ["project1", "project2"]            # Multiple projects as array
+```
+
+**2. CLI variables:**
+```bash
+dbt run --vars '{"input_gcp_projects": "test"}'                   # Single project
+dbt run --vars '{"input_gcp_projects": ["test1", "test2"]}'       # Multiple projects
+```
+
+**3. Environment variables:**
+```bash
+# Single project
+export DBT_BQ_MONITORING_GCP_PROJECTS="single-project"
+
+# Multiple projects with quotes
+export DBT_BQ_MONITORING_GCP_PROJECTS='["project1","project2"]'
+
+# Multiple projects without quotes (also supported)
+export DBT_BQ_MONITORING_GCP_PROJECTS='[project1,project2]'
+
+# Single project in array format
+export DBT_BQ_MONITORING_GCP_PROJECTS='["project1"]'
+export DBT_BQ_MONITORING_GCP_PROJECTS='[project1]'
+
+# Empty array
+export DBT_BQ_MONITORING_GCP_PROJECTS='[]'
+```
+
+All input formats are automatically normalized to an array of project strings internally, so you can use whichever format is most convenient for your setup.
+
 :::warning
 
 When using the "project mode", the package will create intermediate tables to avoid issues from BigQuery when too many projects are used.

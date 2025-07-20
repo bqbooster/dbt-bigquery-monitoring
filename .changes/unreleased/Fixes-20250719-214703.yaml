@@ -1,6 +1,0 @@
-kind: Fixes
-body: Fix input_gcp_projects parsing and avoid fromjson for dbt_fusion compatibility
-time: 2025-07-19T21:47:03.320443+02:00
-custom:
-    Author: Kayrnt
-    Issue: ""

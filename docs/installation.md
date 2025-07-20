@@ -12,7 +12,7 @@ Add the following to your `packages.yml` file:
 ```yml
 packages:
   - package: bqbooster/dbt_bigquery_monitoring
-    version: 0.21.0
+    version: 0.22.0
 ```
 
 ## Set up an output dataset

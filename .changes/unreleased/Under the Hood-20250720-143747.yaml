@@ -1,0 +1,6 @@
+kind: Under the Hood
+body: Update dbt-bigquery to 1.10.0 in CI
+time: 2025-07-20T14:37:47.811225+02:00
+custom:
+    Author: Kayrnt
+    Issue: ""

@@ -1,0 +1,28 @@
+version: 2
+models:
+- name: information_schema_search_index_column_options
+  columns:
+  - name: index_catalog
+    description: The name of the project that contains the dataset.
+    data_type: STRING
+  - name: index_schema
+    description: The name of the dataset that contains the index.
+    data_type: STRING
+  - name: table_name
+    description: The name of the base table that the index is created on.
+    data_type: STRING
+  - name: index_name
+    description: The name of the index.
+    data_type: STRING
+  - name: column_name
+    description: The name of the indexed column that the option is set on.
+    data_type: STRING
+  - name: option_name
+    description: The name of the option specified on the column.
+    data_type: STRING
+  - name: option_type
+    description: The type of the option.
+    data_type: STRING
+  - name: option_value
+    description: The value of the option.
+    data_type: STRING

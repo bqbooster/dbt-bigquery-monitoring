@@ -1,6 +1,6 @@
 {{ config(materialized=dbt_bigquery_monitoring_materialization(), enabled=false, tags=["dbt-bigquery-monitoring-information-schema-by-folder"], partition_by={'field': 'creation_time', 'data_type': 'timestamp', 'granularity': 'hour'}, partition_expiration_days=180) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-jobs-by-folder -#}
-{# Required role/permissions:
+{# Required role/permissions: 
 
       To get the permission that
       you need to query the INFORMATION_SCHEMA.JOBS_BY_FOLDER view,

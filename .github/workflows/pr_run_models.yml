@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      DBT_COMMON_FLAGS: "--empty --exclude information_schema_streaming_timeline_by_organization information_schema_jobs_timeline_by_organization information_schema_table_storage_by_organization information_schema_table_storage_by_organization information_schema_write_api_timeline_by_organization information_schema_jobs_by_organization information_schema_table_storage_usage_timeline_by_organization"
+      DBT_COMMON_FLAGS: "--empty --exclude tag:dbt-bigquery-monitoring-information-schema-by-organization"
 
     steps:
       - name: Checkout
@@ -45,7 +45,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install Python packages
-        run: python -m pip install dbt-bigquery~=1.9.1 sqlfluff-templater-dbt
+        run: python -m pip install dbt-bigquery~=1.10.0 sqlfluff-templater-dbt
 
       - name: Write keyfile if secret is defined
         run: |

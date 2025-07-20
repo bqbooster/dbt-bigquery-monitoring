@@ -62,10 +62,14 @@ models:
     description: "If the project is configured to use on-demand\n        pricing,\
       \ then this field contains the total bytes billed for the\n        job. If the\
       \ project is configured to use flat-rate\n        pricing, then you are not\
-      \ billed for bytes and this field is\n        informational only."
+      \ billed for bytes and this field is\n        informational only. This field\
+      \ is only populated for completed jobs\n        and contains the total number\
+      \ of bytes billed for the entire duration\n        of the job."
     data_type: INTEGER
   - name: total_bytes_processed
-    description: Total bytes processed by the job.
+    description: "Total bytes processed by the job. This field is only populated for\n\
+      \        completed jobs and contains the total number of bytes processed over\n\
+      \        the entire duration of the job."
     data_type: INTEGER
   - name: error_result
     description: "Details of error (if any) as an \nErrorProto."

@@ -22,5 +22,7 @@ storage_last_modified_time,
 deleted,
 table_type,
 fail_safe_physical_bytes,
-last_metadata_index_refresh_time
+last_metadata_index_refresh_time,
+table_deletion_reason,
+table_deletion_time
 FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`TABLE_STORAGE`

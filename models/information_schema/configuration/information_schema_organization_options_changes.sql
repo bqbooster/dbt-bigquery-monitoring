@@ -1,5 +1,5 @@
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-organization-options-changes -#}
-{# Required role/permissions:
+{# Required role/permissions: 
 
       To get the permission that
       you need to get the configuration changes,

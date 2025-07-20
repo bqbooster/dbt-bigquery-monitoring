@@ -1,0 +1,55 @@
+version: 2
+models:
+- name: information_schema_search_indexes_by_organization
+  columns:
+  - name: project_id
+    description: The name of the project that contains the dataset.
+    data_type: STRING
+  - name: project_number
+    description: The project number that contains the dataset.
+    data_type: STRING
+  - name: index_catalog
+    description: The name of the project that contains the dataset.
+    data_type: STRING
+  - name: index_schema
+    description: The name of the dataset that contains the index.
+    data_type: STRING
+  - name: table_name
+    description: The name of the base table that the index is created on.
+    data_type: STRING
+  - name: index_name
+    description: The name of the search index.
+    data_type: STRING
+  - name: index_status
+    description: 'The status of the index can be one of the following:
+
+
+      ACTIVE: the index is usable or being created.
+
+      PENDING DISABLEMENT: the total size of indexed base tables exceeds your organization''s
+      limit; the index is queued for deletion. While in this state, the index is usable
+      in search queries and you are charged for the search index storage.
+
+      TEMPORARILY DISABLED: either the total size of indexed base tables exceeds your
+      organization''s limit, or the base indexed table is smaller than 10 GB. While
+      in this state, the index is not used in search queries and you are not charged
+      for the search index storage.
+
+      PERMANENTLY DISABLED: there is an incompatible schema change on the base table,
+      such as changing the type of an indexed column from STRING to INT64.'
+    data_type: STRING
+  - name: index_status_details
+    description: "The record contains following fields:\n\nthrottle_status: indicates\
+      \ the throttle status of the search index, possible values are as follows:\n\
+      \            \nUNTHROTTLED: the index is usable.\nBASE_TABLE_TOO_SMALL: the\
+      \ base table size is smaller than 10 GB. This limit applies whether or not you\
+      \ use your own reservation for your index-management jobs. In this case, the\
+      \ index is temporarily disabled and search queries don't use the index.\nBASE_TABLE_TOO_LARGE:\
+      \ the base table size exceeds your organization's limit.\nORGANIZATION_LIMIT_EXCEEDED:\
+      \ the total size of indexed base tables in your organization exceeds your organization's\
+      \ limit.\n\n\nmessage: detailed message that describes the index status."
+    data_type: RECORD
+  - name: use_background_reservation
+    description: Indicates whether the index maintenance uses the BACKGROUND reservation.
+      This is set to FALSE when the index maintenance uses the limit.
+    data_type: BOOL

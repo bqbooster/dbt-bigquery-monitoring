@@ -76,3 +76,12 @@ models:
   - name: LAST_METADATA_INDEX_REFRESH_TIME
     description: The last metadata index refresh time of the table.
     data_type: TIMESTAMP
+  - name: TABLE_DELETION_REASON
+    description: "Table deletion reason if the DELETED field is true. The\n      possible\
+      \ values are as follows:\n        \nTABLE_EXPIRATION: table deleted after set\
+      \ expiration time\nDATASET_DELETION: dataset deleted by user\nUSER_DELETED:\
+      \ table was deleted by user"
+    data_type: STRING
+  - name: TABLE_DELETION_TIME
+    description: The deletion time of the table.
+    data_type: TIMESTAMP

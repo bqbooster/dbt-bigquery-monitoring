@@ -1,7 +1,15 @@
 version: 2
 models:
-- name: information_schema_table_storage_by_organization
+- name: information_schema_table_storage_by_folder
   columns:
+  - name: FOLDER_NUMBERS
+    description: "Number IDs of folders that contain the project, starting with the\
+      \ folder that immediately\n        contains the project, followed by the folder\
+      \ that contains the child folder, and so forth.\n        For example, if FOLDER_NUMBERS\
+      \ is [1, 2, 3], then folder\n        1 immediately contains the project, folder\
+      \ 2 contains\n        1, and folder 3 contains 2. This column is only\n    \
+      \    populated in TABLE_STORAGE_BY_FOLDER."
+    data_type: REPEATED INTEGER
   - name: PROJECT_ID
     description: The project ID of the project that contains the dataset.
     data_type: STRING

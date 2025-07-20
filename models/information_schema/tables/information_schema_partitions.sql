@@ -44,7 +44,6 @@ storage_tier
 {% endfor %}
 {%- endif -%}
 )
-
 SELECT
 table_catalog,
 table_schema,

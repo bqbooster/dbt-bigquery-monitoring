@@ -1,4 +1,4 @@
-{{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
+{{ config(materialized=dbt_bigquery_monitoring_materialization(), tags=["dbt-bigquery-monitoring-information-schema-by-organization"]) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-table-storage-usage-by-organization -#}
 {# Required role/permissions: To query the INFORMATION_SCHEMA.TABLE_STORAGE_USAGE_TIMELINE_BY_ORGANIZATION view, you
 need the following Identity and Access Management (IAM) permissions for your organization:

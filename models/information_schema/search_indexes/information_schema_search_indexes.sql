@@ -53,7 +53,6 @@ analyzer
 {% endfor %}
 {%- endif -%}
 )
-
 SELECT
 index_catalog,
 index_schema,

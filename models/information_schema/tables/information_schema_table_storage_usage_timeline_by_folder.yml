@@ -1,0 +1,56 @@
+version: 2
+models:
+- name: information_schema_table_storage_usage_timeline_by_folder
+  columns:
+  - name: FOLDER_NUMBERS
+    description: "Number IDs of folders that contain the project, starting with the\
+      \ folder that immediately\n       contains the project, followed by the folder\
+      \ that contains the child folder, and so forth.\n       For example, if FOLDER_NUMBERS\
+      \ is [1, 2, 3], then folder\n       1 immediately contains the project, folder\
+      \ 2 contains\n       1, and folder 3 contains 2. This column is only\n     \
+      \  populated in TABLE_STORAGE_USAGE_TIMELINE_BY_FOLDER."
+    data_type: REPEATED INTEGER
+  - name: PROJECT_ID
+    description: The project ID of the project that contains the dataset
+    data_type: STRING
+  - name: TABLE_CATALOG
+    description: The project ID of the project that contains the dataset
+    data_type: STRING
+  - name: PROJECT_NUMBER
+    description: The project number of the project that contains the dataset
+    data_type: INT64
+  - name: TABLE_SCHEMA
+    description: "The name of the dataset that contains the table or materialized\
+      \ view,\n       also referred to as the datasetId"
+    data_type: STRING
+  - name: TABLE_NAME
+    description: "The name of the table or materialized view, also referred to as\
+      \ the\n       tableId"
+    data_type: STRING
+  - name: BILLABLE_TOTAL_LOGICAL_USAGE
+    description: "The total logical usage, in MiB second.\nReturns 0 if the dataset\
+      \ uses the physical storage\n     billing model."
+    data_type: INT64
+  - name: BILLABLE_ACTIVE_LOGICAL_USAGE
+    description: "The logical usage that is less than 90 days old, in MiB\n     second.\n\
+      Returns 0 if the dataset uses the physical storage\n     billing model."
+    data_type: INT64
+  - name: BILLABLE_LONG_TERM_LOGICAL_USAGE
+    description: "The logical usage that is more than 90 days old, in MiB\n     second.\n\
+      Returns 0 if the dataset uses the physical storage\n     billing model."
+    data_type: INT64
+  - name: BILLABLE_TOTAL_PHYSICAL_USAGE
+    description: "The total usage in MiB second. This includes\n     physical bytes\
+      \ used for fail-safe and\n     time travel storage.\nReturns 0 if the dataset\
+      \ uses the logical storage\n     billing model."
+    data_type: INT64
+  - name: BILLABLE_ACTIVE_PHYSICAL_USAGE
+    description: "The physical usage that is less than 90 days old,\n     in MiB second.\
+      \ This\n     includes physical bytes used for fail-safe and\n     time travel\
+      \ storage.\nReturns 0 if the dataset uses the logical storage\n     billing\
+      \ model."
+    data_type: INT64
+  - name: BILLABLE_LONG_TERM_PHYSICAL_USAGE
+    description: "The physical usage that is more than 90 days old,\n     in MiB second.\n\
+      Returns 0 if the dataset uses the logical storage\n     billing model."
+    data_type: INT64

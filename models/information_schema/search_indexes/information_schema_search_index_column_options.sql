@@ -36,7 +36,7 @@ WITH base AS (
 index_schema,
 table_name,
 index_name,
-column_name,
+index_column_name,
 option_name,
 option_type,
 option_value
@@ -50,7 +50,7 @@ index_catalog,
 index_schema,
 table_name,
 index_name,
-column_name,
+index_column_name,
 option_name,
 option_type,
 option_value

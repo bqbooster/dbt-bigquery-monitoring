@@ -5,7 +5,10 @@ SHELL := /bin/bash
 IMAGE_NAME := dbt-bigquery-monitoring-base
 
 test:
-	poetry run pytest
+	uv run pytest
+
+lint:
+	uv run sqlfluff lint
 
 build:
 	docker build -t $(IMAGE_NAME):main .

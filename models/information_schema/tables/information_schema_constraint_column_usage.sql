@@ -32,6 +32,7 @@ constraint_name
 {% endfor %}
 {%- endif -%}
 )
+
 SELECT
 table_catalog,
 table_schema,

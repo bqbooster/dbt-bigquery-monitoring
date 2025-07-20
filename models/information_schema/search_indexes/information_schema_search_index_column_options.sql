@@ -45,6 +45,7 @@ option_value
 {% endfor %}
 {%- endif -%}
 )
+
 SELECT
 index_catalog,
 index_schema,

@@ -34,6 +34,7 @@ position_in_unique_constraint
 {% endfor %}
 {%- endif -%}
 )
+
 SELECT
 constraint_catalog,
 constraint_schema,

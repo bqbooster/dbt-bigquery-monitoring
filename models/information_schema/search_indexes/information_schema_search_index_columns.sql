@@ -43,6 +43,7 @@ index_field_path
 {% endfor %}
 {%- endif -%}
 )
+
 SELECT
 index_catalog,
 index_schema,

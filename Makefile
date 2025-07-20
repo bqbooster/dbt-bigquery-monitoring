@@ -10,5 +10,8 @@ test:
 lint:
 	uv run sqlfluff lint
 
+fix:
+	uv run sqlfluff fix
+
 build:
 	docker build -t $(IMAGE_NAME):main .

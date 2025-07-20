@@ -1,4 +1,4 @@
-{{ config(materialized=dbt_bigquery_monitoring_materialization(), tags=["dbt-bigquery-monitoring-information-schema-by-organization"]) }}
+{{ config(materialized=dbt_bigquery_monitoring_materialization(), enabled=false, tags=["dbt-bigquery-monitoring-information-schema-by-organization"]) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-recommendations-by-org -#}
 {# Required role/permissions: To view recommendations with the
 INFORMATION_SCHEMA.RECOMMENDATIONS_BY_ORGANIZATION view, you must have the

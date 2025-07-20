@@ -1,8 +1,32 @@
-# dbt-bigquery-monitoring
+<div align="center">
+  <h1>
+    dbt-bigquery-monitoring
+  </h1>
 
-dbt-bigquery-monitoring is a dbt package that provides models for monitoring BigQuery performance and costs.
+  <h2>
+    A dbt package that provides models for monitoring BigQuery performance and costs.
+  </h2>
 
-*little tip: click on "Watch -> Custom -> Releases" to get an email on new versions with the changelog*
+  <div align="center">
+    <a href="https://github.com/bqbooster/dbt-bigquery-monitoring/graphs/commit-activity"><img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/bqbooster/dbt-bigquery-monitoring"/></a>
+    <a href="https://github.com/bqbooster/dbt-bigquery-monitoring/issues"><img alt="GitHub open issues" src="https://img.shields.io/github/issues/bqbooster/dbt-bigquery-monitoring"/></a>
+    <a href="https://github.com/bqbooster/dbt-bigquery-monitoring/pulls"><img alt="GitHub open pull requests" src="https://img.shields.io/github/issues-pr/bqbooster/dbt-bigquery-monitoring"/></a>
+    <a href="https://github.com/bqbooster/dbt-bigquery-monitoring/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/bqbooster/dbt-bigquery-monitoring"/></a>
+    <a href="https://github.com/bqbooster/dbt-bigquery-monitoring/releases"><img alt="Latest Release" src="https://img.shields.io/github/v/release/bqbooster/dbt-bigquery-monitoring"/></a>
+    <a href="https://github.com/bqbooster/dbt-bigquery-monitoring/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/bqbooster/dbt-bigquery-monitoring"/></a>
+  </div>
+
+  <p>
+    <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/">Documentation</a>
+    ◆ <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/installation">Installation</a>
+    ◆ <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/configuration">Configuration</a>
+    ◆ <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/running-the-package">Running</a>
+    ◆ <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/using-the-package">Usage</a>
+    ◆ <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/contributing">Contributing</a>
+  </p>
+</div>
+
+*💡 Tip: Click on "Watch → Custom → Releases" to get email notifications for new versions with changelog details*
 
 ## Is that package for me?
 If one of those statements are true, this package is relevant:

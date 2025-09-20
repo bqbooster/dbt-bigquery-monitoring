@@ -111,3 +111,24 @@ query-comment:
 ```
 
 To get more details about query comments, please refer to the [dbt documentation](https://docs.getdbt.com/reference/project-configs/query-comment).
+
+## Troubleshooting Configuration
+
+If you're having trouble with your configuration or want to verify that your environment variables and dbt variables are being resolved correctly, you can use the built-in debug macro to log all configuration values.
+
+### Example Usage
+
+Run this command to see the configuration debug information:
+
+```bash
+dbt run-operation debug_dbt_bigquery_monitoring_variables
+```
+
+### Variable priority
+
+The package will prioritize the configuration variables in the following order:
+
+1. Environment variables
+2. dbt variables
+3. variables in the `dbt_project.yml` file
+4. default values

@@ -41,13 +41,12 @@ This document distills the essential knowledge from `docs/` so automated agents 
 - Datamarts deliver spend, compute, storage, reservation, and usage aggregates such as `compute_cost_per_hour`, `most_expensive_jobs`, and `storage_billing_per_hour` (`docs/using-the-package.md`).
 
 ## Contributor Workflow
-- Preferred tooling: pipx, SQLFluff, changie, and pre-commit (`docs/contributing.md`).
+- Preferred tooling: uv (for dependency management and running scripts), SQLFluff, changie, and pre-commit (`docs/contributing.md`).
 - Standard flow: fork → branch → develop → run tests and lint (`sqlfluff lint`) → generate changelog (`changie new`) → commit → PR.
+- Run project commands through `uv` to ensure the managed environment is used (for example, `uv run sqlfluff lint`).
 
 ## Agent Operating Principles
 - Respect existing docs and configuration; mirror public documentation when generating new content.
 - Before editing SQL, ensure linting compatibility (`sqlfluff`) and maintain incremental model conventions.
 - Confirm scheduling or permission guidance aligns with sections above; diverge only with explicit user approval.
 - When unsure, surface clarifying questions with references to affected sections in this guide.
-
-

@@ -4,9 +4,6 @@ SHELL := /bin/bash
 # Define the name of the Docker image
 IMAGE_NAME := dbt-bigquery-monitoring-base
 
-test:
-	uv run pytest
-
 lint:
 	uv run sqlfluff lint
 

@@ -7,11 +7,32 @@ slug: /contributing
 
 ## Install setup
 
-You're free to use the environment management tools you prefer but if you're familiar with those, you can use the following:
+We recommend managing dependencies and running commands with `uv`. You're free to use the tooling you prefer, but the following setup keeps things consistent with project automation:
 
-- pipx (to isolate the global tools from your local environment)
-- SQLFluff (to lint SQL)
-- changie (to generate CHANGELOG entries)
+- uv (recommended) to manage the virtual environment and execute project commands
+- pipx (optional) to install global helper CLIs such as changie
+- SQLFluff (lint SQL)
+- changie (generate CHANGELOG entries)
+
+### uv quickstart
+
+Install `uv` by following the [official instructions](https://docs.astral.sh/uv/getting-started/installation/) or run:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Then bootstrap the project environment and install dev dependencies:
+
+```bash
+uv sync --group dev
+```
+
+Run project commands through `uv` to ensure they use the managed environment. For example:
+
+```bash
+uv run sqlfluff lint
+```
 
 ### tool setup guide
 
@@ -22,14 +43,10 @@ pip install pipx
 pipx ensurepath
 ```
 
-Then you'll be able to install tox, pre-commit and sqlfluff with pipx:
-
-```bash
-pipx install sqlfluff
-```
+Then you'll be able to install standalone tools such as changie with pipx if you prefer a global installation.
 
 To install changie, there are few options depending on your OS.
-See the [installation guide](https://changie.dev/guide/installation/) for more details.
+See the [installation guide](https://changie.dev/guide/installation/) for more details, or install it with `pipx install changie`.
 
 To configure your dbt profile, run following command and follow the prompts:
 
@@ -42,7 +59,7 @@ dbt init
 - Fork the repo
 - Create a branch from `main`
 - Make your changes
-- Run the tests
+- Run the tests (for example `uv run dbt test` or your preferred command)
 - Create your changelog entry with `changie new` (don't edit directly the CHANGELOG.md)
 - Commit your changes (it will run the linter through pre-commit)
 - Push your branch and open a PR on the repository
@@ -61,22 +78,22 @@ We use SQLFluff to keep SQL style consistent. By installing `pre-commit` per the
 
 Lint all models in the /models directory:
 ```bash
-sqlfluff lint
+uv run sqlfluff lint
 ```
 
 Fix all models in the /models directory:
 ```bash
-sqlfluff fix
+uv run sqlfluff fix
 ```
 
-Lint (or subsitute lint to fix) a specific model:
+Lint (or substitute lint to fix) a specific model:
 ```bash
-sqlfluff lint -- models/path/to/model.sql
+uv run sqlfluff lint -- models/path/to/model.sql
 ```
 
-Lint (or subsitute lint to fix) a specific directory:
+Lint (or substitute lint to fix) a specific directory:
 ```bash
-sqlfluff lint -- models/path/to/directory
+uv run sqlfluff lint -- models/path/to/directory
 ```
 
 #### Rules

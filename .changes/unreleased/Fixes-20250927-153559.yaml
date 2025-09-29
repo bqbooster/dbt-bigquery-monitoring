@@ -1,0 +1,6 @@
+kind: Fixes
+body: 'Handle trailing dbt metadata comment '
+time: 2025-09-27T15:35:59.264351+02:00
+custom:
+    Author: Kayrnt
+    Issue: "150"

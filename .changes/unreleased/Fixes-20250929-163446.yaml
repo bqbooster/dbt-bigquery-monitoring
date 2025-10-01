@@ -1,0 +1,6 @@
+kind: Fixes
+body: Add new model for BigQuery audit logs and update references in existing model
+time: 2025-09-29T16:34:46.109049+02:00
+custom:
+    Author: Kayrnt
+    Issue: "144"

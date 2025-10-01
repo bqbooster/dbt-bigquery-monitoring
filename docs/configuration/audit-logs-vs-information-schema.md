@@ -6,6 +6,7 @@ slug: /audit-logs-vs-information-schema
 # Audit logs vs Information schema
 
 There are two ways to monitor BigQuery jobs:
+
 - Using the BigQuery audit logs
 - Using the `INFORMATION_SCHEMA.JOBS` table
 

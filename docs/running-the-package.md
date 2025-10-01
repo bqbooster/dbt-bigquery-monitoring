@@ -22,6 +22,7 @@ The granularity of the data partitioning is hourly so the most cost efficient wa
 ### I am just using datamarts (Recommended)
 
 If you plan to use the datamarts provided by the package, schedule running:
+
 ```bash
 dbt run -s +tag:dbt-bigquery-monitoring-datamarts
 ```
@@ -55,7 +56,7 @@ The package provides the following tags that can be used to filter the models:
 As those models can rely on base models which means you have to run at least run base once.
 To be sure, you just rely on the upstream dependency and run, for instance:
 
-```
+```bash
 dbt run -s +tag:dbt-bigquery-monitoring-compute
 ```
 

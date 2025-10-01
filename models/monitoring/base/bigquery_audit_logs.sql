@@ -22,5 +22,4 @@ SELECT
   split,
   labels,
   errorGroups
-FROM
- `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`
+FROM {{ ref('bigquery_audit_logs_v2') }}

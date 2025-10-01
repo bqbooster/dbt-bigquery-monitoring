@@ -1,6 +1,0 @@
-kind: Under the Hood
-body: flatten models that were using jobs_by_project_with_cost instead jobs_with_cost
-time: 2025-09-20T21:39:17.500663+02:00
-custom:
-    Author: Kayrnt
-    Issue: ""

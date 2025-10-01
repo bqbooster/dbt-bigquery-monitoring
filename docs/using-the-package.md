@@ -23,120 +23,119 @@ Here's the list (**don't forget to prefix the following list by `information_sch
 
 - access_control
 
-   - object_privileges
+  - object_privileges
 
 - bi_engine
 
-   - bi_capacities
-   - bi_capacity_changes
+  - bi_capacities
+  - bi_capacity_changes
 
 - configuration
 
-   - effective_project_options
-   - organization_options
-   - organization_options_changes
-   - project_options
-   - project_options_changes
+  - effective_project_options
+  - organization_options
+  - organization_options_changes
+  - project_options
+  - project_options_changes
 
 - datasets
 
-   - links
-   - schemata
-   - schemata_options
-   - schemata_replicas
-   - shared_dataset_usage
+  - links
+  - schemata
+  - schemata_options
+  - schemata_replicas
+  - shared_dataset_usage
 
 - jobs
 
-   - jobs
-   - jobs_by_folder
-   - jobs_by_organization
-   - jobs_by_project
-   - jobs_by_user
+  - jobs
+  - jobs_by_folder
+  - jobs_by_organization
+  - jobs_by_project
+  - jobs_by_user
 
 - jobs_timeline
 
-   - jobs_timeline
-   - jobs_timeline_by_folder
-   - jobs_timeline_by_organization
-   - jobs_timeline_by_user
+  - jobs_timeline
+  - jobs_timeline_by_folder
+  - jobs_timeline_by_organization
+  - jobs_timeline_by_user
 
 - recommendations_and_insights
 
-   - insights
-   - recommendations_by_organization
-   - recommendations
+  - insights
+  - recommendations_by_organization
+  - recommendations
 
 - reservations
 
-   - assignment_changes
-   - assignments
-   - capacity_commitment_changes
-   - capacity_commitments
-   - reservation_changes
-   - reservations
-   - reservations_timeline
+  - assignment_changes
+  - assignments
+  - capacity_commitment_changes
+  - capacity_commitments
+  - reservation_changes
+  - reservations
+  - reservations_timeline
 
 - routines
 
-   - parameters
-   - routine_options
-   - routines
+  - parameters
+  - routine_options
+  - routines
 
 - search_indexes
 
-   - search_index_columns
-   - search_indexes
+  - search_index_columns
+  - search_indexes
 
 - sessions
 
-   - sessions
-   - sessions_by_project
-   - sessions_by_user
+  - sessions
+  - sessions_by_project
+  - sessions_by_user
 
 - streaming
 
-   - streaming_timeline
-   - streaming_timeline_by_folder
-   - streaming_timeline_by_organization
+  - streaming_timeline
+  - streaming_timeline_by_folder
+  - streaming_timeline_by_organization
 
 - tables
 
-   - column_field_paths
-   - columns
-   - constraint_column_usage
-   - key_column_usage
-   - partitions
-   - table_constraints
-   - table_options
-   - table_snapshots
-   - table_storage
-   - table_storage_by_organization
-   - table_storage_usage_timeline
-   - table_storage_usage_timeline_by_organization
-   - tables
+  - column_field_paths
+  - columns
+  - constraint_column_usage
+  - key_column_usage
+  - partitions
+  - table_constraints
+  - table_options
+  - table_snapshots
+  - table_storage
+  - table_storage_by_organization
+  - table_storage_usage_timeline
+  - table_storage_usage_timeline_by_organization
+  - tables
 
 - vector_indexes
 
-   - vector_index_columns
-   - vector_index_options
-   - vector_indexes
+  - vector_index_columns
+  - vector_index_options
+  - vector_indexes
 
 - views
 
-   - materialized_views
-   - views
+  - materialized_views
+  - views
 
 - write_api
 
-   - write_api_timeline
-   - write_api_timeline_by_folder
-   - write_api_timeline_by_organization
-
+  - write_api_timeline
+  - write_api_timeline_by_folder
+  - write_api_timeline_by_organization
 
 - gcp_billing_export
 
-   - gcp_billing_export_resource_v1
+  - gcp_billing_export_resource_v1
 
 ## Monitoring models
 

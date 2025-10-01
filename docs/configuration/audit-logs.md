@@ -31,4 +31,3 @@ vars:
 ```
 
 [You might use environment variable as well](/configuration/package-settings).
-

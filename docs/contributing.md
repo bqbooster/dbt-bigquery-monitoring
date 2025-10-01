@@ -60,16 +60,19 @@ Once changie is installed and your PR is created, simply run `changie new` and c
 We use SQLFluff to keep SQL style consistent. By installing `pre-commit` per the initial setup guide above, SQLFluff will run automatically when you make a commit locally. A GitHub action automatically tests pull requests and adds annotations where there are failures.
 
 Lint all models in the /models directory:
+
 ```bash
 sqlfluff lint
 ```
 
 Fix all models in the /models directory:
+
 ```bash
 sqlfluff fix
 ```
 
 Lint (or subsitute lint to fix) a specific model:
+
 ```bash
 sqlfluff lint -- models/path/to/model.sql
 ```

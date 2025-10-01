@@ -17,6 +17,7 @@ To know which region is related to a job, in the BQ UI, use the `Job history` (b
 :::tip
 
 To get the best out of this package, you should probably configure all data sources and settings:
+
 - Choose the [Baseline mode](#modes) that fits your GCP setup
 - [Add metadata to queries](#add-metadata-to-queries-recommended-but-optional)
 - [GCP BigQuery Audit logs](/configuration/audit-logs)
@@ -24,7 +25,6 @@ To get the best out of this package, you should probably configure all data sour
 - [Settings](/configuration/package-settings) (especially the pricing ones)
 
 :::
-
 
 ## Modes
 
@@ -38,7 +38,7 @@ vars:
   bq_region: 'us'
 ```
 
-**Requirements**
+#### Requirements
 
 - Execution project needs to be the same as the storage project else you'll need to use the second mode.
 - If you have multiple GCP Projects in the same region, you should use the "project mode" (with `input_gcp_projects` setting to specify them) as else you will run into errors such as: `Within a standard SQL view, references to tables/views require explicit project IDs unless the entity is created in the same project that is issuing the query, but these references are not project-qualified: "region-us.INFORMATION_SCHEMA.JOBS"`.
@@ -59,6 +59,7 @@ vars:
 The `input_gcp_projects` setting accepts multiple input formats for maximum flexibility:
 
 **1. dbt project variables (dbt_project.yml):**
+
 ```yml
 vars:
   input_gcp_projects: "single-project"                    # Single project as string
@@ -66,12 +67,14 @@ vars:
 ```
 
 **2. CLI variables:**
+
 ```bash
 dbt run --vars '{"input_gcp_projects": "test"}'                   # Single project
 dbt run --vars '{"input_gcp_projects": ["test1", "test2"]}'       # Multiple projects
 ```
 
 **3. Environment variables:**
+
 ```bash
 # Single project
 export DBT_BQ_MONITORING_GCP_PROJECTS="single-project"

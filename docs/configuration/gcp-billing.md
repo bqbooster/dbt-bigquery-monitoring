@@ -4,6 +4,7 @@ slug: /configuration/gcp-billing
 ---
 
 # GCP Billing export
+
 GCP Billing export is a feature that allows you to export your billing data to BigQuery. It allows the package to track the real cost of your queries and storage overtime.
 
 To enable on GCP end, you can follow the [official documentation](https://cloud.google.com/billing/docs/how-to/export-data-bigquery) to set up the export.

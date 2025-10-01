@@ -44,7 +44,6 @@ WITH jobChangeEvent AS (
     resource.labels.project_id AS projectId,
     protopayload_auditlog.requestMetadata.callerIp AS callerIp,
     protopayload_auditlog.requestMetadata.callerSuppliedUserAgent AS callerSuppliedUserAgent,
-    timestamp,
     protopayload_auditlog.serviceName,
     protopayload_auditlog.methodName,
     CONCAT(

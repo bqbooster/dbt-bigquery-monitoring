@@ -311,7 +311,7 @@ tableCreationEvent AS (
       '$.tableCreation.table.encryption.kmsKeyName') AS tableCreationTableKmsKeyName,
     JSON_EXTRACT_SCALAR(protopayload_auditlog.metadataJson,
       '$.tableCreation.reason')  AS tableCreationReason,
-  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.cloudaudit_googleapis_com_activity`
+  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`
 ),
 /*
  * TableChange: Table metadata change event
@@ -356,7 +356,7 @@ tableChangeEvent AS (
       '$.tableChange.reason')  AS tableChangeReason,
     CAST(JSON_EXTRACT_SCALAR(protopayload_auditlog.metadataJson,
       '$.tableChange.truncated') AS BOOL) AS tableChangeTruncated
-  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.cloudaudit_googleapis_com_activity`
+  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`
 ),
 /*
  * TableDeletion: Table deletion event
@@ -376,7 +376,7 @@ tableDeletionEvent AS (
     JSON_EXTRACT_SCALAR(protopayload_auditlog.metadataJson, '$.tableDeletion.jobName') AS tableDeletionJobName,
     JSON_EXTRACT_SCALAR(protopayload_auditlog.metadataJson,
       '$.tableDeletion.reason') AS tableDeletionReason,
-  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.cloudaudit_googleapis_com_activity`
+  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`
 ),
 /*
  * TableDataRead: Data from tableDataRead audit logs
@@ -421,7 +421,7 @@ tableDataReadEvent AS (
     ARRAY_AGG(
       JSON_EXTRACT(protopayload_auditlog.metadataJson, '$.tableDataRead.sessionName')
       IGNORE NULLS ORDER BY protopayload_auditlog.resourceName) AS tableDataReadSessionName,
-  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.cloudaudit_googleapis_com_data_access`
+  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`
   GROUP BY jobId
 ),
 /*
@@ -450,7 +450,7 @@ tableDataChangeEvent AS (
       '$.tableDataChange.reason') AS tableDataChangeReason,
     JSON_EXTRACT_SCALAR(protopayload_auditlog.metadataJson,
       '$.tableDataChange.jobName') AS tableDataChangeJobName,
-  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.cloudaudit_googleapis_com_data_access`
+  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`
 ),
 /*
  * ModelDeletion: Model deletion event.
@@ -473,7 +473,7 @@ modelDeletionEvent AS (
          '$.modelDeletion.jobName'),
            "/")[SAFE_OFFSET(3)]
    ) AS jobId,
-  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.cloudaudit_googleapis_com_activity`
+  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`
 ),
 /*
  * ModelCreation: Model creation event.
@@ -512,7 +512,7 @@ modelCreationEvent AS (
       '$.modelCreation.model.updateTime')  AS modelCreationModelUpdateTime,
     JSON_EXTRACT_SCALAR(protopayload_auditlog.metadataJson,
       '$.modelCreation.model.encryption.kmsKeyName')  AS modelCreationEncryptionKmsKeyName,
-  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.cloudaudit_googleapis_com_activity`
+  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`
 ),
 /*
  * ModelMetadataChange: Model metadata change event.
@@ -551,7 +551,7 @@ modelMetadataChangeEvent AS (
       '$.modelMetadataChange.model.updateTime') AS modelMetadataChangeModelUpdateTime,
     JSON_EXTRACT_SCALAR(protopayload_auditlog.metadataJson,
       '$.modelMetadataChange.model.encryption.kmsKeyName') AS modelMetadataChangeEncryptionKmsKeyName,
-  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.cloudaudit_googleapis_com_activity`
+  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`
 ),
 /*
  * ModelDataChange: Model data change event.
@@ -574,7 +574,7 @@ modelDataChangeEvent AS (
           '$.modelDataChange.jobName'),
             "/")[SAFE_OFFSET(3)]
     ) AS jobId,
-  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.cloudaudit_googleapis_com_data_access`
+  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`
 ),
 /*
  * RoutineCreation: Routine creation event.
@@ -603,7 +603,7 @@ routineCreationEvent AS (
           '$.routineCreation.jobName'),
             "/")[SAFE_OFFSET(3)]
     ) AS jobId,
-  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.cloudaudit_googleapis_com_activity`
+  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`
 ),
 /*
  * RoutineChange: Routine change event
@@ -632,7 +632,7 @@ routineChangeEvent AS (
           '$.routineChange.jobName'),
             "/")[SAFE_OFFSET(3)]
     ) AS jobId,
-  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.cloudaudit_googleapis_com_activity`
+  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`
 ),
 /*
  * RoutineDeletion: Routine deletion event
@@ -661,7 +661,7 @@ routineDeletionEvent AS (
           '$.routineDeletion.jobName'),
             "/")[SAFE_OFFSET(3)]
     ) AS jobId,
-  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.cloudaudit_googleapis_com_activity`
+  FROM `{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_storage_project() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_dataset() }}.{{ dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() }}`
 ) -- End of WITH clauses
 SELECT
   logName,

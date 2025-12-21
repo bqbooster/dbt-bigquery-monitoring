@@ -63,7 +63,7 @@ Add to your `packages.yml`:
 ```yml
 packages:
   - package: bqbooster/dbt_bigquery_monitoring
-    version: 0.23.1 # Check for the latest version
+    version: 0.24.0 # Check for the latest version
 ```
 
 ### 2. Configure

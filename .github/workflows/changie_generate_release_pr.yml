@@ -59,6 +59,16 @@ jobs:
           sed -i "s/version: \"[0-9]*\.[0-9]*\.[0-9]*\"/version: \"${LATEST_VERSION_STRIPPED}\"/" dbt_project.yml
         fi
 
+    - name: Update version in README.md
+      run: |
+        LATEST_VERSION=${{ steps.latest.outputs.output }}
+        LATEST_VERSION_STRIPPED=${LATEST_VERSION#v}
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+          sed -i '' "s/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${LATEST_VERSION_STRIPPED}/" README.md
+        else
+          sed -i "s/version: [0-9]*\.[0-9]*\.[0-9]*/version: ${LATEST_VERSION_STRIPPED}/" README.md
+        fi
+
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v4
       with:

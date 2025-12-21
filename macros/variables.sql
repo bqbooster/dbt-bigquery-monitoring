@@ -185,7 +185,7 @@
 {% endmacro %}
 
 {% macro debug_dbt_bigquery_monitoring_variables() %}
-    {{ log("=== DBT BigQuery Monitoring Variables Debug ===", info=True) }}
+    {{ log("[dbt-bigquery-monitoring] === DBT BigQuery Monitoring Variables Debug ===", info=True) }}
 
     {# Define variables configuration for debugging #}
     {% set variable_configs = [
@@ -222,9 +222,9 @@
     {# Loop through all variables and log their resolution info #}
     {% for config in variable_configs %}
         {% set var_info = get_variable_resolution_info(config.dbt_var, config.env_var, config.default) %}
-        {{ log(config.dbt_var + ": " + var_info.value | string + " (resolved from " + var_info.resolution + ")", info=True) }}
+        {{ log("[dbt-bigquery-monitoring] " + config.dbt_var + ": " + var_info.value | string + " (resolved from " + var_info.resolution + ")", info=True) }}
     {% endfor %}
 
-    {{ log("=== End Debug ===", info=True) }}
+    {{ log("[dbt-bigquery-monitoring] === End Debug ===", info=True) }}
 
 {% endmacro %}

@@ -2,33 +2,33 @@ version: 2
 models:
 - name: information_schema_key_column_usage
   columns:
-  - name: CONSTRAINT_CATALOG
+  - name: constraint_catalog
     description: The constraint project name.
     data_type: STRING
-  - name: CONSTRAINT_SCHEMA
+  - name: constraint_schema
     description: The constraint dataset name.
     data_type: STRING
-  - name: CONSTRAINT_NAME
+  - name: constraint_name
     description: The constraint name.
     data_type: STRING
-  - name: TABLE_CATALOG
+  - name: table_catalog
     description: The project name of the constrained table.
     data_type: STRING
-  - name: TABLE_SCHEMA
+  - name: table_schema
     description: The name of the constrained table dataset.
     data_type: STRING
-  - name: TABLE_NAME
+  - name: table_name
     description: The name of the constrained table.
     data_type: STRING
-  - name: COLUMN_NAME
+  - name: column_name
     description: The name of the constrained column.
     data_type: STRING
-  - name: ORDINAL_POSITION
+  - name: ordinal_position
     description: 'The ordinal position of the column within the constraint key
 
       (starting at 1).'
     data_type: INT64
-  - name: POSITION_IN_UNIQUE_CONSTRAINT
+  - name: position_in_unique_constraint
     description: 'For foreign keys, the ordinal position of the column within the
 
       primary key constraint (starting at 1). This value is NULL

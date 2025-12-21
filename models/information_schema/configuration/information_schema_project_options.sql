@@ -9,6 +9,8 @@ roles and permissions. -#}
 
 SELECT
 option_name,
+project_id,
+project_number,
 option_description,
 option_type,
 option_value

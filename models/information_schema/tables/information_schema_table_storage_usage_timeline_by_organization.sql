@@ -15,6 +15,7 @@ organizations.For more information about BigQuery permissions, see
 Access control with IAM. -#}
 
 SELECT
+usage_date,
 project_id,
 table_catalog,
 project_number,

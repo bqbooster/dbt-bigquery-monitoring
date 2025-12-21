@@ -14,8 +14,8 @@ models:
       \ capacity."
     data_type: INTEGER
   - name: bi_capacity_name
-    description: "The name of the object. Currently there can only be one capacity\
-      \ per\n        project, hence the name is always default."
+    description: "The name of the object. There can only be one capacity per\n   \
+      \     project, hence the name is always default."
     data_type: STRING
   - name: size
     description: BI Engine RAM in bytes.
@@ -29,4 +29,4 @@ models:
     description: "The set of preferred tables this BI Engine capacity must\n     \
       \   be used for. If set to null, BI Engine\n        capacity is used\n     \
       \   for all queries in the current project."
-    data_type: REPEATED STRING
+    data_type: ARRAY<STRING>

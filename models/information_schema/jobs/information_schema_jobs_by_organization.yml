@@ -113,8 +113,14 @@ models:
     description: "Slot milliseconds for the job over its entire duration in the RUNNING\
       \ state,\n        including retries."
     data_type: INTEGER
+  - name: total_services_sku_slot_ms
+    description: "Total slot milliseconds for the job that runs on external services\
+      \ and is billed on the\n        services SKU. This field is only populated for\
+      \ jobs that have external service costs, and is\n        the total of the usage\
+      \ for costs whose billing method is \"SERVICES_SKU\"."
+    data_type: INTEGER
   - name: transaction_id
-    description: "ID of the transaction\n        in which this job ran, if any. (Preview)"
+    description: "ID of the transaction\n        in which this job ran, if any."
     data_type: STRING
   - name: user_email
     description: "(Clustering column) Email address or service account of the user\
@@ -173,12 +179,13 @@ models:
       \ populated. With resource_warning, you get additional data points to optimize\
       \ your queries and to set up monitoring for performance trends of an equivalent\
       \ set of queries by using query_hashes.\nquery_info.query_hashes.normalized_literals\
-      \ : Contains the hashes of the query. normalized_literals is a hexadecimal\n\
+      \ : Contains the hash value of the query. normalized_literals is a hexadecimal\n\
       \        STRING hash that ignores comments, parameter values, UDFs, and literals.\n\
       \        The hash value will differ when underlying views change, or if the\
       \ query implicitly\n        references columns, such as SELECT *, and the table\
       \ schema changes.\n        \n        This field appears for successful GoogleSQL\
       \ queries that are not cache hits.\nquery_info.performance_insights : Performance\
       \ insights for the job.\nquery_info.optimization_details : The history-based\
-      \ optimizations\n        for the job."
+      \ optimizations\n        for the job. Only the JOBS_BY_PROJECT view has this\
+      \ column."
     data_type: RECORD

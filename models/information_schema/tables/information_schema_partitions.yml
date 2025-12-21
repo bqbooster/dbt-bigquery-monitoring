@@ -2,28 +2,33 @@ version: 2
 models:
 - name: information_schema_partitions
   columns:
-  - name: TABLE_CATALOG
-    description: The project ID of the project that contains the table
+  - name: table_catalog
+    description: The project ID of the project that contains the table.
     data_type: STRING
-  - name: TABLE_SCHEMA
+  - name: table_schema
     description: "The name of the dataset that contains the table, also referred to\
-      \ as\n        the datasetId"
+      \ as\n        the datasetId."
     data_type: STRING
-  - name: TABLE_NAME
-    description: The name of the table, also referred to as the tableId
+  - name: table_name
+    description: The name of the table, also referred to as the tableId.
     data_type: STRING
-  - name: PARTITION_ID
+  - name: partition_id
     description: "A single partition's ID. For unpartitioned tables, the value is\n\
       \        NULL. For partitioned tables that contain rows with\n        NULL values\
       \ in the partitioning column, the value is\n        __NULL__."
     data_type: STRING
-  - name: TOTAL_ROWS
-    description: The total number of rows in the partition
+  - name: total_rows
+    description: The total number of rows in the partition.
     data_type: INTEGER
-  - name: TOTAL_LOGICAL_BYTES
-    description: The total number of logical bytes in the partition
+  - name: total_logical_bytes
+    description: The total number of logical bytes in the partition.
     data_type: INTEGER
-  - name: LAST_MODIFIED_TIME
+  - name: total_billable_bytes
+    description: "The total number of billable bytes in the partition. If billing\
+      \ for\n      your storage is based on physical (compressed) bytes, this value\
+      \ will not\n      match the TOTAL_LOGICAL_BYTES number."
+    data_type: INTEGER
+  - name: last_modified_time
     description: "The most recent time that data was written to the partition. It\
       \ is\n        used to calculate a partition's eligibility for long-term storage.\n\
       \        After 90 days, the partition automatically transitions from active\n\
@@ -32,7 +37,7 @@ models:
       \ streamed, or\n        modified within the partition. Modifications that involve\n\
       \        record deletions might not be reflected."
     data_type: TIMESTAMP
-  - name: STORAGE_TIER
+  - name: storage_tier
     description: "The partition's storage tier:\n\nACTIVE: the partition is billed\
       \ as\n            active storage\nLONG_TERM: the partition is billed as\n  \
       \          long-term storage"

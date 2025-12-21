@@ -55,8 +55,21 @@ models:
       \ datasets."
     data_type: STRING
   - name: num_rows_processed
-    description: The number of rows processed from this table by the job.
+    description: The total number of rows processed by the base tables that are referenced
+      by the queried resource.
     data_type: INTEGER
   - name: total_bytes_processed
-    description: The total bytes processed from this table by the job.
+    description: The total number of bytes processed by the base tables that are referenced
+      by the queried resource.
     data_type: INTEGER
+  - name: shared_resource_id
+    description: The ID of the queried resource (table, view, or routine).
+    data_type: STRING
+  - name: shared_resource_type
+    description: The type of the queried resource. For example, TABLE, EXTERNAL_TABLE,
+      VIEW, MATERIALIZED_VIEW, TABLE_VALUED_FUNCTION, or SCALAR_FUNCTION.
+    data_type: STRING
+  - name: referenced_tables
+    description: Contains project_id, dataset_id, table_id, and processed_bytes fields
+      of the base table.
+    data_type: RECORD REPEATED

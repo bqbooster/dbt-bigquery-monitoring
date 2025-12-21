@@ -1,4 +1,4 @@
-{{ config(materialized=dbt_bigquery_monitoring_materialization(), partition_by={'field': 'job_start_time', 'data_type': 'timestamp', 'granularity': 'hour'}, partition_expiration_days=180) }}
+{{ config(materialized=dbt_bigquery_monitoring_materialization(), partition_by={'field': 'job_start_time', 'data_type': 'timestamp', 'granularity': 'hour'}, partition_expiration_days=180, enabled=false) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-shared-dataset-usage -#}
 
 SELECT
@@ -18,5 +18,8 @@ subscriber_org_number,
 subscriber_org_display_name,
 job_principal_subject,
 num_rows_processed,
-total_bytes_processed
+total_bytes_processed,
+shared_resource_id,
+shared_resource_type,
+referenced_tables
 FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`SHARED_DATASET_USAGE`

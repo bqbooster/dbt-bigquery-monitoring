@@ -39,5 +39,7 @@ replica_primary_assignment_complete,
 creation_time,
 creation_complete,
 replication_time,
-sync_status
+sync_status,
+replica_primary_assignment_time,
+replica_primary_assignment_completion_time
 FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`SCHEMATA_REPLICAS_BY_FAILOVER_RESERVATION`

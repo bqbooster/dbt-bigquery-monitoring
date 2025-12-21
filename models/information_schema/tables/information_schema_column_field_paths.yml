@@ -2,40 +2,44 @@ version: 2
 models:
 - name: information_schema_column_field_paths
   columns:
-  - name: TABLE_CATALOG
-    description: The project ID of the project that contains the dataset
+  - name: table_catalog
+    description: The project ID of the project that contains the dataset.
     data_type: STRING
-  - name: TABLE_SCHEMA
+  - name: table_schema
     description: "The name of the dataset that contains the table also referred to\
-      \ as\n        the datasetId"
+      \ as\n        the datasetId."
     data_type: STRING
-  - name: TABLE_NAME
-    description: The name of the table or view also referred to as the tableId
+  - name: table_name
+    description: The name of the table or view also referred to as the tableId.
     data_type: STRING
-  - name: COLUMN_NAME
-    description: The name of the column
+  - name: column_name
+    description: The name of the column.
     data_type: STRING
-  - name: FIELD_PATH
+  - name: field_path
     description: "The path to a column nested\n        within a `RECORD` or `STRUCT`\
-      \ column"
+      \ column."
     data_type: STRING
-  - name: DATA_TYPE
-    description: "The column's GoogleSQL\n        data type"
+  - name: data_type
+    description: "The column's GoogleSQL\n        data type."
     data_type: STRING
-  - name: DESCRIPTION
-    description: The column's description
+  - name: description
+    description: The column's description.
     data_type: STRING
-  - name: COLLATION_NAME
+  - name: collation_name
     description: "The name of the collation specification\n        if it exists; otherwise,\
-      \ NULL\n\n        If a STRING, ARRAY<STRING>, or\n        STRING field in a\
+      \ NULL.\n\n        If a STRING, ARRAY<STRING>, or\n        STRING field in a\
       \ STRUCT is passed in, the\n        collation specification is returned if it\
-      \ exists; otherwise,\n        NULL is returned"
+      \ exists; otherwise,\n        NULL is returned."
     data_type: STRING
-  - name: ROUNDING_MODE
+  - name: rounding_mode
     description: "The mode of rounding that's used when applying precision and scale\
-      \ to\n        parameterized NUMERIC or BIGNUMERIC values;\n        otherwise,\
-      \ the value is NULL"
+      \ to+\n        parameterized NUMERIC or BIGNUMERIC values;\n        otherwise,\
+      \ the value is NULL."
     data_type: STRING
-  - name: POLICY_TAGS
-    description: The list of policy tags that are attached to the column
+  - name: policy_tags
+    description: The list of policy tags that are attached to the column.
     data_type: ARRAY<STRING>
+  - name: data_policies
+    description: 'data_policies.name : The list of data policies that are attached
+      to the column to control access and masking. This field is in (Preview).'
+    data_type: RECORD

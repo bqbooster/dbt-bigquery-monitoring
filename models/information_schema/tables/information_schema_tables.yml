@@ -20,9 +20,18 @@ models:
       \        materialized view\n            or materialized view replica\nEXTERNAL:\
       \ A table that references an\n            external data source"
     data_type: STRING
+  - name: managed_table_type
+    description: "This column is in Preview. The managed table type; one of the following:\n\
+      \nNATIVE: A standard\n            table\nBIGLAKE: A \n            BigLake table\
+      \ for Apache Iceberg in BigQuery"
+    data_type: STRING
   - name: is_insertable_into
     description: "YES or NO depending on whether the table\n        supports DML INSERT\n\
       \        statements"
+    data_type: STRING
+  - name: is_fine_grained_mutations_enabled
+    description: "YES or NO depending on whether\n        fine-grained DML mutations\n\
+      \        are enabled on the table"
     data_type: STRING
   - name: is_typed
     description: The value is always NO
@@ -93,6 +102,11 @@ models:
     description: "The name of the default collation specification\n        if it exists;\
       \ otherwise, NULL."
     data_type: STRING
+  - name: sync_status
+    description: "The status of the sync between the primary and secondary replicas\
+      \ for cross-region\n      replication and disaster recovery datasets. Returns\
+      \ NULL if the replica is a primary replica or the dataset doesn't use replication."
+    data_type: JSON
   - name: upsert_stream_apply_watermark
     description: "For tables that use change data capture (CDC), the time when row\n\
       \        modifications were last applied. For more information, see\n      \

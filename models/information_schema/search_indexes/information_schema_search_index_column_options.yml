@@ -14,7 +14,7 @@ models:
   - name: index_name
     description: The name of the index.
     data_type: STRING
-  - name: column_name
+  - name: index_column_name
     description: The name of the indexed column that the option is set on.
     data_type: STRING
   - name: option_name

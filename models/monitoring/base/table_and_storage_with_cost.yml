@@ -167,4 +167,4 @@ models:
 
       - name: storage_pricing_model_difference
         description: The difference between the storage pricing model and the default pricing model
-        data_type: STRING
+        data_type: FLOAT64

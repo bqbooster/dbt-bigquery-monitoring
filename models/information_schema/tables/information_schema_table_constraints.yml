@@ -2,37 +2,37 @@ version: 2
 models:
 - name: information_schema_table_constraints
   columns:
-  - name: CONSTRAINT_CATALOG
+  - name: constraint_catalog
     description: The constraint project name.
     data_type: STRING
-  - name: CONSTRAINT_SCHEMA
+  - name: constraint_schema
     description: The constraint dataset name.
     data_type: STRING
-  - name: CONSTRAINT_NAME
+  - name: constraint_name
     description: The constraint name.
     data_type: STRING
-  - name: TABLE_CATALOG
+  - name: table_catalog
     description: The constrained table project name.
     data_type: STRING
-  - name: TABLE_SCHEMA
+  - name: table_schema
     description: The constrained table dataset name.
     data_type: STRING
-  - name: TABLE_NAME
+  - name: table_name
     description: The constrained table name.
     data_type: STRING
-  - name: CONSTRAINT_TYPE
+  - name: constraint_type
     description: 'Either PRIMARY KEY or
 
       FOREIGN KEY.'
     data_type: STRING
-  - name: IS_DEFERRABLE
+  - name: is_deferrable
     description: "YES or NO depending on if a constraint is\n      deferrable. Only\
       \ NO is supported."
     data_type: STRING
-  - name: INITIALLY_DEFERRED
+  - name: initially_deferred
     description: Only NO is supported.
     data_type: STRING
-  - name: ENFORCED
+  - name: enforced
     description: "YES or NO depending on if the constraint is\nenforced. \nOnly NO\
       \ is supported."
     data_type: STRING

@@ -9,5 +9,6 @@ creation_time,
 last_modified_time,
 location,
 ddl,
-default_collation_name
+default_collation_name,
+sync_status
 FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`SCHEMATA`

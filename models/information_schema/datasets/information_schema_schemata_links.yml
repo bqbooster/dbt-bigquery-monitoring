@@ -2,27 +2,35 @@ version: 2
 models:
 - name: information_schema_schemata_links
   columns:
-  - name: CATALOG_NAME
+  - name: catalog_name
     description: The name of the project that contains the source dataset.
     data_type: STRING
-  - name: SCHEMA_NAME
+  - name: schema_name
     description: "The name of the source dataset. The dataset name is also referred\
       \ to as\n     the datasetId."
     data_type: STRING
-  - name: LINKED_SCHEMA_CATALOG_NUMBER
+  - name: linked_schema_catalog_number
     description: The project number of the project that contains the linked dataset.
-    data_type: STRING
-  - name: LINKED_SCHEMA_CATALOG_NAME
+    data_type: INT64
+  - name: linked_schema_catalog_name
     description: The project name of the project that contains the linked dataset.
     data_type: STRING
-  - name: LINKED_SCHEMA_NAME
+  - name: linked_schema_name
     description: "The name of the linked dataset. The dataset name is also referred\
       \ to as\n     the datasetId."
     data_type: STRING
-  - name: LINKED_SCHEMA_CREATION_TIME
+  - name: linked_schema_creation_time
     description: The time when the linked dataset was created.
     data_type: TIMESTAMP
-  - name: LINKED_SCHEMA_ORG_DISPLAY_NAME
+  - name: linked_schema_org_display_name
     description: The display name of the organization in which the linked dataset
       is created.
+    data_type: STRING
+  - name: shared_asset_id
+    description: The ID of the asset that is shared using data clean rooms. This value
+      is null if link_type is REGULAR.
+    data_type: STRING
+  - name: link_type
+    description: The type of linked dataset. Possible values are REGULAR or DCR (Data
+      clean rooms).
     data_type: STRING

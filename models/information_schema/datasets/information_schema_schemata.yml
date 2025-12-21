@@ -2,29 +2,34 @@ version: 2
 models:
 - name: information_schema_schemata
   columns:
-  - name: CATALOG_NAME
+  - name: catalog_name
     description: The name of the project that contains the dataset
     data_type: STRING
-  - name: SCHEMA_NAME
+  - name: schema_name
     description: The dataset's name also referred to as the datasetId
     data_type: STRING
-  - name: SCHEMA_OWNER
+  - name: schema_owner
     description: The value is always NULL
     data_type: STRING
-  - name: CREATION_TIME
+  - name: creation_time
     description: The dataset's creation time
     data_type: TIMESTAMP
-  - name: LAST_MODIFIED_TIME
+  - name: last_modified_time
     description: The dataset's last modified time
     data_type: TIMESTAMP
-  - name: LOCATION
+  - name: location
     description: The dataset's geographic location
     data_type: STRING
-  - name: DDL
+  - name: ddl
     description: "The CREATE SCHEMA\n        DDL statement that can be used to create\
       \ the dataset"
     data_type: STRING
-  - name: DEFAULT_COLLATION_NAME
+  - name: default_collation_name
     description: "The name of the default collation specification\n        if it exists;\
       \ otherwise, NULL."
     data_type: STRING
+  - name: sync_status
+    description: "The status of the sync between the primary and secondary replicas\
+      \ for cross-region\n      replication and disaster recovery datasets. Returns\
+      \ NULL if the replica is a primary replica or the dataset doesn't use replication."
+    data_type: JSON

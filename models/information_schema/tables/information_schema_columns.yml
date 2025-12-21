@@ -2,73 +2,81 @@ version: 2
 models:
 - name: information_schema_columns
   columns:
-  - name: TABLE_CATALOG
-    description: The project ID of the project that contains the dataset
+  - name: table_catalog
+    description: The project ID of the project that contains the dataset.
     data_type: STRING
-  - name: TABLE_SCHEMA
+  - name: table_schema
     description: "The name of the dataset that contains the table also referred to\
-      \ as\n        the datasetId"
+      \ as\n        the datasetId."
     data_type: STRING
-  - name: TABLE_NAME
-    description: The name of the table or view also referred to as the tableId
+  - name: table_name
+    description: The name of the table or view also referred to as the tableId.
     data_type: STRING
-  - name: COLUMN_NAME
-    description: The name of the column
+  - name: column_name
+    description: The name of the column.
     data_type: STRING
-  - name: ORDINAL_POSITION
+  - name: ordinal_position
     description: "The 1-indexed offset of the column within the table; if it's a pseudo\n\
       \        column such as _PARTITIONTIME or _PARTITIONDATE, the value is\n   \
-      \     NULL"
+      \     NULL."
     data_type: INT64
-  - name: IS_NULLABLE
+  - name: is_nullable
     description: "YES or NO depending on whether the column's\n        mode allows\
-      \ NULL values"
+      \ NULL values."
     data_type: STRING
-  - name: DATA_TYPE
-    description: The column's GoogleSQL data type
+  - name: data_type
+    description: The column's GoogleSQL data type.
     data_type: STRING
-  - name: IS_GENERATED
-    description: The value is always NEVER
+  - name: is_generated
+    description: "The value is ALWAYS if the column is an\n        automatically\n\
+      \        generated embedding column;\n        otherwise, the value is NEVER."
     data_type: STRING
-  - name: GENERATION_EXPRESSION
-    description: The value is always NULL
+  - name: generation_expression
+    description: "The value is the generation expression used to define the column\n\
+      \      if the column is an automatically\n      generated embedding column;\
+      \ otherwise the value is NULL."
     data_type: STRING
-  - name: IS_STORED
-    description: The value is always NULL
+  - name: is_stored
+    description: "The value is YES if the column is an automatically\n      generated\
+      \ embedding column; otherwise, the value is\n      NULL."
     data_type: STRING
-  - name: IS_HIDDEN
+  - name: is_hidden
     description: "YES or NO depending on whether the column is\n      a pseudo column\
-      \ such as _PARTITIONTIME or _PARTITIONDATE"
+      \ such as _PARTITIONTIME or _PARTITIONDATE."
     data_type: STRING
-  - name: IS_UPDATABLE
-    description: The value is always NULL
+  - name: is_updatable
+    description: The value is always NULL.
     data_type: STRING
-  - name: IS_SYSTEM_DEFINED
+  - name: is_system_defined
     description: "YES or NO depending on whether the column is\n      a pseudo column\
-      \ such as _PARTITIONTIME or _PARTITIONDATE"
+      \ such as _PARTITIONTIME or _PARTITIONDATE."
     data_type: STRING
-  - name: IS_PARTITIONING_COLUMN
+  - name: is_partitioning_column
     description: "YES or NO depending on whether the column is\n        a partitioning\
-      \ column"
+      \ column."
     data_type: STRING
-  - name: CLUSTERING_ORDINAL_POSITION
+  - name: clustering_ordinal_position
     description: "The 1-indexed offset of the column within the table's\n        clustering\
-      \ columns; the value is NULL if the table is not a\n        clustered table"
+      \ columns; the value is NULL if the table is not a\n        clustered table."
     data_type: INT64
-  - name: COLLATION_NAME
+  - name: collation_name
     description: "The name of the collation specification\n        if it exists; otherwise,\
-      \ NULL\n\n        If a STRING or ARRAY<STRING> is passed\n        in, the collation\
-      \ specification is returned if it exists; otherwise\n        NULL is returned"
+      \ NULL.\n\n        If a STRING or ARRAY<STRING> is passed\n        in, the collation\
+      \ specification is returned if it exists; otherwise\n        NULL is returned."
     data_type: STRING
-  - name: COLUMN_DEFAULT
+  - name: column_default
     description: "The default value of the\n        column if it exists; otherwise,\
-      \ the value is NULL"
+      \ the value is NULL."
     data_type: STRING
-  - name: ROUNDING_MODE
+  - name: rounding_mode
     description: "The mode of rounding that's used for values written to the field\
       \ if its\n        type is a parameterized NUMERIC or BIGNUMERIC;\n        otherwise,\
-      \ the value is NULL"
+      \ the value is NULL."
     data_type: STRING
-  - name: POLICY_TAGS
-    description: The list of policy tags that are attached to the column
+  - name: policy_tags
+    description: The list of policy tags that are attached to the column.
     data_type: ARRAY<STRING>
+  - name: data_policies
+    description: 'data_policies.name : The list of data policies that are attached
+      to the column to control access and masking. This field is in (Preview).'
+    data_type: RECORD

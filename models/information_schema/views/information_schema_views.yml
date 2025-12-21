@@ -2,23 +2,23 @@ version: 2
 models:
 - name: information_schema_views
   columns:
-  - name: TABLE_CATALOG
+  - name: table_catalog
     description: The name of the project that contains the dataset
     data_type: STRING
-  - name: TABLE_SCHEMA
+  - name: table_schema
     description: "The name of the dataset that contains the view also referred to\
       \ as the\n        dataset id"
     data_type: STRING
-  - name: TABLE_NAME
+  - name: table_name
     description: The name of the view also referred to as the table id
     data_type: STRING
-  - name: VIEW_DEFINITION
+  - name: view_definition
     description: The SQL query that defines the view
     data_type: STRING
-  - name: CHECK_OPTION
+  - name: check_option
     description: The value returned is always NULL
     data_type: STRING
-  - name: USE_STANDARD_SQL
+  - name: use_standard_sql
     description: "YES if the view was created by using a\n        GoogleSQL query;\
       \ NO if useLegacySql\n        is set to true"
     data_type: STRING

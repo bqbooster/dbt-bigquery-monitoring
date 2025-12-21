@@ -12,13 +12,23 @@ clean-targets:
   - dbt_packages
 
 models:
-  +start: Jan 1 2017
   dbt_bigquery_monitoring:
     +tags:
       - "dbt-bigquery-monitoring"
     information_schema:
       +tags:
         - "dbt-bigquery-monitoring-information-schema"
+      # Suppress dbt Fusion warnings for models using run_query() introspection
+      # See: https://docs.getdbt.com/docs/fusion/new-concepts#configuring-static_analysis
+      tables:
+        information_schema_partitions:
+          +static_analysis: unsafe
+        information_schema_key_column_usage:
+          +static_analysis: unsafe
+        information_schema_constraint_column_usage:
+          +static_analysis: unsafe
+      search_indexes:
+        +static_analysis: unsafe
     monitoring:
       +on_schema_change: "append_new_columns"
       +tags:

@@ -3,6 +3,7 @@
 
 SELECT
 start_timestamp,
+folder_numbers,
 project_id,
 project_number,
 dataset_id,

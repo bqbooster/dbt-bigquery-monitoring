@@ -2,22 +2,22 @@ version: 2
 models:
 - name: information_schema_table_options
   columns:
-  - name: TABLE_CATALOG
+  - name: table_catalog
     description: The project ID of the project that contains the dataset
     data_type: STRING
-  - name: TABLE_SCHEMA
+  - name: table_schema
     description: "The name of the dataset that contains the table or view also referred\n\
       \        to as the datasetId"
     data_type: STRING
-  - name: TABLE_NAME
+  - name: table_name
     description: The name of the table or view also referred to as the tableId
     data_type: STRING
-  - name: OPTION_NAME
+  - name: option_name
     description: One of the name values in the options table
     data_type: STRING
-  - name: OPTION_TYPE
+  - name: option_type
     description: One of the data type values in the options table
     data_type: STRING
-  - name: OPTION_VALUE
+  - name: option_value
     description: One of the value options in the options table
     data_type: STRING

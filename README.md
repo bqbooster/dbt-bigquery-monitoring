@@ -4,7 +4,7 @@
   </h1>
 
   <h2>
-    A dbt package that provides models for monitoring BigQuery performance and costs.
+    Monitor BigQuery performance and costs with dbt
   </h2>
 
   <div align="center">
@@ -17,25 +17,84 @@
   </div>
 
   <p>
-    <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/">Documentation</a>
-    ◆ <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/installation">Installation</a>
-    ◆ <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/configuration">Configuration</a>
-    ◆ <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/running-the-package">Running</a>
-    ◆ <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/using-the-package">Usage</a>
-    ◆ <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/contributing">Contributing</a>
+    <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/"><strong>Documentation</strong></a>
+    · <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/installation">Installation</a>
+    · <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/configuration">Configuration</a>
+    · <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/running-the-package">Running</a>
+    · <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/using-the-package">Usage</a>
+    · <a href="https://bqbooster.github.io/dbt-bigquery-monitoring/contributing">Contributing</a>
   </p>
 </div>
 
 *💡 Tip: Click on "Watch → Custom → Releases" to get email notifications for new versions with changelog details*
 
-## Is this package for me?
-If one of those statements is true, this package is relevant:
-- I want to have a consolidated view of INFORMATION SCHEMA tables on a complex multi GCP project setup
-- I want to use INFORMATION SCHEMA in my own dbt models and I need proper column level documentation and lineage in dbt
-- I want high level datamarts to monitor my BigQuery consumption (compute or storage)
-- I want to discover cost saving opportunities on my BigQuery usage
+---
 
-## Compatibility
-This package is compatible with:
-- **dbt Core** >= 1.3.0
-- **dbt Fusion** >= 2.0.0-beta
+## 🚀 Overview
+
+`dbt-bigquery-monitoring` provides a robust set of dbt models to help Analytics Engineers and Data Platform teams monitor, analyze, and optimize their BigQuery usage. It bridges **Information Schema**, **Audit Logs**, and **Billing Export** data to give you a complete view of your warehouse performance and costs.
+
+### Key Features
+
+*   **Cost Management**: Track spending by user, project, or query. Identify most expensive jobs and models.
+*   **Performance Tuning**: Find bottlenecks, slow queries, and slot contention.
+*   **Storage Analysis**: monitor logical vs physical storage costs, identify unused tables.
+*   **Unified Metadata**: Abstract away the complexities of `INFORMATION_SCHEMA` with easy-to-use dbt models.
+*   **BigQuery Edition Support**: Compatible with BigQuery Editions (Standard, Enterprise, Enterprise Plus).
+
+---
+
+## 🎯 Is this package for me?
+
+Yes, if you need to:
+*   Consolidate `INFORMATION_SCHEMA` views across a complex, multi-project GCP setup.
+*   Monitor BigQuery compute and storage consumption via high-level datamarts.
+*   Discover cost-saving opportunities (e.g., switching billing models, optimizing queries).
+*   Trace lineage and usage of columns and tables effectively.
+
+---
+
+## ⚡ Quick Start
+
+### 1. Install
+
+Add to your `packages.yml`:
+
+```yml
+packages:
+  - package: bqbooster/dbt_bigquery_monitoring
+    version: 0.23.1 # Check for the latest version
+```
+
+### 2. Configure
+
+Add to your `dbt_project.yml`:
+
+```yml
+models:
+  dbt_bigquery_monitoring:
+    +schema: "monitoring" # Creates tables in <your_schema>_monitoring
+
+vars:
+  bq_region: 'us' # Your dataset region
+```
+
+### 3. Run
+
+```bash
+dbt deps
+dbt run -s dbt_bigquery_monitoring
+```
+
+---
+
+## 🛠 Compatibility
+
+*   **dbt Core** >= 1.3.0
+*   **dbt Fusion** >= 2.0.0-beta
+
+---
+
+## 📖 Full Documentation
+
+For detailed configuration, advanced usage, and architecture diagrams, check out the [Official Documentation](https://bqbooster.github.io/dbt-bigquery-monitoring/).

@@ -1,6 +1,0 @@
-kind: Under the Hood
-body: Centralize dataset fetching logic into a get_dataset_list() macro to avoid redundant run_query calls during JIT rendering
-time: 2025-12-21T17:03:00.000000+01:00
-custom:
-    Author: Kayrnt
-    Issue: ""

@@ -1,6 +1,0 @@
-kind: Features
-body: Add GitHub Actions workflow and Python script for cleaning up BigQuery test datasets
-time: 2025-12-21T17:04:00.000000+01:00
-custom:
-    Author: Kayrnt
-    Issue: ""

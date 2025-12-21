@@ -1,6 +1,0 @@
-kind: Fixes
-body: Comprehensive update of Information Schema models (SQL and YAML) to improve consistency and fix missing columns
-time: 2025-12-21T17:05:00.000000+01:00
-custom:
-    Author: Kayrnt
-    Issue: ""

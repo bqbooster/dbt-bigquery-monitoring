@@ -14,9 +14,6 @@ clean-targets:
   - target
   - dbt_packages
 
-models:
-  +start: Jan 1 2017  
-
 vars:
   # We are using DBT_BQ_MONITORING_GCP_PROJECTS to set input_gcp_projects
   output_partition_expiration_days: 1

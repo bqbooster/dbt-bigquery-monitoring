@@ -1,0 +1,84 @@
+name: Pull Request testing - Run dbt Fusion models on BigQuery
+on:
+  pull_request:
+    paths:
+      - 'macros/**'
+      - 'models/**' 
+      - 'integration_tests/**'
+      - 'dbt_project.yml'
+      - 'packages.yml'
+      - 'config.py'
+  workflow_dispatch:
+
+# GitHub secrets
+env:
+  DBT_PROFILES_DIR: .
+  GITHUB_SHA_OVERRIDE: ${{ github.event.pull_request.head.sha }}
+  DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }}
+  DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT }}
+  DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT }}
+  DBT_ENV_SECRET_BIGQUERY_TEST_LOCATION: "us"
+  DBT_BQ_MONITORING_GCP_PROJECTS: ${{ secrets.DBT_BQ_MONITORING_GCP_PROJECTS }}
+  DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION: project_by_project_view
+
+concurrency:
+  cancel-in-progress: true
+  group: pr-run-models-fusion-${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  integration-bigquery-fusion:
+    name: Run dbt Fusion models on BigQuery to test model validity
+    runs-on: ubuntu-latest
+    
+    env:
+      DBT_COMMON_FLAGS: "--empty --exclude tag:dbt-bigquery-monitoring-information-schema-by-organization"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Install dbt Fusion
+        run: |
+          curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Write keyfile if secret is defined
+        run: |
+          if [ -z "${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }}" ]; then
+            echo "Error: DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT is not defined."
+          else
+            echo ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }} | base64 -d > ./integration_tests/keyfile.json  
+          fi
+
+      - name: Setup dbt dependencies
+        run: | 
+          cd integration_tests
+          dbt deps
+
+      - name: Setup dbt fixtures
+        run: | 
+          cd integration_tests
+          dbt run -s tag:fixtures
+
+      - name: Run all models once
+        run: | 
+          cd integration_tests
+          dbt build -s dbt_bigquery_monitoring --full-refresh ${{ env.DBT_COMMON_FLAGS }}
+
+      - name: Run all models again to test incremental
+        run: |       
+          cd integration_tests
+          dbt build -s dbt_bigquery_monitoring ${{ env.DBT_COMMON_FLAGS }}
+
+      - name: Run all models again with cloud audit logs
+        run: |       
+          cd integration_tests
+          DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
+          dbt run -s jobs_from_audit_logs+ --full-refresh ${{ env.DBT_COMMON_FLAGS }}
+
+      - name: Run all models again to test incremental with cloud audit logs
+        run: |       
+          cd integration_tests
+          DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
+          dbt run -s jobs_from_audit_logs+ ${{ env.DBT_COMMON_FLAGS }}

@@ -5,188 +5,92 @@ slug: /using-the-package
 
 # Using the package
 
+## Monitoring models (Datamarts)
+
+> **💡 Want example queries?** Check out the [Monitoring Datamarts](/datamarts) guide for detailed examples and SQL recipes.
+
+The package provides high-level datamarts designed to be easily consumed by BI tools (like Looker, Superset, Tableau) or for ad-hoc analysis. They are grouped by domain:
+
+### 🌍 Global Overview
+
+High-level metrics for executives and managers.
+
+*   `global.daily_spend`: Aggregated daily cost for both Compute and Storage.
+*   `global.dbt_bigquery_monitoring_options`: Current configuration of the package.
+
+### ⚡ Compute Analysis
+
+Analyze query costs, performance, and user behavior.
+
+#### Costs & Pricing
+*   `compute.cost.compute_cost_per_hour`: Detailed hourly breakdown of compute costs.
+*   `compute.cost.compute_cost_per_minute`: Finer granularity for spotting cost spikes.
+*   `compute.jobs.query_with_better_pricing_using_flat_pricing_view`: Identifies queries that would be cheaper under a flat-rate (slot-based) model.
+*   `compute.jobs.query_with_better_pricing_using_on_demand_view`: Identifies queries that would be cheaper under on-demand pricing.
+
+#### Performance & Top Consumers
+*   `compute.jobs.most_expensive_jobs`: The top queries driving your bill.
+*   `compute.jobs.most_repeated_jobs`: Identifies queries running too frequently (possible loop or scheduling error).
+*   `compute.jobs.slowest_jobs`: Queries with the longest duration (latency analysis).
+*   `compute.users.most_expensive_users`: Which users or service accounts spend the most?
+*   `compute.models.most_expensive_models`: (Requires Query Comments) Which dbt models are the most expensive to run?
+
+#### BI Engine
+*   `compute.bi_engine.bi_engine_usage_per_minute`: Monitoring BI Engine acceleration and fallback rates.
+
+### 💾 Storage Analysis
+
+Monitor storage growth, costs, and optimization opportunities.
+
+#### Costs & Optimization
+*   `storage.storage_billing_per_hour`: Hourly storage costs.
+*   `storage.dataset_with_cost`: Aggregated cost by dataset.
+*   `storage.most_expensive_tables`: Top tables by storage cost.
+*   `storage.unused_tables`: Tables that haven't been queried recently (candidates for deletion/archival).
+*   `storage.read_heavy_tables`: Tables with high read/write ratios.
+
+#### Billing Models
+*   `storage.table_with_better_pricing_on_logical_billing_model`: Tables where logical (uncompressed) billing would be cheaper.
+*   `storage.table_with_better_pricing_on_physical_billing_model`: Tables where physical (compressed) billing would be cheaper.
+
+---
+
 ## Google INFORMATION_SCHEMA tables
 
-Following models are available to query the INFORMATION_SCHEMA tables. They are materialized as `ephemeral` (or incremental tables in project mode) in dbt so it acts as a "source" but let you access multiple project based tables using a single `ref`.
+The package exposes Google's `INFORMATION_SCHEMA` views as standard dbt models. This allows you to query metadata across multiple projects seamlessly.
 
-### Example
+> **Note**: These models are materialized as `ephemeral` (or `incremental` in project mode).
 
-You can use those models such as:
+### Usage Example
 
 ```sql
-SELECT query FROM {{ ref('information_schema_jobs') }}
+SELECT query, total_bytes_billed
+FROM {{ ref('information_schema_jobs') }}
+WHERE creation_time > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 HOUR)
+ORDER BY total_bytes_billed DESC
+LIMIT 10
 ```
 
-### All available google related models
+### Available Models Reference
 
-Here's the list (**don't forget to prefix the following list by `information_schema_` in your `ref` call**).
+(Prefix all refs with `information_schema_`)
 
-- access_control
+**Jobs & Performance**
+*   `jobs`, `jobs_by_project`, `jobs_by_user`, `jobs_by_folder`
+*   `jobs_timeline` (visualize concurrency)
 
-  - object_privileges
+**Storage & Tables**
+*   `tables`, `table_storage`, `table_snapshots`
+*   `columns`, `column_field_paths` (schema details)
+*   `partitions`
 
-- bi_engine
+**Access & Security**
+*   `object_privileges` (who can see what)
+*   `search_indexes`, `vector_indexes`
 
-  - bi_capacities
-  - bi_capacity_changes
+**Configuration & Reservations**
+*   `reservations`, `assignments` (slots management)
+*   `bi_capacities` (BI Engine)
+*   `effective_project_options`
 
-- configuration
-
-  - effective_project_options
-  - organization_options
-  - organization_options_changes
-  - project_options
-  - project_options_changes
-
-- datasets
-
-  - links
-  - schemata
-  - schemata_options
-  - schemata_replicas
-  - shared_dataset_usage
-
-- jobs
-
-  - jobs
-  - jobs_by_folder
-  - jobs_by_organization
-  - jobs_by_project
-  - jobs_by_user
-
-- jobs_timeline
-
-  - jobs_timeline
-  - jobs_timeline_by_folder
-  - jobs_timeline_by_organization
-  - jobs_timeline_by_user
-
-- recommendations_and_insights
-
-  - insights
-  - recommendations_by_organization
-  - recommendations
-
-- reservations
-
-  - assignment_changes
-  - assignments
-  - capacity_commitment_changes
-  - capacity_commitments
-  - reservation_changes
-  - reservations
-  - reservations_timeline
-
-- routines
-
-  - parameters
-  - routine_options
-  - routines
-
-- search_indexes
-
-  - search_index_columns
-  - search_indexes
-
-- sessions
-
-  - sessions
-  - sessions_by_project
-  - sessions_by_user
-
-- streaming
-
-  - streaming_timeline
-  - streaming_timeline_by_folder
-  - streaming_timeline_by_organization
-
-- tables
-
-  - column_field_paths
-  - columns
-  - constraint_column_usage
-  - key_column_usage
-  - partitions
-  - table_constraints
-  - table_options
-  - table_snapshots
-  - table_storage
-  - table_storage_by_organization
-  - table_storage_usage_timeline
-  - table_storage_usage_timeline_by_organization
-  - tables
-
-- vector_indexes
-
-  - vector_index_columns
-  - vector_index_options
-  - vector_indexes
-
-- views
-
-  - materialized_views
-  - views
-
-- write_api
-
-  - write_api_timeline
-  - write_api_timeline_by_folder
-  - write_api_timeline_by_organization
-
-- gcp_billing_export
-
-  - gcp_billing_export_resource_v1
-
-## Monitoring models
-
-The package provides the following datamarts that can be easily used to build monitoring charts and dashboards:
-
-- global
-
-  - daily_spend
-  - dbt_bigquery_monitoring_options
-
-- compute
-
-  - billing
-    - compute_billing_per_hour
-
-  - bi engine
-    - bi_engine_usage_per_minute
-    - bi_engine_usage_per_hour
-
-  - cost
-    - compute_cost_per_hour
-    - compute_cost_per_hour_view (adds computed metrics)
-    - compute_cost_per_minute
-    - compute_cost_per_minute_view (adds computed metrics)
-
-  - jobs
-    - most_expensive_jobs
-    - most_repeated_jobs
-    - slowest_jobs
-    - query_with_better_pricing_using_flat_pricing_view
-    - query_with_better_pricing_using_on_demand_view
-
-  - models
-    - most_expensive_models
-    - most_repeated_models
-
-  - reservations
-    - reservation_usage_per_minute
-
-  - users
-    - most_expensive_users
-
-- storage
-
-  - dataset_with_better_pricing_on_logical_billing_model
-  - dataset_with_better_pricing_on_physical_billing_model
-  - dataset_with_cost
-  - most_expensive_tables
-  - partitions_monitoring
-  - read_heavy_tables
-  - storage_billing_per_hour
-  - table_with_better_pricing_on_logical_billing_model
-  - table_with_better_pricing_on_physical_billing_model
-  - unused_tables
+...and many more mapping to the official [BigQuery Information Schema](https://cloud.google.com/bigquery/docs/information-schema-intro).

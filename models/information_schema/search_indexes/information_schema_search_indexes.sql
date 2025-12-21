@@ -14,16 +14,7 @@ For more information about BigQuery permissions, see
 Access control with IAM. -#}
 
 
-{% set preflight_sql -%}
-SELECT
-CONCAT('`', CATALOG_NAME, '`.`', SCHEMA_NAME, '`') AS SCHEMA_NAME
-FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`SCHEMATA`
-{%- endset %}
-{% set results = run_query(preflight_sql) %}
-{% set dataset_list = results | map(attribute='SCHEMA_NAME') | list %}
-{%- if dataset_list | length == 0 -%}
-{{ log("No datasets found in the project list", info=False) }}
-{%- endif -%}
+{% set dataset_list = get_dataset_list() %}
 
 WITH base AS (
 {%- if dataset_list | length == 0 -%}

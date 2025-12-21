@@ -47,6 +47,13 @@ models:
       \ a table with streaming data, the value of replication_time will not be accurate."
     data_type: TIMESTAMP
   - name: sync_status
-    description: "The status of the sync\n      between the primary and secondary\
-      \ replica. Returns NULL if the replica is a\n      primary replica."
+    description: "The status of the sync between the primary and secondary replicas\
+      \ for cross-region\n      replication and disaster recovery datasets. Returns\
+      \ NULL if the replica is a primary replica or the dataset doesn't use replication."
     data_type: JSON
+  - name: replica_primary_assignment_time
+    description: The time at which the primary switch to the replica was triggered.
+    data_type: TIMESTAMP
+  - name: replica_primary_assignment_completion_time
+    description: The time at which the primary switch to the replica was completed.
+    data_type: TIMESTAMP

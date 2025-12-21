@@ -8,5 +8,7 @@ linked_schema_catalog_number,
 linked_schema_catalog_name,
 linked_schema_name,
 linked_schema_creation_time,
-linked_schema_org_display_name
+linked_schema_org_display_name,
+shared_asset_id,
+link_type
 FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`SCHEMATA_LINKS`

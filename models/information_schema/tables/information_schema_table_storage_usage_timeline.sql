@@ -14,6 +14,7 @@ For queries with a region qualifier, you must have permissions for the project.F
 Access control with IAM. -#}
 
 SELECT
+usage_date,
 project_id,
 table_catalog,
 project_number,

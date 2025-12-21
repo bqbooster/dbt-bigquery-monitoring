@@ -2,23 +2,23 @@ version: 2
 models:
 - name: information_schema_routine_options
   columns:
-  - name: SPECIFIC_CATALOG
+  - name: specific_catalog
     description: "The name of the project that contains the routine where the\n  \
       \    option is defined"
     data_type: STRING
-  - name: SPECIFIC_SCHEMA
+  - name: specific_schema
     description: "The name of the dataset that contains the routine where the option\n\
       \      is defined"
     data_type: STRING
-  - name: SPECIFIC_NAME
+  - name: specific_name
     description: The name of the routine
     data_type: STRING
-  - name: OPTION_NAME
+  - name: option_name
     description: One of the name values in the options table
     data_type: STRING
-  - name: OPTION_TYPE
+  - name: option_type
     description: One of the data type values in the options table
     data_type: STRING
-  - name: OPTION_VALUE
+  - name: option_value
     description: One of the value options in the options table
     data_type: STRING

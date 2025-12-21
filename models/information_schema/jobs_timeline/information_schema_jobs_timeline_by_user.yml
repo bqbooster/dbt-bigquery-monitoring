@@ -25,6 +25,9 @@ models:
     description: "The type of the job. Can be QUERY, LOAD,\n          EXTRACT, COPY,\
       \ or NULL. A\n          NULL value indicates a background job."
     data_type: STRING
+  - name: labels
+    description: Array of labels applied to the job as key-value pairs.
+    data_type: RECORD
   - name: statement_type
     description: "The type of query statement, if valid. For example,\n          SELECT,\
       \ INSERT, UPDATE, or\n          DELETE."
@@ -78,13 +81,15 @@ models:
     description: Whether the query results of this job were from a cache.
     data_type: BOOLEAN
   - name: period_shuffle_ram_usage_ratio
-    description: Shuffle usage ratio in the selected time period.
-    data_type: FLOAT
+    description: "Shuffle usage ratio in the selected time period. The value is\n\
+      \      0.0 if the job ran with a reservation that uses autoscaling\n      and\
+      \ has zero baseline slots."
+    data_type: FLOAT64
   - name: period_estimated_runnable_units
     description: Units of work that can be scheduled immediately in this period. Additional
       slots for these units of work accelerate your query, provided no other query
       in the reservation needs additional slots.
     data_type: INTEGER
   - name: transaction_id
-    description: "ID of the transaction\n        in which this job ran, if any. (Preview)"
+    description: "ID of the transaction\n        in which this job ran, if any."
     data_type: STRING

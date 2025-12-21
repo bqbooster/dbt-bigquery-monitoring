@@ -22,7 +22,7 @@
 {% if existing_relation is none or full_refresh_mode %}
   {#-- If the partition/cluster config has changed, then we must drop and recreate --#}
   {% if not adapter.is_replaceable(existing_relation, partition_config, cluster_by) %}
-      {% do log("Hard refreshing " ~ existing_relation ~ " because it is not replaceable") %}
+      {% do log("[dbt-bigquery-monitoring] Hard refreshing " ~ existing_relation ~ " because it is not replaceable") %}
       {{ adapter.drop_relation(existing_relation) }}
   {% endif %}
   {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}

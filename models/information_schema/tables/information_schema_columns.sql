@@ -32,5 +32,6 @@ clustering_ordinal_position,
 collation_name,
 column_default,
 rounding_mode,
-policy_tags
+policy_tags,
+data_policies
 FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`COLUMNS`

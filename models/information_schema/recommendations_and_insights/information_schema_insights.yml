@@ -28,7 +28,7 @@ models:
     data_type: STRING
   - name: target_resources
     description: Fully qualified resource names this insight is targeting.
-    data_type: STRING
+    data_type: ARRAY<STRING>
   - name: state
     description: The state of the insight. For a list of possible values, see Value.
     data_type: STRING
@@ -39,7 +39,7 @@ models:
     description: Full recommendation names this insight is associated with. Recommendation
       name is the Base64 encoded representation of recommender type and the recommendations
       ID.
-    data_type: STRING
+    data_type: ARRAY<STRING>
   - name: additional_details
     description: "Additional details about the insight.\n      \ncontent: Insight\
       \ content in JSON format.\nstate_metadata: Metadata about the state of the Insight.\

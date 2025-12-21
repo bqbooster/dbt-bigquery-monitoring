@@ -14,6 +14,7 @@ For more information about BigQuery permissions, see
 BigQuery IAM roles and permissions. -#}
 
 SELECT
+usage_date,
 folder_numbers,
 project_id,
 table_catalog,

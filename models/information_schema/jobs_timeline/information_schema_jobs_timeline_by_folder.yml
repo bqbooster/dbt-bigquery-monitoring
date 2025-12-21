@@ -82,7 +82,9 @@ models:
     description: Whether the query results of this job were from a cache.
     data_type: BOOLEAN
   - name: period_shuffle_ram_usage_ratio
-    description: Shuffle usage ratio in the selected time period.
+    description: "Shuffle usage ratio in the selected time period. The value is\n\
+      \      0.0 if the job ran with a reservation that uses autoscaling\n      and\
+      \ has zero baseline slots."
     data_type: FLOAT
   - name: period_estimated_runnable_units
     description: Units of work that can be scheduled immediately in this period. Additional

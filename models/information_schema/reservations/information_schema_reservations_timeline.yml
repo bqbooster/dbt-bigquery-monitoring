@@ -3,14 +3,18 @@ models:
 - name: information_schema_reservations_timeline
   columns:
   - name: autoscale
-    description: "Information about the autoscale capacity of the reservation. Fields\
-      \ include the following:\n\ncurrent_slots: the number of slots added to the\
-      \ reservation by autoscaling.\n            \nNote: After users reduce max_slots,\
-      \ it may take a while before it can be propagated,\n                      so\
-      \ current_slots may stay in the original value and could be larger than max_slots\n\
-      \                      for that brief period (less than one minute).\n     \
-      \       \n\nmax_slots: the maximum number of slots that could be added to the\
-      \ reservation by autoscaling."
+    description: "Contains information about the autoscale capacity of the reservation.\
+      \ Fields include the following:\n\ncurrent_slots: the number of slots added\
+      \ to the reservation by autoscaling.\n            \n              Because current_slots\
+      \ could be updated multiple times within a minute,\n              use per_second_details.autoscale_current_slots\
+      \ instead.\n              It reflects accurate state for each second.\n    \
+      \          Also, after users reduce max_slots, it may take a while before it\
+      \ can be propagated,\n              so current_slots may stay in the original\
+      \ value and could be larger than max_slots\n              for that brief period\
+      \ (less than one minute).\n              \n\n\nmax_slots: the maximum number\
+      \ of slots that could be added to the reservation by autoscaling.\n\nNote: If\
+      \ you frequently change the max_slots,\n              consider using the per_second_details.autoscale_max_slots\
+      \ instead."
     data_type: STRUCT
   - name: edition
     description: The edition associated with this reservation. For more information
@@ -22,11 +26,39 @@ models:
   - name: labels
     description: Array of labels associated with the reservation.
     data_type: RECORD
+  - name: reservation_group_path
+    description: "The hierarchical group structure to which the reservation is linked.\n\
+      \      For example, if the group structure includes a parent group and a child\n\
+      \      group, the reservation_group_path field contains a list such\n      as:\
+      \ [parent group, child group]. This field is in\n      Preview."
+    data_type: ARRAY<STRING>
   - name: period_start
     description: Start time of this one-minute period.
     data_type: TIMESTAMP
+  - name: per_second_details
+    description: "Contains information about the reservation capacity and usage at\
+      \ each second. Fields include the following:\n\nstart_time: the exact timestamp\
+      \ of the second.\nautoscale_current_slots: the number of slots added to the\
+      \ reservation by autoscaling at this second.\n           This number excludes\
+      \ baseline slots.\n            \nNote: When you reduce max_slots, the change\
+      \ might not take effect immediately. During this brief period (under one minute),\
+      \ the current_slots might remain at its original value that could be higher\
+      \ than the value of max_slots.\n            \n\nautoscale_max_slots: the maximum\
+      \ number of slots that could be added to the reservation by autoscaling at this\
+      \ second.\n          This number excludes baseline slots.\nslots_assigned: the\
+      \ number of slots assigned to this reservation at this second. It equals the\
+      \ baseline slot capacity of a reservation.\nslots_max_assigned: the maximum\
+      \ slot capacity for this reservation, including slot sharing at this second.\
+      \ If ignore_idle_slots is true, this field is same as slots_assigned. Otherwise,\
+      \ the slots_max_assigned field is the total number of slots in all capacity\
+      \ commitments in the administration project.\n\nIf there are any autoscale or\
+      \ reservation changes during this minute, the array is populated with 60 rows.\
+      \ However, for non-autoscale reservations that remain unchanged during this\
+      \ minute, the array is empty because it'll otherwise repeat the same number\
+      \ 60 times."
+    data_type: STRUCT
   - name: project_id
-    description: ID of the reservation admin project.
+    description: ID of the reservation administration project.
     data_type: STRING
   - name: project_number
     description: Number of the project.
@@ -44,7 +76,7 @@ models:
     description: "The maximum slot capacity for this reservation, including slot\n\
       \      sharing. If ignore_idle_slots is true, this is the same as slots_assigned,\
       \ otherwise this is the total number of slots in all capacity commitments in\
-      \ the admin project."
+      \ the administration project."
     data_type: INTEGER
   - name: max_slots
     description: "The maximum number of slots that this reservation can use, which\
@@ -57,3 +89,16 @@ models:
       scales from baseline to max_slots. This field is specified by users for using
       the reservation predictability feature.
     data_type: STRING
+  - name: period_autoscale_slot_seconds
+    description: The total slot seconds charged by autoscale for a specific minute
+      (each data row corresponds to one minute).
+    data_type: INTEGER
+  - name: is_creation_region
+    description: "Specifies if the current region is the location where the reservation\
+      \ was created. This location is used to\n      determine the pricing of the\
+      \ baseline reservation slots. For a failover disaster recovery (DR) reservation,\
+      \ a TRUE value indicates the original primary location, while for a non-DR reservation,\
+      \ a TRUE value denotes the reservation's location.\nFor a non-failover reservation,\
+      \ this value is always TRUE. For a failover reservation, the value depends on\
+      \ the region: TRUE for the original primary and FALSE for the original secondary."
+    data_type: BOOLEAN

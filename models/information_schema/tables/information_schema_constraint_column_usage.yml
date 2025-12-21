@@ -2,26 +2,26 @@ version: 2
 models:
 - name: information_schema_constraint_column_usage
   columns:
-  - name: TABLE_CATALOG
+  - name: table_catalog
     description: The name of the project that contains the dataset.
     data_type: STRING
-  - name: TABLE_SCHEMA
+  - name: table_schema
     description: "The name of the dataset that contains the table. Also\n      referred\
       \ to as the datasetId."
     data_type: STRING
-  - name: TABLE_NAME
+  - name: table_name
     description: "The name of the table. Also referred to as the\n      tableId."
     data_type: STRING
-  - name: COLUMN_NAME
+  - name: column_name
     description: The column name.
     data_type: STRING
-  - name: CONSTRAINT_CATALOG
+  - name: constraint_catalog
     description: The constraint project name.
     data_type: STRING
-  - name: CONSTRAINT_SCHEMA
+  - name: constraint_schema
     description: The constraint dataset name.
     data_type: STRING
-  - name: CONSTRAINT_NAME
+  - name: constraint_name
     description: "The constraint name. It can be the name of the\n      primary key\
       \ if the column is used by the primary key or the name of\n      foreign key\
       \ if the column is used by a foreign key."

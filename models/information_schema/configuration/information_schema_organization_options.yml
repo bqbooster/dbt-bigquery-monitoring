@@ -2,15 +2,15 @@ version: 2
 models:
 - name: information_schema_organization_options
   columns:
-  - name: OPTION_NAME
+  - name: option_name
     description: One of the name values in the options table.
     data_type: STRING
-  - name: OPTION_DESCRIPTION
+  - name: option_description
     description: The option description.
     data_type: STRING
-  - name: OPTION_TYPE
-    description: The data type of the OPTION_VALUE.
+  - name: option_type
+    description: The data type of the option_value.
     data_type: STRING
-  - name: OPTION_VALUE
+  - name: option_value
     description: The current value of the option.
     data_type: STRING

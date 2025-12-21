@@ -7,9 +7,12 @@ For more information about granular BigQuery permissions, see
 roles and permissions. -#}
 
 SELECT
+project_id,
+project_number,
 option_name,
 option_description,
 option_type,
 option_set_level,
-option_set_on_id
+option_set_on_id,
+option_value
 FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`EFFECTIVE_PROJECT_OPTIONS`

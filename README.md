@@ -28,9 +28,14 @@
 
 *💡 Tip: Click on "Watch → Custom → Releases" to get email notifications for new versions with changelog details*
 
-## Is that package for me?
-If one of those statements are true, this package is relevant:
+## Is this package for me?
+If one of those statements is true, this package is relevant:
 - I want to have a consolidated view of INFORMATION SCHEMA tables on a complex multi GCP project setup
-- I want to use INFORMATION SCHEMA in my own dbt models and I need proper column level documentation and linage in dbt
+- I want to use INFORMATION SCHEMA in my own dbt models and I need proper column level documentation and lineage in dbt
 - I want high level datamarts to monitor my BigQuery consumption (compute or storage)
 - I want to discover cost saving opportunities on my BigQuery usage
+
+## Compatibility
+This package is compatible with:
+- **dbt Core** >= 1.3.0
+- **dbt Fusion** >= 2.0.0-beta

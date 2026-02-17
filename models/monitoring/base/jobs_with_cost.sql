@@ -28,7 +28,7 @@ source AS (
  {%- endif %}
 ),
 
-base AS (
+base_extracted AS (
 SELECT
   bi_engine_statistics,
   cache_hit,
@@ -59,7 +59,7 @@ SELECT
   COALESCE(
     REPLACE(REPLACE(REGEXP_EXTRACT(query, r'^(\/\* \{+?[\w\W]+?\} \*\/)'), '/', ''), '*', ''),
     REPLACE(REPLACE(REGEXP_EXTRACT(query, r'(\/\* \{+?[\w\W]+?\} \*\/)\s*$'), '/', ''), '*', '')
-  ) AS dbt_info,
+  ) AS dbt_info_extracted,
   referenced_tables,
   reservation_id,
   session_info,
@@ -77,8 +77,18 @@ SELECT
   transferred_bytes,
   materialized_view_statistics
 FROM source
-{#- Prevent to duplicate costs as script contains query #}
-WHERE statement_type != 'SCRIPT'
+),
+
+base AS (
+  SELECT
+    * EXCEPT (dbt_info_extracted),
+    COALESCE(
+      dbt_info_extracted,
+      MAX(dbt_info_extracted) OVER (PARTITION BY COALESCE(parent_job_id, job_id))
+    ) AS dbt_info
+  FROM base_extracted
+  {#- Prevent to duplicate costs as script contains query #}
+  WHERE statement_type != 'SCRIPT'
 ),
 
 base_with_enriched_fields AS (
@@ -102,7 +112,7 @@ SELECT
   WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'sheets_trigger' AND value = 'user') THEN 'Google connected sheets - manual'
   WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'sheets_trigger' AND value = 'schedule') THEN 'Google connected sheets - scheduled'
   WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'data_source_id' AND value = 'scheduled_query') THEN 'Scheduled query'
-  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'client_type') THEN (SELECT value FROM UNNEST(labels) WHERE key = 'client_type' LIMIT 1)
+  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'client_type') THEN (SELECT value FROM UNNEST(labels) WHERE key = 'client_type' ORDER BY value LIMIT 1)
   {%- if dbt_bigquery_monitoring_variable_enable_gcp_bigquery_audit_logs() %}
   WHEN caller_supplied_user_agent LIKE 'dbt%' THEN 'dbt run'
   WHEN caller_supplied_user_agent LIKE 'Fivetran%' THEN 'Fivetran'

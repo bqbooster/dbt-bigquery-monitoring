@@ -1,6 +1,0 @@
-kind: Fixes
-body: Fix script child jobs lose DBT query comment
-time: 2026-02-17T23:04:01.407159+01:00
-custom:
-    Author: Kayrnt
-    Issue: "163"

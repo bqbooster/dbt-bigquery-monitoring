@@ -6,7 +6,7 @@ dbt_bigquery_monitoring:
       method: service-account
       project: "{{ env_var('DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT') }}"
       execution_project: "{{ env_var('DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT') }}"
-      dataset: dbt_bigquery_monitoring_test_commit_{{ env_var('GITHUB_SHA_OVERRIDE', '') if env_var('GITHUB_SHA_OVERRIDE', '') else env_var('GITHUB_SHA') }}
+      dataset: dbt_bigquery_monitoring_test_commit_{{ env_var('GITHUB_SHA_OVERRIDE', '') if env_var('GITHUB_SHA_OVERRIDE', '') else env_var('GITHUB_SHA') }}{{ env_var('DBT_TEST_DATASET_SUFFIX', '') }}
       threads: 8
       keyfile: ./keyfile.json
       timeout_seconds: 300

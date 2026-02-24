@@ -18,6 +18,10 @@ models:
     description: "(Clustering column) Email address or service account of\n      \
       \    the user who ran the job."
     data_type: STRING
+  - name: principal_subject
+    description: "A string representation of the identity of the principal that ran\
+      \ the\n        job."
+    data_type: STRING
   - name: job_id
     description: ID of the job. For example, bquxjob_1234.
     data_type: STRING

@@ -35,13 +35,16 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }} # Check out the code of the PR
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'    
 
       - name: Install Python packages
-        run: python -m pip install dbt-bigquery~=1.10.0 sqlfluff-templater-dbt google-cloud-bigquery==3.31.0
+        run: uv pip install --system dbt-bigquery~=1.10.0 sqlfluff-templater-dbt google-cloud-bigquery==3.31.0
 
       - name: Write keyfile if secret is defined
         run: |
@@ -58,65 +61,21 @@ jobs:
         run: dbt deps
 
       - name: Get changed files
-        id: get_file_changes
-        uses: trilom/file-changes-action@v1.2.4
+        id: changed-files
+        uses: tj-actions/changed-files@v44
         with:
-          output: ' '
-
-      - name: Get new and changed .sql files in /models to lint
-        id: get_files_to_lint
-        shell: bash -l {0}
-        run: |
-          # Set the command in the $() brackets as an output to use in later steps
-          echo "::set-output name=lintees::$(
-          # Issue where grep regular expressions don't work as expected on the
-          # Github Actions shell, check dbt/models/ folder
-          echo \
-          $(echo ${{ steps.get_file_changes.outputs.files_modified }} |
-          tr -s ' ' '\n' |
-          grep -E '^models.*[.]sql$' |
-          tr -s '\n' ' ') \
-          $(echo ${{ steps.get_file_changes.outputs.files_added }} |
-          tr -s ' ' '\n' |
-          grep -E '^models.*[.]sql$' |
-          tr -s '\n' ' ')
-          )"
-
-      # ---- USEFUL FOR DEBUGGING profiles.yml and VPN config ----
-      # - name: Expose workflow directory structure and CI/CD files
-      #   # Show folder structue and that required files are present.
-      #   # Mainly for sanity/debugging.
-      #   run: |
-      #     echo "Home directory (~):"
-      #     echo ~
-      #     echo " "
-      #     echo "Present working directory:"
-      #     pwd
-      #     echo " "
-      #     echo "Present working directory contents:"
-      #     ls -lh
-      #     echo " "
-      #     echo "Check /integration_tests folder contents for dummy profiles.yml"
-      #     ls -lh ./integration_tests
-
-      # ---- USEFUL FOR DEBUGGING CONNECTION ISSUES ----
-      # - name: Check dbt can connect to data warehouse and compile on its own.
-      #   # Call dbt separately here to try and catch a more verbose version of
-      #   # errors related to connection and profiles.yml issues since SQLFluff
-      #   # returns very unclear errors when this occurs.
-      #   shell: bash -l {0}
-      #   run : |
-      #     dbt compile
+          files: |
+            models/**/*.sql
 
       - name: Lint dbt models
-        if: steps.get_files_to_lint.outputs.lintees != ''
+        if: steps.changed-files.outputs.any_changed == 'true'
         shell: bash -l {0}
         run: |
-          sqlfluff lint --format github-annotation --annotation-level failure --nofail ${{ steps.get_files_to_lint.outputs.lintees }} > annotations.json
+          sqlfluff lint --format github-annotation --annotation-level failure --nofail ${{ steps.changed-files.outputs.all_changed_files }} > annotations.json
 
       # This step forces the presence of an empty annotations file in the case
       - name: Force pass because no SQL edited.
-        if: steps.get_files_to_lint.outputs.lintees == ''
+        if: steps.changed-files.outputs.any_changed == 'false'
         shell: bash -l {0}
         run: |
           echo "[]" > annotations.json

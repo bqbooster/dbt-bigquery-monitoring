@@ -8,61 +8,107 @@ models:
         data_type: timestamp
         description: The hour of the compute cost.
 
-      - name: dbt_model_name
+      - name: query
         data_type: string
-        description: Dbt model name
+        description: The SQL query text.
 
-      - name: project_ids
+      - name: jobs
         data_type: record
-        description: Array of GCP projects used to run the model and how many times.
+        description: Array of individual jobs for this hour and query.
 
-      - name: project_ids.value
+      - name: jobs.project_id
         data_type: string
-        description: GCP Project name
-
-      - name: project_ids.count
+        description: The ID of the project where the job was run.
+      - name: jobs.reservation_id
+        data_type: string
+        description: The ID of the reservation assigned to the job.
+      - name: jobs.job_id
+        data_type: string
+        description: The unique ID of the job.
+      - name: jobs.user_email
+        data_type: string
+        description: The email of the user who ran the job.
+      - name: jobs.cache_hit
+        data_type: boolean
+        description: Whether the job was a cache hit.
+      - name: jobs.query_cost
+        data_type: float64
+        description: The estimated cost of the query.
+      - name: jobs.total_slot_ms
         data_type: int64
-        description: Number of occurences of related GCP project
-
-      - name: reservation_ids
+        description: The total slot time used by the job in milliseconds.
+      - name: jobs.total_time_seconds
+        data_type: float64
+        description: The total execution time of the job in seconds.
+      - name: jobs.job_type
+        data_type: string
+        description: The type of job (e.g., QUERY).
+      - name: jobs.statement_type
+        data_type: string
+        description: The type of statement (e.g., SELECT, INSERT).
+      - name: jobs.priority
+        data_type: string
+        description: The priority of the job (INTERACTIVE or BATCH).
+      - name: jobs.total_bytes_processed
+        data_type: int64
+        description: Total bytes processed by the job.
+      - name: jobs.total_bytes_billed
+        data_type: int64
+        description: Total bytes billed for the job.
+      - name: jobs.error_result
         data_type: record
-        description: Array of reservation used to run the model and how many times.
-
-      - name: reservation_ids.value
+        description: Error details if the job failed.
+      - name: jobs.bi_engine_mode
         data_type: string
-        description: BigQuery Reservation id
-
-      - name: reservation_ids.count
+        description: The BI Engine execution mode.
+      - name: jobs.rank_cost
         data_type: int64
-        description: Number of occurences of related reservation
-
-      - name: user_emails
-        data_type: record
-        description: Array of user emails used to run the model and how many times.
-
-      - name: user_emails.value
-        data_type: string
-        description: User email
-
-      - name: user_emails.count
+        description: The rank of the job by cost within the hour.
+      - name: jobs.rank_duration
         data_type: int64
-        description: Number of occurences of related user email
+        description: The rank of the job by duration within the hour.
+      - name: jobs.rank_slot_usage
+        data_type: int64
+        description: The rank of the job by slot usage within the hour.
 
       - name: cache_hit
         data_type: int64
-        description: "Whether the query results of this job were from a cache.\n     \
-          \   If you have a multi-query statement\n        job, cache_hit for your parent\
-          \ query is\n        NULL."
+        description: "Number of cache hits for this hour/query."
 
       - name: total_query_cost
         data_type: float64
-        description: The total cost of all queries run during the hour.
+        description: The total cost of all queries run during the hour for this specific query.
 
       - name: total_slot_ms
         data_type: int64
-        description: The total number of slot time milliseconds used by all queries during the hour.
+        description: The total number of slot time milliseconds used.
 
       - name: query_count
         data_type: int64
-        description: The total number of queries run during the hour.
+        description: The total number of queries run.
+
+      - name: failed_jobs
+        data_type: int64
+        description: Total number of failed jobs.
+
+      - name: total_bytes_processed
+        data_type: int64
+        description: Total bytes processed.
+
+      - name: total_bytes_billed
+        data_type: int64
+        description: Total bytes billed.
+
+      - name: projects_count
+        data_type: int64
+        description: Number of distinct projects.
+
+      - name: users_count
+        data_type: int64
+        description: Number of distinct users.
+
+      - name: avg_duration_seconds
+        data_type: float64
+        description: Average duration in seconds.
+
 

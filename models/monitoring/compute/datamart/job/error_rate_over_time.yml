@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: error_rate_over_time
+    description: >
+      Daily error rate trend per GCP project and user. Provides a time-series view of job failure rates
+      to enable reliability dashboards, alerting thresholds, and root cause investigation by time window.
+      Complements job_failure_analysis which shows aggregate error patterns.
+    config:
+      meta:
+        label: "Error Rate Over Time"
+        order_fields_by: "label"
+        group_label: "Compute cost"
+    columns:
+      - name: day
+        description: The day of the error rate observation.
+      - name: project_id
+        description: The GCP project the jobs ran in.
+      - name: user_email
+        description: The email of the user who submitted the jobs.
+      - name: total_jobs
+        description: Total number of jobs submitted by this user in this project on this day.
+      - name: failed_jobs
+        description: Number of jobs that failed (error_result IS NOT NULL) on this day.
+      - name: error_rate_pct
+        description: Percentage of jobs that failed (0 to 100).
+      - name: wasted_cost_on_failures
+        description: Total query cost attributed to failed jobs on this day.
+      - name: rolling_7d_avg_error_rate_pct
+        description: 7-day rolling average error rate percentage for this project/user combination.

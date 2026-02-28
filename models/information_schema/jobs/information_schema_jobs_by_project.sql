@@ -52,14 +52,16 @@ total_bytes_billed,
 total_bytes_processed,
 total_modified_partitions,
 total_slot_ms,
-{%- if dbt_bigquery_monitoring_variable_enable_total_services_sku_slot_ms() %}
-total_services_sku_slot_ms,
-{%- endif %}
+{{ dbt_bigquery_monitoring_get_column_selection(
+    dbt_bigquery_monitoring_variable_bq_region(),
+    'JOBS_BY_PROJECT',
+    [
+        {'name': 'total_services_sku_slot_ms', 'type': 'INT64'},
+        {'name': 'principal_subject', 'type': 'STRING'}
+    ]
+) }},
 transaction_id,
 user_email,
-{%- if dbt_bigquery_monitoring_variable_enable_principal_subject() %}
-principal_subject,
-{%- endif %}
 transferred_bytes,
 {%- if dbt_bigquery_monitoring_variable_enable_materialized_view_statistics() %}
 materialized_view_statistics,

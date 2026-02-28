@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: write_ingestion_cost_per_table
+    description: >
+      Aggregates daily write ingestion volume and estimated cost per table, combining both the legacy
+      Streaming API and the Storage Write API. Use source_type to distinguish between the two.
+      Cost estimates are approximations based on Google's public pricing:
+      Streaming inserts at $0.01/200MB and Storage Write API at $0.025/GB for committed streams.
+    config:
+      meta:
+        label: "Write Ingestion Cost per Table"
+        order_fields_by: "label"
+        group_label: "Storage cost"
+    columns:
+      - name: day
+        description: The day of the ingestion activity.
+      - name: project_id
+        description: The GCP project the data was ingested into.
+      - name: dataset_id
+        description: The dataset the data was ingested into.
+      - name: table_id
+        description: The table the data was ingested into.
+      - name: source_type
+        description: The ingestion method used — either 'streaming' (legacy Streaming API) or 'write_api' (Storage Write API).
+      - name: total_requests
+        description: Total number of ingestion requests made to this table on this day.
+      - name: total_rows
+        description: Total number of rows ingested into this table on this day.
+      - name: total_input_bytes
+        description: Total bytes ingested into this table on this day.
+      - name: total_input_mb
+        description: Total megabytes ingested into this table on this day (rounded to 2 decimals).
+      - name: error_count
+        description: Number of requests that resulted in an error.
+      - name: error_rate
+        description: Fraction of requests that resulted in an error (0 to 1).
+      - name: estimated_cost
+        description: Estimated ingestion cost in USD based on public Google pricing. This is an approximation.

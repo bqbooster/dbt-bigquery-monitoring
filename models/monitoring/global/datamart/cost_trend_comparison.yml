@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: cost_trend_comparison
+    description: >
+      Daily BigQuery cost (compute and storage) enriched with 7-day and 30-day rolling averages,
+      same-day-last-week comparison, and week-over-week percentage change. Designed for anomaly detection
+      dashboards and budget variance monitoring.
+    config:
+      meta:
+        label: "Cost Trend Comparison"
+        order_fields_by: "label"
+        group_label: "Global cost"
+    columns:
+      - name: day
+        description: The day of the cost observation.
+      - name: cost_category
+        description: The cost category (e.g., 'compute', 'storage').
+      - name: daily_cost
+        description: Total cost for this day and category.
+      - name: rolling_7d_avg_cost
+        description: 7-day rolling average cost (current day and the 6 preceding days) for this category.
+      - name: rolling_30d_avg_cost
+        description: 30-day rolling average cost (current day and the 29 preceding days) for this category.
+      - name: cost_same_day_last_week
+        description: The cost on the same day of the week from the previous week, for week-over-week comparison.
+      - name: wow_pct_change
+        description: Week-over-week percentage change in daily cost. Positive = cost increased vs. last week.
+      - name: pct_deviation_from_7d_avg
+        description: Percentage deviation of today's cost from the 7-day rolling average. Useful for spike detection.

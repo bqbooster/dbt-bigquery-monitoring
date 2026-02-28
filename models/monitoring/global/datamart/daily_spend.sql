@@ -59,7 +59,11 @@ cost
 FROM compute_cost
   {%- if dbt_bigquery_monitoring_variable_enable_gcp_billing_export() %}
   UNION ALL
-  SELECT day, cost_category, cost FROM storage_cost AS s
+  SELECT
+    day,
+    cost_category,
+    cost
+  FROM storage_cost AS s
   {%- endif %}
 )
 GROUP BY ALL

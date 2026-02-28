@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: write_ingestion_errors_analysis
+    description: >
+      Analyzes error patterns for write ingestion operations, covering both the Streaming API and the
+      Storage Write API. Shows which tables have the highest error rates and which error codes are most
+      common, enabling targeted debugging of ingestion pipelines.
+    config:
+      meta:
+        label: "Write Ingestion Errors"
+        order_fields_by: "label"
+        group_label: "Storage cost"
+    columns:
+      - name: project_id
+        description: The GCP project the ingestion errors occurred in.
+      - name: dataset_id
+        description: The dataset containing the table with errors.
+      - name: table_id
+        description: The table that received failed ingestion requests.
+      - name: source_type
+        description: The ingestion method — 'streaming' (legacy Streaming API) or 'write_api' (Storage Write API).
+      - name: error_code
+        description: The error code returned by the ingestion API (e.g., QUOTA_EXCEEDED, INVALID_ARGUMENT).
+      - name: error_request_count
+        description: Total number of requests that resulted in this error code over the lookback window.
+      - name: error_row_count
+        description: Total number of rows that were part of failed requests with this error code.
+      - name: first_occurrence
+        description: The earliest day this error was observed for this table and source type.
+      - name: last_occurrence
+        description: The most recent day this error was observed for this table and source type.
+      - name: error_rate
+        description: Fraction of all ingestion requests that resulted in this error code (0 to 1).

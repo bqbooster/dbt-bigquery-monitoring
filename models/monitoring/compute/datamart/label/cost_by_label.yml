@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: cost_by_label
+    description: >
+      Breaks down BigQuery compute cost by job label key and value. Useful for FinOps chargeback, cost allocation
+      by team/environment/cost-center, and understanding spend patterns across labeled workloads.
+      Only covers jobs that have at least one label attached.
+    config:
+      meta:
+        label: "Cost by Label"
+        order_fields_by: "label"
+        group_label: "Compute cost"
+    columns:
+      - name: day
+        description: The day of the aggregated cost (truncated from job creation_time).
+      - name: label_key
+        description: The label key (e.g., team, environment, cost_center).
+      - name: label_value
+        description: The label value (e.g., analytics, production, marketing).
+      - name: project_id
+        description: The GCP project the jobs ran in.
+      - name: unique_users
+        description: Number of distinct users who ran jobs with this label in the period.
+      - name: query_count
+        description: Total number of jobs with this label on this day.
+      - name: cache_hits
+        description: Number of jobs that were served from cache.
+      - name: failed_queries
+        description: Number of jobs that failed (error_result IS NOT NULL).
+      - name: total_query_cost
+        description: Total cost of all jobs with this label on this day.
+      - name: avg_query_cost
+        description: Average cost per job with this label on this day.
+      - name: total_slot_ms
+        description: Total slot milliseconds consumed by jobs with this label.
+      - name: total_bytes_processed
+        description: Total bytes processed by jobs with this label.
+      - name: cache_hit_ratio
+        description: Fraction of jobs served from cache (0 to 1).

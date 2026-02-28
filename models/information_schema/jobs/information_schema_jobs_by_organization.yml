@@ -121,6 +121,10 @@ models:
     description: "(Clustering column) Email address or service account of the user\
       \ who\n        ran the job."
     data_type: STRING
+  - name: principal_subject
+    description: A string representation of the identity of the principal that ran
+      the job.
+    data_type: STRING
   - name: transferred_bytes
     description: Total bytes transferred for cross-cloud queries, such as BigQuery
       Omni cross-cloud transfer jobs.

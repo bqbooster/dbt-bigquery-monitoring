@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: project_cost_summary
+    description: >
+      Combined compute and storage cost summary per GCP project. Aggregates the lookback window compute
+      cost together with the current monthly storage cost forecast. Designed for executive and FinOps
+      dashboards that need a single ranked view of overall BigQuery spend by project.
+    config:
+      meta:
+        label: "Project Cost Summary"
+        order_fields_by: "label"
+        group_label: "Global cost"
+    columns:
+      - name: project_id
+        description: The GCP project ID.
+      - name: compute_cost
+        description: Total compute cost for this project over the lookback window.
+      - name: storage_monthly_forecast
+        description: Current monthly storage cost forecast for this project.
+      - name: total_estimated_cost
+        description: Sum of compute cost and storage monthly forecast — a combined cost indicator per project.
+      - name: storage_potential_savings
+        description: Potential savings from switching storage billing models (logical vs. physical) for this project.
+      - name: query_count
+        description: Total number of queries run in this project over the lookback window.
+      - name: unique_users
+        description: Number of distinct users who ran queries in this project over the lookback window.
+      - name: total_logical_bytes
+        description: Total logical bytes stored in this project.
+      - name: total_physical_bytes
+        description: Total physical bytes stored in this project.
+      - name: table_count
+        description: Number of tables in this project.

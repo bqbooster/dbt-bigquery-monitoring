@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: write_only_tables
+    description: >
+      Detects tables that have been recently written to but have never been queried (or not queried within
+      the lookback window). These "write-only" tables often represent pipeline outputs that are no longer
+      consumed downstream — good candidates for archival or deletion to reduce storage costs.
+      Complements unused_tables which detects tables that have never been modified.
+    config:
+      meta:
+        label: "Write-Only Tables"
+        order_fields_by: "label"
+        group_label: "Storage cost"
+    columns:
+      - name: project_id
+        description: The GCP project containing the table.
+      - name: dataset_id
+        description: The dataset containing the table.
+      - name: table_id
+        description: The table ID.
+      - name: table_type
+        description: The type of table (always BASE TABLE in this view).
+      - name: storage_last_modified_time
+        description: The last time data was written to this table.
+      - name: last_read_date
+        description: The last day this table was referenced in a query. NULL if never read within tracked history.
+      - name: total_reference_count
+        description: Total number of times this table has been referenced in queries within the tracked history.
+      - name: days_since_last_write
+        description: Number of days since the last write to this table.
+      - name: last_read_label
+        description: Human-readable label for when this table was last read (e.g., "Never read" or "14 days ago").
+      - name: cost_monthly_forecast
+        description: Current monthly storage cost forecast for this table.
+      - name: total_logical_bytes
+        description: Total logical bytes stored in this table.
+      - name: total_physical_bytes
+        description: Total physical bytes stored in this table.
+      - name: total_rows
+        description: Total number of rows in this table.
+      - name: total_partitions
+        description: Total number of partitions in this table.
+      - name: storage_billing_model
+        description: The storage billing model of the parent dataset (LOGICAL or PHYSICAL).

@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: recommendations
+    description: >
+      Active BigQuery recommendations from Google's Recommender API. Surfaces optimization signals such as
+      partition/cluster suggestions, materialized view opportunities, idle table removal, and capacity commitment
+      recommendations. Only ACTIVE recommendations are included.
+    config:
+      meta:
+        label: "BigQuery Recommendations"
+        order_fields_by: "label"
+        group_label: "Global cost"
+    columns:
+      - name: project_id
+        description: The GCP project the recommendation applies to.
+      - name: recommender_label
+        description: Human-readable name of the recommender that generated this recommendation.
+      - name: subtype
+        description: Specific subtype of the recommendation (e.g., CLUSTER_TABLE, MATERIALIZE_VIEW).
+      - name: description
+        description: Human-readable description of the recommendation.
+      - name: priority
+        description: Recommendation priority from Google (P1 = highest, P4 = lowest).
+      - name: priority_rank
+        description: Numeric priority rank (1 = highest) for easy sorting.
+      - name: impact_category
+        description: The primary impact category (e.g., COST, PERFORMANCE).
+      - name: estimated_monthly_savings
+        description: Estimated monthly cost savings in USD if the recommendation is applied. May be NULL if not a cost recommendation.
+      - name: target_resources
+        description: Array of GCP resource identifiers that the recommendation targets.
+      - name: last_updated_time
+        description: Timestamp when the recommendation was last updated by Google.
+      - name: recommendation_id
+        description: Unique identifier for the recommendation.

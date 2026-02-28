@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: dbt_model_trends
+    description: >
+      Daily cost and performance trends per dbt model. Aggregates from the incremental models_costs table
+      to provide a time-series view suitable for detecting regressions, cost spikes, and performance
+      degradation in dbt models over time.
+    config:
+      meta:
+        label: "dbt Model Trends"
+        order_fields_by: "label"
+        group_label: "Compute cost"
+    columns:
+      - name: day
+        description: The day of the aggregated metrics.
+      - name: dbt_model_name
+        description: The dbt model name (project.package.model format).
+      - name: query_count
+        description: Number of times this model was run on this day.
+      - name: total_query_cost
+        description: Total compute cost for all runs of this model on this day.
+      - name: avg_query_cost
+        description: Average cost per run of this model on this day.
+      - name: total_slot_ms
+        description: Total slot milliseconds consumed by this model on this day.
+      - name: avg_duration_seconds
+        description: Average execution duration in seconds across all runs on this day.
+      - name: max_duration_seconds
+        description: Maximum execution duration in seconds observed on this day.
+      - name: median_duration_seconds
+        description: Median execution duration in seconds on this day (approximate).
+      - name: p90_duration_seconds
+        description: 90th percentile execution duration in seconds on this day (approximate).
+      - name: failed_runs
+        description: Number of failed runs of this model on this day.
+      - name: failure_rate
+        description: Fraction of runs that failed (0 to 1).
+      - name: cache_hits
+        description: Number of runs served from cache on this day.
+      - name: cache_hit_ratio
+        description: Fraction of runs served from cache (0 to 1).
+      - name: total_bytes_processed
+        description: Total bytes processed by this model on this day.
+      - name: total_bytes_billed
+        description: Total bytes billed for this model on this day.

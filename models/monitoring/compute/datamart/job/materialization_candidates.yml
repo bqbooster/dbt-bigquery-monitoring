@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: materialization_candidates
+    description: >
+      Identifies repeated queries with significant cost and low cache hit rates — strong candidates for
+      optimization via materialized views, scheduled queries, or BI Engine acceleration.
+      Only queries classified as Medium or High recommendation are included.
+    config:
+      meta:
+        label: "Materialization Candidates"
+        order_fields_by: "label"
+        group_label: "Compute cost"
+    columns:
+      - name: query
+        description: The SQL query text that is being repeatedly executed.
+      - name: query_count
+        description: Total number of times this query has been executed over the lookback window.
+      - name: total_query_cost
+        description: Total cost of all executions of this query over the lookback window.
+      - name: avg_query_cost
+        description: Average cost per execution of this query.
+      - name: cache_hits
+        description: Number of executions that were served from BigQuery's query cache.
+      - name: cache_hit_ratio
+        description: Fraction of executions served from cache (0 to 1). Low values indicate caching is not being leveraged.
+      - name: potential_savings_from_caching
+        description: Estimated cost savings if all non-cached executions were served from cache.
+      - name: total_slot_ms
+        description: Total slot milliseconds consumed by all executions of this query.
+      - name: avg_duration_seconds
+        description: Average execution duration in seconds.
+      - name: total_gb_processed
+        description: Total gigabytes processed across all executions.
+      - name: first_seen
+        description: The earliest hour this query was observed.
+      - name: last_seen
+        description: The most recent hour this query was observed.
+      - name: materialization_recommendation
+        description: >
+          Recommendation tier based on frequency, cost, and cache hit rate.
+          'High' means a materialized view or scheduled query is strongly recommended.
+          'Medium' means caching or optimization could provide savings.

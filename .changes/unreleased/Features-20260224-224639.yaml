@@ -1,0 +1,6 @@
+kind: Features
+body: Add 11 new monitoring datamarts covering write ingestion (streaming + Storage Write API), GCP recommendations, cost by label, project cost summary, cost trend comparison, materialization candidates, error rate over time, dbt model trends, cost per project, and write-only tables detection
+time: 2026-02-24T22:46:39.000000+00:00
+custom:
+    Author: Copilot
+    Issue: ""

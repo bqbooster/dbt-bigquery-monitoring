@@ -19,6 +19,13 @@ table_catalog,
 table_schema,
 table_name,
 table_type,
+{{ dbt_bigquery_monitoring_get_column_selection(
+    dbt_bigquery_monitoring_variable_bq_region(),
+    'TABLES',
+    [
+        {'name': 'managed_table_type', 'type': 'STRING'}
+    ]
+) }},
 is_insertable_into,
 is_fine_grained_mutations_enabled,
 is_typed,

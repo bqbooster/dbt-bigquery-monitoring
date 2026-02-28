@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: cost_per_project
+    description: >
+      Daily compute cost breakdown per GCP project. Enables cross-project cost comparison, ranking,
+      and trend analysis for executive and FinOps dashboards.
+    config:
+      meta:
+        label: "Cost per Project"
+        order_fields_by: "label"
+        group_label: "Compute cost"
+    columns:
+      - name: day
+        description: The day of the aggregated cost.
+      - name: project_id
+        description: The GCP project ID.
+      - name: total_query_cost
+        description: Total compute cost for this project on this day.
+      - name: total_failing_query_cost
+        description: Compute cost attributed to failed jobs on this day.
+      - name: total_slot_ms
+        description: Total slot milliseconds consumed by this project on this day.
+      - name: query_count
+        description: Total number of queries run in this project on this day.
+      - name: unique_users
+        description: Number of distinct users who ran queries in this project on this day.
+      - name: total_bytes_processed
+        description: Total bytes processed by queries in this project on this day.
+      - name: total_bytes_billed
+        description: Total bytes billed for queries in this project on this day.
+      - name: cache_hits
+        description: Number of queries served from cache in this project on this day.
+      - name: cache_hit_ratio
+        description: Fraction of queries served from cache (0 to 1).
+      - name: avg_duration_seconds
+        description: Average query duration in seconds for this project on this day.

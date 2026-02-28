@@ -17,6 +17,9 @@ period_slot_ms,
 project_id,
 project_number,
 user_email,
+{%- if dbt_bigquery_monitoring_variable_enable_principal_subject() %}
+principal_subject,
+{%- endif %}
 job_id,
 job_type,
 statement_type,

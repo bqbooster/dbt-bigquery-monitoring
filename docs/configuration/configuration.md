@@ -18,5 +18,5 @@ Core configuration pages:
 
 - [Package settings](/configuration/package-settings)
 - [GCP BigQuery audit logs](/configuration/audit-logs)
-- [Audit logs vs Information Schema](/configuration/audit-logs-vs-information-schema)
+- [Audit logs vs Information Schema](/audit-logs-vs-information-schema)
 - [GCP billing export](/configuration/gcp-billing)

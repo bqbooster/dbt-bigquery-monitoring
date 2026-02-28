@@ -48,4 +48,4 @@ Validate results, then choose the right configuration path for your setup.
    dbt run-operation debug_dbt_bigquery_monitoring_variables
    ```
 2. Follow the [configuration decision flow](/configuration).
-3. If needed, use [configuration troubleshooting](/configuration#troubleshooting-configuration).
+3. If needed, review [required rights troubleshooting](/required-rights).

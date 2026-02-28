@@ -21,3 +21,11 @@ tmp_html_content.html
 # custom
 test_scripts/
 dbt_internal_packages/
+# lock
+uv.lock
+# txt files / log
+*.txt
+*.log
+
+# profiles
+profiles.yml

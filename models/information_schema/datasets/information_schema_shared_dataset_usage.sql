@@ -1,4 +1,4 @@
-{{ config(materialized=dbt_bigquery_monitoring_materialization(), partition_by={'field': 'job_start_time', 'data_type': 'timestamp', 'granularity': 'hour'}, partition_expiration_days=180, enabled=false) }}
+{{ config(materialized=dbt_bigquery_monitoring_materialization(), partition_by={'field': 'job_start_time', 'data_type': 'timestamp', 'granularity': 'hour'}, partition_expiration_days=180) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-shared-dataset-usage -#}
 
 SELECT
@@ -16,7 +16,9 @@ linked_project_number,
 linked_dataset_id,
 subscriber_org_number,
 subscriber_org_display_name,
+{%- if dbt_bigquery_monitoring_variable_enable_principal_subject() %}
 job_principal_subject,
+{%- endif %}
 num_rows_processed,
 total_bytes_processed,
 shared_resource_id,

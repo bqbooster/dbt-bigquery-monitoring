@@ -4,8 +4,8 @@ models:
   columns:
   - name: autoscale
     description: "Contains information about the autoscale capacity of the reservation.\
-      \ Fields include the following:\n\ncurrent_slots: the number of slots added\
-      \ to the reservation by autoscaling.\n            \n              Because current_slots\
+      \ Fields include the following:\n\ncurrent_slots: the number of autoscaling\
+      \ slots available to the reservation.\n            \n              Because current_slots\
       \ could be updated multiple times within a minute,\n              use per_second_details.autoscale_current_slots\
       \ instead.\n              It reflects accurate state for each second.\n    \
       \          Also, after users reduce max_slots, it may take a while before it\
@@ -38,12 +38,12 @@ models:
   - name: per_second_details
     description: "Contains information about the reservation capacity and usage at\
       \ each second. Fields include the following:\n\nstart_time: the exact timestamp\
-      \ of the second.\nautoscale_current_slots: the number of slots added to the\
-      \ reservation by autoscaling at this second.\n           This number excludes\
-      \ baseline slots.\n            \nNote: When you reduce max_slots, the change\
-      \ might not take effect immediately. During this brief period (under one minute),\
-      \ the current_slots might remain at its original value that could be higher\
-      \ than the value of max_slots.\n            \n\nautoscale_max_slots: the maximum\
+      \ of the second.\nautoscale_current_slots: the number of autoscaling slots available\
+      \ to the reservation at this second.\n           This number excludes baseline\
+      \ slots.\n            \nNote: When you reduce max_slots, the change might not\
+      \ take effect immediately. During this brief period (under one minute), the\
+      \ current_slots might remain at its original value that could be higher than\
+      \ the value of max_slots.\n            \n\nautoscale_max_slots: the maximum\
       \ number of slots that could be added to the reservation by autoscaling at this\
       \ second.\n          This number excludes baseline slots.\nslots_assigned: the\
       \ number of slots assigned to this reservation at this second. It equals the\
@@ -51,11 +51,16 @@ models:
       \ slot capacity for this reservation, including slot sharing at this second.\
       \ If ignore_idle_slots is true, this field is same as slots_assigned. Otherwise,\
       \ the slots_max_assigned field is the total number of slots in all capacity\
-      \ commitments in the administration project.\n\nIf there are any autoscale or\
-      \ reservation changes during this minute, the array is populated with 60 rows.\
-      \ However, for non-autoscale reservations that remain unchanged during this\
-      \ minute, the array is empty because it'll otherwise repeat the same number\
-      \ 60 times."
+      \ commitments in the administration project.\nborrowed_slots: the number of\
+      \ slots used from the idle slot sharing. Only populated if ignore_idle_slots\
+      \ is false, and idle slots were used\n          during this second.\nlent_slots:\
+      \ the number of slots other reservations use from the pool of\n          baseline\
+      \ slots of this reservation. Only populated if ignore_idle_slots is false, and\
+      \ idle slots were used by other reservations during this second.\n\nIf there\
+      \ are any autoscale or reservation changes during this minute, the array is\
+      \ populated with 60 rows. However, for non-autoscale reservations that remain\
+      \ unchanged during this minute, the array is empty because it'll otherwise repeat\
+      \ the same number 60 times."
     data_type: STRUCT
   - name: project_id
     description: ID of the reservation administration project.

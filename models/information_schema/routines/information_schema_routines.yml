@@ -24,8 +24,9 @@ models:
     data_type: STRING
   - name: routine_type
     description: "The routine type:\n\nFUNCTION: A BigQuery\n            persistent\
-      \ user-defined function\nPROCEDURE: A BigQuery\n            stored procedure\n\
-      TABLE FUNCTION: A BigQuery\n            table function."
+      \ user-defined function\nAGGREGATE FUNCTION: A BigQuery\n            persistent\
+      \ user-defined aggregate function\nPROCEDURE: A BigQuery\n            stored\
+      \ procedure\nTABLE FUNCTION: A BigQuery\n            table function"
     data_type: STRING
   - name: data_type
     description: "The data type that the routine returns. NULL if the\n      routine\

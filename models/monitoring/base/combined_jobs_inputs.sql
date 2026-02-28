@@ -38,8 +38,16 @@ SELECT
   j.transaction_id AS transaction_id, -- this field is only available in information schema
   COALESCE(a.user_email, j.user_email) AS user_email,
   j.query_info AS query_info, -- this field is only available in information schema
-  j.transferred_bytes AS transferred_bytes, -- this field is only available in information schema
+  {%- if dbt_bigquery_monitoring_variable_enable_total_services_sku_slot_ms() %}
+  j.total_services_sku_slot_ms AS total_services_sku_slot_ms, -- this field is only available in information schema
+  {%- endif %}
+  {%- if dbt_bigquery_monitoring_variable_enable_principal_subject() %}
+  j.principal_subject AS principal_subject, -- this field is only available in information schema
+  {%- endif %}
+  j.transferred_bytes AS transferred_bytes
+  {%- if dbt_bigquery_monitoring_variable_enable_materialized_view_statistics() %},
   j.materialized_view_statistics AS materialized_view_statistics -- this field is only available in information schema
+  {%- endif %}
  FROM {{ ref('jobs_from_audit_logs') }} AS a
  LEFT JOIN {{ ref('information_schema_jobs') }} AS j ON
   {% if is_incremental() %}

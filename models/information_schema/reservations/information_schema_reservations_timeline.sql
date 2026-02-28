@@ -6,7 +6,9 @@ autoscale,
 edition,
 ignore_idle_slots,
 labels,
+{%- if dbt_bigquery_monitoring_variable_enable_reservation_group_path() %}
 reservation_group_path,
+{%- endif %}
 period_start,
 per_second_details,
 project_id,

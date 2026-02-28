@@ -12,9 +12,9 @@
 {% endmacro %}
 
 {% macro force_bool(value) %}
-    {% if value == 'true' %}
+    {% if value == 'true' or value == true %}
         {{ return(true) }}
-    {% elif value == 'false' %}
+    {% elif value == 'false' or value == false %}
         {{ return(false) }}
     {% else %}
         {{ return(value) }}
@@ -165,6 +165,34 @@
     {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('should_combine_audit_logs_and_information_schema', 'DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA', false))) }}
 {% endmacro %}
 
+/* ==============================================
+   EXPERIMENTAL / PREVIEW FIELDS CONFIGURATION
+   ============================================== */
+
+{% macro dbt_bigquery_monitoring_variable_enable_experimental_fields() %}
+    {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('enable_experimental_fields', 'DBT_BQ_MONITORING_ENABLE_EXPERIMENTAL_FIELDS', false))) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enable_preview_fields() %}
+    {{ return(dbt_bigquery_monitoring_variable_enable_experimental_fields()) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enable_principal_subject() %}
+    {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('enable_principal_subject', 'DBT_BQ_MONITORING_ENABLE_PRINCIPAL_SUBJECT', dbt_bigquery_monitoring_variable_enable_experimental_fields()))) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enable_reservation_group_path() %}
+    {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('enable_reservation_group_path', 'DBT_BQ_MONITORING_ENABLE_RESERVATION_GROUP_PATH', dbt_bigquery_monitoring_variable_enable_experimental_fields()))) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enable_materialized_view_statistics() %}
+    {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('enable_materialized_view_statistics', 'DBT_BQ_MONITORING_ENABLE_MATERIALIZED_VIEW_STATISTICS', dbt_bigquery_monitoring_variable_enable_experimental_fields()))) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enable_total_services_sku_slot_ms() %}
+    {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('enable_total_services_sku_slot_ms', 'DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS', dbt_bigquery_monitoring_variable_enable_experimental_fields()))) }}
+{% endmacro %}
+
 {% macro get_variable_resolution_info(dbt_var_name, env_var_name, default_value) %}
     {% set env_var = env_var(env_var_name, 'NOT_SET') %}
     {% set dbt_var = var(dbt_var_name, 'NOT_SET') %}
@@ -216,7 +244,12 @@
         {'dbt_var': 'gcp_bigquery_audit_logs_storage_project', 'env_var': 'DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_STORAGE_PROJECT', 'default': 'placeholder', 'format': 'string'},
         {'dbt_var': 'gcp_bigquery_audit_logs_dataset', 'env_var': 'DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_DATASET', 'default': 'placeholder', 'format': 'string'},
         {'dbt_var': 'gcp_bigquery_audit_logs_table', 'env_var': 'DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_TABLE', 'default': 'placeholder', 'format': 'string'},
-        {'dbt_var': 'should_combine_audit_logs_and_information_schema', 'env_var': 'DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA', 'default': false, 'format': 'string'}
+        {'dbt_var': 'should_combine_audit_logs_and_information_schema', 'env_var': 'DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA', 'default': false, 'format': 'string'},
+        {'dbt_var': 'enable_experimental_fields', 'env_var': 'DBT_BQ_MONITORING_ENABLE_EXPERIMENTAL_FIELDS', 'default': false, 'format': 'string'},
+        {'dbt_var': 'enable_principal_subject', 'env_var': 'DBT_BQ_MONITORING_ENABLE_PRINCIPAL_SUBJECT', 'default': false, 'format': 'string'},
+        {'dbt_var': 'enable_reservation_group_path', 'env_var': 'DBT_BQ_MONITORING_ENABLE_RESERVATION_GROUP_PATH', 'default': false, 'format': 'string'},
+        {'dbt_var': 'enable_total_services_sku_slot_ms', 'env_var': 'DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS', 'default': false, 'format': 'string'},
+        {'dbt_var': 'enable_materialized_view_statistics', 'env_var': 'DBT_BQ_MONITORING_ENABLE_MATERIALIZED_VIEW_STATISTICS', 'default': false, 'format': 'string'}
     ] %}
 
     {# Loop through all variables and log their resolution info #}

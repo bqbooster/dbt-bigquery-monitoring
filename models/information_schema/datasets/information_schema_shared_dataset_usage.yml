@@ -72,4 +72,4 @@ models:
   - name: referenced_tables
     description: Contains project_id, dataset_id, table_id, and processed_bytes fields
       of the base table.
-    data_type: RECORD REPEATED
+    data_type: ARRAY<RECORD>

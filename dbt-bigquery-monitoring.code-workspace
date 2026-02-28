@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../dbt-bigquery-monitoring-parser"
+		}
+	],
+	"settings": {}
+}

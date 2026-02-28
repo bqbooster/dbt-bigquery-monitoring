@@ -14,13 +14,6 @@ models:
   - name: project_number
     description: Number of the project.
     data_type: INTEGER
-  - name: folder_numbers
-    description: "Number IDs of the folders that contain the project, starting with\
-      \ the\n        folder that immediately contains the project, followed by the\
-      \ folder\n        that contains the child folder, and so forth. For example,\
-      \ if\n        `folder_numbers` is `[1, 2, 3]`, then folder `1` immediately contains\n\
-      \        the project, folder `2` contains `1`, and folder `3` contains `2`."
-    data_type: REPEATED INTEGER
   - name: user_email
     description: "(Clustering column) Email address or service account of\n      \
       \    the user who ran the job."
@@ -85,7 +78,7 @@ models:
     description: "Shuffle usage ratio in the selected time period. The value is\n\
       \      0.0 if the job ran with a reservation that uses autoscaling\n      and\
       \ has zero baseline slots."
-    data_type: FLOAT
+    data_type: FLOAT64
   - name: period_estimated_runnable_units
     description: Units of work that can be scheduled immediately in this period. Additional
       slots for these units of work accelerate your query, provided no other query

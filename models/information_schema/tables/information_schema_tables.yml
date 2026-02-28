@@ -20,11 +20,6 @@ models:
       \        materialized view\n            or materialized view replica\nEXTERNAL:\
       \ A table that references an\n            external data source"
     data_type: STRING
-  - name: managed_table_type
-    description: "This column is in Preview. The managed table type; one of the following:\n\
-      \nNATIVE: A standard\n            table\nBIGLAKE: A \n            BigLake table\
-      \ for Apache Iceberg in BigQuery"
-    data_type: STRING
   - name: is_insertable_into
     description: "YES or NO depending on whether the table\n        supports DML INSERT\n\
       \        statements"

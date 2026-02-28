@@ -56,7 +56,43 @@ Yes, if you need to:
 
 ## ⚡ Quick Start
 
-Follow the [Quickstart](https://bqbooster.github.io/dbt-bigquery-monitoring/quickstart) to get up and running.
+> **Full docs:** [bqbooster.github.io/dbt-bigquery-monitoring](https://bqbooster.github.io/dbt-bigquery-monitoring/quickstart)
+
+**1) Install the package**
+
+Add to `packages.yml` and run `dbt deps` — see [installation instructions](https://bqbooster.github.io/dbt-bigquery-monitoring/installation).
+
+**2) Set the minimum configuration**
+
+Add to your `dbt_project.yml`:
+
+```yml
+models:
+  dbt_bigquery_monitoring:
+    +schema: "dbt_bigquery_monitoring"
+```
+
+If your datasets are not in the US region, also set your BigQuery region:
+
+```yml
+vars:
+  bq_region: "EU"  # e.g. EU, europe-west1
+```
+
+**3) Install dependencies and run the package**
+
+```bash
+dbt deps
+dbt run -s dbt_bigquery_monitoring
+```
+
+**4) Check everything is working**
+
+```bash
+dbt run-operation debug_dbt_bigquery_monitoring_variables
+```
+
+Then head to the [configuration guide](https://bqbooster.github.io/dbt-bigquery-monitoring/configuration) to enable additional data sources (GCP billing export, audit logs, etc.).
 
 ---
 

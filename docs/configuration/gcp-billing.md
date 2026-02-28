@@ -16,7 +16,7 @@ Then enable the GCP billing export monitoring in the package, you'll need to def
 
 ```yml
 vars:
-  dbt_bigquery_monitoring_variable_enable_gcp_billing_export: true
+  enable_gcp_billing_export: true
   gcp_billing_export_storage_project: 'my-gcp-project'
   gcp_billing_export_dataset: 'my_dataset'
   gcp_billing_export_table: 'my_table'

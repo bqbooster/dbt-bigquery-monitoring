@@ -18,7 +18,8 @@ See `should_combine_audit_logs_and_information_schema` in the [configuration](/c
 
 ## What's in there?
 
-Each of the solution has its advantages and disadvantages. Here is a comparison table to help you choose the right one for your use case:
+Each solution has its advantages and disadvantages. Here is a comparison table
+to help you choose the right one for your use case:
 
 | Feature | Audit logs | INFORMATION_SCHEMA |
 |---------|------------|--------------------|
@@ -33,4 +34,6 @@ Each of the solution has its advantages and disadvantages. Here is a comparison 
 
 ## Information schema
 
-The `INFORMATION_SCHEMA.JOBS` table is a system table that contains information about the jobs that have been run in BigQuery. It provides a lot of information about the job such BI engine and insights.
+The `INFORMATION_SCHEMA.JOBS` table is a system table that contains
+information about the jobs that have been run in BigQuery. It provides a lot
+of information about the job, such as BI Engine and insights.

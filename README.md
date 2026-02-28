@@ -56,35 +56,7 @@ Yes, if you need to:
 
 ## ⚡ Quick Start
 
-### 1. Install
-
-Add to your `packages.yml`:
-
-```yml
-packages:
-  - package: bqbooster/dbt_bigquery_monitoring
-    version: 0.24.1 # Check for the latest version
-```
-
-### 2. Configure
-
-Add to your `dbt_project.yml`:
-
-```yml
-models:
-  dbt_bigquery_monitoring:
-    +schema: "monitoring" # Creates tables in <your_schema>_monitoring
-
-vars:
-  bq_region: 'us' # Your dataset region
-```
-
-### 3. Run
-
-```bash
-dbt deps
-dbt run -s dbt_bigquery_monitoring
-```
+Use the [Quickstart](/quickstart) as the canonical first-run instructions.
 
 ---
 

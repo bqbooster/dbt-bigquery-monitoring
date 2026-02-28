@@ -27,6 +27,9 @@ models:
     +schema: "dbt_bigquery_monitoring"
 ```
 
+If your datasets are not in the US region, also set `vars.bq_region` in
+`dbt_project.yml` to your BigQuery region.
+
 ## 3) Install dependencies and run the package
 
 Run dbt dependencies, then run the package models.

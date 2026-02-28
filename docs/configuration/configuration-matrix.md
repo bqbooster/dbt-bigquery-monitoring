@@ -4,8 +4,7 @@ slug: /configuration/configuration-matrix
 
 # Configuration matrix
 
-Use this matrix to validate required and optional variables or settings for each
-setup scenario.
+Use this table to find which variables are required or optional for your setup.
 
 | Scenario | Required variables/settings | Optional variables/settings | Related docs |
 | --- | --- | --- | --- |

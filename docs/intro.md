@@ -9,7 +9,7 @@ slug: /
 
 By leveraging metadata from **Information Schema**, **Audit Logs**, and **Billing Exports**, this package provides actionable insights into your data warehouse.
 
-Start with the [Quickstart](/quickstart) as the canonical first-run path.
+Follow the [Quickstart](/quickstart) to get up and running.
 
 ## Why use this package?
 

@@ -5,8 +5,7 @@ slug: /configuration
 
 # Configuration
 
-Use this section to choose the right setup path, then validate all required
-variables.
+Choose your setup path and configure the package.
 
 - Follow the [configuration decision tree](/configuration/decision-tree) to
   select the right baseline mode and data source setup.

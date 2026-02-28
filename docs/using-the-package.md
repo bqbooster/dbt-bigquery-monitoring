@@ -5,8 +5,7 @@ slug: /using-the-package
 
 # Using the package
 
-> **Next decision:** If you are still configuring sources, run the
-> [setup wizard](/configuration/setup-wizard).
+If you haven't finished setting up yet, start with the [configuration guide](/configuration) first.
 
 ## Monitoring models (Datamarts)
 

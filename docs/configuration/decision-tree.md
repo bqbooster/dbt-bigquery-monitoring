@@ -2,9 +2,9 @@
 slug: /configuration/decision-tree
 ---
 
-# Configuration decision tree
+# Choosing your configuration
 
-Use this decision tree to choose your baseline configuration quickly.
+Answer these questions to pick the right setup for your environment.
 
 1. If your execution project and storage project are the same, start in region
    mode with `bq_region`.
@@ -19,8 +19,7 @@ Use this decision tree to choose your baseline configuration quickly.
 
 Then continue with the detailed pages:
 
-- Baseline and variable setup:
-  [configuration matrix](/configuration/configuration-matrix)
+- Baseline and variable setup: [configuration matrix](/configuration/configuration-matrix)
 - Audit logs configuration: [GCP BigQuery audit logs](/configuration/audit-logs)
 - Billing configuration: [GCP billing export](/configuration/gcp-billing)
 - Variable reference: [package settings](/configuration/package-settings)

@@ -56,7 +56,7 @@ Yes, if you need to:
 
 ## ⚡ Quick Start
 
-Use the [Quickstart](https://bqbooster.github.io/dbt-bigquery-monitoring/quickstart) as the canonical first-run instructions.
+Follow the [Quickstart](https://bqbooster.github.io/dbt-bigquery-monitoring/quickstart) to get up and running.
 
 ---
 

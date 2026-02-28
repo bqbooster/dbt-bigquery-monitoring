@@ -5,7 +5,7 @@ slug: /installation
 
 # Installation
 
-Use the [Quickstart](/quickstart) as the canonical first-run path.
+New to the package? Follow the [Quickstart](/quickstart) to get up and running.
 
 ## Installing the package to your dbt project
 

@@ -5,17 +5,14 @@ slug: /quickstart
 
 # Quickstart
 
-Use this page as the canonical first-run path for
-`dbt-bigquery-monitoring`.
+Get `dbt-bigquery-monitoring` up and running in a few steps.
 
-Before you run the package, review [required rights](/required-rights) to avoid
-common permission errors on first run.
+Before you start, check the [required rights](/required-rights) to make sure you have the right permissions.
 
 ## 1) Install the package
 
-Add the package by following
-[installation instructions](/installation#installing-the-package-to-your-dbt-project),
-which keeps the pinned version in one canonical location.
+Add the package to your project by following the
+[installation instructions](/installation#installing-the-package-to-your-dbt-project).
 
 ## 2) Set the minimum configuration
 
@@ -39,13 +36,13 @@ dbt deps
 dbt run -s dbt_bigquery_monitoring
 ```
 
-## 4) Validate and choose your configuration path
+## 4) Check everything is working
 
-Validate results, then choose the right configuration path for your setup.
+Run the debug command to confirm your variables are set correctly.
 
-1. Run configuration troubleshooting:
+1. Check your configuration:
    ```bash
    dbt run-operation debug_dbt_bigquery_monitoring_variables
    ```
-2. Follow the [configuration decision flow](/configuration).
-3. If needed, review [required rights troubleshooting](/required-rights).
+2. Then head to the [configuration guide](/configuration) to enable additional data sources.
+3. If something looks wrong, check [required rights](/required-rights).

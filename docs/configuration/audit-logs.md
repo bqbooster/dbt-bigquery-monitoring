@@ -8,8 +8,7 @@ slug: /configuration/audit-logs
 In this mode, the package monitors all the jobs that are written to a GCP
 BigQuery audit logs table instead of using `INFORMATION_SCHEMA.JOBS`.
 
-> **Next decision:** Compare options in the
-> [decision tree](/configuration/decision-tree).
+Not sure which to use? See [audit logs vs Information Schema](/audit-logs-vs-information-schema).
 
 :::tip
 

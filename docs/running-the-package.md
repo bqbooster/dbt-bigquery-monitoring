@@ -5,9 +5,7 @@ slug: /running-the-package
 
 # Running the package
 
-Before you schedule jobs, complete the
-[setup wizard](/configuration/setup-wizard) so scheduling follows your
-configuration choices.
+Make sure you've completed [configuration](/configuration) before scheduling jobs.
 
 ## Region mode vs project mode
 

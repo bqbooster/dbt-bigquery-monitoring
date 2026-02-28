@@ -7,8 +7,7 @@ slug: /audit-logs-vs-information-schema
 
 There are two ways to monitor BigQuery jobs:
 
-> **Next decision:** Use the
-> [migration map](/configuration/migration-map) to choose your path.
+Not sure which to choose? See the [comparison guide](/audit-logs-vs-information-schema) for a full breakdown.
 
 - Using the BigQuery audit logs
 - Using the `INFORMATION_SCHEMA.JOBS` table

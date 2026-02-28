@@ -3,16 +3,12 @@ sidebar_position: 5.4
 slug: /configuration/migration-map
 ---
 
-# Migration map
+# Old page locations
 
-Use this page to map your current setup to the next configuration decision.
+If you followed a link that no longer works, use this table to find where the
+page moved.
 
-> **Next decision:** Start with the
-> [setup wizard](/configuration/setup-wizard) to pick your migration path.
-
-Use this mapping when updating links from older entry pages.
-
-| Old entry page | Canonical destination |
+| Old URL | New location |
 | --- | --- |
 | `/setup` | `/configuration/setup-wizard` |
 | `/configuration/setup` | `/configuration/setup-wizard` |

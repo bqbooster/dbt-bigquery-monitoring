@@ -11,7 +11,8 @@
 
 
       BigQuery User  (roles/bigquery.user)
-     IAM role on your project.
+     IAM role
+     on your project.
 
 
 
@@ -51,11 +52,18 @@ total_bytes_billed,
 total_bytes_processed,
 total_modified_partitions,
 total_slot_ms,
+{%- if dbt_bigquery_monitoring_variable_enable_total_services_sku_slot_ms() %}
 total_services_sku_slot_ms,
+{%- endif %}
 transaction_id,
 user_email,
+{%- if dbt_bigquery_monitoring_variable_enable_principal_subject() %}
+principal_subject,
+{%- endif %}
 transferred_bytes,
+{%- if dbt_bigquery_monitoring_variable_enable_materialized_view_statistics() %}
 materialized_view_statistics,
+{%- endif %}
 metadata_cache_statistics,
 search_statistics,
 query_dialect,

@@ -18,14 +18,22 @@ source AS (
   NULL AS transaction_id,
   NULL AS query_info,
   NULL AS transferred_bytes,
+  {%- if dbt_bigquery_monitoring_variable_enable_materialized_view_statistics() %}
   NULL AS materialized_view_statistics,
+  {%- endif %}
+  {%- if dbt_bigquery_monitoring_variable_enable_total_services_sku_slot_ms() %}
+  NULL AS total_services_sku_slot_ms,
+  {%- endif %}
+  {%- if dbt_bigquery_monitoring_variable_enable_principal_subject() %}
+  NULL AS principal_subject,
+  {%- endif %}
   NULL AS edition,
   NULL AS session_info,
   FROM {{ ref('jobs_from_audit_logs') }}
- {%- else %}
+{%- else %}
   NULL AS caller_supplied_user_agent,
   FROM {{ ref('information_schema_jobs') }}
- {%- endif %}
+{%- endif %}
 ),
 
 base_extracted AS (
@@ -71,11 +79,19 @@ SELECT
   total_bytes_processed,
   total_modified_partitions,
   total_slot_ms,
+  {%- if dbt_bigquery_monitoring_variable_enable_total_services_sku_slot_ms() %}
+  total_services_sku_slot_ms,
+  {%- endif %}
   transaction_id,
   user_email,
+  {%- if dbt_bigquery_monitoring_variable_enable_principal_subject() %}
+  principal_subject,
+  {%- endif %}
   query_info,
-  transferred_bytes,
+  transferred_bytes
+  {%- if dbt_bigquery_monitoring_variable_enable_materialized_view_statistics() %},
   materialized_view_statistics
+  {%- endif %}
 FROM source
 ),
 

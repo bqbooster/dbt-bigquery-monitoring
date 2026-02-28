@@ -23,12 +23,16 @@ models:
     description: The region or multi-region the replica was created in.
     data_type: STRING
   - name: replica_primary_assigned
-    description: If the value is TRUE, the replica has the primary assignment.
+    description: "If the value is TRUE, the replica has the primary assignment. When\
+      \ you change\n        a secondary replica to a primary, this state takes effect\
+      \ immediately."
     data_type: BOOL
   - name: replica_primary_assignment_complete
     description: "If the value is TRUE, the primary assignment is complete.\n    \
       \  If the value is FALSE, the replica is not (yet) the primary\n      replica,\
-      \ even if replica_primary_assigned equals\n      TRUE."
+      \ even if replica_primary_assigned equals\n      TRUE. For information about\
+      \ how long it takes for a secondary replica to\n        become a primary,\n\
+      \        see Promote the secondary replica."
     data_type: BOOL
   - name: creation_time
     description: "The replica's creation\n      time. When the replica is first created,\

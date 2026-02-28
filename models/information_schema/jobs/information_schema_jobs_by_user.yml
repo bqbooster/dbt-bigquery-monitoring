@@ -67,8 +67,9 @@ models:
     description: SQL query text.
     data_type: STRING
   - name: referenced_tables
-    description: "Array of tables\n        referenced by the job. Only populated for\
-      \ query jobs that are not cache hits."
+    description: "Array of STRUCT values\n        that contain the following STRING\
+      \ fields for each table referenced by the query:\n        project_id, dataset_id,\
+      \ and table_id. Only populated\n        for query jobs that are not cache hits."
     data_type: RECORD
   - name: reservation_id
     description: "Name of the primary reservation assigned to this job,\n        in\
@@ -123,12 +124,6 @@ models:
   - name: total_slot_ms
     description: "Slot milliseconds for the job over its entire duration in the RUNNING\
       \ state,\n        including retries."
-    data_type: INTEGER
-  - name: total_services_sku_slot_ms
-    description: "Total slot milliseconds for the job that runs on external services\
-      \ and is billed on the\n        services SKU. This field is only populated for\
-      \ jobs that have external service costs, and is\n        the total of the usage\
-      \ for costs whose billing method is \"SERVICES_SKU\"."
     data_type: INTEGER
   - name: transaction_id
     description: "ID of the transaction\n        in which this job ran, if any."
@@ -200,3 +195,9 @@ models:
       \ optimizations\n        for the job. Only the JOBS_BY_PROJECT view has this\
       \ column."
     data_type: RECORD
+  - name: total_services_sku_slot_ms
+    description: Total slot milliseconds consumed by a job that utilizes external services and is billed under the SERVICES_SKU billing method.
+    data_type: INTEGER
+  - name: principal_subject
+    description: The identity of the principal (user or service account) who initiated and ran the BigQuery job.
+    data_type: STRING

@@ -28,5 +28,7 @@ ddl,
 coverage_percentage,
 unindexed_row_count,
 total_logical_bytes,
-total_storage_bytes
+total_storage_bytes,
+last_index_alteration_info,
+last_model_build_time
 FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`VECTOR_INDEXES`

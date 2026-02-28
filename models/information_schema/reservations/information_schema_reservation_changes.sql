@@ -17,7 +17,9 @@ primary_location,
 secondary_location,
 original_primary_location,
 labels,
+{%- if dbt_bigquery_monitoring_variable_enable_reservation_group_path() %}
 reservation_group_path,
+{%- endif %}
 max_slots,
 scaling_mode
 FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`RESERVATION_CHANGES`

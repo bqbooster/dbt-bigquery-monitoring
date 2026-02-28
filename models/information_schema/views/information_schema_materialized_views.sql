@@ -11,7 +11,8 @@
 
 
       BigQuery Metadata Viewer  (roles/bigquery.metadataViewer)
-     IAM role on your project or dataset.
+     IAM role
+     on your project or dataset.
 
 
 

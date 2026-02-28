@@ -40,3 +40,12 @@ models:
       storage:
         +tags:
           - "dbt-bigquery-monitoring-storage"
+
+vars:
+  dbt_bigquery_monitoring:
+    # Enable experimental/preview fields that may not be available in all regions
+    enable_experimental_fields: false
+    enable_principal_subject: false
+    enable_reservation_group_path: false
+    enable_total_services_sku_slot_ms: false
+    enable_materialized_view_statistics: false

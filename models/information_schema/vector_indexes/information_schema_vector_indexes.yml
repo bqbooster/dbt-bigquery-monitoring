@@ -68,3 +68,19 @@ models:
   - name: total_storage_bytes
     description: The number of billable storage bytes for the index.
     data_type: INTEGER
+  - name: last_index_alteration_info
+    description: "The details of the latest user-triggered index alteration, containing\n\
+      \        following fields:\n        \nstatus: a STRING value that indicates\n\
+      \            the alteration status. Possible values are NULL\n            (complete),\
+      \ IN_PROGRESS, and FAILED.\nmessage: a STRUCT field that contains\n        \
+      \    the details of the FAILED status as an\n            ErrorProto.\n     \
+      \       The value is NULL for other statuses.\nnew_coverage_percentage: an INT64\
+      \ value\n            that contains the approximate percentage of table data\
+      \ that has been\n            indexed for the alteration.\nstart_time: the timestamp\
+      \ when the alteration was\n            initiated.\nend_time: the timestamp when\
+      \ the alteration enters\n            the FAILED status.\nddl: the data definition\
+      \ language (DDL) statement\n            used to alter the index."
+    data_type: RECORD
+  - name: last_model_build_time
+    description: The start time of the last index model build.
+    data_type: TIMESTAMP

@@ -10,7 +10,8 @@
 
 
       BigQuery Admin  (roles/bigquery.admin)
-     IAM role on your organization.
+     IAM role
+     on your organization.
 
 
 

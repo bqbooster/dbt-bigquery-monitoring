@@ -1,4 +1,4 @@
-{{ config(materialized=dbt_bigquery_monitoring_materialization(), enabled=false) }}
+{{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-index-column-options -#}
 {# Required role/permissions: To see search index metadata, you need the
 bigquery.tables.get or bigquery.tables.list Identity and Access Management (IAM)

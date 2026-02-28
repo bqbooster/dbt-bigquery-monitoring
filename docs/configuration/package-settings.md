@@ -65,3 +65,16 @@ See [GCP BigQuery Audit logs](/configuration/audit-logs) for more information.
 | `gcp_bigquery_audit_logs_dataset` | `DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_DATASET` | The dataset for BigQuery Audit logs data | `'placeholder'` if enabled, `None` otherwise |
 | `gcp_bigquery_audit_logs_table` | `DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_TABLE` | The table for BigQuery Audit logs data | `'placeholder'` if enabled, `None` otherwise |
 | `should_combine_audit_logs_and_information_schema` | `DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA` | Whether to combine the audit logs and information schema data | `false` |
+| `google_information_schema_model_materialization` | `DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION` | Whether to use a specific materialization for information schema models. Note that it doesn't work in project mode as it will materialize intermediate tables to avoid issues from BQ when too many projects are used. | `ephemeral` |
+
+### Experimental / Preview fields
+
+BigQuery periodically introduces new fields in `INFORMATION_SCHEMA` views that are initially in "Preview" or "Experimental" and might not be available in all regions. These fields are disabled by default in this package to ensure compatibility across all regions.
+
+| Variable | Environment Variable | Description | Default |
+|----------|-------------------|-------------|---------|
+| `enable_experimental_fields` | `DBT_BQ_MONITORING_ENABLE_EXPERIMENTAL_FIELDS` | Toggle to enable all experimental/preview fields | `false` |
+| `enable_principal_subject` | `DBT_BQ_MONITORING_ENABLE_PRINCIPAL_SUBJECT` | Toggle to enable `principal_subject` field in jobs views | `false` |
+| `enable_reservation_group_path` | `DBT_BQ_MONITORING_ENABLE_RESERVATION_GROUP_PATH` | Toggle to enable `reservation_group_path` field in reservations views | `false` |
+| `enable_total_services_sku_slot_ms` | `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS` | Toggle to enable `total_services_sku_slot_ms` field in jobs views | `false` |
+| `enable_materialized_view_statistics` | `DBT_BQ_MONITORING_ENABLE_MATERIALIZED_VIEW_STATISTICS` | Toggle to enable `materialized_view_statistics` field in jobs views | `false` |

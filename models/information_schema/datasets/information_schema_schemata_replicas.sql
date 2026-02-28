@@ -11,7 +11,8 @@
 
 
       BigQuery Data Viewer  (roles/bigquery.dataViewer)
-     IAM role on the project.
+     IAM role
+     on the project.
 
 
 

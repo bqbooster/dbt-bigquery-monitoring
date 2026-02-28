@@ -28,6 +28,8 @@ models:
     description: ID of the session. For example, bquxsession_1234.
     data_type: STRING
   - name: user_email
-    description: "(Clustering column) Email address or service account of\n      \
-      \  the user who ran the session."
+    description: "(Clustering column) Email address or service account of\n        the user who ran the session."
+    data_type: STRING
+  - name: principal_subject
+    description: The identity of the principal (user or service account) who initiated and ran the BigQuery job.
     data_type: STRING

@@ -13,7 +13,7 @@ models:
       \ is [1, 2, 3], then folder\n        1 immediately contains the project, folder\
       \ 2 contains\n        1, and folder 3 contains 2. This column is only\n    \
       \    populated in STREAMING_TIMELINE_BY_FOLDER."
-    data_type: REPEATED INTEGER
+    data_type: ARRAY<INTEGER>
   - name: project_id
     description: (Clustering column) ID of the project.
     data_type: STRING

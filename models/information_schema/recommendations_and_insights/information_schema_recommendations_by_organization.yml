@@ -26,7 +26,7 @@ models:
     data_type: TIMESTAMP
   - name: target_resources
     description: Fully qualified resource names this recommendation is targeting.
-    data_type: STRING
+    data_type: ARRAY<STRING>
   - name: state
     description: The state of the recommendation. For a list of possible values, see
       State.
@@ -48,7 +48,7 @@ models:
     description: Full Insight names associated with the recommendation.Insight name
       is the Base64 encoded representation of Insight type name & the Insight ID.
       This can be used to query Insights view.
-    data_type: STRING
+    data_type: ARRAY<STRING>
   - name: additional_details
     description: "Additional Details about the recommendation.\n      \noverview:\
       \ Overview of the recommendation in JSON format. The content of this field might\

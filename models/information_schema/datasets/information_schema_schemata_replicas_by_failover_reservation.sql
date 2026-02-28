@@ -11,7 +11,8 @@
 
 
       BigQuery Resource Viewer  (roles/bigquery.resourceViewer)
-     IAM role on the project.
+     IAM role
+     on the project.
 
 
 

@@ -44,5 +44,5 @@ Validate results, then choose the right configuration path for your setup.
    ```bash
    dbt run-operation debug_dbt_bigquery_monitoring_variables
    ```
-2. Follow the [configuration decision flow](/audit-logs-vs-information-schema).
+2. Follow the [configuration decision flow](/configuration/audit-logs-vs-information-schema).
 3. If needed, use [configuration troubleshooting](/configuration#troubleshooting-configuration).

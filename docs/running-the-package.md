@@ -11,17 +11,24 @@ configuration choices.
 
 ## Region mode vs project mode
 
-In region mode, the INFORMATION SCHEMA tables and wrapper models are ephemeral. So you may just use directly in your own models using `ref`.
+In region mode, the INFORMATION SCHEMA tables and wrapper models are ephemeral,
+so you can use them directly in your own models with `ref`.
 **In region mode, you need to schedule something ONLY if you are using datamarts.**
 
-In project mode, all the INFORMATION SCHEMA tables are copied to new consolidated tables and wrapper models are views. Then it requires to run recurringly both those base tables and the datamarts if you are planning to use them.
+In project mode, all INFORMATION SCHEMA tables are copied into new consolidated
+tables and wrapper models are views. You must run both those base tables and
+the datamarts regularly if you plan to use them.
 
 ## Scheduling
 
 The package is designed to be run as a daily or hourly job.
-It leverages incremental modelisations to reduce the amount of data to process and to optimize the performance of the queries. Practically it won't reread data that has already been processed (and not needed anymore).
+It uses incremental models to reduce the amount of data to process and optimize
+query performance. In practice, it does not reread data that has already been
+processed and is no longer needed.
 
-The granularity of the data partitioning is hourly so the most cost efficient way to process the data is run it every hour but you may run it more frequently if you need more "real-time" data.
+The data partitioning granularity is hourly, so the most cost-efficient way to
+process the data is to run it every hour, but you can run it more frequently if
+you need more "real-time" data.
 
 ### I am just using datamarts (Recommended)
 
@@ -57,8 +64,9 @@ The package provides the following tags that can be used to filter the models:
 - compute only datamarts: `+tag:dbt-bigquery-monitoring-compute`
 - storage only datamarts: `+tag:dbt-bigquery-monitoring-storage`
 
-As those models can rely on base models which means you have to run at least run base once.
-To be sure, you just rely on the upstream dependency and run, for instance:
+Some models rely on base models, which means you must run the base models at
+least once. To ensure this, rely on upstream dependencies and run, for
+instance:
 
 ```bash
 dbt run -s +tag:dbt-bigquery-monitoring-compute
@@ -66,9 +74,11 @@ dbt run -s +tag:dbt-bigquery-monitoring-compute
 
 :::tip
 
-The plugin doesn't behave very well in CI environments as it requires extensive rights to read the INFORMATION SCHEMA tables.
-I usually recommend to exclude the package from the CI runs and run it only in production environments.
-to do so you can use the `--exclude` option to exclude the package models from the CI runs:
+The plugin does not behave well in CI environments because it requires
+extensive rights to read the INFORMATION SCHEMA tables. I usually recommend
+excluding the package from CI runs and running it only in production
+environments. To do so, use the `--exclude` option to exclude package models
+from CI runs:
 
 ```bash
 dbt run --exclude tag:dbt-bigquery-monitoring

@@ -5,6 +5,8 @@ slug: /installation
 
 # Installation
 
+Use the [Quickstart](/quickstart) as the canonical first-run path.
+
 ## Installing the package to your dbt project
 
 Add the following to your `packages.yml` file:

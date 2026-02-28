@@ -9,6 +9,8 @@ slug: /
 
 By leveraging metadata from **Information Schema**, **Audit Logs**, and **Billing Exports**, this package provides actionable insights into your data warehouse.
 
+Start with the [Quickstart](/quickstart) as the canonical first-run path.
+
 ## Why use this package?
 
 In a modern data stack, BigQuery costs and performance complexity can grow rapidly. This package solves common challenges:

@@ -8,15 +8,14 @@ slug: /quickstart
 Use this page as the canonical first-run path for
 `dbt-bigquery-monitoring`.
 
+Before you run the package, review [required rights](/required-rights) to avoid
+common permission errors on first run.
+
 ## 1) Install the package
 
-Add the package to your `packages.yml` file.
-
-```yml
-packages:
-  - package: bqbooster/dbt_bigquery_monitoring
-    version: 0.24.1
-```
+Add the package by following
+[installation instructions](/installation#installing-the-package-to-your-dbt-project),
+which keeps the pinned version in one canonical location.
 
 ## 2) Set the minimum configuration
 

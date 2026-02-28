@@ -12,7 +12,8 @@ Use this decision tree to choose your baseline configuration quickly.
    use project mode with `input_gcp_projects`.
 3. If you want full cost and governance coverage, enable both audit logs and
    billing export.
-4. If you want model metadata in jobs, enable query comments.
+4. If you want model metadata in jobs, enable query comments using the
+   [dbt query comment docs](https://docs.getdbt.com/reference/project-configs/query-comment).
 5. If you need pricing and advanced package controls, configure package
    settings.
 

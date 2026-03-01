@@ -158,7 +158,7 @@
 {% endmacro %}
 
 {% macro dbt_bigquery_monitoring_variable_gcp_bigquery_audit_logs_table() %}
-    {{ return(dbt_bigquery_monitoring_variable_priority('gcp_bigquery_audit_logs_table', 'DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_TABLE', 'cloudaudit_googleapis_com_activity')) }}
+    {{ return(dbt_bigquery_monitoring_variable_priority('gcp_bigquery_audit_logs_table', 'DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_TABLE', 'cloudaudit_googleapis_com_data_access')) }}
 {% endmacro %}
 
 {% macro dbt_bigquery_monitoring_variable_should_combine_audit_logs_and_information_schema() %}

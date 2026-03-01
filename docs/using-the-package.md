@@ -5,6 +5,8 @@ slug: /using-the-package
 
 # Using the package
 
+If you haven't finished setting up yet, start with the [configuration guide](/configuration) first.
+
 ## Monitoring models (Datamarts)
 
 > **💡 Want example queries?** Check out the [Monitoring Datamarts](/datamarts) guide for detailed examples and SQL recipes.

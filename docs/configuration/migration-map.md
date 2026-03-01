@@ -10,7 +10,7 @@ page moved.
 
 | Old URL | New location |
 | --- | --- |
-| `/setup` | `/configuration/setup-wizard` |
-| `/configuration/setup` | `/configuration/setup-wizard` |
-| `/configuration/getting-started` | `/configuration/setup-wizard` |
+| `/setup` | `/configuration` |
+| `/configuration/setup` | `/configuration` |
+| `/configuration/getting-started` | `/configuration` |
 | `/migration` | `/configuration/migration-map` |

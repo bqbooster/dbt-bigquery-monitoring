@@ -7,148 +7,221 @@ slug: /configuration
 
 Settings have default values that can be overridden using:
 
-- dbt project variables (and therefore also by CLI variable override)
-- environment variables
+- **dbt project variables** (defined in `dbt_project.yml` or passed via CLI `--vars`)
+- **Environment variables** (prefixed with `DBT_BQ_MONITORING_`)
+
+Environment variables always take priority over dbt variables, which take priority over defaults.
 
 :::tip
 
-To get the best out of this package, you should probably configure all data sources and settings:
+To get the best out of this package, configure all relevant data sources:
 
-- Choose the [Baseline mode](#modes) that fits your GCP setup
-- [Add metadata to queries](#add-metadata-to-queries-recommended-but-optional)
-- [GCP BigQuery Audit logs](/configuration/audit-logs)
-- [GCP Billing export](/configuration/gcp-billing)
-- [Settings](/configuration/package-settings) (especially the pricing ones)
-
-:::
-
-- Follow the [configuration decision tree](/configuration/decision-tree) to
-  select the right baseline mode and data source setup.
-- Use the
-  [configuration matrix](/configuration/configuration-matrix) to verify required
-  and optional variables for each scenario.
-
-Core configuration pages:
-
-- [Package settings](/configuration/package-settings)
-- [GCP BigQuery audit logs](/configuration/audit-logs)
-- [Audit logs vs Information Schema](/audit-logs-vs-information-schema)
-- [GCP billing export](/configuration/gcp-billing)
-
-:::note
-
-Please note that the default region is `us` and there's no way, at the time of writing, to query cross-region tables. However, you might run that project in each region you want to monitor and [then replicate the tables to a central region](https://cloud.google.com/bigquery/docs/data-replication) to build an aggregated view.
-
-To know which region is related to a job, in the BQ UI, use the `Job history` (bottom panel), take a job and look at the `Location` field when clicking on a job. You can also access the region of a dataset/table by opening the details panel of it and check the `Data location` field.
+1. Pick the right **[mode](#modes)** for your GCP setup (region vs. project)
+2. **[Add metadata to queries](#add-metadata-to-queries-recommended)** so dbt model names show up in job costs
+3. Enable **[GCP BigQuery audit logs](/configuration/audit-logs)** for richer job history
+4. Enable **[GCP Billing export](/configuration/gcp-billing)** for exact dollar costs
+5. Tune **[package settings](/configuration/package-settings)** (pricing, look-back window, etc.)
 
 :::
+
+## How to choose your setup
+
+```mermaid
+flowchart TD
+    A[Start] --> B{Single GCP project\nand same execution\n+ storage project?}
+    B -->|Yes| C[Region mode\nbq_region]
+    B -->|No| D[Project mode\ninput_gcp_projects]
+    C --> E{Want richer\njob history?}
+    D --> E
+    E -->|Yes| F[Enable audit logs\nenable_gcp_bigquery_audit_logs]
+    E -->|No| G{Want exact\ndollar costs?}
+    F --> G
+    G -->|Yes| H[Enable billing export\nenable_gcp_billing_export]
+    G -->|No| I[Done ✅]
+    H --> I
+
+    style C fill:#d4edda,stroke:#28a745
+    style D fill:#d4edda,stroke:#28a745
+    style F fill:#d1ecf1,stroke:#17a2b8
+    style H fill:#d1ecf1,stroke:#17a2b8
+    style I fill:#cce5ff,stroke:#004085
+```
+
+---
 
 ## Modes
 
-### Region mode (default)
+The package has two base modes that control how it reads from `INFORMATION_SCHEMA`.
 
-In this mode, the package will monitor all the GCP projects in the region specified in the `dbt_project.yml` file.
+:::note
 
-```yml
-vars:
-  # dbt bigquery monitoring vars
-  bq_region: 'us'
-```
+The default region is `us`. There is no cross-region querying in BigQuery, so use
+one dbt project per region and optionally
+[replicate tables to a central region](https://cloud.google.com/bigquery/docs/data-replication)
+for an aggregated view.
 
-#### Requirements
-
-- Execution project needs to be the same as the storage project, else you'll need to use the second mode.
-- If you have multiple GCP Projects in the same region, you should use the "project mode" (with `input_gcp_projects` setting to specify them), as otherwise you will run into errors such as: `Within a standard SQL view, references to tables/views require explicit project IDs unless the entity is created in the same project that is issuing the query, but these references are not project-qualified: "region-us.INFORMATION_SCHEMA.JOBS"`.
-
-### Project mode
-
-Project mode is useful when you have multiple GCP projects or you want to store the dbt-bigquery-monitoring models in a project different from the one used for execution.
-To enable the "project mode", you'll need to define explicitly one mandatory setting in the `dbt_project.yml` file:
-
-```yml
-vars:
-  # dbt bigquery monitoring vars
-  input_gcp_projects: [ 'my-gcp-project', 'my-gcp-project-2' ]
-```
-
-#### Supported Input Formats
-
-The `input_gcp_projects` setting accepts multiple input formats for maximum flexibility:
-
-**1. dbt project variables (`dbt_project.yml`):**
-
-```yml
-vars:
-  input_gcp_projects: "single-project"                    # Single project as string
-  input_gcp_projects: ["project1", "project2"]            # Multiple projects as array
-```
-
-**2. CLI variables:**
-
-```bash
-dbt run --vars '{"input_gcp_projects": "test"}'                   # Single project
-dbt run --vars '{"input_gcp_projects": ["test1", "test2"]}'       # Multiple projects
-```
-
-**3. Environment variables:**
-
-```bash
-# Single project
-export DBT_BQ_MONITORING_GCP_PROJECTS="single-project"
-
-# Multiple projects with quotes
-export DBT_BQ_MONITORING_GCP_PROJECTS='["project1","project2"]'
-
-# Multiple projects without quotes (also supported)
-export DBT_BQ_MONITORING_GCP_PROJECTS='[project1,project2]'
-
-# Single project in array format
-export DBT_BQ_MONITORING_GCP_PROJECTS='["project1"]'
-export DBT_BQ_MONITORING_GCP_PROJECTS='[project1]'
-
-# Empty array
-export DBT_BQ_MONITORING_GCP_PROJECTS='[]'
-```
-
-All input formats are automatically normalized to an array of project strings internally, so you can use whichever format is most convenient for your setup.
-
-:::warning
-
-When using the "project mode", the package will create intermediate tables to avoid issues from BigQuery when too many projects are used.
-That process is done only on tables that are project related. The package leverages a custom materialization (`project_by_project_table`) designed specifically for that need that can be found in the `macros` folder.
+To find a job's region: open **Job history** in the BQ UI → click a job → look at the **Location** field.
 
 :::
 
-## Add metadata to queries (Recommended but optional)
+### Region mode (default)
 
-To enhance your query metadata with dbt model information, the package provides a dedicated macro that leverages "dbt query comments" (the header set at the top of each query).
-To configure the query comments, add the following config to `dbt_project.yml`.
+Monitor all BigQuery jobs in a single GCP region. This is the simplest setup.
+All `INFORMATION_SCHEMA` models are **ephemeral**, so they can be referenced directly in your own models.
+
+**When to use:** single project, or multiple projects all in the same region where your execution project equals the storage project.
+
+```yml
+# dbt_project.yml
+vars:
+  bq_region: 'us'          # US multi-region (default)
+  # bq_region: 'EU'        # EU multi-region
+  # bq_region: 'europe-west1'  # specific region
+```
+
+:::warning
+
+If you have **multiple GCP projects in the same region** but your execution project differs from the storage project, you will hit this error:
+
+```
+Within a standard SQL view, references to tables/views require explicit project IDs
+unless the entity is created in the same project that is issuing the query
+```
+
+Switch to **project mode** in this case.
+
+:::
+
+### Project mode
+
+Monitor specific GCP projects by listing them explicitly. All `INFORMATION_SCHEMA` tables are
+materialized into consolidated BigQuery tables via the `project_by_project_table` custom materialization.
+
+**When to use:** multiple GCP projects, or when your dbt execution project is different from the monitored projects.
+
+```yml
+# dbt_project.yml
+vars:
+  input_gcp_projects:
+    - 'my-production-project'
+    - 'my-analytics-project'
+    - 'my-platform-project'
+```
+
+#### Supported input formats for `input_gcp_projects`
+
+You can pass projects in multiple ways — all are normalized internally to a list of strings.
+
+**In `dbt_project.yml`:**
+
+```yml
+vars:
+  input_gcp_projects: 'single-project'                      # single project as string
+  input_gcp_projects: ['project-a', 'project-b']            # multiple projects as list
+```
+
+**From the CLI:**
+
+```bash
+# Single project
+dbt run --vars '{"input_gcp_projects": "my-project"}'
+
+# Multiple projects
+dbt run --vars '{"input_gcp_projects": ["project-a", "project-b"]}'
+```
+
+**As environment variables:**
+
+```bash
+# Single project
+export DBT_BQ_MONITORING_GCP_PROJECTS="my-project"
+
+# Multiple projects (with or without quotes around values)
+export DBT_BQ_MONITORING_GCP_PROJECTS='["project-a","project-b"]'
+export DBT_BQ_MONITORING_GCP_PROJECTS='[project-a,project-b]'
+
+# Empty (region mode will be used as fallback)
+export DBT_BQ_MONITORING_GCP_PROJECTS='[]'
+```
+
+:::warning
+
+In project mode, the package creates **intermediate materialized tables** per project to avoid
+BigQuery limits when querying too many projects simultaneously. This is handled automatically
+via the `project_by_project_table` custom materialization in the `macros` folder.
+
+These extra tables need to be refreshed regularly — include them in your scheduled runs.
+
+:::
+
+---
+
+## Add metadata to queries (Recommended)
+
+Tag every BigQuery job with dbt model metadata (model name, package, node ID). This enables
+the `most_expensive_models` datamart and lets you trace costs back to specific dbt models.
+
+Add the following to `dbt_project.yml`:
 
 ```yaml
 query-comment:
   comment: '{{ dbt_bigquery_monitoring.get_query_comment(node) }}'
-  job-label: true # Use query comment JSON as job labels
+  job-label: true   # Promotes the JSON comment to BigQuery job labels
 ```
 
-To get more details about query comments, please refer to the [dbt documentation](https://docs.getdbt.com/reference/project-configs/query-comment).
+Once set, every query run by dbt will carry a structured comment like:
 
-## Troubleshooting Configuration
+```json
+{
+  "dbt_version": "1.9.0",
+  "app": "dbt",
+  "profile_name": "my_profile",
+  "target_name": "prod",
+  "node_id": "model.my_project.my_model"
+}
+```
 
-If you're having trouble with your configuration or want to verify that your environment variables and dbt variables are being resolved correctly, you can use the built-in debug macro to log all configuration values.
+See the [dbt query-comment documentation](https://docs.getdbt.com/reference/project-configs/query-comment) for more options.
 
-### Example Usage
+---
 
-Run this command to see the configuration debug information:
+## Configuration matrix
+
+Use this table to determine which variables are required vs. optional for each scenario.
+
+| Scenario | Required variables | Optional variables | Guide |
+|---|---|---|---|
+| **Region mode** (default) | `bq_region` | `output_partition_expiration_days`, `use_flat_pricing`, `per_billed_tb_price` | [Package settings](/configuration/package-settings) |
+| **Project mode** | `input_gcp_projects` | `bq_region`, `output_partition_expiration_days`, `use_flat_pricing` | [Package settings](/configuration/package-settings) |
+| **Audit logs** | `enable_gcp_bigquery_audit_logs`, `gcp_bigquery_audit_logs_storage_project`, `gcp_bigquery_audit_logs_dataset`, `gcp_bigquery_audit_logs_table` | `should_combine_audit_logs_and_information_schema`, `google_information_schema_model_materialization` | [Audit logs](/configuration/audit-logs) |
+| **Billing export** | `enable_gcp_billing_export`, `gcp_billing_export_storage_project`, `gcp_billing_export_dataset`, `gcp_billing_export_table` | `lookback_incremental_billing_window_days` | [GCP billing export](/configuration/gcp-billing) |
+| **Query metadata** | `query-comment.comment` + `query-comment.job-label` in `dbt_project.yml` | — | [Query comments](https://docs.getdbt.com/reference/project-configs/query-comment) |
+
+---
+
+## Troubleshooting
+
+### Debug all resolved variable values
+
+Run this command to log every variable with its resolved value and source (env var, dbt var, or default):
 
 ```bash
 dbt run-operation debug_dbt_bigquery_monitoring_variables
 ```
 
-### Variable priority
+### Variable priority order
 
-The package will prioritize the configuration variables in the following order:
+Variables are resolved in this order (first match wins):
 
-1. Environment variables
-2. dbt variables
-3. Variables in the `dbt_project.yml` file
-4. Default values
+1. **Environment variables** (`DBT_BQ_MONITORING_*`)
+2. **dbt CLI variables** (`dbt run --vars '{...}'`)
+3. **`dbt_project.yml` variables** (`vars:` section)
+4. **Package defaults**
+
+### Common errors
+
+| Error | Likely cause | Fix |
+|---|---|---|
+| `references to tables/views require explicit project IDs` | Region mode with mismatched execution/storage project | Switch to project mode with `input_gcp_projects` |
+| Model produces no rows | `bq_region` doesn't match your data location | Check region with Job History → Location |
+| `placeholder` in variable value | Required variable not set | Set the variable in `dbt_project.yml` or via env var |

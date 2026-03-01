@@ -7,11 +7,9 @@ slug: /configuration/package-settings
 
 This page is the full variable reference for the package.
 
-- Start with the [configuration decision tree](/configuration/decision-tree).
-- Validate required variables in the
-  [configuration matrix](/configuration/configuration-matrix).
-- Follow the guided steps in the
-  [setup guide](/configuration/setup-wizard).
+- Start with the [configuration guide](/configuration) to pick your mode and enable data sources.
+- Use the [configuration matrix](/configuration#configuration-matrix) to verify required and optional variables.
+- Follow the [quickstart](/quickstart) for a first-run walkthrough.
 
 Following settings can be overriden to customize the package configuration.
 To do so, you can set the following variables in your `dbt_project.yml` file or use environment variables.

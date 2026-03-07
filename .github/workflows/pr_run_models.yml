@@ -40,7 +40,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }} # Check out the code of the PR
       
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 

@@ -43,8 +43,9 @@ models:
 
 vars:
   dbt_bigquery_monitoring:
-    # Enable experimental/preview fields that may not be available in all regions
+    # Enable experimental/preview fields that may not be available in all regions (see the documentation)
     enable_experimental_fields: false
+    # Per field settings
     enable_principal_subject: false
     enable_reservation_group_path: false
     enable_total_services_sku_slot_ms: false

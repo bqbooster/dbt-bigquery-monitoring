@@ -1,0 +1,6 @@
+kind: Fixes
+body: Rework the way the columns are checked by enabling all columns by default by can be disabled through configuration
+time: 2026-03-21T00:53:24.882435+01:00
+custom:
+    Author: Kayrnt
+    Issue: ""

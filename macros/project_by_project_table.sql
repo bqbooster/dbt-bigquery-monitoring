@@ -16,7 +16,10 @@
 
 {{ run_hooks(pre_hooks) }}
 
-{%- set sql_no_data = sql + " LIMIT 0" %}
+{#-- Use the first project from the list to bootstrap the table schema,
+     so it matches the actual INFORMATION_SCHEMA being queried --#}
+{%- set first_project_sql = sql | replace('`region-', '`' ~ projects[0] | trim ~ '`.`region-') -%}
+{%- set sql_no_data = first_project_sql + " LIMIT 0" %}
 
 -- Create the table if it doesn't exist or if we're in full-refresh mode
 {% if existing_relation is none or full_refresh_mode %}

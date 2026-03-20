@@ -177,6 +177,7 @@
     {{ return(dbt_bigquery_monitoring_variable_enable_experimental_fields()) }}
 {% endmacro %}
 
+
 {% macro dbt_bigquery_monitoring_variable_enable_principal_subject() %}
     {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('enable_principal_subject', 'DBT_BQ_MONITORING_ENABLE_PRINCIPAL_SUBJECT', dbt_bigquery_monitoring_variable_enable_experimental_fields()))) }}
 {% endmacro %}
@@ -184,6 +185,7 @@
 {% macro dbt_bigquery_monitoring_variable_enable_reservation_group_path() %}
     {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('enable_reservation_group_path', 'DBT_BQ_MONITORING_ENABLE_RESERVATION_GROUP_PATH', dbt_bigquery_monitoring_variable_enable_experimental_fields()))) }}
 {% endmacro %}
+
 
 {% macro dbt_bigquery_monitoring_variable_enable_materialized_view_statistics() %}
     {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('enable_materialized_view_statistics', 'DBT_BQ_MONITORING_ENABLE_MATERIALIZED_VIEW_STATISTICS', dbt_bigquery_monitoring_variable_enable_experimental_fields()))) }}

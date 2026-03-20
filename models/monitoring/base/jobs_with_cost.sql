@@ -95,7 +95,7 @@ SELECT
 FROM source
 ),
 
-base AS (
+base_with_dbt_info AS (
   SELECT
     * EXCEPT (dbt_info_extracted),
     COALESCE(
@@ -103,6 +103,11 @@ base AS (
       MAX(dbt_info_extracted) OVER (PARTITION BY COALESCE(parent_job_id, job_id))
     ) AS dbt_info
   FROM base_extracted
+),
+
+base AS (
+  SELECT *
+  FROM base_with_dbt_info
   {#- Prevent to duplicate costs as script contains query #}
   WHERE statement_type != 'SCRIPT'
 ),

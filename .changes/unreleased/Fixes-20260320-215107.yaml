@@ -1,6 +1,0 @@
-kind: Fixes
-body: Fix dbt_model_name propagation from parent SCRIPT jobs to children in jobs_with_cost
-time: 2026-03-20T21:51:07.60619+01:00
-custom:
-    Author: Kayrnt
-    Issue: "180"

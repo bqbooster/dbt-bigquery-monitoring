@@ -52,14 +52,12 @@ total_bytes_billed,
 total_bytes_processed,
 total_modified_partitions,
 total_slot_ms,
-{{ dbt_bigquery_monitoring_get_column_selection(
-    dbt_bigquery_monitoring_variable_bq_region(),
-    'JOBS',
-    [
-        {'name': 'total_services_sku_slot_ms', 'type': 'INT64'},
-        {'name': 'principal_subject', 'type': 'STRING'}
-    ]
-) }},
+{%- if dbt_bigquery_monitoring_variable_enable_total_services_sku_slot_ms() %}
+total_services_sku_slot_ms,
+{%- endif %}
+{%- if dbt_bigquery_monitoring_variable_enable_principal_subject() %}
+principal_subject,
+{%- endif %}
 transaction_id,
 user_email,
 transferred_bytes,

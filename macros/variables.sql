@@ -26,11 +26,15 @@
    ============================================== */
 
 {% macro dbt_bigquery_monitoring_variable_bq_region() %}
-    {{ return(dbt_bigquery_monitoring_variable_priority('bq_region', 'DBT_BQ_MONITORING_REGION', 'us')) }}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('bq_region', 'DBT_BQ_MONITORING_REGION', 'us')) }}
 {% endmacro %}
 
 {% macro dbt_bigquery_monitoring_variable_input_gcp_projects() %}
-    {{ return(dbt_bigquery_monitoring_variable_priority('input_gcp_projects', 'DBT_BQ_MONITORING_GCP_PROJECTS', [])) }}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('input_gcp_projects', 'DBT_BQ_MONITORING_GCP_PROJECTS', [])) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_input_datasets() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('input_datasets', 'DBT_BQ_MONITORING_INPUT_DATASETS', [])) }}
 {% endmacro %}
 
 /* ==============================================

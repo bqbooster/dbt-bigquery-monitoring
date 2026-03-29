@@ -30,6 +30,11 @@ for dataset-scanned `INFORMATION_SCHEMA` models. Set one
 `dbt_project.yml`. If you leave it empty, the package auto-discovers
 datasets.
 
+If you use `DBT_BQ_MONITORING_INPUT_DATASETS`, pass a single
+`project.dataset` string. List-style environment variable values are not
+parsed for this setting, so use `dbt_project.yml` or `--vars` for
+multiple datasets.
+
 ```yml
 # dbt_project.yml
 vars:

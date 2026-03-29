@@ -18,8 +18,12 @@
 
     {% if raw_input_datasets is string and raw_input_datasets | length > 0 %}
       {% set input_datasets_list = [raw_input_datasets] %}
-    {% elif raw_input_datasets | length > 0 %}
+    {% elif raw_input_datasets is sequence and raw_input_datasets is not mapping and raw_input_datasets | length > 0 %}
       {% set input_datasets_list = raw_input_datasets %}
+    {% elif raw_input_datasets | length > 0 %}
+      {% do exceptions.raise_compiler_error(
+        "input_datasets must be a string or list of project.dataset values"
+      ) %}
     {% endif %}
 
     {% if input_datasets_list is not none %}
@@ -48,15 +52,9 @@
       {{ return(normalized_input_datasets) }}
     {% endif %}
 
-    {% set bq_region = dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority(
-      'bq_region',
-      'DBT_BQ_MONITORING_REGION',
-      'us'
-    ) %}
-
     {% set preflight_sql %}
     SELECT CONCAT('`', CATALOG_NAME, '`.`', SCHEMA_NAME, '`') AS SCHEMA_NAME
-    FROM `region-{{ bq_region }}`.`INFORMATION_SCHEMA`.`SCHEMATA`
+    FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`SCHEMATA`
     {% endset %}
     
     {% set results = run_query(preflight_sql) %}

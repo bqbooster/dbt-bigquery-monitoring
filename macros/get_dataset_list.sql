@@ -16,11 +16,15 @@
     {% set raw_input_datasets = dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_input_datasets() %}
     {% set input_datasets_list = none %}
 
-    {% if raw_input_datasets is string and raw_input_datasets | length > 0 %}
-      {% set input_datasets_list = [raw_input_datasets] %}
-    {% elif raw_input_datasets is sequence and raw_input_datasets is not mapping and raw_input_datasets | length > 0 %}
-      {% set input_datasets_list = raw_input_datasets %}
-    {% elif raw_input_datasets | length > 0 %}
+    {% if raw_input_datasets is string %}
+      {% if raw_input_datasets | length > 0 %}
+        {% set input_datasets_list = [raw_input_datasets] %}
+      {% endif %}
+    {% elif raw_input_datasets is sequence and raw_input_datasets is not mapping %}
+      {% if raw_input_datasets | length > 0 %}
+        {% set input_datasets_list = raw_input_datasets %}
+      {% endif %}
+    {% else %}
       {% do exceptions.raise_compiler_error(
         "input_datasets must be a string or list of project.dataset values"
       ) %}

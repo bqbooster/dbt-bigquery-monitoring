@@ -225,6 +225,7 @@
     {% set variable_configs = [
         {'dbt_var': 'bq_region', 'env_var': 'DBT_BQ_MONITORING_REGION', 'default': 'us', 'format': 'string'},
         {'dbt_var': 'input_gcp_projects', 'env_var': 'DBT_BQ_MONITORING_GCP_PROJECTS', 'default': [], 'format': 'string'},
+        {'dbt_var': 'input_datasets', 'env_var': 'DBT_BQ_MONITORING_INPUT_DATASETS', 'default': [], 'format': 'string'},
         {'dbt_var': 'use_flat_pricing', 'env_var': 'DBT_BQ_MONITORING_USE_FLAT_PRICING', 'default': true, 'format': 'string'},
         {'dbt_var': 'per_billed_tb_price', 'env_var': 'DBT_BQ_MONITORING_PER_BILLED_TB_PRICE', 'default': 6.25, 'format': 'string'},
         {'dbt_var': 'free_tb_per_month', 'env_var': 'DBT_BQ_MONITORING_FREE_TB_PER_MONTH', 'default': 1, 'format': 'string'},

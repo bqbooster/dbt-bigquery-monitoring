@@ -17,9 +17,12 @@
 
     {% if raw_input_datasets is string and raw_input_datasets | length > 0 %}
       {% set dataset_parts = raw_input_datasets.split('.') %}
-      {{ return([
-        '`' ~ dataset_parts[0] ~ '`.`' ~ dataset_parts[1] ~ '`'
-      ]) }}
+
+      {% if dataset_parts | length == 2 and dataset_parts[0] | length > 0 and dataset_parts[1] | length > 0 %}
+        {{ return([
+          '`' ~ dataset_parts[0] ~ '`.`' ~ dataset_parts[1] ~ '`'
+        ]) }}
+      {% endif %}
     {% endif %}
 
     {% set preflight_sql %}

@@ -19,7 +19,30 @@ To do so, you can set the following variables in your `dbt_project.yml` file or 
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
 | `input_gcp_projects` | `DBT_BQ_MONITORING_GCP_PROJECTS` | List of GCP projects to monitor | `[]` |
+| `input_datasets` | `DBT_BQ_MONITORING_INPUT_DATASETS` | Optional `project.dataset` values that limit dataset-scanned `INFORMATION_SCHEMA` models | `[]` |
 | `bq_region` | `DBT_BQ_MONITORING_REGION` | Region where the monitored projects are located | `us` |
+
+### `input_datasets` examples
+
+Use `input_datasets` when you want to skip automatic dataset discovery
+for dataset-scanned `INFORMATION_SCHEMA` models. Set one
+`project.dataset` string or a list of `project.dataset` values in
+`dbt_project.yml`. If you leave it empty, the package auto-discovers
+datasets.
+
+```yml
+# dbt_project.yml
+vars:
+  input_datasets: 'sample-project.sample_dataset'
+```
+
+```yml
+# dbt_project.yml
+vars:
+  input_datasets:
+    - 'sample-project.sample_dataset'
+    - 'sample-project.second_dataset'
+```
 
 ## Pricing
 

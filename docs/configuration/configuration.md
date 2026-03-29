@@ -154,6 +154,32 @@ These extra tables need to be refreshed regularly — include them in your sched
 
 :::
 
+### Limit dataset discovery with `input_datasets`
+
+Use `input_datasets` when dataset-scanned `INFORMATION_SCHEMA` models
+only need a known subset of `project.dataset` values. This is useful in
+large environments where scanning every dataset in a region adds
+unnecessary work. If you leave `input_datasets` unset, the package keeps
+the default behavior and auto-discovers datasets from
+`INFORMATION_SCHEMA.SCHEMATA`.
+
+Set `input_datasets` in `dbt_project.yml` as a single string or a list.
+Each entry must use the `project.dataset` format.
+
+```yml
+# dbt_project.yml
+vars:
+  input_datasets: 'sample-project.sample_dataset'
+```
+
+```yml
+# dbt_project.yml
+vars:
+  input_datasets:
+    - 'sample-project.sample_dataset'
+    - 'sample-project.second_dataset'
+```
+
 ---
 
 ## Add metadata to queries (Recommended)

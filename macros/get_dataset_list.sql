@@ -10,6 +10,17 @@
   Returns:
     A list of fully-qualified dataset names like ['`project`.`dataset`', ...]
 #}
+{% macro validate_input_datasets_identifier_part(part_name, part_value, allowed_chars, allowed_description, dataset) %}
+  {% for char in part_value %}
+    {% if char not in allowed_chars %}
+      {% do exceptions.raise_compiler_error(
+        "input_datasets " ~ part_name ~ " identifiers may contain only " ~
+        allowed_description ~ ": " ~ dataset
+      ) %}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
 {% macro get_dataset_list() %}
   {# Only execute during actual run, not during parsing #}
   {% if execute %}
@@ -40,16 +51,35 @@
           ) %}
         {% endif %}
 
-        {% set dataset_parts = dataset.split('.') %}
+        {% set trimmed_dataset = dataset | trim %}
+        {% set dataset_parts = trimmed_dataset.split('.') %}
 
         {% if dataset_parts | length != 2 or dataset_parts[0] | length == 0 or dataset_parts[1] | length == 0 %}
           {% do exceptions.raise_compiler_error(
-            "input_datasets entries must use project.dataset: " ~ dataset
+            "input_datasets entries must use project.dataset: " ~ trimmed_dataset
           ) %}
         {% endif %}
 
+        {% set project_part = dataset_parts[0] %}
+        {% set dataset_part = dataset_parts[1] %}
+
+        {% do dbt_bigquery_monitoring.validate_input_datasets_identifier_part(
+          'project',
+          project_part,
+          'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-',
+          'letters, numbers, underscores, and hyphens',
+          trimmed_dataset
+        ) %}
+        {% do dbt_bigquery_monitoring.validate_input_datasets_identifier_part(
+          'dataset',
+          dataset_part,
+          'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_',
+          'letters, numbers, and underscores',
+          trimmed_dataset
+        ) %}
+
         {% do normalized_input_datasets.append(
-          '`' ~ dataset_parts[0] ~ '`.`' ~ dataset_parts[1] ~ '`'
+          '`' ~ project_part ~ '`.`' ~ dataset_part ~ '`'
         ) %}
       {% endfor %}
 

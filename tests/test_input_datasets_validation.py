@@ -6,31 +6,6 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 INTEGRATION_TESTS_DIR = REPO_ROOT / "integration_tests"
-KEYFILE_PATH = INTEGRATION_TESTS_DIR / "keyfile.json"
-PRIVATE_KEY_PATH = INTEGRATION_TESTS_DIR / "dummy_private_key.pem"
-
-
-def _ensure_dummy_keyfile() -> None:
-    if not PRIVATE_KEY_PATH.exists():
-        subprocess.run(
-            ["openssl", "genrsa", "-out", str(PRIVATE_KEY_PATH), "2048"],
-            check=True,
-            cwd=INTEGRATION_TESTS_DIR,
-        )
-
-    keyfile = {
-        "type": "service_account",
-        "project_id": "dummy-project",
-        "private_key_id": "dummyprivatekeyid",
-        "private_key": PRIVATE_KEY_PATH.read_text(),
-        "client_email": "dummy@dummy-project.iam.gserviceaccount.com",
-        "client_id": "1234567890",
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dummy",
-    }
-    KEYFILE_PATH.write_text(json.dumps(keyfile, indent=2))
 
 
 def _dbt_env() -> dict[str, str]:
@@ -48,8 +23,6 @@ def _dbt_env() -> dict[str, str]:
 
 
 def _run_operation(macro_name: str, *, dbt_vars=None, args=None) -> subprocess.CompletedProcess[str]:
-    _ensure_dummy_keyfile()
-
     command = ["dbt", "run-operation", macro_name]
     if args is not None:
         command.extend(["--args", json.dumps(args)])

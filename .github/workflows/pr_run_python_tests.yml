@@ -32,6 +32,14 @@ jobs:
       - name: Install Python packages
         run: python -m pip install pytest dbt-bigquery~=1.10.0
 
+      - name: Write keyfile if secret is defined
+        run: |
+          if [ -z "${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }}" ]; then
+            echo "Error: DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT is not defined."
+          else
+            echo ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }} | base64 -d > ./integration_tests/keyfile.json
+          fi
+
       - name: Install dbt dependencies
         run: |
           cd integration_tests

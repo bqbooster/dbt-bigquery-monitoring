@@ -1,6 +1,0 @@
-kind: Features
-body: Add opt-in input_datasets scoping for dataset-scanned INFORMATION_SCHEMA models, expose the setting in runtime diagnostics, document the configuration, and validate identifiers before SQL interpolation.
-time: 2026-03-31T10:55:27.803876+02:00
-custom:
-    Author: github-christophe-oudar
-    Issue: "46"

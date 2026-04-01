@@ -154,6 +154,32 @@ These extra tables need to be refreshed regularly — include them in your sched
 
 :::
 
+### Limit dataset discovery with `input_datasets`
+
+Use `input_datasets` when dataset-scanned `INFORMATION_SCHEMA` models
+only need a known subset of `project.dataset` values. This is useful in
+large environments where scanning every dataset in a region adds
+unnecessary work. If you leave `input_datasets` unset, the package keeps
+the default behavior and auto-discovers datasets from
+`INFORMATION_SCHEMA.SCHEMATA`.
+
+Set `input_datasets` in `dbt_project.yml` as a single string or a list.
+Each entry must use the `project.dataset` format.
+
+```yml
+# dbt_project.yml
+vars:
+  input_datasets: 'sample-project.sample_dataset'
+```
+
+```yml
+# dbt_project.yml
+vars:
+  input_datasets:
+    - 'sample-project.sample_dataset'
+    - 'sample-project.second_dataset'
+```
+
 ---
 
 ## Add metadata to queries (Recommended)
@@ -191,8 +217,8 @@ Use this table to determine which variables are required vs. optional for each s
 
 | Scenario | Required variables | Optional variables | Guide |
 |---|---|---|---|
-| **Region mode** (default) | `bq_region` | `output_partition_expiration_days`, `use_flat_pricing`, `per_billed_tb_price` | [Package settings](/configuration/package-settings) |
-| **Project mode** | `input_gcp_projects` | `bq_region`, `output_partition_expiration_days`, `use_flat_pricing` | [Package settings](/configuration/package-settings) |
+| **Region mode** (default) | `bq_region` | `input_datasets`, `output_partition_expiration_days`, `use_flat_pricing`, `per_billed_tb_price` | [Package settings](/configuration/package-settings) |
+| **Project mode** | `input_gcp_projects` | `input_datasets`, `bq_region`, `output_partition_expiration_days`, `use_flat_pricing` | [Package settings](/configuration/package-settings) |
 | **Audit logs** | `enable_gcp_bigquery_audit_logs`, `gcp_bigquery_audit_logs_storage_project`, `gcp_bigquery_audit_logs_dataset`, `gcp_bigquery_audit_logs_table` | `should_combine_audit_logs_and_information_schema`, `google_information_schema_model_materialization` | [Audit logs](/configuration/audit-logs) |
 | **Billing export** | `enable_gcp_billing_export`, `gcp_billing_export_storage_project`, `gcp_billing_export_dataset`, `gcp_billing_export_table` | `lookback_incremental_billing_window_days` | [GCP billing export](/configuration/gcp-billing) |
 | **Query metadata** | `query-comment.comment` + `query-comment.job-label` in `dbt_project.yml` | — | [Query comments](https://docs.getdbt.com/reference/project-configs/query-comment) |

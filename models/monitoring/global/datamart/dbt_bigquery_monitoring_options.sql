@@ -7,6 +7,7 @@
 {%- set option_macros = {
   'bq_region': dbt_bigquery_monitoring_variable_bq_region(),
   'input_gcp_projects': dbt_bigquery_monitoring_variable_input_gcp_projects(),
+  'input_datasets': dbt_bigquery_monitoring_variable_input_datasets(),
   'use_flat_pricing': dbt_bigquery_monitoring_variable_use_flat_pricing(),
   'per_billed_tb_price': dbt_bigquery_monitoring_variable_per_billed_tb_price(),
   'free_tb_per_month': dbt_bigquery_monitoring_variable_free_tb_per_month(),

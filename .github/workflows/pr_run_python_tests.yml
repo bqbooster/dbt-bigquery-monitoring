@@ -1,0 +1,41 @@
+name: Pull Request testing - Run Python validation tests
+on:
+  pull_request:
+    paths:
+      - 'tests/**'
+      - 'integration_tests/**'
+      - 'macros/**'
+      - 'dbt_project.yml'
+      - 'packages.yml'
+  workflow_dispatch:
+
+concurrency:
+  cancel-in-progress: true
+  group: pr-run-python-tests-${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  python-validation-tests:
+    name: Run Python validation tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install Python packages
+        run: python -m pip install pytest dbt-bigquery~=1.10.0
+
+      - name: Install dbt dependencies
+        run: |
+          cd integration_tests
+          dbt deps
+
+      - name: Run Python validation tests
+        run: python -m pytest tests/test_input_datasets_validation.py -q

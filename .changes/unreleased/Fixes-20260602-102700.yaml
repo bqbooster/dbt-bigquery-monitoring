@@ -1,2 +1,0 @@
-kind: Fixes
-body: Scope compute cost per minute and per hour incrementals to partitions from the current max partition onward

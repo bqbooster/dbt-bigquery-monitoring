@@ -31,7 +31,8 @@ models:
       search_indexes:
         +static_analysis: off
     monitoring:
-      +on_schema_change: "append_new_columns"
+      # copy_partitions + on_schema_change (non-ignore) drops __dbt_tmp twice in dbt-bigquery and can hang (#192)
+      +on_schema_change: "ignore"
       +tags:
         - "dbt-bigquery-monitoring-datamarts"
       compute:

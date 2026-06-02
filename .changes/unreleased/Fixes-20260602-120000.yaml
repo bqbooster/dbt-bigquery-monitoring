@@ -1,2 +1,2 @@
 kind: Fixes
-body: Fix dbt build hang by using on_schema_change ignore with copy_partitions, and scope compute cost incrementals to recent partitions
+body: Fix dbt build hang by using on_schema_change ignore with copy_partitions

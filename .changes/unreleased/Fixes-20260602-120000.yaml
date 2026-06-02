@@ -1,0 +1,2 @@
+kind: Fixes
+body: Fix dbt build hang on copy_partitions incremental models when on_schema_change is enabled

@@ -20,7 +20,7 @@ jobs:
         args: latest
 
     - name: Release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         body_path: ".changes/${{ steps.latest.outputs.output }}.md"
         tag_name: "${{ steps.latest.outputs.output }}"

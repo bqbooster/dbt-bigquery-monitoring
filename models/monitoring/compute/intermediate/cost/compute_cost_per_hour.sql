@@ -33,4 +33,5 @@ SELECT
     SUM(job_state.pending) AS pending
   ) AS job_state
 FROM {{ ref("compute_cost_per_minute") }}
+{{ compute_incremental_minute_filter('minute') }}
 GROUP BY ALL

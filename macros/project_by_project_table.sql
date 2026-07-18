@@ -58,6 +58,7 @@
   {% set build_sql = create_table_as(False, tmp_relation, sql_no_data) %}
   {% do run_query(build_sql) %}
   {% set dest_columns = process_schema_changes('sync_all_columns', tmp_relation, existing_relation) %}
+  {% do adapter.drop_relation(tmp_relation) %}
 
 {% endif %}
 

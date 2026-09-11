@@ -46,4 +46,4 @@ jobs:
           dbt deps
 
       - name: Run Python validation tests
-        run: python -m pytest tests/test_input_datasets_validation.py -q
+        run: python -m pytest tests/ -q

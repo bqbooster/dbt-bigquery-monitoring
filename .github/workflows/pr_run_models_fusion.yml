@@ -57,6 +57,17 @@ jobs:
           cd integration_tests
           dbt deps
 
+      # Runtime Fusion CI uses project_by_project_view because table-mode DML
+      # is unavailable on the free-tier test project. Compile the table
+      # materialization so Jinja still renders the Fusion-typed relation path
+      # that production project-mode users hit (#202).
+      - name: Compile project_by_project_table materialization
+        env:
+          DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION: project_by_project_table
+        run: |
+          cd integration_tests
+          dbt compile -s information_schema_write_api_timeline information_schema_recommendations --exclude tag:dbt-bigquery-monitoring-information-schema-by-organization
+
       - name: Setup dbt fixtures
         run: | 
           cd integration_tests

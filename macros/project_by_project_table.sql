@@ -6,7 +6,10 @@
 -- grab current tables grants config for comparision later on
   {%- set grant_config = config.get('grants') -%}
 
-  {% set target_relation = this %}
+  {# Fusion rejects untyped relations in adapter.drop_relation() with
+     "relation has no type" (InvalidConfig dbt1005). Core is more lenient,
+     but both accept incorporate(type=...). #}
+  {% set target_relation = this.incorporate(type='table') %}
   {% set existing_relation = load_relation(this) %}
   {% set projects = project_list() %}
   {%- set raw_partition_by = config.get('partition_by', none) -%}
@@ -24,9 +27,9 @@
 -- Create the table if it doesn't exist or if we're in full-refresh mode
 {% if existing_relation is none or full_refresh_mode %}
   {#-- If the partition/cluster config has changed, then we must drop and recreate --#}
-  {% if not adapter.is_replaceable(existing_relation, partition_config, cluster_by) %}
+  {% if existing_relation is not none and not adapter.is_replaceable(existing_relation, partition_config, cluster_by) %}
       {% do log("[dbt-bigquery-monitoring] Hard refreshing " ~ existing_relation ~ " because it is not replaceable") %}
-      {{ adapter.drop_relation(existing_relation) }}
+      {% do adapter.drop_relation(existing_relation) %}
   {% endif %}
   {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}
   {{ build_sql }}
@@ -54,7 +57,7 @@
   {% endif %}
 
   -- Check if the schema has changed using a temporary table and if needed
-  {%- set tmp_relation = make_temp_relation(this) %}
+  {%- set tmp_relation = make_temp_relation(this).incorporate(type='table') %}
   {% set build_sql = create_table_as(False, tmp_relation, sql_no_data) %}
   {% do run_query(build_sql) %}
   {% set dest_columns = process_schema_changes('sync_all_columns', tmp_relation, existing_relation) %}
@@ -120,7 +123,7 @@
 
 
 {{ run_hooks(post_hooks) }}
-{% set should_revoke = should_revoke(old_relation, full_refresh_mode=True) %}
+{% set should_revoke = should_revoke(existing_relation, full_refresh_mode=True) %}
 {% do apply_grants(target_relation, grant_config, should_revoke) %}
 {% do persist_docs(target_relation, model) %}
 

@@ -1,6 +1,0 @@
-kind: Fixes
-body: Set explicit table types on project_by_project_table relations so dbt Fusion no longer fails with "relation has no type"
-time: 2026-09-11T23:55:00Z
-custom:
-    Author: github-christophe-oudar
-    Issue: "202"

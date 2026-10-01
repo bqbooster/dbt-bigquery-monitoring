@@ -5,32 +5,42 @@
 
 {#
   Returns the lower boundary timestamp when no data is available.
+  Default granularity is HOUR so existing jobs incrementals keep the same compiled SQL.
 #}
-{% macro lower_boundary_no_data() -%}
+{% macro lower_boundary_no_data(granularity='HOUR') -%}
     TIMESTAMP_SUB(
-        TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR),
+        TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), {{ granularity }}),
         INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY
     )
 {%- endmacro %}
 
 {#
-  Returns the partition timestamp.
+  Use when an incremental predicate subtracts from `_dbt_max_partition`.
+  An empty target leaves that symbol NULL; without a fallback the predicate matches nothing.
 #}
-{% macro get_partition_timestamp() -%}
+{% macro coalesce_dbt_max_partition(null_fallback) -%}
+COALESCE(_dbt_max_partition, {{ null_fallback }})
+{%- endmacro %}
+
+{#
+  Returns the partition timestamp.
+  Default granularity is HOUR so existing jobs incrementals keep the same compiled SQL.
+#}
+{% macro get_partition_timestamp(granularity='HOUR') -%}
     TIMESTAMP_TRUNC(
         CASE
-            WHEN _dbt_max_partition IS NULL THEN {{ lower_boundary_no_data() }}
+            WHEN _dbt_max_partition IS NULL THEN {{ lower_boundary_no_data(granularity) }}
             ELSE _dbt_max_partition
         END,
-        HOUR
+        {{ granularity }}
     )
 {%- endmacro %}
 
-{% macro get_partition_logic() -%}
+{% macro get_partition_logic(granularity='HOUR') -%}
   {% if is_incremental() %}
-    {{ get_partition_timestamp() }}
+    {{ get_partition_timestamp(granularity) }}
   {% else %}
-    {{ lower_boundary_no_data() }}
+    {{ lower_boundary_no_data(granularity) }}
   {% endif %}
 {%- endmacro %}
 

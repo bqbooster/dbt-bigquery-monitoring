@@ -18,7 +18,7 @@ WITH compute_cost AS (
     SUM(compute_cost) AS cost
   FROM {{ ref('compute_billing_per_hour') }}
   {% if is_incremental() %}
-    WHERE hour >= TIMESTAMP_SUB(_dbt_max_partition, INTERVAL 1 DAY)
+    WHERE hour >= TIMESTAMP_SUB({{ coalesce_dbt_max_partition('CURRENT_TIMESTAMP()') }}, INTERVAL 1 DAY)
   {% endif %}
   GROUP BY ALL
   {%- else %}
@@ -28,7 +28,7 @@ WITH compute_cost AS (
     SUM(total_query_cost) AS cost
   FROM {{ ref('compute_cost_per_hour_view') }}
   {% if is_incremental() %}
-    WHERE hour >= TIMESTAMP_SUB(_dbt_max_partition, INTERVAL 1 DAY)
+    WHERE hour >= TIMESTAMP_SUB({{ coalesce_dbt_max_partition('CURRENT_TIMESTAMP()') }}, INTERVAL 1 DAY)
   {% endif %}
   GROUP BY ALL
   {% endif %}
@@ -42,7 +42,7 @@ storage_cost AS (
     SUM(storage_cost) AS cost
   FROM {{ ref('storage_billing_per_hour') }}
   {% if is_incremental() %}
-    WHERE hour >= TIMESTAMP_SUB(_dbt_max_partition, INTERVAL 1 DAY)
+    WHERE hour >= TIMESTAMP_SUB({{ coalesce_dbt_max_partition('CURRENT_TIMESTAMP()') }}, INTERVAL 1 DAY)
   {% endif %}
   GROUP BY day
 )

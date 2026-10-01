@@ -51,18 +51,15 @@ SELECT
  FROM {{ ref('jobs_from_audit_logs') }} AS a
  LEFT JOIN {{ ref('information_schema_jobs') }} AS j ON
   {% if is_incremental() %}
-  j.creation_time BETWEEN TIMESTAMP_SUB(TIMESTAMP_TRUNC(_dbt_max_partition, HOUR), INTERVAL 6 HOUR) AND TIMESTAMP_TRUNC(_dbt_max_partition, HOUR)
+  j.creation_time BETWEEN TIMESTAMP_SUB({{ get_partition_timestamp() }}, INTERVAL 6 HOUR)
+    AND COALESCE(TIMESTAMP_TRUNC(_dbt_max_partition, HOUR), CURRENT_TIMESTAMP())
   {% else %}
-  j.creation_time >= TIMESTAMP_SUB(TIMESTAMP_TRUNC(TIMESTAMP_SUB(
-  TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR),
-  INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY), HOUR), INTERVAL 6 HOUR)
+  j.creation_time >= TIMESTAMP_SUB({{ lower_boundary_no_data() }}, INTERVAL 6 HOUR)
   {% endif %}
   AND (a.project_id = j.project_id AND a.job_id = j.job_id)
  WHERE
   {% if is_incremental() %}
-  a.timestamp >= TIMESTAMP_TRUNC(_dbt_max_partition, HOUR)
+  a.timestamp >= {{ get_partition_timestamp() }}
   {% else %}
-  a.timestamp >= TIMESTAMP_SUB(
-   TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR),
-   INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY)
+  a.timestamp >= {{ lower_boundary_no_data() }}
   {% endif %}

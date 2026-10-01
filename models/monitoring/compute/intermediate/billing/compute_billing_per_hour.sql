@@ -22,6 +22,8 @@ WHERE
 ((service.description = 'BigQuery' AND LOWER(sku.description) LIKE '%analysis%')
 OR (service.description IN ('BigQuery Reservation API', 'BigQuery BI Engine')))
 {% if is_incremental() %}
-AND TIMESTAMP_TRUNC(usage_start_time, HOUR) >= TIMESTAMP_SUB(_dbt_max_partition, INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_incremental_billing_window_days() }} DAY)
+AND TIMESTAMP_TRUNC(usage_start_time, HOUR) >= TIMESTAMP_SUB(
+  {{ coalesce_dbt_max_partition('TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR)') }},
+  INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_incremental_billing_window_days() }} DAY)
 {% endif %}
 GROUP BY ALL

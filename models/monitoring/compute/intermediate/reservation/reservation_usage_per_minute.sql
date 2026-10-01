@@ -25,13 +25,7 @@ SELECT
   FROM
   {{ ref("information_schema_reservations_timeline") }}
   WHERE
-  {% if is_incremental() %}
-  period_start >= TIMESTAMP_TRUNC(_dbt_max_partition, MINUTE)
-  {% else %}
-  period_start >= TIMESTAMP_SUB(
-    TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), MINUTE),
-    INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY)
-  {% endif %}
+  period_start >= {{ get_partition_logic('MINUTE') }}
   GROUP BY ALL
 )
 

@@ -19,7 +19,10 @@ SELECT
   COUNT(*) AS reference_count
 FROM {{ ref('jobs_with_cost') }}, UNNEST(referenced_tables) AS rt
 {% if is_incremental() %}
-WHERE creation_time > _dbt_max_partition
+WHERE creation_time > COALESCE(
+    _dbt_max_partition,
+    TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY)
+)
 {% else %}
 WHERE creation_time > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY)
 {% endif %}

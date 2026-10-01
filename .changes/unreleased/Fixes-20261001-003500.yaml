@@ -1,0 +1,6 @@
+kind: Fixes
+body: Recover empty incremental tables by coalescing NULL `_dbt_max_partition` to each model's existing lookback bound
+time: 2026-10-01T00:35:00Z
+custom:
+    Author: aw-stevens
+    Issue: "202"

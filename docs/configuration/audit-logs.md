@@ -97,6 +97,14 @@ Or use the [GCP Console](https://console.cloud.google.com/logs/router) to create
 
 After creation, grant the sink's service account **BigQuery Data Editor** access on the destination dataset.
 
+Cloud Logging only adds BigQuery columns after a log entry has used that field.
+Optional `LogEntry` fields such as `labels` and `errorGroups` are often absent from
+a new sink. The package inspects the sink schema at run time and treats missing
+optional columns as `NULL`, so you do not need to add them by hand.
+
+Job labels used in cost datamarts come from `protopayload_auditlog.metadataJson`
+(`$.labels` / job config labels), not from the top-level LogEntry `labels` column.
+
 :::tip
 
 Use **partitioned tables** (not date-sharded) when creating the sink — it's the recommended

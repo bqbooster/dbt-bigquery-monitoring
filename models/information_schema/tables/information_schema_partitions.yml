@@ -1,6 +1,10 @@
 version: 2
 models:
 - name: information_schema_partitions
+  description: >
+    Dataset-scoped INFORMATION_SCHEMA.PARTITIONS rows. BigQuery allows at most
+    1000 tables per PARTITIONS query; this model batches oversized datasets by
+    table_name (see partitions_table_batch_size).
   columns:
   - name: table_catalog
     description: The project ID of the project that contains the table.

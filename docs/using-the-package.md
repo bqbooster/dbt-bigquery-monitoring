@@ -61,7 +61,7 @@ Monitor storage growth, costs, and optimization opportunities.
 
 The package exposes Google's `INFORMATION_SCHEMA` views as standard dbt models. This allows you to query metadata across multiple projects seamlessly.
 
-> **Note**: These models are materialized as `ephemeral` (or `incremental` in project mode).
+> **Note**: These models are materialized as `ephemeral` (or `incremental` in project mode), except `information_schema_partitions`, which is a table so datasets with more than 1000 tables can be queried in batches. See [package settings](/configuration/package-settings).
 
 ### Usage Example
 

@@ -217,8 +217,8 @@ Use this table to determine which variables are required vs. optional for each s
 
 | Scenario | Required variables | Optional variables | Guide |
 |---|---|---|---|
-| **Region mode** (default) | `bq_region` | `input_datasets`, `output_partition_expiration_days`, `use_flat_pricing`, `per_billed_tb_price` | [Package settings](/configuration/package-settings) |
-| **Project mode** | `input_gcp_projects` | `input_datasets`, `bq_region`, `output_partition_expiration_days`, `use_flat_pricing` | [Package settings](/configuration/package-settings) |
+| **Region mode** (default) | `bq_region` | `input_datasets`, `partitions_table_batch_size`, `output_partition_expiration_days`, `use_flat_pricing`, `per_billed_tb_price` | [Package settings](/configuration/package-settings) |
+| **Project mode** | `input_gcp_projects` | `input_datasets`, `partitions_table_batch_size`, `bq_region`, `output_partition_expiration_days`, `use_flat_pricing` | [Package settings](/configuration/package-settings) |
 | **Audit logs** | `enable_gcp_bigquery_audit_logs`, `gcp_bigquery_audit_logs_storage_project`, `gcp_bigquery_audit_logs_dataset`, `gcp_bigquery_audit_logs_table` | `should_combine_audit_logs_and_information_schema`, `google_information_schema_model_materialization` | [Audit logs](/configuration/audit-logs) |
 | **Billing export** | `enable_gcp_billing_export`, `gcp_billing_export_storage_project`, `gcp_billing_export_dataset`, `gcp_billing_export_table` | `lookback_incremental_billing_window_days` | [GCP billing export](/configuration/gcp-billing) |
 | **Query metadata** | `query-comment.comment` + `query-comment.job-label` in `dbt_project.yml` | — | [Query comments](https://docs.getdbt.com/reference/project-configs/query-comment) |
@@ -251,3 +251,4 @@ Variables are resolved in this order (first match wins):
 | `references to tables/views require explicit project IDs` | Region mode with mismatched execution/storage project | Switch to project mode with `input_gcp_projects` |
 | Model produces no rows | `bq_region` doesn't match your data location | Check region with Job History → Location |
 | `placeholder` in variable value | Required variable not set | Set the variable in `dbt_project.yml` or via env var |
+| `INFORMATION_SCHEMA.PARTITIONS query attempted to read too many tables` | A dataset has more than 1000 tables | Keep the default `information_schema_batched_table` materialization (unset `google_information_schema_model_materialization` for this path). Optionally lower `partitions_table_batch_size` (max 1000). `input_datasets` cannot work around a single oversized dataset |

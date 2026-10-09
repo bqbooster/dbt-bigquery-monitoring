@@ -76,6 +76,15 @@ These settings are used to configure how dbt will run and materialize the models
 | `output_partition_expiration_days` | `DBT_BQ_MONITORING_TABLE_EXPIRATION_DAYS` | Default table expiration in days for incremental models | `365` days |
 | `use_copy_partitions` | `DBT_BQ_MONITORING_USE_COPY_PARTITIONS` | Whether to use copy partitions or not | `true` |
 | `google_information_schema_model_materialization` | `DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION` | Whether to use a specific materialization for information schema models. Note that it doesn't work in project mode as it will materialize intermediate tables to avoid issues from BQ when too many projects are used. | `ephemeral` |
+| `partitions_table_batch_size` | `DBT_BQ_MONITORING_PARTITIONS_TABLE_BATCH_SIZE` | Max tables per `INFORMATION_SCHEMA.PARTITIONS` query. BigQuery rejects scans of more than 1000 tables; the package lists tables and queries oversized datasets in batches. Defaults to 900 to stay under the limit. Datasets at or below this size keep a single unfiltered `PARTITIONS` query. | `900` |
+
+### `INFORMATION_SCHEMA.PARTITIONS` 1000-table limit
+
+[BigQuery limits `INFORMATION_SCHEMA.PARTITIONS` to 1000 tables per query](https://docs.cloud.google.com/bigquery/docs/information-schema-partitions). `input_datasets` only chooses which datasets are scanned, so it does not help when a needed dataset itself has more than 1000 tables.
+
+By default `information_schema_partitions` uses the `information_schema_batched_table` materialization: it counts tables in each dataset, leaves small datasets as one unfiltered `SELECT`, and queries larger datasets with `WHERE table_name IN UNNEST([...])` in separate jobs (never `UNION ALL`'d in one statement). View or ephemeral overrides (`google_information_schema_model_materialization`) cannot split those jobs and will fail if any selected dataset needs batching.
+
+Other dataset-scanned `INFORMATION_SCHEMA` models (`KEY_COLUMN_USAGE`, `CONSTRAINT_COLUMN_USAGE`, `SEARCH_INDEXES*`) do not document this 1000-table cap, so they are unchanged.
 
 ### GCP Billing export configuration
 

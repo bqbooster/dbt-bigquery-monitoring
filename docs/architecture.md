@@ -101,7 +101,7 @@ See [Using the package](/using-the-package) and [Monitoring Datamarts](/datamart
 
 | Layer | Region mode | Project mode |
 |---|---|---|
-| INFORMATION_SCHEMA wrappers | `ephemeral` | `incremental` (per project) |
+| INFORMATION_SCHEMA wrappers | `ephemeral` (`information_schema_partitions` is a batched table) | `incremental` (per project; partitions still use table-name batches) |
 | Base models | `ephemeral` | `ephemeral` |
 | `jobs_with_cost` | `incremental` | `incremental` |
 | Datamarts | `table` (configurable) | `table` (configurable) |

@@ -37,6 +37,19 @@
     {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('input_datasets', 'DBT_BQ_MONITORING_INPUT_DATASETS', [])) }}
 {% endmacro %}
 
+{% macro dbt_bigquery_monitoring_variable_partitions_table_batch_size() %}
+    {% set raw_batch_size = dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('partitions_table_batch_size', 'DBT_BQ_MONITORING_PARTITIONS_TABLE_BATCH_SIZE', 900) %}
+    {% set batch_size = raw_batch_size | as_number | int %}
+    {% if batch_size < 1 or batch_size > 1000 %}
+        {% do exceptions.raise_compiler_error(
+            "partitions_table_batch_size must be an integer between 1 and 1000 "
+            ~ "(BigQuery INFORMATION_SCHEMA.PARTITIONS table scan limit), got: "
+            ~ raw_batch_size
+        ) %}
+    {% endif %}
+    {{ return(batch_size) }}
+{% endmacro %}
+
 /* ==============================================
    BIGQUERY PRICING CONFIGURATION
    ============================================== */
@@ -226,6 +239,7 @@
         {'dbt_var': 'bq_region', 'env_var': 'DBT_BQ_MONITORING_REGION', 'default': 'us', 'format': 'string'},
         {'dbt_var': 'input_gcp_projects', 'env_var': 'DBT_BQ_MONITORING_GCP_PROJECTS', 'default': [], 'format': 'string'},
         {'dbt_var': 'input_datasets', 'env_var': 'DBT_BQ_MONITORING_INPUT_DATASETS', 'default': [], 'format': 'string'},
+        {'dbt_var': 'partitions_table_batch_size', 'env_var': 'DBT_BQ_MONITORING_PARTITIONS_TABLE_BATCH_SIZE', 'default': 900, 'format': 'string'},
         {'dbt_var': 'use_flat_pricing', 'env_var': 'DBT_BQ_MONITORING_USE_FLAT_PRICING', 'default': true, 'format': 'string'},
         {'dbt_var': 'per_billed_tb_price', 'env_var': 'DBT_BQ_MONITORING_PER_BILLED_TB_PRICE', 'default': 6.25, 'format': 'string'},
         {'dbt_var': 'free_tb_per_month', 'env_var': 'DBT_BQ_MONITORING_FREE_TB_PER_MONTH', 'default': 1, 'format': 'string'},

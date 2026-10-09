@@ -68,6 +68,16 @@ jobs:
           cd integration_tests
           dbt compile -s information_schema_write_api_timeline information_schema_recommendations --exclude tag:dbt-bigquery-monitoring-information-schema-by-organization
 
+      # Default production path for partitions is information_schema_batched_table
+      # (separate INSERT jobs under the 1000-table PARTITIONS limit). Runtime Fusion
+      # CI still uses project_by_project_view; compile the batched table path here.
+      - name: Compile information_schema_batched_table materialization
+        env:
+          DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION: information_schema_batched_table
+        run: |
+          cd integration_tests
+          dbt compile -s information_schema_partitions --exclude tag:dbt-bigquery-monitoring-information-schema-by-organization
+
       - name: Setup dbt fixtures
         run: | 
           cd integration_tests

@@ -1,0 +1,6 @@
+kind: Fixes
+body: Query INFORMATION_SCHEMA.PARTITIONS in table-name batches so datasets with more than 1000 tables no longer fail the collector
+time: 2026-10-09T23:12:00Z
+custom:
+    Author: github-christophe-oudar
+    Issue: "208"

@@ -20,6 +20,7 @@
     enabled = dbt_bigquery_monitoring_variable_enable_gcp_bigquery_audit_logs()
     )
 }}
+{%- set audit_log_source_columns = gcp_bigquery_audit_logs_source_column_names() -%}
 
 WITH jobChangeEvent AS (
   SELECT
@@ -38,8 +39,16 @@ WITH jobChangeEvent AS (
     traceSampled,
     sourceLocation,
     split,
-    labels,
-    errorGroups,
+    {{ gcp_bigquery_audit_logs_optional_column(
+        'labels',
+        'ARRAY<STRUCT<key STRING, value STRING>>',
+        audit_log_source_columns
+    ) }},
+    {{ gcp_bigquery_audit_logs_optional_column(
+        'errorGroups',
+        'ARRAY<STRUCT<id STRING>>',
+        audit_log_source_columns
+    ) }},
     protopayload_auditlog.authenticationInfo.principalEmail,
     resource.labels.project_id AS projectId,
     protopayload_auditlog.requestMetadata.callerIp AS callerIp,

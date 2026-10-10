@@ -93,6 +93,12 @@ jobs:
           cd integration_tests
           dbt build -s dbt_bigquery_monitoring ${{ env.DBT_COMMON_FLAGS }}
 
+      - name: Compile audit logs without sink metadata lookup
+        run: |
+          cd integration_tests
+          DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
+          dbt compile -s jobs_from_audit_logs
+
       - name: Run all models again with cloud audit logs
         run: |       
           cd integration_tests
@@ -104,3 +110,11 @@ jobs:
           cd integration_tests
           DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
           dbt run -s jobs_from_audit_logs+ ${{ env.DBT_COMMON_FLAGS }}
+
+      - name: Run audit logs against a sink without optional LogEntry columns
+        run: |
+          cd integration_tests
+          DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true \
+          DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
+          DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_TABLE=gcp_bigquery_audit_logs_fixture_without_optional_columns \
+          dbt run -s jobs_from_audit_logs+ --full-refresh ${{ env.DBT_COMMON_FLAGS }}

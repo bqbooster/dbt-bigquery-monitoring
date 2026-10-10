@@ -52,7 +52,12 @@ models:
         description: "Split information for log entries that were split due to size limitations"
       - name: labels
         data_type: record
-        description: "User-defined labels associated with the resource that generated the log entry"
+        description: >
+          User-defined LogEntry labels. Cloud Logging omits this column until a log
+          entry includes labels; the package projects NULL when the sink column is absent.
       - name: errorGroups
         data_type: record
-        description: "Information about error groups when the log entry represents an error"
+        description: >
+          Error group information when the log entry represents an error. Often absent
+          from Cloud Logging BigQuery sinks; the package projects NULL when the column
+          is missing.

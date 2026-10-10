@@ -6,17 +6,33 @@
   Optional LogEntry fields such as `labels` and `errorGroups` are therefore often
   missing. Selecting them unconditionally fails the audit-log models (#207).
 
-  Parse / compile (execute is false): Fusion's parse adapter returns an empty
-  column list from get_columns_in_relation, so this path must not assume the
-  column exists. Typed CAST(NULL AS ...) keeps compile/parse valid on Core and
-  Fusion without adapter metadata calls.
+  The sink lookup (get_relation + get_columns_in_relation) runs only while
+  models are being materialized. `execute` is also True during `dbt compile`
+  (and docs generate / show / etc.), so `execute` alone is not enough.
 
-  Run (execute is true): look up the sink via get_relation + get_columns_in_relation.
-  Missing tables and missing columns both fall back to CAST(NULL AS <type>).
-  Relations are typed for Fusion (see #202).
+  Command gate (Core and Fusion): `flags.WHICH` is the current CLI task.
+  Fusion exposes it the same way Core does (this package already serializes
+  `which=flags.WHICH` in query comments; Fusion issue reproductions use
+  `flags.WHICH` comparisons). `| default('')` covers Fusion gaps such as
+  missing flag attributes (see flags.EMPTY). Allowed values: run, build,
+  retry. compile, docs, list, show, parse, test, run-operation, and similar
+  skip the warehouse metadata calls.
+
+  When the lookup is skipped, compiled SQL selects
+  CAST(NULL AS <type>) AS <column>. That SQL is valid, but it can differ
+  from run/build SQL when the sink actually has the column.
 #}
-{% macro gcp_bigquery_audit_logs_source_column_names() %}
+{% macro gcp_bigquery_audit_logs_should_inspect_sink() %}
   {% if not execute %}
+    {{ return(false) }}
+  {% endif %}
+
+  {% set which = flags.WHICH | default('') | lower %}
+  {{ return(which in ['run', 'build', 'retry']) }}
+{% endmacro %}
+
+{% macro gcp_bigquery_audit_logs_source_column_names() %}
+  {% if not gcp_bigquery_audit_logs_should_inspect_sink() %}
     {{ return([]) }}
   {% endif %}
 

@@ -75,6 +75,12 @@ jobs:
           cd integration_tests
           dbt build -s dbt_bigquery_monitoring ${{ env.DBT_COMMON_FLAGS }}
 
+      - name: Compile audit logs without sink metadata lookup
+        run: |
+          cd integration_tests
+          DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
+          dbt compile -s jobs_from_audit_logs
+
       - name: Run all models again with cloud audit logs
         run: |       
           cd integration_tests

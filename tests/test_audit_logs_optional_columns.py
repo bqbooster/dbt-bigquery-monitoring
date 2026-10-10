@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from test_input_datasets_validation import _output, _run_operation
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MACRO = REPO_ROOT / "macros" / "gcp_bigquery_audit_logs_optional_column.sql"
@@ -21,12 +23,31 @@ WORKFLOWS = [
 def test_optional_column_macro_is_parse_safe_and_typed_for_fusion() -> None:
     source = MACRO.read_text()
 
+    assert "gcp_bigquery_audit_logs_should_inspect_sink" in source
     assert "{% if not execute %}" in source
+    assert "flags.WHICH | default('')" in source
+    assert "which in ['run', 'build', 'retry']" in source
     assert "adapter.get_relation(" in source
     assert "adapter.get_columns_in_relation(" in source
     assert "incorporate(type='table')" in source
     assert "CAST(NULL AS {{ data_type }}) AS {{ column_name }}" in source
     assert "run_query(" not in source
+    assert "get_relation" in source.split("gcp_bigquery_audit_logs_source_column_names()")[1]
+    inspect_macro, lookup_macro = source.split("{% macro gcp_bigquery_audit_logs_source_column_names() %}")
+    assert "adapter.get_relation(" not in inspect_macro
+    assert "adapter.get_relation(" in lookup_macro
+    assert "gcp_bigquery_audit_logs_should_inspect_sink()" in lookup_macro
+
+
+def test_sink_lookup_is_not_gated_by_execute_alone() -> None:
+    source = MACRO.read_text()
+    lookup = source.split("{% macro gcp_bigquery_audit_logs_source_column_names() %}")[1]
+
+    assert "if not gcp_bigquery_audit_logs_should_inspect_sink()" in lookup
+    assert "{% if not execute %}" not in lookup
+    assert "{% if execute %}" not in lookup
+    for command in ("compile", "docs", "list", "show", "parse", "test", "run-operation"):
+        assert f"'{command}'" not in source.split("which in")[1].split("\n")[0]
 
 
 def test_v2_model_projects_optional_sink_columns_through_macro() -> None:
@@ -73,3 +94,10 @@ def test_core_and_fusion_ci_cover_sink_without_optional_columns() -> None:
         text = workflow.read_text()
         assert "gcp_bigquery_audit_logs_fixture_without_optional_columns" in text, workflow.name
         assert "DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_TABLE=" in text, workflow.name
+        assert "dbt compile -s jobs_from_audit_logs" in text, workflow.name
+
+
+def test_run_operation_does_not_inspect_the_sink() -> None:
+    result = _run_operation("assert_audit_logs_sink_inspect_gated")
+
+    assert result.returncode == 0, _output(result)

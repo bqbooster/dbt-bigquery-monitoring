@@ -1,6 +1,0 @@
-kind: Fixes
-body: Tolerate Cloud Logging BigQuery sinks that omit optional LogEntry columns such as labels and errorGroups, inspecting the sink only during run/build/retry
-time: 2026-10-09T23:12:01Z
-custom:
-    Author: github-christophe-oudar
-    Issue: "207"

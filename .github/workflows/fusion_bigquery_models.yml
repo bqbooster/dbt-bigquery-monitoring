@@ -1,0 +1,144 @@
+name: dbt Fusion models on BigQuery
+
+on:
+  workflow_call:
+    inputs:
+      # Bump this default to move the Fusion version used by pull requests.
+      # Pass "latest" to install the current stable channel instead.
+      dbt_fusion_version:
+        description: Fusion version to install, or "latest" for the stable channel.
+        required: false
+        type: string
+        default: "2.0.11"
+      dataset_suffix:
+        description: Suffix appended to the temporary BigQuery dataset name.
+        required: false
+        type: string
+        default: _fusion
+
+permissions:
+  contents: read
+
+jobs:
+  integration-bigquery-fusion:
+    name: Run dbt Fusion models on BigQuery to test model validity
+    runs-on: ubuntu-latest
+
+    env:
+      DBT_PROFILES_DIR: .
+      GITHUB_SHA_OVERRIDE: ${{ github.event.pull_request.head.sha || github.sha }}
+      DBT_TEST_DATASET_SUFFIX: ${{ inputs.dataset_suffix }}
+      DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }}
+      DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT }}
+      DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT }}
+      DBT_ENV_SECRET_BIGQUERY_TEST_LOCATION: "us"
+      DBT_BQ_MONITORING_GCP_PROJECTS: ${{ secrets.DBT_BQ_MONITORING_GCP_PROJECTS }}
+      DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION: project_by_project_view
+      # Organization INFORMATION_SCHEMA models are enabled: false. Excluding
+      # their tag matches zero enabled nodes and warns on dbt >= 1.12.
+      DBT_COMMON_FLAGS: "--empty"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Install dbt Fusion
+        env:
+          DBT_FUSION_VERSION: ${{ inputs.dbt_fusion_version }}
+        run: |
+          set -euo pipefail
+          if [ "$DBT_FUSION_VERSION" = "latest" ]; then
+            curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update
+          else
+            curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$DBT_FUSION_VERSION"
+          fi
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          installed="$("$HOME/.local/bin/dbt" --version)"
+          printf '%s\n' "$installed"
+          {
+            echo "### dbt Fusion"
+            echo '```'
+            printf '%s\n' "$installed"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$DBT_FUSION_VERSION" != "latest" ] && ! printf '%s\n' "$installed" | grep -Eq "^dbt ${DBT_FUSION_VERSION}$"; then
+            echo "Expected dbt ${DBT_FUSION_VERSION} but the installer produced: ${installed}"
+            exit 1
+          fi
+
+      - name: Write keyfile if secret is defined
+        run: |
+          if [ -z "${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }}" ]; then
+            echo "Error: DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT is not defined."
+          else
+            echo ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }} | base64 -d > ./integration_tests/keyfile.json
+          fi
+
+      - name: Setup dbt dependencies
+        run: |
+          cd integration_tests
+          dbt deps
+
+      # Runtime Fusion CI uses project_by_project_view because table-mode DML
+      # is unavailable on the free-tier test project. Compile the table
+      # materialization so Jinja still renders the Fusion-typed relation path
+      # that production project-mode users hit (#202).
+      - name: Compile project_by_project_table materialization
+        env:
+          DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION: project_by_project_table
+        run: |
+          cd integration_tests
+          dbt compile -s information_schema_write_api_timeline information_schema_recommendations
+
+      # Default production path for partitions is information_schema_batched_table
+      # (separate INSERT jobs under the 1000-table PARTITIONS limit). Runtime Fusion
+      # CI still uses project_by_project_view; compile the batched table path here.
+      - name: Compile information_schema_batched_table materialization
+        env:
+          DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION: information_schema_batched_table
+        run: |
+          cd integration_tests
+          dbt compile -s information_schema_partitions
+
+      - name: Setup dbt fixtures
+        run: |
+          cd integration_tests
+          dbt run -s tag:fixtures
+
+      - name: Run all models once
+        run: |
+          cd integration_tests
+          dbt build -s dbt_bigquery_monitoring --full-refresh ${{ env.DBT_COMMON_FLAGS }}
+
+      - name: Run all models again to test incremental
+        run: |
+          cd integration_tests
+          dbt build -s dbt_bigquery_monitoring ${{ env.DBT_COMMON_FLAGS }}
+
+      - name: Compile audit logs without sink metadata lookup
+        run: |
+          cd integration_tests
+          DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
+          dbt compile -s jobs_from_audit_logs
+
+      - name: Run all models again with cloud audit logs
+        run: |
+          cd integration_tests
+          DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
+          dbt run -s jobs_from_audit_logs+ --full-refresh ${{ env.DBT_COMMON_FLAGS }}
+
+      - name: Run all models again to test incremental with cloud audit logs
+        run: |
+          cd integration_tests
+          DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
+          dbt run -s jobs_from_audit_logs+ ${{ env.DBT_COMMON_FLAGS }}
+
+      - name: Run audit logs against a sink without optional LogEntry columns
+        run: |
+          cd integration_tests
+          DBT_BQ_MONITORING_SHOULD_COMBINE_AUDIT_LOGS_AND_INFORMATION_SCHEMA=true \
+          DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS=true \
+          DBT_BQ_MONITORING_GCP_BIGQUERY_AUDIT_LOGS_TABLE=gcp_bigquery_audit_logs_fixture_without_optional_columns \
+          dbt run -s jobs_from_audit_logs+ --full-refresh ${{ env.DBT_COMMON_FLAGS }}

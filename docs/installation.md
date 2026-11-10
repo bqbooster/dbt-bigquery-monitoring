@@ -53,6 +53,6 @@ Then head to the [configuration guide](/configuration) to enable additional data
 
 ## Requirements
 
-- **dbt Core** >= 1.3.0 or **dbt Fusion** >= 2.0.0-beta
+- **dbt Core** >= 1.3.0 and < 2.0.0, or **dbt v2 (Fusion)** >= 2.0.0 and < 3.0.0 (`require-dbt-version` is `[">=1.3.0", "<3.0.0"]`)
 - BigQuery adapter (`dbt-bigquery`)
 - The service account used by dbt must have the [required IAM permissions](/required-rights)

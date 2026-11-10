@@ -1,0 +1,6 @@
+kind: Features
+body: Declare compatibility with dbt v2 (Fusion) while keeping dbt Core 1.3 and newer (`require-dbt-version` is >=1.3.0,<3.0.0)
+time: 2026-11-10T02:55:00Z
+custom:
+  Author: bqbooster
+  Issue: ""

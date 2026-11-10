@@ -1,6 +1,8 @@
 name: "dbt_bigquery_monitoring"
 version: "0.26.5"
-require-dbt-version: [">=1.3.0"]
+# Core 1.3+ and dbt v2 (Fusion) 2.x. The upper bound is what package hub
+# uses to mark the package dbt v2-compatible.
+require-dbt-version: [">=1.3.0", "<3.0.0"]
 config-version: 2
 
 profile: dbt_bigquery_monitoring
@@ -20,7 +22,7 @@ models:
         - "dbt-bigquery-monitoring-information-schema"
       # Disable static analysis for models using expensive run_query() loops
       # to prevent dbt Fusion from performing metadata queries (LIMIT 0) on every dataset.
-      # See: https://docs.getdbt.com/docs/fusion/new-concepts#configuring-static_analysis
+      # See: https://docs.getdbt.com/reference/resource-configs/static-analysis
       tables:
         information_schema_partitions:
           +static_analysis: off

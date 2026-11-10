@@ -1,3 +1,4 @@
+{{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-effective-project-options -#}
 {# Required role/permissions: To get effective project options metadata, you need the bigquery.config.get
 Identity and Access Management (IAM) permission.The following predefined IAM role includes the

@@ -43,3 +43,6 @@ This list might not be exhaustive and you might need to add more permissions dep
 - **bigquery.reservations.list** - To [access BigQuery Reservations data](https://cloud.google.com/bigquery/docs/information-schema-reservations#required_permissions)
 - **bigquery.capacityCommitments.list** - To [access BigQuery Reservations data](https://cloud.google.com/bigquery/docs/information-schema-reservations#required_permissions)
 - **bigquery.reservationAssignments.list** - To [access BigQuery Reservations data](https://cloud.google.com/bigquery/docs/information-schema-reservations#required_permissions)
+- **bigquery.config.get** - To read `INFORMATION_SCHEMA.PROJECT_OPTIONS`, `EFFECTIVE_PROJECT_OPTIONS`, and `ORGANIZATION_OPTIONS`
+- **bigquery.config.update** - To read `INFORMATION_SCHEMA.PROJECT_OPTIONS_CHANGES` and `ORGANIZATION_OPTIONS_CHANGES`. `roles/bigquery.admin` includes this permission. The project-level changes model stays enabled; the organization model is disabled with the other organization-scoped models (`dbt-bigquery-monitoring-information-schema-by-organization`)
+- **bigquery.datasets.listSharedDatasetUsage** - To read `INFORMATION_SCHEMA.SHARED_DATASET_USAGE`. `roles/bigquery.dataOwner` on the source project includes this permission. The model stays enabled

@@ -1,3 +1,4 @@
+{{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-project-options-changes -#}
 {# Required role/permissions: To get the configuration, you need the bigquery.config.update
 Identity and Access Management (IAM) permission at the project level. The predefined

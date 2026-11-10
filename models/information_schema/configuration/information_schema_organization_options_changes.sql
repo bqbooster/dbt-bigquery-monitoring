@@ -1,3 +1,4 @@
+{{ config(materialized=dbt_bigquery_monitoring_materialization(), enabled=false, tags=["dbt-bigquery-monitoring-information-schema-by-organization"]) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-organization-options-changes -#}
 {# Required role/permissions: 
 

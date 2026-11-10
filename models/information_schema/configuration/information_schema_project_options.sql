@@ -1,3 +1,4 @@
+{{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-project-options -#}
 {# Required role/permissions: To get configuration options metadata, you need the following Identity and Access Management (IAM) permissions:
 bigquery.config.get

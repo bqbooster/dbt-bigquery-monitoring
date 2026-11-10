@@ -1,3 +1,4 @@
+{{ config(materialized=dbt_bigquery_monitoring_materialization(), enabled=false, tags=["dbt-bigquery-monitoring-information-schema-by-organization"]) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-organization-options -#}
 {# Required role/permissions: To get organization options metadata, you need the following Identity and Access Management (IAM) permissions:
 bigquery.config.get

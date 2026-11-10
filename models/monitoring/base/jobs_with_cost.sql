@@ -40,8 +40,8 @@ source AS (
   -- One extra day keeps a parent SCRIPT job visible to children at the edge
   -- of lookback_window_days. Off by default so the view still returns the
   -- full jobs history (project-mode retention, region INFORMATION_SCHEMA, and
-  -- audit logs). Downstream models that read past lookback_window_days,
-  -- including incremental catch-up from _dbt_max_partition, keep that history.
+  -- audit logs). Downstream models that read past lookback_window_days
+  -- keep that history, including an incremental catch-up from an older partition.
   WHERE creation_time >= TIMESTAMP_SUB(
     CURRENT_TIMESTAMP(),
     INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() + 1 }} DAY

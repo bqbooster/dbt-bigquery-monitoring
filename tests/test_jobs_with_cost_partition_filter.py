@@ -8,12 +8,14 @@ and incremental catch-up from _dbt_max_partition.
 """
 
 import re
-import subprocess
 from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SQL_PATH = REPO_ROOT / "models" / "monitoring" / "base" / "jobs_with_cost.sql"
+# The view as it exists on main. CI checks out the pull request with a shallow
+# history, so the comparison cannot depend on `git show main:...`.
+BASELINE_PATH = REPO_ROOT / "tests" / "fixtures" / "jobs_with_cost_without_pruning.sql"
 SQL = SQL_PATH.read_text()
 
 
@@ -31,14 +33,11 @@ def _normalize(sql: str) -> str:
 
 
 def test_default_jobs_with_cost_sql_matches_the_previous_view() -> None:
-    baseline = subprocess.check_output(
-        ["git", "show", "main:models/monitoring/base/jobs_with_cost.sql"],
-        cwd=REPO_ROOT,
-        text=True,
-    )
+    baseline = BASELINE_PATH.read_text()
 
     assert _normalize(_without_pruning_blocks(SQL)) == _normalize(baseline)
     assert "enable_jobs_with_cost_partition_pruning" not in baseline
+    assert "_dbt_max_partition" not in SQL
 
 
 def test_pruning_filter_sits_above_the_parent_script_window() -> None:

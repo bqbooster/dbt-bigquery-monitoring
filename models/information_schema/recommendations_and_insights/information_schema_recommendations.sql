@@ -1,5 +1,14 @@
 {{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-recommendations -#}
+{# Required role/permissions: To view recommendations with the INFORMATION_SCHEMA.RECOMMENDATIONS view, you
+must have the required permissions for the corresponding recommender. The
+INFORMATION_SCHEMA.RECOMMENDATIONS view only returns recommendations that you
+have permission to view.Ask your administrator to grant access to view the recommendations. To see the
+required permissions for each recommender, see the following:
+Partition & cluster recommender permissions
+Materialized view recommendations permissions
+Role recommendations for datasets permissions
+ -#}
 
 SELECT
 recommendation_id,

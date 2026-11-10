@@ -18,7 +18,7 @@ Access control with IAM. -#}
 
 WITH base AS (
 {%- if dataset_list | length == 0 -%}
-  SELECT CAST(NULL AS STRING) AS index_catalog, CAST(NULL AS STRING) AS index_schema, CAST(NULL AS STRING) AS table_name, CAST(NULL AS STRING) AS index_name, CAST(NULL AS STRING) AS index_status, CAST(NULL AS TIMESTAMP) AS creation_time, CAST(NULL AS TIMESTAMP) AS last_modification_time, CAST(NULL AS TIMESTAMP) AS last_refresh_time, CAST(NULL AS TIMESTAMP) AS disable_time, CAST(NULL AS STRING) AS disable_reason, CAST(NULL AS STRING) AS ddl, CAST(NULL AS INTEGER) AS coverage_percentage, CAST(NULL AS INTEGER) AS unindexed_row_count, CAST(NULL AS INTEGER) AS total_logical_bytes, CAST(NULL AS INTEGER) AS total_storage_bytes, CAST(NULL AS STRING) AS analyzer
+  SELECT CAST(NULL AS STRING) AS index_catalog, CAST(NULL AS STRING) AS index_schema, CAST(NULL AS STRING) AS table_name, CAST(NULL AS STRING) AS index_name, CAST(NULL AS STRING) AS index_status, CAST(NULL AS TIMESTAMP) AS creation_time, CAST(NULL AS TIMESTAMP) AS last_modification_time, CAST(NULL AS TIMESTAMP) AS last_refresh_time, CAST(NULL AS TIMESTAMP) AS disable_time, CAST(NULL AS STRING) AS disable_reason, CAST(NULL AS STRING) AS ddl, CAST(NULL AS INTEGER) AS coverage_percentage, CAST(NULL AS INTEGER) AS unindexed_row_count, CAST(NULL AS INTEGER) AS total_logical_bytes, CAST(NULL AS INTEGER) AS total_storage_bytes, CAST(NULL AS STRING) AS analyzer, CAST(NULL AS STRUCT<>) AS last_index_alteration_info
   LIMIT 0
 {%- else %}
 {% for dataset in dataset_list -%}
@@ -38,7 +38,8 @@ coverage_percentage,
 unindexed_row_count,
 total_logical_bytes,
 total_storage_bytes,
-analyzer
+analyzer,
+last_index_alteration_info
   FROM {{ dataset | trim }}.`INFORMATION_SCHEMA`.`SEARCH_INDEXES`
 {% if not loop.last %}UNION ALL{% endif %}
 {% endfor %}
@@ -61,6 +62,7 @@ coverage_percentage,
 unindexed_row_count,
 total_logical_bytes,
 total_storage_bytes,
-analyzer
+analyzer,
+last_index_alteration_info
 FROM
 base

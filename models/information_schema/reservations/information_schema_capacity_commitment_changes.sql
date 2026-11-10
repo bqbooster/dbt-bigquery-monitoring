@@ -1,5 +1,17 @@
 {{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-capacity-commitment-changes -#}
+{# Required role/permissions: To query the INFORMATION_SCHEMA.CAPACITY_COMMITMENT_CHANGES view,
+you need the bigquery.capacityCommitments.list Identity and Access Management (IAM)
+permission for the project.
+Each of the following predefined IAM roles includes the required
+permission:
+roles/bigquery.resourceAdmin
+roles/bigquery.resourceEditor
+roles/bigquery.resourceViewer
+roles/bigquery.user
+roles/bigquery.admin
+For more information about BigQuery permissions, see
+Access control with IAM. -#}
 
 SELECT
 change_timestamp,

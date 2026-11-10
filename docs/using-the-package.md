@@ -85,6 +85,7 @@ LIMIT 10
 *   `tables`, `table_storage`, `table_snapshots`
 *   `columns`, `column_field_paths` (schema details)
 *   `partitions`
+*   `property_graphs` (property graph metadata)
 
 **Access & Security**
 *   `object_privileges` (who can see what)
@@ -92,6 +93,7 @@ LIMIT 10
 
 **Configuration & Reservations**
 *   `reservations`, `assignments` (slots management)
+*   `reservations_timeline`, `failover_history` (capacity over time and managed disaster-recovery failovers)
 *   `bi_capacities` (BI Engine)
 *   `effective_project_options`
 

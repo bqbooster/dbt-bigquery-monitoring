@@ -72,3 +72,16 @@ models:
     description: "The text analyzer\n        to use to generate tokens for the search\
       \ index."
     data_type: STRING
+  - name: last_index_alteration_info
+    description: "The details of the latest user-triggered index alteration, containing\n\
+      \        following fields:\n        \nstatus: a STRING value that indicates\n\
+      \            the alteration status. Possible values are IN_PROGRESS,\n     \
+      \       and FAILED.\nmessage: the details of the FAILED\n            status\
+      \ as an\n            ErrorProto.\n            The value is NULL for other statuses.\n\
+      new_coverage_percentage: an INT64 value\n            that contains the approximate\
+      \ percentage of table data that has been\n            indexed for the alteration.\n\
+      start_time: the timestamp when the alteration is\n            initiated.\nend_time:\
+      \ the timestamp when the alteration enters\n            the FAILED status.\n\
+      ddl: the data definition language (DDL) statement\n            used to alter\
+      \ the index."
+    data_type: STRUCT

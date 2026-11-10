@@ -45,7 +45,7 @@ models:
       see Priority.
     data_type: STRING
   - name: associated_insight_ids
-    description: Full Insight names associated with the recommendation.Insight name
+    description: Full Insight names associated with the recommendation. Insight name
       is the Base64 encoded representation of Insight type name & the Insight ID.
       This can be used to query Insights view.
     data_type: ARRAY<STRING>

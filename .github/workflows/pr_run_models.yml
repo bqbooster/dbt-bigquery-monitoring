@@ -84,6 +84,9 @@ jobs:
           status=$?
           set -e
           printf '%s\n' "$output"
+          # Later steps materialize this model as a view. Drop the table
+          # this step created so that replacement can succeed.
+          dbt run-operation drop_ci_partitions_table
           if printf '%s\n' "$output" | grep -q 'Unexpected ";"'; then
             echo "Batched materialization produced an empty statement"
             exit 1

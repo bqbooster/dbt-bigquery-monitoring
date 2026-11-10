@@ -167,7 +167,7 @@ def test_hour_sql_does_not_cross_join_repeated_arrays() -> None:
     assert "ARRAY_CONCAT_AGG(statement_types)" in sql
     assert "user_emails_backfilled" in sql
     assert "summed_unique_users" in sql
-    assert "IFNULL(job_types, [])" in sql
+    assert "COALESCE(job_types, [])" in sql
     assert "compute_incremental_minute_filter('minute')" in sql
     output_block = "\n  " + ",\n  ".join(
         [

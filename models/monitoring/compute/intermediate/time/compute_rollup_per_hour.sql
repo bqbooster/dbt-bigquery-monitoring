@@ -114,12 +114,12 @@ SELECT
   job_state,
   (
     SELECT APPROX_TOP_SUM(job_type.value, job_type.sum, 20)
-    FROM UNNEST(IFNULL(job_types, [])) AS job_type
+    FROM UNNEST(COALESCE(job_types, [])) AS job_type
     WHERE job_type.value IS NOT NULL
   ) AS job_types,
   (
     SELECT APPROX_TOP_SUM(statement_type.value, statement_type.sum, 30)
-    FROM UNNEST(IFNULL(statement_types, [])) AS statement_type
+    FROM UNNEST(COALESCE(statement_types, [])) AS statement_type
     WHERE statement_type.value IS NOT NULL
   ) AS statement_types,
   avg_duration_seconds,

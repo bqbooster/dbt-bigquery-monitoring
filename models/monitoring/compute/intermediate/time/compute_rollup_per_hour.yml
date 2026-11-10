@@ -112,7 +112,7 @@ unit_tests:
         format: sql
         rows: |
           SELECT
-            TIMESTAMP '2026-11-01 12:00:00' AS minute,
+            TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR) AS minute,
             'p1' AS project_id,
             CAST(NULL AS STRING) AS reservation_id,
             CAST(NULL AS STRING) AS bi_engine_mode,
@@ -136,7 +136,7 @@ unit_tests:
             [STRUCT('SELECT' AS value, 1 AS sum), STRUCT('INSERT' AS value, 1 AS sum)] AS statement_types
           UNION ALL
           SELECT
-            TIMESTAMP '2026-11-01 12:01:00',
+            TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 1 MINUTE),
             'p1',
             CAST(NULL AS STRING),
             CAST(NULL AS STRING),
@@ -150,6 +150,7 @@ unit_tests:
             1,
             1,
             1,
+            1,
             STRUCT(1 AS done, 0 AS running, 0 AS pending),
             20.0,
             20.0,
@@ -159,7 +160,7 @@ unit_tests:
             [STRUCT('SELECT' AS value, 1 AS sum)]
           UNION ALL
           SELECT
-            TIMESTAMP '2026-11-01 13:05:00',
+            TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 65 MINUTE),
             'p1',
             CAST(NULL AS STRING),
             CAST(NULL AS STRING),
@@ -183,7 +184,7 @@ unit_tests:
             [STRUCT('SELECT' AS value, 1 AS sum)]
           UNION ALL
           SELECT
-            TIMESTAMP '2026-11-01 12:30:00',
+            TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 30 MINUTE),
             'p2',
             CAST(NULL AS STRING),
             CAST(NULL AS STRING),
@@ -209,7 +210,7 @@ unit_tests:
       format: sql
       rows: |
         SELECT
-          TIMESTAMP '2026-11-01 12:00:00' AS hour,
+          TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR) AS hour,
           'p1' AS project_id,
           CAST(NULL AS STRING) AS reservation_id,
           CAST(NULL AS STRING) AS bi_engine_mode,
@@ -231,7 +232,7 @@ unit_tests:
           15.0 AS median_duration_seconds
         UNION ALL
         SELECT
-          TIMESTAMP '2026-11-01 13:00:00',
+          TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 1 HOUR),
           'p1',
           CAST(NULL AS STRING),
           CAST(NULL AS STRING),
@@ -253,7 +254,7 @@ unit_tests:
           4.0
         UNION ALL
         SELECT
-          TIMESTAMP '2026-11-01 12:00:00',
+          TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR),
           'p2',
           CAST(NULL AS STRING),
           CAST(NULL AS STRING),
@@ -289,7 +290,7 @@ unit_tests:
         format: sql
         rows: |
           SELECT
-            TIMESTAMP '2026-11-02 08:00:00' AS minute,
+            TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR) AS minute,
             'p1' AS project_id,
             CAST(NULL AS STRING) AS reservation_id,
             CAST(NULL AS STRING) AS bi_engine_mode,
@@ -313,7 +314,7 @@ unit_tests:
             CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS statement_types
           UNION ALL
           SELECT
-            TIMESTAMP '2026-11-02 08:10:00',
+            TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 10 MINUTE),
             'p1',
             CAST(NULL AS STRING),
             CAST(NULL AS STRING),
@@ -339,7 +340,7 @@ unit_tests:
       format: sql
       rows: |
         SELECT
-          TIMESTAMP '2026-11-02 08:00:00' AS hour,
+          TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR) AS hour,
           'p1' AS project_id,
           CAST(NULL AS STRING) AS reservation_id,
           CAST(NULL AS STRING) AS bi_engine_mode,

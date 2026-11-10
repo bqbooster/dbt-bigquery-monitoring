@@ -41,7 +41,8 @@ and returns project-qualified dataset names (`` `project`.`dataset` ``).
 A project with no datasets in that region contributes nothing. If listing
 one project fails (for example, missing `bigquery.datasets.get`), that
 project is skipped and the error is logged. Discovery fails only when
-every input project fails. With no project list, discovery uses the
+every input project fails. The lookup only reads `SCHEMATA`; it does not
+write a table, so it still runs where BigQuery rejects DML. With no project list, discovery uses the
 execution project's region. An explicit `input_datasets` list skips
 discovery. Dataset-scoped models (`PARTITIONS`, `KEY_COLUMN_USAGE`,
 `CONSTRAINT_COLUMN_USAGE`, `SEARCH_INDEXES*`) then query those datasets.

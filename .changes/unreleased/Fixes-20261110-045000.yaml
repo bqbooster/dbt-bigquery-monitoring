@@ -1,5 +1,5 @@
 kind: Fixes
-body: Add new INFORMATION_SCHEMA columns on existing project-mode tables without --full-refresh, replace leftover configuration views with tables, keep organization configuration models enabled, leave preview failover history disabled, and continue dataset discovery when one input project cannot be listed
+body: Add new INFORMATION_SCHEMA columns on existing project-mode tables without --full-refresh, replace leftover configuration views with tables, keep organization configuration models enabled, leave preview failover history disabled, and continue dataset discovery when one input project cannot be listed without writing a table
 time: 2026-11-10T04:50:00Z
 custom:
     Author: github-christophe-oudar

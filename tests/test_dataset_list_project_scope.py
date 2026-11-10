@@ -67,11 +67,13 @@ def test_project_mode_schemata_lookup_isolates_each_project() -> None:
                 "FROM `proj-a`.`region-eu`.`INFORMATION_SCHEMA`.`SCHEMATA`",
                 "FROM `proj-b`.`region-eu`.`INFORMATION_SCHEMA`.`SCHEMATA`",
                 "EXCEPTION WHEN ERROR",
-                "CREATE TEMP TABLE `_dbt_bq_monitoring_schemata`",
+                "DECLARE datasets ARRAY<STRING> DEFAULT []",
+                "SET errors = ARRAY_CONCAT(errors, [@@error.message])",
             ],
             "forbidden": [
                 "FROM `region-eu`.`INFORMATION_SCHEMA`.`SCHEMATA`",
-                "UNION ALL",
+                "INSERT INTO",
+                "CREATE TEMP TABLE",
             ],
         },
     )

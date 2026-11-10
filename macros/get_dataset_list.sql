@@ -85,24 +85,36 @@
     {% set sql = "SELECT CONCAT('`', REPLACE(CATALOG_NAME, '`', ''), '`.`', REPLACE(SCHEMA_NAME, '`', ''), '`') AS SCHEMA_NAME\nFROM `region-" ~ region ~ "`.`INFORMATION_SCHEMA`.`SCHEMATA`" %}
   {% else %}
     {# One project's Access Denied must not hide datasets from the others.
-       UNION ALL fails the whole discovery query on the first error. #}
+       UNION ALL fails the whole discovery query on the first error.
+       Script variables avoid INSERT, which the BigQuery sandbox rejects. #}
     {% set statements = [] %}
-    {% do statements.append("CREATE TEMP TABLE `_dbt_bq_monitoring_schemata` (schema_name STRING, error_message STRING)") %}
+    {% do statements.append("DECLARE datasets ARRAY<STRING> DEFAULT []") %}
+    {% do statements.append("DECLARE errors ARRAY<STRING> DEFAULT []") %}
     {% for project in projects %}
       {% set project_id = dbt_bigquery_monitoring.information_schema_project_identifier(project) %}
       {% set block %}
 BEGIN
-  INSERT INTO `_dbt_bq_monitoring_schemata` (schema_name)
-  SELECT CONCAT('`', REPLACE(CATALOG_NAME, '`', ''), '`.`', REPLACE(SCHEMA_NAME, '`', ''), '`')
-  FROM `{{ project_id }}`.`region-{{ region }}`.`INFORMATION_SCHEMA`.`SCHEMATA`;
+  SET datasets = ARRAY_CONCAT(
+    datasets,
+    ARRAY(
+      SELECT CONCAT('`', REPLACE(CATALOG_NAME, '`', ''), '`.`', REPLACE(SCHEMA_NAME, '`', ''), '`')
+      FROM `{{ project_id }}`.`region-{{ region }}`.`INFORMATION_SCHEMA`.`SCHEMATA`
+    )
+  );
 EXCEPTION WHEN ERROR THEN
-  INSERT INTO `_dbt_bq_monitoring_schemata` (error_message)
-  SELECT @@error.message;
+  SET errors = ARRAY_CONCAT(errors, [@@error.message]);
 END
       {% endset %}
       {% do statements.append(block | trim) %}
     {% endfor %}
-    {% do statements.append("SELECT schema_name AS SCHEMA_NAME, error_message AS ERROR_MESSAGE FROM `_dbt_bq_monitoring_schemata`") %}
+    {% set block %}
+SELECT dataset AS SCHEMA_NAME, CAST(NULL AS STRING) AS ERROR_MESSAGE
+FROM UNNEST(datasets) AS dataset
+UNION ALL
+SELECT CAST(NULL AS STRING) AS SCHEMA_NAME, error_message AS ERROR_MESSAGE
+FROM UNNEST(errors) AS error_message
+    {% endset %}
+    {% do statements.append(block | trim) %}
     {% set sql = statements | join(';\n') %}
   {% endif %}
   {{ return(sql) }}

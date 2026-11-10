@@ -3,24 +3,20 @@ version: 2
 models:
   - name: most_repeated_jobs
     description: >
-      Queries that ran more than once, grouped by normalized query hash so parameterized
-      repeats count as one statement. When BigQuery does not provide
-      query_hashes.normalized_literals (cache hits, failures, non-GoogleSQL, audit-log-only
-      mode), the raw query text is the group key. `query` is one example text.
+      Queries that ran more than once. Grouped by raw query text unless
+      group_repeated_jobs_by_normalized_hash is true. With that var, rows are grouped
+      by query_info.query_hashes.normalized_literals (raw text when the hash is null)
+      and hourly totals are summed once per fingerprint. `query_fingerprint` and
+      `normalized_query_hash` are always present and do not change the historical columns.
     config:
       meta:
         label: "Most Repeated Jobs"
         order_fields_by: "label"
         group_label: "Compute cost"
     columns:
-      - name: query_fingerprint
-        description: >
-          normalized_literals when present, otherwise the raw query text.
-      - name: normalized_query_hash
-        description: >
-          The normalized_literals hash, or NULL when this row was grouped by query text.
       - name: query
-        description: One example SQL text for this fingerprint.
+        description: >
+          The raw query text, or one example text when hash grouping is enabled.
       - name: project_ids
         description: The top aggregated project IDs.
       - name: reservation_ids
@@ -37,3 +33,11 @@ models:
         description: The total slot time in human-readable format.
       - name: query_count
         description: The total query count for the model.
+      - name: query_fingerprint
+        description: >
+          normalized_literals when present, otherwise the raw query text.
+          A null hash and a null query stay null and do not collapse other texts.
+      - name: normalized_query_hash
+        description: >
+          The normalized_literals hash, or NULL when BigQuery did not provide one
+          (cache hits, failures, non-GoogleSQL, audit-log-only mode).

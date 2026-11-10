@@ -10,6 +10,10 @@ WITH samples AS (
     SELECT 'c' AS query_text, CAST(NULL AS STRING) AS normalized_literals
     UNION ALL
     SELECT 'd' AS query_text, CAST(NULL AS STRING) AS normalized_literals
+    UNION ALL
+    SELECT CAST(NULL AS STRING) AS query_text, CAST(NULL AS STRING) AS normalized_literals
+    UNION ALL
+    SELECT CAST(NULL AS STRING) AS query_text, CAST(NULL AS STRING) AS normalized_literals
 ),
 
 fingerprinted AS (
@@ -36,5 +40,5 @@ FROM grouped
 WHERE (query_fingerprint = 'hash1' AND (n_rows != 2 OR n_texts != 2))
     OR (query_fingerprint = 'c' AND n_rows != 2)
     OR (query_fingerprint = 'd' AND n_rows != 1)
-    OR query_fingerprint IS NULL
-    OR query_fingerprint NOT IN ('hash1', 'c', 'd')
+    OR (query_fingerprint IS NULL AND (n_rows != 2 OR n_texts != 0))
+    OR (query_fingerprint IS NOT NULL AND query_fingerprint NOT IN ('hash1', 'c', 'd'))

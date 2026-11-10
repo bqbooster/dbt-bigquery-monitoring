@@ -12,6 +12,7 @@
   'per_billed_tb_price': dbt_bigquery_monitoring_variable_per_billed_tb_price(),
   'free_tb_per_month': dbt_bigquery_monitoring_variable_free_tb_per_month(),
   'hourly_slot_price': dbt_bigquery_monitoring_variable_hourly_slot_price(),
+  'group_repeated_jobs_by_normalized_hash': dbt_bigquery_monitoring_variable_group_repeated_jobs_by_normalized_hash(),
   'active_logical_storage_gb_price': dbt_bigquery_monitoring_variable_active_logical_storage_gb_price(),
   'long_term_logical_storage_gb_price': dbt_bigquery_monitoring_variable_long_term_logical_storage_gb_price(),
   'active_physical_storage_gb_price': dbt_bigquery_monitoring_variable_active_physical_storage_gb_price(),

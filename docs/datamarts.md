@@ -213,11 +213,13 @@ LIMIT 20
 
 ### `most_repeated_jobs`
 
-Identifies queries that run repeatedly. Jobs are grouped by `query_info.query_hashes.normalized_literals`, so the same statement with different parameter values counts once. When that hash is null (typical for cache hits, failed jobs, and non-GoogleSQL), the raw query text is used instead. `query` is one example of the statement, not every literal variant.
+Identifies queries that run repeatedly. **By default this is still one row per raw query text**, with the same cost, slot, and count columns as before. `query_fingerprint` and `normalized_query_hash` are extra columns: the fingerprint is `query_info.query_hashes.normalized_literals` when BigQuery populated it, otherwise the raw query text. A null hash does not merge different texts. A null query and a null hash stay a null fingerprint (the same single group `GROUP BY query` already produces for null text).
 
-BigQuery does not publish the hash for cache hits, so a cached parameterized execution can remain on its own text key. Audit-log-only mode has no `query_info` and always uses the query text.
+Set `group_repeated_jobs_by_normalized_hash` to `true` to group by that fingerprint so parameterized repeats count once. `query` is then one example statement. That mode also sums hourly totals once per fingerprint. The default view still unnests `jobs` while aggregating, which repeats each hour's totals once per job in the bucket; that historical behavior is unchanged until you opt in.
 
-Rebuild `jobs_costs_incremental` with `--full-refresh` after upgrading. The model is incremental and clustered on the fingerprint; partitions written by older versions are still grouped by raw text.
+BigQuery does not publish the hash for cache hits, so a cached parameterized execution can remain on its own text key. Audit-log-only mode has no `query_info` (the struct is an untyped null) and always uses the query text. Region and project mode both read the hash through `jobs_with_cost`.
+
+`jobs_costs_incremental` keeps `cluster_by` `['hour', 'query']` and `on_schema_change: append_new_columns`. Upgrading adds the two columns on the next incremental run and does not require a full refresh. After you enable the var, full-refresh `jobs_costs_incremental` so older hour partitions use the same grain. The run still succeeds without that refresh: new partitions are hash-grouped and older ones stay text-grouped until they are rewritten or expire.
 
 **Key columns:** `query_fingerprint`, `normalized_query_hash`, `query`, `query_count`, `total_query_cost`, `cache_hit_ratio`, `total_slot_ms`, `user_emails`
 
@@ -310,7 +312,7 @@ ORDER BY total_slot_seconds DESC
 
 ### `materialization_candidates`
 
-Identifies queries that are **strong candidates for materialized views or scheduled queries**: high frequency, significant cost, and low cache hit rate. Shows potential savings if the queries were cached. Frequency is counted on the same normalized-hash fingerprint as `most_repeated_jobs`.
+Identifies queries that are **strong candidates for materialized views or scheduled queries**: high frequency, significant cost, and low cache hit rate. Shows potential savings if the queries were cached. Frequency is counted on raw query text unless `group_repeated_jobs_by_normalized_hash` is true, in which case it uses the same fingerprint as `most_repeated_jobs`. Recommendation thresholds are unchanged.
 
 **Key columns:** `query_fingerprint`, `query`, `query_count`, `total_query_cost`, `cache_hit_ratio`, `potential_savings_from_caching`, `materialization_recommendation`, `first_seen`, `last_seen`
 

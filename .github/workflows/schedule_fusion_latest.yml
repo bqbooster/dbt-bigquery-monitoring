@@ -1,0 +1,21 @@
+name: Scheduled testing - latest dbt Fusion stable
+on:
+  schedule:
+    # Weekly, after the Fusion stable channel has usually picked up the week's release.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  cancel-in-progress: false
+  group: schedule-fusion-latest-${{ github.ref }}
+
+jobs:
+  integration-bigquery-fusion-latest:
+    uses: ./.github/workflows/fusion_bigquery_models.yml
+    secrets: inherit
+    with:
+      dbt_fusion_version: latest
+      dataset_suffix: _fusion_latest

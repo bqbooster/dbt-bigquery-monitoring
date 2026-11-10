@@ -8,12 +8,19 @@ on:
       - 'dbt_project.yml'
       - 'packages.yml'
       - 'config.py'
+      - '.github/workflows/pr_lint_models.yml'
+      - '.github/actions/setup-dbt/**'
   workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  checks: write
 
 # GitHub secrets
 env:
   DBT_PROFILES_DIR: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/integration_tests
-  GITHUB_SHA_OVERRIDE: ${{ github.event.pull_request.head.sha }} # We need the commit hash of the pull request branch's head, the GITHUB_SHA env var is always the base branch in a pull_request_target trigger
+  GITHUB_SHA_OVERRIDE: ${{ github.event.pull_request.head.sha || github.sha }}
   DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }}
   DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT }}
   DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT }}
@@ -33,18 +40,12 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha }} # Check out the code of the PR
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
-
-      - name: Set up Python
-        uses: actions/setup-python@v7
+      - name: Set up dbt Core
+        uses: ./.github/actions/setup-dbt
         with:
-          python-version: '3.11'    
-
-      - name: Install Python packages
-        run: uv pip install --system dbt-bigquery~=1.10.0 sqlfluff-templater-dbt google-cloud-bigquery==3.31.0
+          with-sqlfluff: "true"
 
       - name: Write keyfile if secret is defined
         run: |

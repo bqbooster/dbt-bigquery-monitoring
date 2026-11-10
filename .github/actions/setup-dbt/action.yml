@@ -1,0 +1,41 @@
+name: Setup dbt Core
+description: >-
+  Install the CI pins for uv, Python, and dbt-bigquery (which installs the
+  matching dbt Core). Bump the versions in this action to move every Core job.
+
+inputs:
+  with-sqlfluff:
+    description: Also install the pinned SQLFluff dbt templater.
+    required: false
+    default: "false"
+  with-pytest:
+    description: Also install pytest.
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Install uv
+      uses: astral-sh/setup-uv@v10
+      with:
+        version: "0.13.7"
+
+    - name: Set up Python
+      uses: actions/setup-python@v7
+      with:
+        python-version: "3.15"
+
+    - name: Install Python packages
+      shell: bash
+      run: |
+        set -euo pipefail
+        packages=("dbt-bigquery==1.12.2")
+        if [ "${{ inputs.with-sqlfluff }}" = "true" ]; then
+          packages+=("sqlfluff==4.5.0" "sqlfluff-templater-dbt==4.5.0")
+        fi
+        if [ "${{ inputs.with-pytest }}" = "true" ]; then
+          packages+=("pytest")
+        fi
+        uv pip install --system "${packages[@]}"
+        dbt --version

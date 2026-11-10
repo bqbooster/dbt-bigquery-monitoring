@@ -3,6 +3,14 @@ name: Generate Release PR
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: changie-release-pr
+  cancel-in-progress: false
+
 jobs:
   generate-pr:
     runs-on: ubuntu-latest

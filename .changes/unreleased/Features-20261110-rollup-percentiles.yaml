@@ -1,6 +1,6 @@
 kind: Features
-body: Add creation-to-start queue wait and p50/p90/p99 duration percentiles to the compute rollups using APPROX_QUANTILES
-time: 2026-11-10T05:30:00Z
+body: Append creation-to-start queue wait and p50/p90/p99 duration percentiles on the compute rollups. Existing columns and median_duration_seconds are unchanged. Minute percentiles use APPROX_QUANTILES on the jobs that model already reads; a null start_time stays null, and SAFE_OFFSET returns null when every queue wait in the minute is null. The hour model still reads every minute row and does not scan JOBS again. Its new percentile columns are query-count-weighted averages of the minute values. on_schema_change is append_new_columns and clustering is unchanged, so the upgrade does not require a full refresh. Minute partitions that this run does not rewrite keep nulls in the new columns until they are rebuilt
+time: 2026-11-10T05:40:00Z
 custom:
   Author: cursoragent
   Issue: ""

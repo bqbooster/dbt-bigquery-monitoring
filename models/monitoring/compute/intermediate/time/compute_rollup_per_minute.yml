@@ -79,20 +79,26 @@ models:
                 description: Number of statements of this type
       - name: avg_duration_seconds
         description: Average execution duration of jobs in seconds during the minute (start to end).
-      - name: avg_queue_wait_ms
-        description: Average milliseconds from job creation to start during the minute.
       - name: median_duration_seconds
         description: >
-          p50 execution duration in seconds, from the same APPROX_QUANTILES sketch as duration_p50_seconds.
+          p50 execution duration in seconds. Still APPROX_QUANTILES(total_time_seconds, 100)[OFFSET(50)].
+          An all-null minute still fails this expression, as it did before these columns existed.
+      - name: avg_queue_wait_ms
+        description: >
+          Additive column. Average milliseconds from creation to start. Null when start_time is null.
+          Ignored by AVG when null. Does not change existing duration columns.
       - name: duration_p50_seconds
-        description: p50 execution duration in seconds (APPROX_QUANTILES offset 50).
+        description: >
+          Additive column. p50 execution duration in seconds (APPROX_QUANTILES offset 50 via SAFE_OFFSET).
       - name: duration_p90_seconds
-        description: p90 execution duration in seconds (APPROX_QUANTILES offset 90).
+        description: Additive column. p90 execution duration in seconds (APPROX_QUANTILES offset 90).
       - name: duration_p99_seconds
-        description: p99 execution duration in seconds (APPROX_QUANTILES offset 99).
+        description: Additive column. p99 execution duration in seconds (APPROX_QUANTILES offset 99).
       - name: queue_wait_p50_ms
-        description: p50 queue wait in milliseconds, from creation to start.
+        description: >
+          Additive column. p50 queue wait in milliseconds. SAFE_OFFSET returns null when every
+          start_time in the minute is null, instead of failing the build.
       - name: queue_wait_p90_ms
-        description: p90 queue wait in milliseconds, from creation to start.
+        description: Additive column. p90 queue wait in milliseconds, from creation to start.
       - name: queue_wait_p99_ms
-        description: p99 queue wait in milliseconds, from creation to start.
+        description: Additive column. p99 queue wait in milliseconds, from creation to start.

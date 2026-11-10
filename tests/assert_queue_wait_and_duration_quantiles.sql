@@ -27,6 +27,14 @@ quantiles AS (
         SELECT 12 AS total_time_seconds, 3000 AS queue_wait_ms
         FROM UNNEST(GENERATE_ARRAY(1, 20))
     )
+),
+
+all_null_durations AS (
+    SELECT
+        APPROX_QUANTILES(total_time_seconds, 100) AS duration_quantiles
+    FROM (
+        SELECT CAST(NULL AS INT64) AS total_time_seconds
+    )
 )
 
 SELECT 'queue_wait' AS scenario
@@ -45,3 +53,9 @@ WHERE duration_quantiles[SAFE_OFFSET(50)] != 12
     OR queue_wait_quantiles[SAFE_OFFSET(50)] != 3000
     OR queue_wait_quantiles[SAFE_OFFSET(90)] != 3000
     OR queue_wait_quantiles[SAFE_OFFSET(99)] != 3000
+UNION ALL
+SELECT 'all_null_duration' AS scenario
+FROM all_null_durations
+WHERE duration_quantiles[SAFE_OFFSET(50)] IS NOT NULL
+    OR duration_quantiles[SAFE_OFFSET(90)] IS NOT NULL
+    OR duration_quantiles[SAFE_OFFSET(99)] IS NOT NULL

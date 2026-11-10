@@ -419,7 +419,11 @@ LIMIT 10
 
 Hourly compute cost with year/month/day time truncations added for easy BI tool grouping. Wraps the `compute_cost_per_hour` intermediate table.
 
-`compute_rollup_per_minute` and `compute_rollup_per_hour` also carry queue wait (creation to start) and execution-duration percentiles. Both use one `APPROX_QUANTILES(..., 100)` sketch per metric and read offsets 50, 90, and 99. The minute rollup computes them on the jobs it already scans. The hour rollup recomputes them from `jobs_with_cost` scalar columns (creation time, start time, duration, project, reservation, client, edition) for the day partition it rewrites, so hour p99 is not an average of minute p99s. `median_duration_seconds` on the hour rollup is still the average of per-minute medians. Full-refresh the rollups once so older partitions pick up the new columns.
+`compute_rollup_per_minute` and `compute_rollup_per_hour` append queue wait (creation to start) and duration percentiles. Existing columns, including `median_duration_seconds`, keep their previous expressions. The minute model still uses `APPROX_QUANTILES(total_time_seconds, 100)[OFFSET(50)]` for that median. The new minute percentiles use `SAFE_OFFSET`, so a minute whose start times are all null returns null queue-wait percentiles instead of failing. A minute whose durations are all null still fails on the historical median expression.
+
+The hour model does not scan `JOBS` again and still re-aggregates every minute row, so previously written hours keep being refreshed. Its new percentile columns are query-count-weighted averages of the minute values, not a second sketch. `median_duration_seconds` on the hour rollup is still the unweighted average of per-minute medians.
+
+Both models set `on_schema_change: append_new_columns` and do not change partitioning or clustering, so the upgrade incremental run does not require a full refresh. Partitions the minute model does not rewrite keep nulls in the new columns until they are rebuilt or expire. The next hour-model run then rolls up whatever minute values exist.
 
 ```sql
 -- Rolling hourly cost for the past 24 hours

@@ -84,16 +84,25 @@ models:
       - name: median_duration_seconds
         description: Unweighted average of the per-minute p50 execution durations. Kept for compatibility.
       - name: avg_queue_wait_ms
-        description: Average milliseconds from job creation to start for jobs created in the hour.
+        description: >
+          Additive column. Query-count-weighted average of the minute-level average queue wait.
+          Null minute values are ignored. This does not scan JOBS again.
       - name: duration_p50_seconds
-        description: p50 execution duration in seconds for jobs created in the hour (APPROX_QUANTILES offset 50).
+        description: >
+          Additive column. Query-count-weighted average of the minute-level duration p50.
+          Not a fresh hour-level APPROX_QUANTILES sketch.
       - name: duration_p90_seconds
-        description: p90 execution duration in seconds for jobs created in the hour.
+        description: >
+          Additive column. Query-count-weighted average of the minute-level duration p90.
       - name: duration_p99_seconds
-        description: p99 execution duration in seconds for jobs created in the hour.
+        description: >
+          Additive column. Query-count-weighted average of the minute-level duration p99.
       - name: queue_wait_p50_ms
-        description: p50 queue wait in milliseconds (creation to start) for jobs created in the hour.
+        description: >
+          Additive column. Query-count-weighted average of the minute-level queue-wait p50.
       - name: queue_wait_p90_ms
-        description: p90 queue wait in milliseconds (creation to start) for jobs created in the hour.
+        description: >
+          Additive column. Query-count-weighted average of the minute-level queue-wait p90.
       - name: queue_wait_p99_ms
-        description: p99 queue wait in milliseconds (creation to start) for jobs created in the hour.
+        description: >
+          Additive column. Query-count-weighted average of the minute-level queue-wait p99.

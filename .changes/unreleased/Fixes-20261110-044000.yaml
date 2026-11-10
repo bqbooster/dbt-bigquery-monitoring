@@ -1,0 +1,6 @@
+kind: Fixes
+body: Leave total_services_sku_slot_ms out of jobs views unless enable_total_services_sku_slot_ms is set, because the column is null for standard jobs
+time: 2026-11-10T04:40:00Z
+custom:
+    Author: cursoragent
+    Issue: ""

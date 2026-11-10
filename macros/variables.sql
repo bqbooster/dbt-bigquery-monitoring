@@ -208,8 +208,9 @@
     {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('enable_materialized_view_statistics', 'DBT_BQ_MONITORING_ENABLE_MATERIALIZED_VIEW_STATISTICS', dbt_bigquery_monitoring_variable_enable_experimental_fields()))) }}
 {% endmacro %}
 
+{# Not tied to enable_experimental_fields: the column is null unless the job has external service costs billed as SERVICES_SKU. #}
 {% macro dbt_bigquery_monitoring_variable_enable_total_services_sku_slot_ms() %}
-    {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('enable_total_services_sku_slot_ms', 'DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS', dbt_bigquery_monitoring_variable_enable_experimental_fields()))) }}
+    {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('enable_total_services_sku_slot_ms', 'DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS', false))) }}
 {% endmacro %}
 
 {% macro get_variable_resolution_info(dbt_var_name, env_var_name, default_value) %}

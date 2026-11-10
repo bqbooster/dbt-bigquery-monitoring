@@ -124,3 +124,15 @@ Run the package only in your **production** or **staging** dbt environment.
 ---
 
 Read more about the available models in [using the package](/using-the-package).
+
+---
+
+## Upgrade notes
+
+`compute_rollup_per_hour` no longer multiplies slot, byte, and query totals by the number of job types and statement types. `compute_rollup_per_minute` appends `user_emails` and `session_ids` so the hour model can count distinct users and sessions. Both models set `on_schema_change=append_new_columns`, so an existing incremental table keeps building without `--full-refresh`.
+
+The next incremental run corrects only partitions at or after the current maximum partition. Older hour partitions keep the previous multiplied totals until you full-refresh. Minute partitions that have not been rebuilt store NULL id arrays; the hour model then keeps the sum of the per-minute distinct counts for those hours instead of writing zero.
+
+```bash
+dbt run -s compute_rollup_per_minute compute_rollup_per_hour --full-refresh
+```

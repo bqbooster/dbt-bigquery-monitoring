@@ -30,6 +30,8 @@ WITH filtered_minutes AS (
     total_bytes_billed,
     total_slot_ms,
     query_count,
+    unique_users,
+    unique_sessions,
     cache_hits,
     job_state,
     avg_duration_seconds,
@@ -56,6 +58,13 @@ grouped AS (
     SUM(total_bytes_billed) AS total_bytes_billed,
     SUM(total_slot_ms) AS total_slot_ms,
     SUM(query_count) AS query_count,
+    -- Partitions built before user_emails / session_ids existed store NULL arrays.
+    -- Summing the per-minute counts keeps those hours stable until a full refresh
+    -- backfills the arrays. Exact distinct counts require every minute in the hour.
+    SUM(unique_users) AS summed_unique_users,
+    SUM(unique_sessions) AS summed_unique_sessions,
+    LOGICAL_AND(user_emails IS NOT NULL) AS user_emails_backfilled,
+    LOGICAL_AND(session_ids IS NOT NULL) AS session_ids_backfilled,
     SUM(cache_hits) AS cache_hits,
     STRUCT(
       SUM(job_state.done) AS done,
@@ -85,24 +94,32 @@ SELECT
   total_bytes_billed,
   total_slot_ms,
   query_count,
-  (
-    SELECT COUNT(DISTINCT user_email)
-    FROM UNNEST(user_emails) AS user_email
+  IF(
+    user_emails_backfilled,
+    (
+      SELECT COUNT(DISTINCT user_email)
+      FROM UNNEST(user_emails) AS user_email
+    ),
+    summed_unique_users
   ) AS unique_users,
-  (
-    SELECT COUNT(DISTINCT session_id)
-    FROM UNNEST(session_ids) AS session_id
+  IF(
+    session_ids_backfilled,
+    (
+      SELECT COUNT(DISTINCT session_id)
+      FROM UNNEST(session_ids) AS session_id
+    ),
+    summed_unique_sessions
   ) AS unique_sessions,
   cache_hits,
   job_state,
   (
     SELECT APPROX_TOP_SUM(job_type.value, job_type.sum, 20)
-    FROM UNNEST(job_types) AS job_type
+    FROM UNNEST(IFNULL(job_types, [])) AS job_type
     WHERE job_type.value IS NOT NULL
   ) AS job_types,
   (
     SELECT APPROX_TOP_SUM(statement_type.value, statement_type.sum, 30)
-    FROM UNNEST(statement_types) AS statement_type
+    FROM UNNEST(IFNULL(statement_types, [])) AS statement_type
     WHERE statement_type.value IS NOT NULL
   ) AS statement_types,
   avg_duration_seconds,

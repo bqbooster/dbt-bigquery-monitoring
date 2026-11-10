@@ -3,7 +3,15 @@ version: 2
 models:
   - name: compute_rollup_per_hour
     description: >
-      A model that stores the compute cost per hour.
+      Hourly compute rollup. Additive metrics are summed from compute_rollup_per_minute.
+      unique_users and unique_sessions count distinct ids across the hour when every
+      minute row has user_emails and session_ids. Incremental runs only rewrite partitions
+      at or after the current max hour partition, so older hour partitions keep their
+      previous values until a full refresh. A full refresh of compute_rollup_per_minute,
+      then this model, rewrites history: sums match the minute (and raw job) totals,
+      and distinct users are exact. Until those minute partitions are rebuilt, their
+      id arrays are NULL and this model keeps the sum of the per-minute distinct counts
+      for that hour instead of writing zero.
     config:
       meta:
         label: "Compute cost per hour"
@@ -37,9 +45,14 @@ models:
       - name: query_count
         description: The total number of queries run during the hour.
       - name: unique_users
-        description: Distinct users during the hour. Users who ran jobs in more than one minute are counted once.
+        description: >
+          Distinct users during the hour when user_emails is populated on every contributing
+          minute. Otherwise the sum of per-minute unique_users, which is what an incremental
+          upgrade uses until a full refresh backfills the arrays.
       - name: unique_sessions
-        description: Distinct sessions during the hour. Sessions that span more than one minute are counted once.
+        description: >
+          Distinct sessions during the hour when session_ids is populated on every contributing
+          minute. Otherwise the sum of per-minute unique_sessions.
       - name: cache_hits
         description: The number of cache hits during the hour.
       - name: job_state
@@ -111,6 +124,8 @@ unit_tests:
             80 AS total_bytes_billed,
             150 AS total_slot_ms,
             2 AS query_count,
+            2 AS unique_users,
+            2 AS unique_sessions,
             1 AS cache_hits,
             STRUCT(2 AS done, 0 AS running, 0 AS pending) AS job_state,
             10.0 AS avg_duration_seconds,
@@ -134,6 +149,7 @@ unit_tests:
             25,
             1,
             1,
+            1,
             STRUCT(1 AS done, 0 AS running, 0 AS pending),
             20.0,
             20.0,
@@ -155,12 +171,38 @@ unit_tests:
             4,
             7,
             1,
+            1,
+            1,
             0,
             STRUCT(1 AS done, 0 AS running, 0 AS pending),
             4.0,
             4.0,
             ['c@example.com'],
             ['s3'],
+            [STRUCT('QUERY' AS value, 1 AS sum)],
+            [STRUCT('SELECT' AS value, 1 AS sum)]
+          UNION ALL
+          SELECT
+            TIMESTAMP '2026-11-01 12:30:00',
+            'p2',
+            CAST(NULL AS STRING),
+            CAST(NULL AS STRING),
+            'dbt',
+            CAST(NULL AS STRING),
+            1.0,
+            0.0,
+            1,
+            1,
+            9,
+            1,
+            1,
+            1,
+            0,
+            STRUCT(1 AS done, 0 AS running, 0 AS pending),
+            3.0,
+            3.0,
+            ['d@example.com'],
+            ['s9'],
             [STRUCT('QUERY' AS value, 1 AS sum)],
             [STRUCT('SELECT' AS value, 1 AS sum)]
     expect:
@@ -209,3 +251,111 @@ unit_tests:
           [STRUCT('SELECT' AS value, 1 AS sum)],
           4.0,
           4.0
+        UNION ALL
+        SELECT
+          TIMESTAMP '2026-11-01 12:00:00',
+          'p2',
+          CAST(NULL AS STRING),
+          CAST(NULL AS STRING),
+          'dbt',
+          CAST(NULL AS STRING),
+          1.0,
+          0.0,
+          1,
+          1,
+          9,
+          1,
+          1,
+          1,
+          0,
+          STRUCT(1 AS done, 0 AS running, 0 AS pending),
+          [STRUCT('QUERY' AS value, 1 AS sum)],
+          [STRUCT('SELECT' AS value, 1 AS sum)],
+          3.0,
+          3.0
+
+  - name: compute_rollup_per_hour_keeps_legacy_counts_when_id_arrays_are_null
+    description: >
+      Minute partitions written before user_emails and session_ids existed have NULL
+      arrays. The hour must keep the summed per-minute counts instead of returning 0,
+      including when only some minutes in the hour have been backfilled. Null job and
+      statement arrays must not multiply the sums.
+    model: compute_rollup_per_hour
+    overrides:
+      macros:
+        is_incremental: false
+    given:
+      - input: ref('compute_rollup_per_minute')
+        format: sql
+        rows: |
+          SELECT
+            TIMESTAMP '2026-11-02 08:00:00' AS minute,
+            'p1' AS project_id,
+            CAST(NULL AS STRING) AS reservation_id,
+            CAST(NULL AS STRING) AS bi_engine_mode,
+            'dbt' AS client_type,
+            CAST(NULL AS STRING) AS edition,
+            2.0 AS total_query_cost,
+            0.0 AS failing_query_cost,
+            20 AS total_bytes_processed,
+            20 AS total_bytes_billed,
+            40 AS total_slot_ms,
+            2 AS query_count,
+            4 AS unique_users,
+            3 AS unique_sessions,
+            1 AS cache_hits,
+            STRUCT(2 AS done, 0 AS running, 0 AS pending) AS job_state,
+            5.0 AS avg_duration_seconds,
+            5.0 AS median_duration_seconds,
+            CAST(NULL AS ARRAY<STRING>) AS user_emails,
+            CAST(NULL AS ARRAY<STRING>) AS session_ids,
+            CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS job_types,
+            CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS statement_types
+          UNION ALL
+          SELECT
+            TIMESTAMP '2026-11-02 08:10:00',
+            'p1',
+            CAST(NULL AS STRING),
+            CAST(NULL AS STRING),
+            'dbt',
+            CAST(NULL AS STRING),
+            1.0,
+            0.0,
+            5,
+            5,
+            10,
+            1,
+            2,
+            1,
+            0,
+            STRUCT(1 AS done, 0 AS running, 0 AS pending),
+            8.0,
+            8.0,
+            ['a@example.com'],
+            ['s1'],
+            [STRUCT(CAST(NULL AS STRING) AS value, 1 AS sum)],
+            []
+    expect:
+      format: sql
+      rows: |
+        SELECT
+          TIMESTAMP '2026-11-02 08:00:00' AS hour,
+          'p1' AS project_id,
+          CAST(NULL AS STRING) AS reservation_id,
+          CAST(NULL AS STRING) AS bi_engine_mode,
+          'dbt' AS client_type,
+          CAST(NULL AS STRING) AS edition,
+          3.0 AS total_query_cost,
+          0.0 AS failing_query_cost,
+          25 AS total_bytes_processed,
+          25 AS total_bytes_billed,
+          50 AS total_slot_ms,
+          3 AS query_count,
+          6 AS unique_users,
+          4 AS unique_sessions,
+          1 AS cache_hits,
+          STRUCT(3 AS done, 0 AS running, 0 AS pending) AS job_state,
+          CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS job_types,
+          CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS statement_types,
+          6.5 AS avg_duration_seconds,
+          6.5 AS median_duration_seconds

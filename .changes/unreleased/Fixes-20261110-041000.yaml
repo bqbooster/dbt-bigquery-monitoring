@@ -1,5 +1,13 @@
 kind: Fixes
-body: Stop compute_rollup_per_hour from multiplying sums when job and statement type arrays are unnested, and count distinct users across the hour
+body: >
+  Stop compute_rollup_per_hour from multiplying sums when job and statement type arrays are unnested.
+  unique_users and unique_sessions now count distinct values across the hour once compute_rollup_per_minute
+  has user_emails and session_ids. Those two columns are appended (on_schema_change=append_new_columns),
+  so existing incremental tables do not need a full refresh to keep building. A full refresh of the minute
+  model, then the hour model, corrects historical sums and distinct counts. Until then, hours whose minute
+  rows still have NULL id arrays keep the sum of the per-minute distinct counts. Output column names and
+  types of compute_rollup_per_hour are unchanged. No downstream model refs it. Incremental runs still
+  rewrite only partitions at or after the max hour partition; a full refresh rewrites every partition.
 time: 2026-11-10T04:10:00Z
 custom:
     Author: cursoragent

@@ -13,6 +13,12 @@
     partition_expiration_days = dbt_bigquery_monitoring_variable_output_partition_expiration_days()
     )
 }}
+{#-
+  Existing metrics are unchanged and still come from every minute row.
+  New percentile columns are query-count-weighted averages of the minute
+  APPROX_QUANTILES. A true hour sketch would scan JOBS again for the whole
+  retention window; the unnest fanout cancels out of the weighted ratio.
+-#}
 SELECT
   TIMESTAMP_TRUNC(MINUTE, HOUR) AS hour,
   project_id,
@@ -51,7 +57,14 @@ SELECT
   ) AS statement_types,
   -- Performance metrics
   AVG(avg_duration_seconds) AS avg_duration_seconds,
-  AVG(median_duration_seconds) AS median_duration_seconds
+  AVG(median_duration_seconds) AS median_duration_seconds,
+  SAFE_DIVIDE(SUM(avg_queue_wait_ms * query_count), SUM(query_count)) AS avg_queue_wait_ms,
+  SAFE_DIVIDE(SUM(duration_p50_seconds * query_count), SUM(query_count)) AS duration_p50_seconds,
+  SAFE_DIVIDE(SUM(duration_p90_seconds * query_count), SUM(query_count)) AS duration_p90_seconds,
+  SAFE_DIVIDE(SUM(duration_p99_seconds * query_count), SUM(query_count)) AS duration_p99_seconds,
+  SAFE_DIVIDE(SUM(queue_wait_p50_ms * query_count), SUM(query_count)) AS queue_wait_p50_ms,
+  SAFE_DIVIDE(SUM(queue_wait_p90_ms * query_count), SUM(query_count)) AS queue_wait_p90_ms,
+  SAFE_DIVIDE(SUM(queue_wait_p99_ms * query_count), SUM(query_count)) AS queue_wait_p99_ms
 FROM {{ ref("compute_rollup_per_minute") }}
 LEFT JOIN UNNEST(job_types) AS jt
 LEFT JOIN UNNEST(statement_types) AS st

@@ -41,6 +41,13 @@ SELECT
   APPROX_TOP_SUM(statement_type, 1, 30) AS statement_types,
   -- Performance metrics
   AVG(total_time_seconds) AS avg_duration_seconds,
-  APPROX_QUANTILES(total_time_seconds, 100)[OFFSET(50)] AS median_duration_seconds
+  APPROX_QUANTILES(total_time_seconds, 100)[OFFSET(50)] AS median_duration_seconds,
+  AVG({{ queue_wait_ms() }}) AS avg_queue_wait_ms,
+  APPROX_QUANTILES(total_time_seconds, 100)[SAFE_OFFSET(50)] AS duration_p50_seconds,
+  APPROX_QUANTILES(total_time_seconds, 100)[SAFE_OFFSET(90)] AS duration_p90_seconds,
+  APPROX_QUANTILES(total_time_seconds, 100)[SAFE_OFFSET(99)] AS duration_p99_seconds,
+  APPROX_QUANTILES({{ queue_wait_ms() }}, 100)[SAFE_OFFSET(50)] AS queue_wait_p50_ms,
+  APPROX_QUANTILES({{ queue_wait_ms() }}, 100)[SAFE_OFFSET(90)] AS queue_wait_p90_ms,
+  APPROX_QUANTILES({{ queue_wait_ms() }}, 100)[SAFE_OFFSET(99)] AS queue_wait_p99_ms
 FROM {{ jobs_done_incremental_hourly() }}
 GROUP BY ALL

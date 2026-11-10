@@ -3,7 +3,9 @@ version: 2
 models:
   - name: compute_rollup_per_hour
     description: >
-      A model that stores the compute cost per hour.
+      Hourly compute rollup. Cost and job counts are summed from compute_rollup_per_minute.
+      Queue wait and duration p50/p90/p99 are APPROX_QUANTILES over jobs in the hour,
+      from scalar columns on jobs_with_cost, for the partitions this run rewrites.
     config:
       meta:
         label: "Compute cost per hour"
@@ -78,6 +80,29 @@ models:
                 data_type: int64
                 description: Number of statements of this type
       - name: avg_duration_seconds
-        description: Average duration of jobs in seconds during the hour.
+        description: Unweighted average of the per-minute average execution durations.
       - name: median_duration_seconds
-        description: Median duration of jobs in seconds during the hour.
+        description: Unweighted average of the per-minute p50 execution durations. Kept for compatibility.
+      - name: avg_queue_wait_ms
+        description: >
+          Additive column. Query-count-weighted average of the minute-level average queue wait.
+          Null minute values are ignored. This does not scan JOBS again.
+      - name: duration_p50_seconds
+        description: >
+          Additive column. Query-count-weighted average of the minute-level duration p50.
+          Not a fresh hour-level APPROX_QUANTILES sketch.
+      - name: duration_p90_seconds
+        description: >
+          Additive column. Query-count-weighted average of the minute-level duration p90.
+      - name: duration_p99_seconds
+        description: >
+          Additive column. Query-count-weighted average of the minute-level duration p99.
+      - name: queue_wait_p50_ms
+        description: >
+          Additive column. Query-count-weighted average of the minute-level queue-wait p50.
+      - name: queue_wait_p90_ms
+        description: >
+          Additive column. Query-count-weighted average of the minute-level queue-wait p90.
+      - name: queue_wait_p99_ms
+        description: >
+          Additive column. Query-count-weighted average of the minute-level queue-wait p99.

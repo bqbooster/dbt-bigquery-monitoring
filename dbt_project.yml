@@ -33,7 +33,7 @@ models:
       # jobs scan. Opt in when something outside the package reads this model.
       jobs:
         information_schema_jobs_by_project:
-          +enabled: "{{ dbt_bigquery_monitoring_variable_enable_information_schema_jobs_by_project() }}"
+          +enabled: false
       search_indexes:
         +static_analysis: off
     monitoring:
@@ -55,6 +55,4 @@ vars:
     enable_principal_subject: true
     enable_reservation_group_path: true
     enable_total_services_sku_slot_ms: true
-    # JOBS_BY_PROJECT duplicates INFORMATION_SCHEMA.JOBS. Leave this off unless you query the model directly.
-    enable_information_schema_jobs_by_project: false
     enable_materialized_view_statistics: true

@@ -2,7 +2,8 @@
 
 Project mode materializes every enabled INFORMATION_SCHEMA model. Leaving
 information_schema_jobs_by_project enabled repeats the jobs scan. The gate
-lives in dbt_project.yml so the generated SQL file stays untouched.
+is a boolean in dbt_project.yml. A Jinja enabled flag renders as text and
+Fusion treats that text as enabled.
 """
 
 from pathlib import Path
@@ -20,20 +21,11 @@ GENERATED_SQL = (
 
 def test_jobs_by_project_is_opt_in_outside_the_generated_sql() -> None:
     project = (REPO_ROOT / "dbt_project.yml").read_text()
-    variables = (REPO_ROOT / "macros" / "variables.sql").read_text()
     generated = GENERATED_SQL.read_text()
 
-    assert "enable_information_schema_jobs_by_project: false" in project
-    assert (
-        "+enabled: \"{{ dbt_bigquery_monitoring_variable_enable_information_schema_jobs_by_project() }}\""
-        in project
-    )
-    assert "DBT_BQ_MONITORING_ENABLE_INFORMATION_SCHEMA_JOBS_BY_PROJECT" in variables
-    assert (
-        "dbt_bigquery_monitoring_variable_priority('enable_information_schema_jobs_by_project', "
-        "'DBT_BQ_MONITORING_ENABLE_INFORMATION_SCHEMA_JOBS_BY_PROJECT', false)"
-        in variables
-    )
+    assert "information_schema_jobs_by_project:" in project
+    assert "+enabled: false" in project
+    assert "dbt_bigquery_monitoring_variable_enable_information_schema_jobs_by_project" not in project
     assert "JOBS_BY_PROJECT" in generated
     assert "enabled=" not in generated.split("\n", 1)[0]
 

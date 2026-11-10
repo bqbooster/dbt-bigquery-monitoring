@@ -19,9 +19,10 @@ To do so, you can set the following variables in your `dbt_project.yml` file or 
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
 | `input_gcp_projects` | `DBT_BQ_MONITORING_GCP_PROJECTS` | List of GCP projects to monitor | `[]` |
-| `enable_information_schema_jobs_by_project` | `DBT_BQ_MONITORING_ENABLE_INFORMATION_SCHEMA_JOBS_BY_PROJECT` | Build `information_schema_jobs_by_project`. `INFORMATION_SCHEMA.JOBS` and `INFORMATION_SCHEMA.JOBS_BY_PROJECT` return the same rows, and project mode materializes each one, so the default avoids a second full jobs scan. No other model in the package refs it. Set this to `true` only if you query that model yourself. | `false` |
 | `input_datasets` | `DBT_BQ_MONITORING_INPUT_DATASETS` | Optional `project.dataset` values that limit dataset-scanned `INFORMATION_SCHEMA` models | `[]` |
 | `bq_region` | `DBT_BQ_MONITORING_REGION` | Region where the monitored projects are located | `us` |
+
+`information_schema_jobs_by_project` is disabled in this package. [BigQuery documents `INFORMATION_SCHEMA.JOBS` and `INFORMATION_SCHEMA.JOBS_BY_PROJECT` as the same view](https://cloud.google.com/bigquery/docs/information-schema-jobs). In project mode each enabled model is materialized, so leaving both on repeats the jobs scan (about the size of the `JOBS` history; one production project scanned ~120 GB twice). No model in the package refs `information_schema_jobs_by_project`. Folder and organization jobs models are already `enabled: false` inside their SQL. This one is turned off from `dbt_project.yml` so the generated SQL stays intact. To build it, set `+enabled: true` on `information_schema_jobs_by_project` in your root project, as in the [configuration guide](/configuration#project-mode).
 
 ### `input_datasets` examples
 

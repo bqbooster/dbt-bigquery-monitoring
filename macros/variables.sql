@@ -72,6 +72,22 @@
     {{ return(dbt_bigquery_monitoring_variable_priority('hourly_slot_price', 'DBT_BQ_MONITORING_HOURLY_SLOT_PRICE', 0.04) | as_number) }}
 {% endmacro %}
 
+{#-
+  Off by default. jobs_with_cost.client_type keeps the historical CASE,
+  including 'dbt run' for a dbt user agent when audit logs are enabled.
+-#}
+{% macro dbt_bigquery_monitoring_variable_improve_client_type_detection() %}
+    {{ return(dbt_bigquery_monitoring.force_bool(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('improve_client_type_detection', 'DBT_BQ_MONITORING_IMPROVE_CLIENT_TYPE_DETECTION', false))) }}
+{% endmacro %}
+
+{% macro client_type_detection_mode() %}
+    {% if dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_improve_client_type_detection() %}
+        {{ return('improved') }}
+    {% else %}
+        {{ return('legacy') }}
+    {% endif %}
+{% endmacro %}
+
 /* Storage pricing */
 {% macro dbt_bigquery_monitoring_variable_active_logical_storage_gb_price() %}
     {{ return(dbt_bigquery_monitoring_variable_priority('active_logical_storage_gb_price', 'DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE', 0.02) | as_number) }}
@@ -244,6 +260,7 @@
         {'dbt_var': 'per_billed_tb_price', 'env_var': 'DBT_BQ_MONITORING_PER_BILLED_TB_PRICE', 'default': 6.25, 'format': 'string'},
         {'dbt_var': 'free_tb_per_month', 'env_var': 'DBT_BQ_MONITORING_FREE_TB_PER_MONTH', 'default': 1, 'format': 'string'},
         {'dbt_var': 'hourly_slot_price', 'env_var': 'DBT_BQ_MONITORING_HOURLY_SLOT_PRICE', 'default': 0.04, 'format': 'string'},
+        {'dbt_var': 'improve_client_type_detection', 'env_var': 'DBT_BQ_MONITORING_IMPROVE_CLIENT_TYPE_DETECTION', 'default': false, 'format': 'string'},
         {'dbt_var': 'active_logical_storage_gb_price', 'env_var': 'DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE', 'default': 0.02, 'format': 'string'},
         {'dbt_var': 'long_term_logical_storage_gb_price', 'env_var': 'DBT_BQ_MONITORING_LONG_TERM_LOGICAL_STORAGE_GB_PRICE', 'default': 0.01, 'format': 'string'},
         {'dbt_var': 'active_physical_storage_gb_price', 'env_var': 'DBT_BQ_MONITORING_ACTIVE_PHYSICAL_STORAGE_GB_PRICE', 'default': 0.04, 'format': 'string'},

@@ -127,6 +127,9 @@ SELECT
   SELECT JSON_VALUE(string_element, '$')
   FROM UNNEST(JSON_QUERY_ARRAY(dbt_info, '$.node_tags')) AS string_element
   ), NULL) AS node_tags,
+  {% if dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_improve_client_type_detection() %}
+  {{ improved_client_type_sql() }} AS client_type,
+  {% else %}
   CASE
   WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'dbt_invocation_id' AND value IS NOT NULL) THEN 'dbt'
   WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key LIKE 'looker-%' AND value IS NOT NULL) THEN 'Looker'
@@ -150,6 +153,7 @@ SELECT
   ELSE 'Unknown'
   {% endif %}
   END AS client_type,
+  {% endif %}
 FROM base
 ),
 

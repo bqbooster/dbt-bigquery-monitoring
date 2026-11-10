@@ -1,0 +1,6 @@
+kind: Features
+body: Add optional client_type detection for Elementary, Airflow, Dataform, Hex, BI tools, orchestrators, user agents, and service accounts. It is off by default, so jobs_with_cost keeps the historical CASE, including Unknown and the audit-log label dbt run. No column is added or retyped, and no full refresh is required. Enabling improve_client_type_detection changes labels on partitions written afterward. dbt stays ahead of Airflow when both labels are present, and a key named model is not classified as Mode. Null labels stay Unknown. Full-refresh the downstream incremental models only when you want older partitions restated
+time: 2026-11-10T06:00:00Z
+custom:
+  Author: cursoragent
+  Issue: ""

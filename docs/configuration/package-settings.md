@@ -73,6 +73,7 @@ These settings are used to configure how dbt will run and materialize the models
 | `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Number of days to look back for monitoring | `7` |
 | `lookback_incremental_billing_window_days` | `DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS` | Number of days to look back for monitoring | `3` |
 | `output_limit_size` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Limit size to use for the models | `1000` |
+| `improve_client_type_detection` | `DBT_BQ_MONITORING_IMPROVE_CLIENT_TYPE_DETECTION` | Replace the historical `client_type` CASE with label, user-agent, and service-account detection. Off keeps every existing label, including `Unknown` and audit-log `dbt run`. On does not add or retype a column. Full-refresh downstream incrementals only if you want old partitions restated; the next run succeeds without it | `false` |
 | `output_partition_expiration_days` | `DBT_BQ_MONITORING_TABLE_EXPIRATION_DAYS` | Default table expiration in days for incremental models | `365` days |
 | `use_copy_partitions` | `DBT_BQ_MONITORING_USE_COPY_PARTITIONS` | Whether to use copy partitions or not | `true` |
 | `google_information_schema_model_materialization` | `DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION` | Whether to use a specific materialization for information schema models. Note that it doesn't work in project mode as it will materialize intermediate tables to avoid issues from BQ when too many projects are used. | `ephemeral` |

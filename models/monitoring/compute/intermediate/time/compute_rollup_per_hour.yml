@@ -3,7 +3,9 @@ version: 2
 models:
   - name: compute_rollup_per_hour
     description: >
-      A model that stores the compute cost per hour.
+      Hourly compute rollup. Cost and job counts are summed from compute_rollup_per_minute.
+      Queue wait and duration p50/p90/p99 are APPROX_QUANTILES over jobs in the hour,
+      from scalar columns on jobs_with_cost, for the partitions this run rewrites.
     config:
       meta:
         label: "Compute cost per hour"
@@ -78,6 +80,20 @@ models:
                 data_type: int64
                 description: Number of statements of this type
       - name: avg_duration_seconds
-        description: Average duration of jobs in seconds during the hour.
+        description: Unweighted average of the per-minute average execution durations.
       - name: median_duration_seconds
-        description: Median duration of jobs in seconds during the hour.
+        description: Unweighted average of the per-minute p50 execution durations. Kept for compatibility.
+      - name: avg_queue_wait_ms
+        description: Average milliseconds from job creation to start for jobs created in the hour.
+      - name: duration_p50_seconds
+        description: p50 execution duration in seconds for jobs created in the hour (APPROX_QUANTILES offset 50).
+      - name: duration_p90_seconds
+        description: p90 execution duration in seconds for jobs created in the hour.
+      - name: duration_p99_seconds
+        description: p99 execution duration in seconds for jobs created in the hour.
+      - name: queue_wait_p50_ms
+        description: p50 queue wait in milliseconds (creation to start) for jobs created in the hour.
+      - name: queue_wait_p90_ms
+        description: p90 queue wait in milliseconds (creation to start) for jobs created in the hour.
+      - name: queue_wait_p99_ms
+        description: p99 queue wait in milliseconds (creation to start) for jobs created in the hour.

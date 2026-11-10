@@ -78,6 +78,21 @@ models:
                 data_type: int64
                 description: Number of statements of this type
       - name: avg_duration_seconds
-        description: Average duration of jobs in seconds during the minute.
+        description: Average execution duration of jobs in seconds during the minute (start to end).
+      - name: avg_queue_wait_ms
+        description: Average milliseconds from job creation to start during the minute.
       - name: median_duration_seconds
-        description: Median duration of jobs in seconds during the minute.
+        description: >
+          p50 execution duration in seconds, from the same APPROX_QUANTILES sketch as duration_p50_seconds.
+      - name: duration_p50_seconds
+        description: p50 execution duration in seconds (APPROX_QUANTILES offset 50).
+      - name: duration_p90_seconds
+        description: p90 execution duration in seconds (APPROX_QUANTILES offset 90).
+      - name: duration_p99_seconds
+        description: p99 execution duration in seconds (APPROX_QUANTILES offset 99).
+      - name: queue_wait_p50_ms
+        description: p50 queue wait in milliseconds, from creation to start.
+      - name: queue_wait_p90_ms
+        description: p90 queue wait in milliseconds, from creation to start.
+      - name: queue_wait_p99_ms
+        description: p99 queue wait in milliseconds, from creation to start.

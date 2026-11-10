@@ -419,6 +419,8 @@ LIMIT 10
 
 Hourly compute cost with year/month/day time truncations added for easy BI tool grouping. Wraps the `compute_cost_per_hour` intermediate table.
 
+`compute_rollup_per_minute` and `compute_rollup_per_hour` also carry queue wait (creation to start) and execution-duration percentiles. Both use one `APPROX_QUANTILES(..., 100)` sketch per metric and read offsets 50, 90, and 99. The minute rollup computes them on the jobs it already scans. The hour rollup recomputes them from `jobs_with_cost` scalar columns (creation time, start time, duration, project, reservation, client, edition) for the day partition it rewrites, so hour p99 is not an average of minute p99s. `median_duration_seconds` on the hour rollup is still the average of per-minute medians. Full-refresh the rollups once so older partitions pick up the new columns.
+
 ```sql
 -- Rolling hourly cost for the past 24 hours
 SELECT

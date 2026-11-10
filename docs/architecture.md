@@ -103,7 +103,7 @@ See [Using the package](/using-the-package) and [Monitoring Datamarts](/datamart
 |---|---|---|
 | INFORMATION_SCHEMA wrappers | `ephemeral` (`information_schema_partitions` is a batched table) | `incremental` (per project; partitions still use table-name batches) |
 | Base models | `ephemeral` | `ephemeral` |
-| `jobs_with_cost` | `view`, limited to `lookback_window_days` | `view`, limited to `lookback_window_days` |
+| `jobs_with_cost` | `view` over the full jobs source. Set `enable_jobs_with_cost_partition_pruning` to limit it to `lookback_window_days` | `view` over the full jobs source. The same opt-in limit applies |
 | Datamarts | `table` (configurable) | `table` (configurable) |
 
 The `output_materialization` variable controls the datamart materialization type

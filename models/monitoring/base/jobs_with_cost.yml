@@ -4,11 +4,13 @@ models:
   - name: jobs_with_cost
     description: >
       A model that combines job data with cost information.
-      Only jobs inside lookback_window_days are returned. The source scan includes
-      one extra day so a parent SCRIPT job can still supply the dbt comment for a
-      child at the start of that window. Filters on this model do not prune
-      INFORMATION_SCHEMA.JOBS, because a window function sits between the source
-      and the outer query.
+      By default it returns every job from its source. Set
+      enable_jobs_with_cost_partition_pruning to keep only lookback_window_days.
+      That predicate is applied before the parent-script window so BigQuery can
+      prune the jobs scan. One extra day of source rows stays available inside
+      the window so a parent SCRIPT job can still supply the dbt comment for a
+      child. A filter on this model does not prune INFORMATION_SCHEMA.JOBS when
+      the flag is off, because the window sits between the source and the outer query.
     config:
       meta:
         label: "Jobs with Cost"

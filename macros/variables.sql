@@ -107,6 +107,11 @@
     {{ return(dbt_bigquery_monitoring_variable_priority('lookback_window_days', 'DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS', 7) | as_number) }}
 {% endmacro %}
 
+{# Off by default. jobs_with_cost otherwise returns every job its source exposes. #}
+{% macro dbt_bigquery_monitoring_variable_enable_jobs_with_cost_partition_pruning() %}
+    {{ return(dbt_bigquery_monitoring.force_bool(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('enable_jobs_with_cost_partition_pruning', 'DBT_BQ_MONITORING_ENABLE_JOBS_WITH_COST_PARTITION_PRUNING', false))) }}
+{% endmacro %}
+
 /* Billing data can be late, a safe window is to refresh data for the past 3 days */
 {% macro dbt_bigquery_monitoring_variable_lookback_incremental_billing_window_days() %}
     {{ return(dbt_bigquery_monitoring_variable_priority('lookback_incremental_billing_window_days', 'DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS', 3) | as_number) }}
@@ -251,6 +256,7 @@
         {'dbt_var': 'free_storage_gb_per_month', 'env_var': 'DBT_BQ_MONITORING_FREE_STORAGE_GB_PER_MONTH', 'default': 10, 'format': 'string'},
         {'dbt_var': 'bi_engine_gb_hourly_price', 'env_var': 'DBT_BQ_MONITORING_BI_ENGINE_GB_HOURLY_PRICE', 'default': 0.0416, 'format': 'string'},
         {'dbt_var': 'lookback_window_days', 'env_var': 'DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS', 'default': 7, 'format': 'string'},
+        {'dbt_var': 'enable_jobs_with_cost_partition_pruning', 'env_var': 'DBT_BQ_MONITORING_ENABLE_JOBS_WITH_COST_PARTITION_PRUNING', 'default': false, 'format': 'string'},
         {'dbt_var': 'lookback_incremental_billing_window_days', 'env_var': 'DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS', 'default': 3, 'format': 'string'},
         {'dbt_var': 'output_materialization', 'env_var': 'DBT_BQ_MONITORING_OUTPUT_MATERIALIZATION', 'default': 'table', 'format': 'string'},
         {'dbt_var': 'output_limit_size', 'env_var': 'DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE', 'default': 1000, 'format': 'string'},

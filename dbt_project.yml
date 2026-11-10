@@ -28,12 +28,6 @@ models:
           +static_analysis: off
         information_schema_constraint_column_usage:
           +static_analysis: off
-      # JOBS and JOBS_BY_PROJECT are the same project-scoped view. In project
-      # mode both are materialized, so the by-project copy repeats the largest
-      # jobs scan. Opt in when something outside the package reads this model.
-      jobs:
-        information_schema_jobs_by_project:
-          +enabled: false
       search_indexes:
         +static_analysis: off
     monitoring:

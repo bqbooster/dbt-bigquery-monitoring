@@ -149,15 +149,18 @@ export DBT_BQ_MONITORING_GCP_PROJECTS='[]'
 In project mode, the package creates **intermediate materialized tables** per project to avoid
 BigQuery limits when querying too many projects simultaneously. This is handled automatically
 via the `project_by_project_table` custom materialization in the `macros` folder.
-`information_schema_jobs_by_project` stays disabled unless you opt in below.
-`INFORMATION_SCHEMA.JOBS` and `INFORMATION_SCHEMA.JOBS_BY_PROJECT` return the same rows,
-so building both doubles the largest jobs scan.
+`information_schema_jobs_by_project` stays enabled, which is the same behavior as
+previous releases. `INFORMATION_SCHEMA.JOBS` and `INFORMATION_SCHEMA.JOBS_BY_PROJECT`
+return the same rows in project mode, so building both repeats the jobs scan. Disable
+that second model in the root project only if nothing of yours refs it.
 
 These extra tables need to be refreshed regularly — include them in your scheduled runs.
 
 :::
 
-Enable `information_schema_jobs_by_project` in the root project only if you query that model directly:
+Skip `information_schema_jobs_by_project` with a literal boolean. A Jinja expression or
+`var()` in `+enabled` does not turn the model off in dbt Fusion; the unrendered value
+stays enabled.
 
 ```yml
 models:
@@ -165,7 +168,7 @@ models:
     information_schema:
       jobs:
         information_schema_jobs_by_project:
-          +enabled: true
+          +enabled: false
 ```
 
 ### Limit dataset discovery with `input_datasets`

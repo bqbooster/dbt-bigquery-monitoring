@@ -78,7 +78,8 @@ LIMIT 10
 (Prefix all refs with `information_schema_`)
 
 **Jobs & Performance**
-*   `jobs`, `jobs_by_project`, `jobs_by_user`, `jobs_by_folder`
+*   `jobs`, `jobs_by_user`, `jobs_by_folder`
+*   `jobs_by_project` is disabled by default. BigQuery treats `JOBS` and `JOBS_BY_PROJECT` as the same view, so project mode would materialize the jobs history twice. Set `enable_information_schema_jobs_by_project: true` to build it.
 *   `jobs_timeline` (visualize concurrency)
 
 **Storage & Tables**

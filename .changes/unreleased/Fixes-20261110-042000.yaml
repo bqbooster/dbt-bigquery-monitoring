@@ -1,0 +1,6 @@
+kind: Fixes
+body: Disable information_schema_jobs_by_project by default so project mode does not materialize JOBS and the synonymous JOBS_BY_PROJECT view
+time: 2026-11-10T04:20:00Z
+custom:
+    Author: cursoragent
+    Issue: ""

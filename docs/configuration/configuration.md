@@ -149,6 +149,10 @@ export DBT_BQ_MONITORING_GCP_PROJECTS='[]'
 In project mode, the package creates **intermediate materialized tables** per project to avoid
 BigQuery limits when querying too many projects simultaneously. This is handled automatically
 via the `project_by_project_table` custom materialization in the `macros` folder.
+`information_schema_jobs_by_project` is not one of those tables unless you opt in.
+`INFORMATION_SCHEMA.JOBS` and `INFORMATION_SCHEMA.JOBS_BY_PROJECT` return the same rows,
+so building both doubles the largest jobs scan. Set `enable_information_schema_jobs_by_project: true`
+only if you query that model directly.
 
 These extra tables need to be refreshed regularly — include them in your scheduled runs.
 

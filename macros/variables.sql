@@ -212,6 +212,11 @@
     {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('enable_total_services_sku_slot_ms', 'DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS', dbt_bigquery_monitoring_variable_enable_experimental_fields()))) }}
 {% endmacro %}
 
+{# JOBS_BY_PROJECT is synonymous with JOBS. Disabled so project mode does not materialize it twice. #}
+{% macro dbt_bigquery_monitoring_variable_enable_information_schema_jobs_by_project() %}
+    {{ return(force_bool(dbt_bigquery_monitoring_variable_priority('enable_information_schema_jobs_by_project', 'DBT_BQ_MONITORING_ENABLE_INFORMATION_SCHEMA_JOBS_BY_PROJECT', false))) }}
+{% endmacro %}
+
 {% macro get_variable_resolution_info(dbt_var_name, env_var_name, default_value) %}
     {% set env_var = env_var(env_var_name, 'NOT_SET') %}
     {% set dbt_var = var(dbt_var_name, 'NOT_SET') %}
@@ -270,7 +275,8 @@
         {'dbt_var': 'enable_principal_subject', 'env_var': 'DBT_BQ_MONITORING_ENABLE_PRINCIPAL_SUBJECT', 'default': false, 'format': 'string'},
         {'dbt_var': 'enable_reservation_group_path', 'env_var': 'DBT_BQ_MONITORING_ENABLE_RESERVATION_GROUP_PATH', 'default': false, 'format': 'string'},
         {'dbt_var': 'enable_total_services_sku_slot_ms', 'env_var': 'DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS', 'default': false, 'format': 'string'},
-        {'dbt_var': 'enable_materialized_view_statistics', 'env_var': 'DBT_BQ_MONITORING_ENABLE_MATERIALIZED_VIEW_STATISTICS', 'default': false, 'format': 'string'}
+        {'dbt_var': 'enable_materialized_view_statistics', 'env_var': 'DBT_BQ_MONITORING_ENABLE_MATERIALIZED_VIEW_STATISTICS', 'default': false, 'format': 'string'},
+        {'dbt_var': 'enable_information_schema_jobs_by_project', 'env_var': 'DBT_BQ_MONITORING_ENABLE_INFORMATION_SCHEMA_JOBS_BY_PROJECT', 'default': false, 'format': 'string'}
     ] %}
 
     {# Loop through all variables and log their resolution info #}

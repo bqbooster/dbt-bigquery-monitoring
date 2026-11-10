@@ -19,6 +19,7 @@ To do so, you can set the following variables in your `dbt_project.yml` file or 
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
 | `input_gcp_projects` | `DBT_BQ_MONITORING_GCP_PROJECTS` | List of GCP projects to monitor | `[]` |
+| `enable_information_schema_jobs_by_project` | `DBT_BQ_MONITORING_ENABLE_INFORMATION_SCHEMA_JOBS_BY_PROJECT` | Build `information_schema_jobs_by_project`. `INFORMATION_SCHEMA.JOBS` and `INFORMATION_SCHEMA.JOBS_BY_PROJECT` return the same rows, and project mode materializes each one, so the default avoids a second full jobs scan. No other model in the package refs it. Set this to `true` only if you query that model yourself. | `false` |
 | `input_datasets` | `DBT_BQ_MONITORING_INPUT_DATASETS` | Optional `project.dataset` values that limit dataset-scanned `INFORMATION_SCHEMA` models | `[]` |
 | `bq_region` | `DBT_BQ_MONITORING_REGION` | Region where the monitored projects are located | `us` |
 

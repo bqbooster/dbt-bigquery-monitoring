@@ -1,0 +1,6 @@
+kind: Fixes
+body: Run the INFORMATION_SCHEMA.PARTITIONS table create outside the joined script so a dataset with tables no longer fails with Unexpected ";"
+time: 2026-11-10T03:55:00Z
+custom:
+    Author: github-christophe-oudar
+    Issue: ""

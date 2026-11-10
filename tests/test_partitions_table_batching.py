@@ -161,6 +161,12 @@ def test_batched_materialization_sets_relation_types_for_fusion() -> None:
     assert "existing_relation.incorporate(type='table')" in source
     assert "dbt_bigquery_monitoring.information_schema_partitions_job_sqls()" in source
     assert "INSERT INTO {{ target_relation }}" in source
+    # create_table_as() already ends with ';'. It must not be joined onto
+    # the INSERT script, or BigQuery reports Syntax error: Unexpected ";".
+    assert "run_query(build_sql)" in source
+    assert "main_sql.append(build_sql)" not in source
+    assert "main_sql | length == 0" in source
+    assert "SELECT 1" in source
 
 
 def test_partitions_model_uses_batched_materialization_by_default() -> None:

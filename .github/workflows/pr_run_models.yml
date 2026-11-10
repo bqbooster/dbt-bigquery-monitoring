@@ -65,6 +65,19 @@ jobs:
           cd integration_tests
           dbt run -s tag:fixtures
 
+      # --empty never appends the INSERT jobs, so it misses the empty
+      # statement created when create_table_as() (already terminated with ';')
+      # is joined to a later statement. Run the batched materialization
+      # against the fixture dataset, which has tables.
+      - name: Run batched partitions against a non-empty dataset
+        run: |
+          cd integration_tests
+          suffix="${DBT_TEST_DATASET_SUFFIX:-}"
+          dataset="dbt_bigquery_monitoring_test_commit_${GITHUB_SHA_OVERRIDE}${suffix}"
+          DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION=information_schema_batched_table \
+          DBT_BQ_MONITORING_INPUT_DATASETS="${DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT}.${dataset}" \
+          dbt run -s information_schema_partitions --full-refresh
+
       - name: Run all models once
         run: | 
           cd integration_tests

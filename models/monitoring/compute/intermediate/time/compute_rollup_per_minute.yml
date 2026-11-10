@@ -40,6 +40,10 @@ models:
         description: The number of unique users during the minute.
       - name: unique_sessions
         description: The number of unique sessions during the minute.
+      - name: user_emails
+        description: Distinct user emails in the minute. Coarser rollups concatenate these arrays and count distinct values instead of summing unique_users.
+      - name: session_ids
+        description: Distinct session ids in the minute. Coarser rollups concatenate these arrays and count distinct values instead of summing unique_sessions.
       - name: cache_hits
         description: The number of cache hits during the minute.
       - name: job_state

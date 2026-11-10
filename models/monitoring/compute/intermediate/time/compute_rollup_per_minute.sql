@@ -28,6 +28,9 @@ SELECT
   COUNT(*) AS query_count,
   COUNT(DISTINCT user_email) AS unique_users,
   COUNT(DISTINCT session_info.session_id) AS unique_sessions,
+  -- Kept so coarser rollups can count distinct users without summing the counts above.
+  ARRAY_AGG(DISTINCT user_email IGNORE NULLS) AS user_emails,
+  ARRAY_AGG(DISTINCT session_info.session_id IGNORE NULLS) AS session_ids,
   COUNTIF(cache_hit) AS cache_hits,
   -- Job state breakdown
   STRUCT(

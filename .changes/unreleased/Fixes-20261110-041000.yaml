@@ -1,0 +1,6 @@
+kind: Fixes
+body: Stop compute_rollup_per_hour from multiplying sums when job and statement type arrays are unnested, and count distinct users across the hour
+time: 2026-11-10T04:10:00Z
+custom:
+    Author: cursoragent
+    Issue: ""

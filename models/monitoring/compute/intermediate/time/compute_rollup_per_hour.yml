@@ -37,9 +37,9 @@ models:
       - name: query_count
         description: The total number of queries run during the hour.
       - name: unique_users
-        description: The number of unique users during the hour.
+        description: Distinct users during the hour. Users who ran jobs in more than one minute are counted once.
       - name: unique_sessions
-        description: The number of unique sessions during the hour.
+        description: Distinct sessions during the hour. Sessions that span more than one minute are counted once.
       - name: cache_hits
         description: The number of cache hits during the hour.
       - name: job_state
@@ -81,3 +81,125 @@ models:
         description: Average duration of jobs in seconds during the hour.
       - name: median_duration_seconds
         description: Median duration of jobs in seconds during the hour.
+
+unit_tests:
+  - name: compute_rollup_per_hour_matches_job_totals
+    description: >
+      Hour totals equal the underlying jobs. Overlapping users are counted once,
+      and job-type plus statement-type arrays must not multiply slot and byte sums.
+    model: compute_rollup_per_hour
+    given:
+      - input: ref('compute_rollup_per_minute')
+        format: sql
+        rows: |
+          SELECT
+            TIMESTAMP '2026-11-01 12:00:00' AS minute,
+            'p1' AS project_id,
+            CAST(NULL AS STRING) AS reservation_id,
+            CAST(NULL AS STRING) AS bi_engine_mode,
+            'dbt' AS client_type,
+            CAST(NULL AS STRING) AS edition,
+            3.0 AS total_query_cost,
+            1.0 AS failing_query_cost,
+            100 AS total_bytes_processed,
+            80 AS total_bytes_billed,
+            150 AS total_slot_ms,
+            2 AS query_count,
+            1 AS cache_hits,
+            STRUCT(2 AS done, 0 AS running, 0 AS pending) AS job_state,
+            10.0 AS avg_duration_seconds,
+            10.0 AS median_duration_seconds,
+            ['a@example.com', 'b@example.com'] AS user_emails,
+            ['s1', 's2'] AS session_ids,
+            [STRUCT('QUERY' AS value, 2 AS sum)] AS job_types,
+            [STRUCT('SELECT' AS value, 1 AS sum), STRUCT('INSERT' AS value, 1 AS sum)] AS statement_types
+          UNION ALL
+          SELECT
+            TIMESTAMP '2026-11-01 12:01:00',
+            'p1',
+            CAST(NULL AS STRING),
+            CAST(NULL AS STRING),
+            'dbt',
+            CAST(NULL AS STRING),
+            1.5,
+            0.0,
+            10,
+            10,
+            25,
+            1,
+            1,
+            STRUCT(1 AS done, 0 AS running, 0 AS pending),
+            20.0,
+            20.0,
+            ['a@example.com'],
+            ['s1'],
+            [STRUCT('LOAD' AS value, 1 AS sum)],
+            [STRUCT('SELECT' AS value, 1 AS sum)]
+          UNION ALL
+          SELECT
+            TIMESTAMP '2026-11-01 13:05:00',
+            'p1',
+            CAST(NULL AS STRING),
+            CAST(NULL AS STRING),
+            'dbt',
+            CAST(NULL AS STRING),
+            0.25,
+            0.0,
+            4,
+            4,
+            7,
+            1,
+            0,
+            STRUCT(1 AS done, 0 AS running, 0 AS pending),
+            4.0,
+            4.0,
+            ['c@example.com'],
+            ['s3'],
+            [STRUCT('QUERY' AS value, 1 AS sum)],
+            [STRUCT('SELECT' AS value, 1 AS sum)]
+    expect:
+      format: sql
+      rows: |
+        SELECT
+          TIMESTAMP '2026-11-01 12:00:00' AS hour,
+          'p1' AS project_id,
+          CAST(NULL AS STRING) AS reservation_id,
+          CAST(NULL AS STRING) AS bi_engine_mode,
+          'dbt' AS client_type,
+          CAST(NULL AS STRING) AS edition,
+          4.5 AS total_query_cost,
+          1.0 AS failing_query_cost,
+          110 AS total_bytes_processed,
+          90 AS total_bytes_billed,
+          175 AS total_slot_ms,
+          3 AS query_count,
+          2 AS unique_users,
+          2 AS unique_sessions,
+          2 AS cache_hits,
+          STRUCT(3 AS done, 0 AS running, 0 AS pending) AS job_state,
+          [STRUCT('QUERY' AS value, 2 AS sum), STRUCT('LOAD' AS value, 1 AS sum)] AS job_types,
+          [STRUCT('SELECT' AS value, 2 AS sum), STRUCT('INSERT' AS value, 1 AS sum)] AS statement_types,
+          15.0 AS avg_duration_seconds,
+          15.0 AS median_duration_seconds
+        UNION ALL
+        SELECT
+          TIMESTAMP '2026-11-01 13:00:00',
+          'p1',
+          CAST(NULL AS STRING),
+          CAST(NULL AS STRING),
+          'dbt',
+          CAST(NULL AS STRING),
+          0.25,
+          0.0,
+          4,
+          4,
+          7,
+          1,
+          1,
+          1,
+          0,
+          STRUCT(1 AS done, 0 AS running, 0 AS pending),
+          [STRUCT('QUERY' AS value, 1 AS sum)],
+          [STRUCT('SELECT' AS value, 1 AS sum)],
+          4.0,
+          4.0

@@ -156,7 +156,7 @@ FROM base
 base_with_all_pricing AS (
 SELECT
   * EXCEPT (dbt_model_name),
-    total_slot_ms / (1000 * 60 * 60) * {{ dbt_bigquery_monitoring_variable_hourly_slot_price() }} AS flat_pricing_query_cost,
+    total_slot_ms / (1000 * 60 * 60) * {{ dbt_bigquery_monitoring_slot_hour_price_sql() }} AS flat_pricing_query_cost,
     total_tb_billed * {{ dbt_bigquery_monitoring_variable_per_billed_tb_price() }} AS ondemand_query_cost,
     CASE
         WHEN dbt_model_name LIKE 'model.%' THEN 'model'

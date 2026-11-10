@@ -114,12 +114,12 @@ See [GCP BigQuery Audit logs](/configuration/audit-logs) for more information.
 
 BigQuery periodically introduces new fields in `INFORMATION_SCHEMA` views that are initially in "Preview" or "Experimental" and might not be available in all regions. These fields are disabled by default in this package to ensure compatibility across all regions.
 
-`total_services_sku_slot_ms` is gated separately and defaults to off. It is null for ordinary BigQuery jobs. BigQuery fills it only when the job has external service costs billed with method `SERVICES_SKU` (the total of that usage). Selecting it on every job adds a column that is empty for a normal warehouse workload. Set `enable_total_services_sku_slot_ms: true` if you use those external services and want the column.
+`total_services_sku_slot_ms` stays selected by default. It is null for ordinary BigQuery jobs. BigQuery fills it only when the job has external service costs billed with method `SERVICES_SKU` (the total of that usage). Set `enable_total_services_sku_slot_ms: false` to omit the column. If you do not set that variable, it still follows `enable_experimental_fields`, which is the previous behavior.
 
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
 | `enable_experimental_fields` | `DBT_BQ_MONITORING_ENABLE_EXPERIMENTAL_FIELDS` | Toggle to enable all experimental/preview fields | `true` |
 | `enable_principal_subject` | `DBT_BQ_MONITORING_ENABLE_PRINCIPAL_SUBJECT` | Toggle to enable `principal_subject` field in jobs views | `true` |
 | `enable_reservation_group_path` | `DBT_BQ_MONITORING_ENABLE_RESERVATION_GROUP_PATH` | Toggle to enable `reservation_group_path` field in reservations views | `false` |
-| `enable_total_services_sku_slot_ms` | `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS` | Select `total_services_sku_slot_ms` on jobs views. BigQuery populates it only for jobs with external service costs whose billing method is `SERVICES_SKU`. On standard analysis, load, and extract jobs it is null, so the package leaves it out unless you opt in. `enable_experimental_fields` does not turn this column on. | `false` |
+| `enable_total_services_sku_slot_ms` | `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS` | Select `total_services_sku_slot_ms` on jobs views. BigQuery populates it only for jobs with external service costs whose billing method is `SERVICES_SKU`. On standard analysis, load, and extract jobs it is null. The column stays on unless you set this to `false`. When the variable is unset, `enable_experimental_fields` still controls it. | `true` |
 | `enable_materialized_view_statistics` | `DBT_BQ_MONITORING_ENABLE_MATERIALIZED_VIEW_STATISTICS` | Toggle to enable `materialized_view_statistics` field in jobs views | `true` |

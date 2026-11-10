@@ -77,7 +77,9 @@ models:
       - name: total_services_sku_slot_ms
         description: >
           Total slot milliseconds for external services billed as SERVICES_SKU.
-          Null for standard BigQuery jobs. Omitted unless enable_total_services_sku_slot_ms is true.
+          Null for standard BigQuery jobs. Selected by default. Set
+          enable_total_services_sku_slot_ms to false to omit it. When that
+          variable is unset, enable_experimental_fields still controls it.
       - name: principal_subject
         description: The identity of the principal (user or service account) who initiated and ran the BigQuery job.
       - name: avg_slots

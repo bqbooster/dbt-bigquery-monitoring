@@ -1,5 +1,5 @@
-kind: Fixes
-body: Leave total_services_sku_slot_ms out of jobs views unless enable_total_services_sku_slot_ms is set, because the column is null for standard jobs
+kind: Docs
+body: Document that total_services_sku_slot_ms is null on standard jobs and can be omitted with enable_total_services_sku_slot_ms set to false. The column stays selected by default, and enable_experimental_fields still applies when that variable is unset
 time: 2026-11-10T04:40:00Z
 custom:
     Author: cursoragent

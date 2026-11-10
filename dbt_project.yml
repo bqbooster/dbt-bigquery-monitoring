@@ -48,6 +48,5 @@ vars:
     # Per field settings
     enable_principal_subject: true
     enable_reservation_group_path: true
-    # Null on standard jobs. Populated only for SERVICES_SKU external-service costs.
-    enable_total_services_sku_slot_ms: false
+    enable_total_services_sku_slot_ms: true
     enable_materialized_view_statistics: true

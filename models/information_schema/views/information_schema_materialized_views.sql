@@ -6,13 +6,7 @@
       you need to query the INFORMATION_SCHEMA.MATERIALIZED_VIEWS view,
 
       ask your administrator to grant you the
-
-
-
-
-      BigQuery Metadata Viewer  (roles/bigquery.metadataViewer)
-     IAM role
-     on your project or dataset.
+    BigQuery Metadata Viewer  (roles/bigquery.metadataViewer) IAM role on your project or dataset.
 
 
 
@@ -35,10 +29,10 @@ Required permissions
 The following permissions are required to query the INFORMATION_SCHEMA.MATERIALIZED_VIEWS view:
 
 
- bigquery.tables.get 
+bigquery.tables.get
 
 
- bigquery.tables.list
+bigquery.tables.list
 
 
 

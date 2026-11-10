@@ -1,0 +1,6 @@
+kind: Features
+body: Refresh INFORMATION_SCHEMA models from current BigQuery docs, including property graphs, reservation failover history, and new jobs, columns, and reservation timeline fields
+time: 2026-11-10T03:00:00Z
+custom:
+    Author: github-christophe-oudar
+    Issue: ""

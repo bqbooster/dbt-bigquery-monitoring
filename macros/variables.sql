@@ -26,11 +26,11 @@
    ============================================== */
 
 {% macro dbt_bigquery_monitoring_variable_bq_region() %}
-    {{ return(dbt_bigquery_monitoring_variable_priority('bq_region', 'DBT_BQ_MONITORING_REGION', 'us')) }}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('bq_region', 'DBT_BQ_MONITORING_REGION', 'us')) }}
 {% endmacro %}
 
 {% macro dbt_bigquery_monitoring_variable_input_gcp_projects() %}
-    {{ return(dbt_bigquery_monitoring_variable_priority('input_gcp_projects', 'DBT_BQ_MONITORING_GCP_PROJECTS', [])) }}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('input_gcp_projects', 'DBT_BQ_MONITORING_GCP_PROJECTS', [])) }}
 {% endmacro %}
 
 {% macro dbt_bigquery_monitoring_variable_input_datasets() %}
@@ -133,7 +133,7 @@
 {% endmacro %}
 
 {% macro dbt_bigquery_monitoring_variable_google_information_schema_model_materialization() %}
-    {{ return(dbt_bigquery_monitoring_variable_priority('google_information_schema_model_materialization', 'DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION', 'placeholder')) }}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('google_information_schema_model_materialization', 'DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION', 'placeholder')) }}
 {% endmacro %}
 
 /* ==============================================

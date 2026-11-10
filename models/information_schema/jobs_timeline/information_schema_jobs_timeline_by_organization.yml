@@ -14,7 +14,6 @@ models:
   - name: project_number
     description: Number of the project.
     data_type: INTEGER
-
   - name: user_email
     description: "(Clustering column) Email address or service account of\n      \
       \    the user who ran the job."
@@ -60,6 +59,11 @@ models:
     description: "Name of the primary reservation assigned to this job at the end\
       \ of\n        this period, if applicable."
     data_type: STRING
+  - name: reservation_group_path
+    description: "The reservation group to which the reservation is linked.\n    \
+      \  For example, if the reservation is linked to group my-group,\n      the reservation_group_path\
+      \ field contains a list such\n      as: [my-group]."
+    data_type: ARRAY<STRING>
   - name: edition
     description: The edition associated with the reservation assigned to this job.
       For more information about editions, see Introduction to BigQuery editions.
@@ -89,3 +93,13 @@ models:
       slots for these units of work accelerate your query, provided no other query
       in the reservation needs additional slots.
     data_type: INTEGER
+  - name: global_query_info
+    description: "Information about a global query.\n        Contains the following\
+      \ fields:\n        \nparent_job_id: The ID of the parent global query job in\
+      \ the primary region.\nparent_job_location: The location of the parent global\
+      \ query job.\nremote_regions: An array of remote regions referenced by the global\
+      \ query."
+    data_type: RECORD
+  - name: copy_job_statistics
+    description: "Statistics for a copy\n        job."
+    data_type: RECORD

@@ -20,7 +20,7 @@ models:
     data_type: STRING
   - name: stream_type
     description: "The stream type used \n      for the data ingestion with BigQuery\
-      \ Storage Write API. It is supposed to be one of \"DEFAULT\", \"COMMITTED\"\
+      \ Storage Write API (gRPC). It is supposed to be one of \"DEFAULT\", \"COMMITTED\"\
       , \"BUFFERED\", or \"PENDING\"."
     data_type: STRING
   - name: error_code

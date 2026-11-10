@@ -85,7 +85,12 @@ models:
       - name: total_time_seconds
         description: The total time in seconds for the job.
       - name: flat_pricing_query_cost
-        description: The query cost based on flat pricing.
+        description: >
+          Slot-hour cost. Uses hourly_slot_price for every job unless
+          use_edition_slot_pricing is true, in which case the job edition
+          (STANDARD, ENTERPRISE, ENTERPRISE_PLUS) and slot_pricing_plan
+          select the rate. Unknown editions keep hourly_slot_price.
+          reservation_slot_pricing_plans can override the plan per reservation_id.
       - name: ondemand_query_cost
         description: The query cost based on on-demand pricing.
       - name: query_cost

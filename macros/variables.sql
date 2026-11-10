@@ -69,7 +69,56 @@
 
 /* Capacity compute (analysis) pricing */
 {% macro dbt_bigquery_monitoring_variable_hourly_slot_price() %}
-    {{ return(dbt_bigquery_monitoring_variable_priority('hourly_slot_price', 'DBT_BQ_MONITORING_HOURLY_SLOT_PRICE', 0.04) | as_number) }}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('hourly_slot_price', 'DBT_BQ_MONITORING_HOURLY_SLOT_PRICE', 0.04) | as_number) }}
+{% endmacro %}
+
+{#-
+  Off by default. While off, every job uses hourly_slot_price (0.04 unless overridden),
+  which is the historical flat slot-hour rate.
+  Calls are package-qualified so a root-project run-operation can render the rate.
+-#}
+{% macro dbt_bigquery_monitoring_variable_use_edition_slot_pricing() %}
+    {{ return(dbt_bigquery_monitoring.force_bool(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('use_edition_slot_pricing', 'DBT_BQ_MONITORING_USE_EDITION_SLOT_PRICING', false))) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_slot_pricing_plan() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('slot_pricing_plan', 'DBT_BQ_MONITORING_SLOT_PRICING_PLAN', 'pay_as_you_go')) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_standard_payg_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('standard_payg_slot_price', 'DBT_BQ_MONITORING_STANDARD_PAYG_SLOT_PRICE', 0.04) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_standard_commitment_1y_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('standard_commitment_1y_slot_price', 'DBT_BQ_MONITORING_STANDARD_COMMITMENT_1Y_SLOT_PRICE', 0.036) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_standard_commitment_3y_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('standard_commitment_3y_slot_price', 'DBT_BQ_MONITORING_STANDARD_COMMITMENT_3Y_SLOT_PRICE', 0.032) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enterprise_payg_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('enterprise_payg_slot_price', 'DBT_BQ_MONITORING_ENTERPRISE_PAYG_SLOT_PRICE', 0.06) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enterprise_commitment_1y_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('enterprise_commitment_1y_slot_price', 'DBT_BQ_MONITORING_ENTERPRISE_COMMITMENT_1Y_SLOT_PRICE', 0.048) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enterprise_commitment_3y_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('enterprise_commitment_3y_slot_price', 'DBT_BQ_MONITORING_ENTERPRISE_COMMITMENT_3Y_SLOT_PRICE', 0.036) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enterprise_plus_payg_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('enterprise_plus_payg_slot_price', 'DBT_BQ_MONITORING_ENTERPRISE_PLUS_PAYG_SLOT_PRICE', 0.10) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enterprise_plus_commitment_1y_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('enterprise_plus_commitment_1y_slot_price', 'DBT_BQ_MONITORING_ENTERPRISE_PLUS_COMMITMENT_1Y_SLOT_PRICE', 0.08) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enterprise_plus_commitment_3y_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('enterprise_plus_commitment_3y_slot_price', 'DBT_BQ_MONITORING_ENTERPRISE_PLUS_COMMITMENT_3Y_SLOT_PRICE', 0.06) | as_number) }}
 {% endmacro %}
 
 /* Storage pricing */
@@ -244,6 +293,17 @@
         {'dbt_var': 'per_billed_tb_price', 'env_var': 'DBT_BQ_MONITORING_PER_BILLED_TB_PRICE', 'default': 6.25, 'format': 'string'},
         {'dbt_var': 'free_tb_per_month', 'env_var': 'DBT_BQ_MONITORING_FREE_TB_PER_MONTH', 'default': 1, 'format': 'string'},
         {'dbt_var': 'hourly_slot_price', 'env_var': 'DBT_BQ_MONITORING_HOURLY_SLOT_PRICE', 'default': 0.04, 'format': 'string'},
+        {'dbt_var': 'use_edition_slot_pricing', 'env_var': 'DBT_BQ_MONITORING_USE_EDITION_SLOT_PRICING', 'default': false, 'format': 'string'},
+        {'dbt_var': 'slot_pricing_plan', 'env_var': 'DBT_BQ_MONITORING_SLOT_PRICING_PLAN', 'default': 'pay_as_you_go', 'format': 'string'},
+        {'dbt_var': 'standard_payg_slot_price', 'env_var': 'DBT_BQ_MONITORING_STANDARD_PAYG_SLOT_PRICE', 'default': 0.04, 'format': 'string'},
+        {'dbt_var': 'standard_commitment_1y_slot_price', 'env_var': 'DBT_BQ_MONITORING_STANDARD_COMMITMENT_1Y_SLOT_PRICE', 'default': 0.036, 'format': 'string'},
+        {'dbt_var': 'standard_commitment_3y_slot_price', 'env_var': 'DBT_BQ_MONITORING_STANDARD_COMMITMENT_3Y_SLOT_PRICE', 'default': 0.032, 'format': 'string'},
+        {'dbt_var': 'enterprise_payg_slot_price', 'env_var': 'DBT_BQ_MONITORING_ENTERPRISE_PAYG_SLOT_PRICE', 'default': 0.06, 'format': 'string'},
+        {'dbt_var': 'enterprise_commitment_1y_slot_price', 'env_var': 'DBT_BQ_MONITORING_ENTERPRISE_COMMITMENT_1Y_SLOT_PRICE', 'default': 0.048, 'format': 'string'},
+        {'dbt_var': 'enterprise_commitment_3y_slot_price', 'env_var': 'DBT_BQ_MONITORING_ENTERPRISE_COMMITMENT_3Y_SLOT_PRICE', 'default': 0.036, 'format': 'string'},
+        {'dbt_var': 'enterprise_plus_payg_slot_price', 'env_var': 'DBT_BQ_MONITORING_ENTERPRISE_PLUS_PAYG_SLOT_PRICE', 'default': 0.10, 'format': 'string'},
+        {'dbt_var': 'enterprise_plus_commitment_1y_slot_price', 'env_var': 'DBT_BQ_MONITORING_ENTERPRISE_PLUS_COMMITMENT_1Y_SLOT_PRICE', 'default': 0.08, 'format': 'string'},
+        {'dbt_var': 'enterprise_plus_commitment_3y_slot_price', 'env_var': 'DBT_BQ_MONITORING_ENTERPRISE_PLUS_COMMITMENT_3Y_SLOT_PRICE', 'default': 0.06, 'format': 'string'},
         {'dbt_var': 'active_logical_storage_gb_price', 'env_var': 'DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE', 'default': 0.02, 'format': 'string'},
         {'dbt_var': 'long_term_logical_storage_gb_price', 'env_var': 'DBT_BQ_MONITORING_LONG_TERM_LOGICAL_STORAGE_GB_PRICE', 'default': 0.01, 'format': 'string'},
         {'dbt_var': 'active_physical_storage_gb_price', 'env_var': 'DBT_BQ_MONITORING_ACTIVE_PHYSICAL_STORAGE_GB_PRICE', 'default': 0.04, 'format': 'string'},

@@ -1,0 +1,6 @@
+kind: Features
+body: Add optional edition-aware slot pricing. It is off by default, so flat_pricing_query_cost still multiplies by hourly_slot_price (0.04 unless that variable is already overridden). Set use_edition_slot_pricing to price STANDARD, ENTERPRISE, and ENTERPRISE_PLUS. Null and unknown editions keep hourly_slot_price. No schema change and no full refresh is required; previously written incremental costs stay until those partitions are rebuilt
+time: 2026-11-10T05:10:00Z
+custom:
+  Author: cursoragent
+  Issue: ""

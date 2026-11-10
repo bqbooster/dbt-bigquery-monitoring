@@ -81,3 +81,13 @@ models:
         description: Average duration of jobs in seconds during the minute.
       - name: median_duration_seconds
         description: Median duration of jobs in seconds during the minute.
+      - name: user_emails
+        description: >
+          Distinct user emails in the minute, appended after the existing columns.
+          The model uses on_schema_change=append_new_columns, so an existing incremental
+          table picks the column up without a full refresh. Partitions that have not
+          been rebuilt yet store NULL. A full refresh backfills every partition.
+      - name: session_ids
+        description: >
+          Distinct session ids in the minute, appended after the existing columns.
+          Same upgrade behavior as user_emails.

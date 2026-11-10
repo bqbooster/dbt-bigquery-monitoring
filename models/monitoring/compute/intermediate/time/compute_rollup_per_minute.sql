@@ -41,6 +41,12 @@ SELECT
   APPROX_TOP_SUM(statement_type, 1, 30) AS statement_types,
   -- Performance metrics
   AVG(total_time_seconds) AS avg_duration_seconds,
-  APPROX_QUANTILES(total_time_seconds, 100)[OFFSET(50)] AS median_duration_seconds
+  APPROX_QUANTILES(total_time_seconds, 100)[OFFSET(50)] AS median_duration_seconds,
+  -- Appended so on_schema_change=append_new_columns can add them to an existing
+  -- incremental table without reordering columns. Null on partitions that have
+  -- not been rebuilt yet. compute_rollup_per_hour uses them for exact distinct
+  -- counts and falls back to unique_users / unique_sessions while they are null.
+  ARRAY_AGG(DISTINCT user_email IGNORE NULLS) AS user_emails,
+  ARRAY_AGG(DISTINCT session_info.session_id IGNORE NULLS) AS session_ids
 FROM {{ jobs_done_incremental_hourly() }}
 GROUP BY ALL

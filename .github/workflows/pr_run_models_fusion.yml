@@ -32,7 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      DBT_COMMON_FLAGS: "--empty --exclude tag:dbt-bigquery-monitoring-information-schema-by-organization"
+      # --empty wraps refs in `where false limit 0`, which empties unit-test fixtures.
+      DBT_COMMON_FLAGS: "--empty --exclude tag:dbt-bigquery-monitoring-information-schema-by-organization --exclude test_type:unit"
 
     steps:
       - name: Checkout
@@ -87,6 +88,11 @@ jobs:
         run: | 
           cd integration_tests
           dbt build -s dbt_bigquery_monitoring --full-refresh ${{ env.DBT_COMMON_FLAGS }}
+
+      - name: Run unit tests with their fixture rows
+        run: |
+          cd integration_tests
+          dbt test -s test_type:unit --exclude tag:dbt-bigquery-monitoring-information-schema-by-organization
 
       - name: Run all models again to test incremental
         run: |       

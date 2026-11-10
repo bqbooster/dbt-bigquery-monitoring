@@ -3,7 +3,15 @@ version: 2
 models:
   - name: compute_rollup_per_hour
     description: >
-      A model that stores the compute cost per hour.
+      Hourly compute rollup. Additive metrics are summed from compute_rollup_per_minute.
+      unique_users and unique_sessions count distinct ids across the hour when every
+      minute row has user_emails and session_ids. Incremental runs only rewrite partitions
+      at or after the current max hour partition, so older hour partitions keep their
+      previous values until a full refresh. A full refresh of compute_rollup_per_minute,
+      then this model, rewrites history: sums match the minute (and raw job) totals,
+      and distinct users are exact. Until those minute partitions are rebuilt, their
+      id arrays are NULL and this model keeps the sum of the per-minute distinct counts
+      for that hour instead of writing zero.
     config:
       meta:
         label: "Compute cost per hour"
@@ -37,9 +45,14 @@ models:
       - name: query_count
         description: The total number of queries run during the hour.
       - name: unique_users
-        description: The number of unique users during the hour.
+        description: >
+          Distinct users during the hour when user_emails is populated on every contributing
+          minute. Otherwise the sum of per-minute unique_users, which is what an incremental
+          upgrade uses until a full refresh backfills the arrays.
       - name: unique_sessions
-        description: The number of unique sessions during the hour.
+        description: >
+          Distinct sessions during the hour when session_ids is populated on every contributing
+          minute. Otherwise the sum of per-minute unique_sessions.
       - name: cache_hits
         description: The number of cache hits during the hour.
       - name: job_state
@@ -81,3 +94,269 @@ models:
         description: Average duration of jobs in seconds during the hour.
       - name: median_duration_seconds
         description: Median duration of jobs in seconds during the hour.
+
+unit_tests:
+  - name: compute_rollup_per_hour_matches_job_totals
+    description: >
+      Hour totals equal the underlying jobs. Overlapping users are counted once,
+      and job-type plus statement-type arrays must not multiply slot and byte sums.
+      is_incremental is overridden so Fusion types this test from compiled SQL.
+      Without that override it describes the incremental table, which does not
+      exist yet when dbt build runs the unit test on a fresh schema.
+    model: compute_rollup_per_hour
+    overrides:
+      macros:
+        is_incremental: false
+    given:
+      - input: ref('compute_rollup_per_minute')
+        format: sql
+        rows: |
+          SELECT
+            TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR) AS minute,
+            'p1' AS project_id,
+            CAST(NULL AS STRING) AS reservation_id,
+            CAST(NULL AS STRING) AS bi_engine_mode,
+            'dbt' AS client_type,
+            CAST(NULL AS STRING) AS edition,
+            3.0 AS total_query_cost,
+            1.0 AS failing_query_cost,
+            100 AS total_bytes_processed,
+            80 AS total_bytes_billed,
+            150 AS total_slot_ms,
+            2 AS query_count,
+            2 AS unique_users,
+            2 AS unique_sessions,
+            1 AS cache_hits,
+            STRUCT(2 AS done, 0 AS running, 0 AS pending) AS job_state,
+            10.0 AS avg_duration_seconds,
+            10.0 AS median_duration_seconds,
+            ['a@example.com', 'b@example.com'] AS user_emails,
+            ['s1', 's2'] AS session_ids,
+            [STRUCT('QUERY' AS value, 2 AS sum)] AS job_types,
+            [STRUCT('SELECT' AS value, 1 AS sum), STRUCT('INSERT' AS value, 1 AS sum)] AS statement_types
+          UNION ALL
+          SELECT
+            TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 1 MINUTE),
+            'p1',
+            CAST(NULL AS STRING),
+            CAST(NULL AS STRING),
+            'dbt',
+            CAST(NULL AS STRING),
+            1.5,
+            0.0,
+            10,
+            10,
+            25,
+            1,
+            1,
+            1,
+            1,
+            STRUCT(1 AS done, 0 AS running, 0 AS pending),
+            20.0,
+            20.0,
+            ['a@example.com'],
+            ['s1'],
+            [STRUCT('LOAD' AS value, 1 AS sum)],
+            [STRUCT('SELECT' AS value, 1 AS sum)]
+          UNION ALL
+          SELECT
+            TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 65 MINUTE),
+            'p1',
+            CAST(NULL AS STRING),
+            CAST(NULL AS STRING),
+            'dbt',
+            CAST(NULL AS STRING),
+            0.25,
+            0.0,
+            4,
+            4,
+            7,
+            1,
+            1,
+            1,
+            0,
+            STRUCT(1 AS done, 0 AS running, 0 AS pending),
+            4.0,
+            4.0,
+            ['c@example.com'],
+            ['s3'],
+            [STRUCT('QUERY' AS value, 1 AS sum)],
+            [STRUCT('SELECT' AS value, 1 AS sum)]
+          UNION ALL
+          SELECT
+            TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 30 MINUTE),
+            'p2',
+            CAST(NULL AS STRING),
+            CAST(NULL AS STRING),
+            'dbt',
+            CAST(NULL AS STRING),
+            1.0,
+            0.0,
+            1,
+            1,
+            9,
+            1,
+            1,
+            1,
+            0,
+            STRUCT(1 AS done, 0 AS running, 0 AS pending),
+            3.0,
+            3.0,
+            ['d@example.com'],
+            ['s9'],
+            [STRUCT('QUERY' AS value, 1 AS sum)],
+            [STRUCT('SELECT' AS value, 1 AS sum)]
+    expect:
+      format: sql
+      rows: |
+        SELECT
+          TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR) AS hour,
+          'p1' AS project_id,
+          CAST(NULL AS STRING) AS reservation_id,
+          CAST(NULL AS STRING) AS bi_engine_mode,
+          'dbt' AS client_type,
+          CAST(NULL AS STRING) AS edition,
+          4.5 AS total_query_cost,
+          1.0 AS failing_query_cost,
+          110 AS total_bytes_processed,
+          90 AS total_bytes_billed,
+          175 AS total_slot_ms,
+          3 AS query_count,
+          2 AS unique_users,
+          2 AS unique_sessions,
+          2 AS cache_hits,
+          STRUCT(3 AS done, 0 AS running, 0 AS pending) AS job_state,
+          [STRUCT('QUERY' AS value, 2 AS sum), STRUCT('LOAD' AS value, 1 AS sum)] AS job_types,
+          [STRUCT('SELECT' AS value, 2 AS sum), STRUCT('INSERT' AS value, 1 AS sum)] AS statement_types,
+          15.0 AS avg_duration_seconds,
+          15.0 AS median_duration_seconds
+        UNION ALL
+        SELECT
+          TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 1 HOUR),
+          'p1',
+          CAST(NULL AS STRING),
+          CAST(NULL AS STRING),
+          'dbt',
+          CAST(NULL AS STRING),
+          0.25,
+          0.0,
+          4,
+          4,
+          7,
+          1,
+          1,
+          1,
+          0,
+          STRUCT(1 AS done, 0 AS running, 0 AS pending),
+          [STRUCT('QUERY' AS value, 1 AS sum)],
+          [STRUCT('SELECT' AS value, 1 AS sum)],
+          4.0,
+          4.0
+        UNION ALL
+        SELECT
+          TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR),
+          'p2',
+          CAST(NULL AS STRING),
+          CAST(NULL AS STRING),
+          'dbt',
+          CAST(NULL AS STRING),
+          1.0,
+          0.0,
+          1,
+          1,
+          9,
+          1,
+          1,
+          1,
+          0,
+          STRUCT(1 AS done, 0 AS running, 0 AS pending),
+          [STRUCT('QUERY' AS value, 1 AS sum)],
+          [STRUCT('SELECT' AS value, 1 AS sum)],
+          3.0,
+          3.0
+
+  - name: compute_rollup_per_hour_keeps_legacy_counts_when_id_arrays_are_null
+    description: >
+      Minute partitions written before user_emails and session_ids existed have NULL
+      arrays. The hour must keep the summed per-minute counts instead of returning 0,
+      including when only some minutes in the hour have been backfilled. Null job and
+      statement arrays must not multiply the sums.
+    model: compute_rollup_per_hour
+    overrides:
+      macros:
+        is_incremental: false
+    given:
+      - input: ref('compute_rollup_per_minute')
+        format: sql
+        rows: |
+          SELECT
+            TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR) AS minute,
+            'p1' AS project_id,
+            CAST(NULL AS STRING) AS reservation_id,
+            CAST(NULL AS STRING) AS bi_engine_mode,
+            'dbt' AS client_type,
+            CAST(NULL AS STRING) AS edition,
+            2.0 AS total_query_cost,
+            0.0 AS failing_query_cost,
+            20 AS total_bytes_processed,
+            20 AS total_bytes_billed,
+            40 AS total_slot_ms,
+            2 AS query_count,
+            4 AS unique_users,
+            3 AS unique_sessions,
+            1 AS cache_hits,
+            STRUCT(2 AS done, 0 AS running, 0 AS pending) AS job_state,
+            5.0 AS avg_duration_seconds,
+            5.0 AS median_duration_seconds,
+            CAST(NULL AS ARRAY<STRING>) AS user_emails,
+            CAST(NULL AS ARRAY<STRING>) AS session_ids,
+            CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS job_types,
+            CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS statement_types
+          UNION ALL
+          SELECT
+            TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 10 MINUTE),
+            'p1',
+            CAST(NULL AS STRING),
+            CAST(NULL AS STRING),
+            'dbt',
+            CAST(NULL AS STRING),
+            1.0,
+            0.0,
+            5,
+            5,
+            10,
+            1,
+            2,
+            1,
+            0,
+            STRUCT(1 AS done, 0 AS running, 0 AS pending),
+            8.0,
+            8.0,
+            ['a@example.com'],
+            ['s1'],
+            [STRUCT(CAST(NULL AS STRING) AS value, 1 AS sum)],
+            []
+    expect:
+      format: sql
+      rows: |
+        SELECT
+          TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR) AS hour,
+          'p1' AS project_id,
+          CAST(NULL AS STRING) AS reservation_id,
+          CAST(NULL AS STRING) AS bi_engine_mode,
+          'dbt' AS client_type,
+          CAST(NULL AS STRING) AS edition,
+          3.0 AS total_query_cost,
+          0.0 AS failing_query_cost,
+          25 AS total_bytes_processed,
+          25 AS total_bytes_billed,
+          50 AS total_slot_ms,
+          3 AS query_count,
+          6 AS unique_users,
+          4 AS unique_sessions,
+          1 AS cache_hits,
+          STRUCT(3 AS done, 0 AS running, 0 AS pending) AS job_state,
+          CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS job_types,
+          CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS statement_types,
+          6.5 AS avg_duration_seconds,
+          6.5 AS median_duration_seconds

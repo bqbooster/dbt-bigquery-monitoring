@@ -5,6 +5,7 @@ on:
       - 'macros/**'
       - 'models/**' 
       - 'integration_tests/**'
+      - 'tests/**'
       - 'dbt_project.yml'
       - 'packages.yml'
       - 'config.py'

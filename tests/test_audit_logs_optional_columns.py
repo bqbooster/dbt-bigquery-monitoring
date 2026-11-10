@@ -14,10 +14,10 @@ OPTIONAL_FIXTURE = (
     / "models"
     / "gcp_bigquery_audit_logs_fixture_without_optional_columns.sql"
 )
-WORKFLOWS = [
-    REPO_ROOT / ".github" / "workflows" / "pr_run_models.yml",
-    REPO_ROOT / ".github" / "workflows" / "pr_run_models_fusion.yml",
-]
+CORE_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "pr_run_models.yml"
+FUSION_CALLER = REPO_ROOT / ".github" / "workflows" / "pr_run_models_fusion.yml"
+FUSION_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "fusion_bigquery_models.yml"
+WORKFLOWS = [CORE_WORKFLOW, FUSION_WORKFLOW]
 
 
 def test_optional_column_macro_is_parse_safe_and_typed_for_fusion() -> None:
@@ -90,6 +90,9 @@ def test_fixture_omits_top_level_labels_and_error_groups() -> None:
 
 
 def test_core_and_fusion_ci_cover_sink_without_optional_columns() -> None:
+    caller = FUSION_CALLER.read_text()
+    assert "uses: ./.github/workflows/fusion_bigquery_models.yml" in caller
+
     for workflow in WORKFLOWS:
         text = workflow.read_text()
         assert "gcp_bigquery_audit_logs_fixture_without_optional_columns" in text, workflow.name

@@ -1,0 +1,6 @@
+kind: Fixes
+body: Add opt-in jobs_with_cost partition pruning before the parent-script window. The default view is unchanged, so existing history, audit logs, and incremental catch-up stay intact
+time: 2026-11-10T04:30:00Z
+custom:
+    Author: cursoragent
+    Issue: ""

@@ -10,7 +10,11 @@ models:
 
       - name: query
         data_type: string
-        description: The SQL query text.
+        description: >
+          The raw query text. This is the group key unless
+          group_repeated_jobs_by_normalized_hash is true, in which case it is the
+          most common literal variant for that fingerprint.
+          Individual jobs in `jobs` do not repeat the query text.
 
       - name: jobs
         data_type: record
@@ -110,5 +114,24 @@ models:
       - name: avg_duration_seconds
         data_type: float64
         description: Average duration in seconds.
+
+      - name: query_fingerprint
+        data_type: string
+        description: >
+          Additive column. query_info.query_hashes.normalized_literals when BigQuery
+          populated it, otherwise the raw query text. Null hashes (cache hits, failed
+          jobs, non-GoogleSQL, and audit-log-only mode) fall back to the text, and a
+          null query with a null hash stays null. Default grouping is still `query`,
+          so this column does not change existing metrics. Clustering stays on
+          `hour, query`, and on_schema_change is append_new_columns, so an upgrade
+          does not require a full refresh. Enable group_repeated_jobs_by_normalized_hash
+          to group by this value. Full-refresh after enabling it so older hour
+          partitions use the same grain; the incremental job still succeeds without that.
+
+      - name: normalized_query_hash
+        data_type: string
+        description: >
+          Additive column. The normalized_literals hash, or NULL when it was not
+          available. Ignored by the default GROUP BY query.
 
 

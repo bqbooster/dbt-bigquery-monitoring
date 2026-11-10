@@ -1,0 +1,6 @@
+kind: Features
+body: Add query_fingerprint and normalized_query_hash without changing default grouping. jobs_costs_incremental, most_repeated_jobs, and materialization_candidates still group by raw query text, keep their existing columns and types, and stay clustered on hour plus query, so an upgrade does not need a full refresh (on_schema_change appends the new columns). Set group_repeated_jobs_by_normalized_hash to group by query_info.query_hashes.normalized_literals, falling back to the query text when the hash is null. That opt-in also stops most_repeated_jobs from multiplying hourly totals by the jobs array length. Full-refresh jobs_costs_incremental after enabling it so older hour partitions share that grain; the incremental run still succeeds without a refresh. Audit-log-only mode has no query_info and keeps the query text
+time: 2026-11-10T05:20:00Z
+custom:
+  Author: cursoragent
+  Issue: ""

@@ -133,7 +133,7 @@
 {% endmacro %}
 
 {% macro dbt_bigquery_monitoring_variable_google_information_schema_model_materialization() %}
-    {{ return(dbt_bigquery_monitoring_variable_priority('google_information_schema_model_materialization', 'DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION', 'placeholder')) }}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('google_information_schema_model_materialization', 'DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION', 'placeholder')) }}
 {% endmacro %}
 
 /* ==============================================

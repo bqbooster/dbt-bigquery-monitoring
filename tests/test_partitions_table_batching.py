@@ -154,6 +154,40 @@ def test_rejects_batch_size_above_bigquery_limit() -> None:
     assert "between 1 and 1000" in _output(result)
 
 
+def test_zero_datasets_emit_no_partition_jobs() -> None:
+    result = _run_operation(
+        "assert_partitions_job_sql_count",
+        args={"dataset_list": [], "batch_size": 900, "expected_job_count": 0},
+    )
+
+    assert result.returncode == 0, _output(result)
+
+
+def test_project_qualified_dataset_names_stay_quoted() -> None:
+    result = _run_operation(
+        "assert_partitions_select_contains",
+        args={
+            "dataset": "`proj-1`.`Data_Set`",
+            "table_names": None,
+            "needle": "FROM `proj-1`.`Data_Set`.`INFORMATION_SCHEMA`.`PARTITIONS`",
+        },
+    )
+
+    assert result.returncode == 0, _output(result)
+
+
+def test_named_insert_quotes_new_columns_in_select_order() -> None:
+    result = _run_operation(
+        "assert_project_by_project_column_csv",
+        args={
+            "column_names": ["cache_hit", "copy_job_statistics", "creation_time"],
+            "expected": "`cache_hit`,\n  `copy_job_statistics`,\n  `creation_time`",
+        },
+    )
+
+    assert result.returncode == 0, _output(result)
+
+
 def test_batched_materialization_sets_relation_types_for_fusion() -> None:
     source = BATCHED_MATERIALIZATION.read_text()
 

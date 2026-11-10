@@ -1,5 +1,5 @@
 kind: Fixes
-body: Materialize project and organization configuration INFORMATION_SCHEMA models in project mode, keep organization configuration models disabled, and document bigquery.config.update and bigquery.datasets.listSharedDatasetUsage
+body: Materialize project configuration INFORMATION_SCHEMA models with the package materialization (views in region mode, per-project tables in project mode) and document bigquery.config.get, bigquery.config.update, and bigquery.datasets.listSharedDatasetUsage. Organization configuration models stay enabled views
 time: 2026-11-10T03:55:02Z
 custom:
     Author: github-christophe-oudar

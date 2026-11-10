@@ -21,19 +21,89 @@
   {% endfor %}
 {% endmacro %}
 
+{% macro information_schema_project_identifier(project) %}
+  {% set cleaned = project | string | trim %}
+  {% if cleaned | length == 0 or '`' in cleaned or '\n' in cleaned or '\r' in cleaned or ';' in cleaned %}
+    {% do exceptions.raise_compiler_error(
+      "input_gcp_projects entries must be project ids without backticks or statement breaks: " ~ cleaned
+    ) %}
+  {% endif %}
+  {{ return(cleaned) }}
+{% endmacro %}
+
+{% macro information_schema_region_identifier(region) %}
+  {% set cleaned = region | string | trim %}
+  {% if cleaned | length == 0 or '`' in cleaned or '\n' in cleaned or '\r' in cleaned or ';' in cleaned or ' ' in cleaned %}
+    {% do exceptions.raise_compiler_error(
+      "bq_region must be a BigQuery location such as us or europe-west1: " ~ cleaned
+    ) %}
+  {% endif %}
+  {{ return(cleaned) }}
+{% endmacro %}
+
+{% macro agate_column_values(table, candidates) %}
+  {% for name in candidates %}
+    {% if name in table.column_names %}
+      {{ return(table.columns[name].values() | list) }}
+    {% endif %}
+  {% endfor %}
+  {% do exceptions.raise_compiler_error(
+    "Expected one of " ~ (candidates | join(', ')) ~ " in " ~ (table.column_names | join(', '))
+  ) %}
+{% endmacro %}
+
+{% macro datasets_from_schemata_columns(schema_names, error_messages) %}
+  {% set dataset_list = [] %}
+  {% set errors = [] %}
+  {% for schema_name in schema_names %}
+    {% if schema_name %}
+      {% do dataset_list.append(schema_name) %}
+    {% endif %}
+  {% endfor %}
+  {% for error_message in error_messages %}
+    {% if error_message %}
+      {% do errors.append(error_message) %}
+    {% endif %}
+  {% endfor %}
+  {{ return({'datasets': dataset_list, 'errors': errors}) }}
+{% endmacro %}
+
+{% macro raise_if_schemata_discovery_failed(parsed) %}
+  {% if parsed['datasets'] | length == 0 and parsed['errors'] | length > 0 %}
+    {% do exceptions.raise_compiler_error(
+      "[dbt-bigquery-monitoring] Could not list datasets for any input project. " ~ parsed['errors'][0]
+    ) %}
+  {% endif %}
+{% endmacro %}
+
 {% macro information_schema_schemata_lookup_sql() %}
-  {% set region = dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_bq_region() %}
+  {% set region = dbt_bigquery_monitoring.information_schema_region_identifier(
+    dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_bq_region()
+  ) %}
   {% set projects = dbt_bigquery_monitoring.project_list() %}
   {% if projects | length == 0 %}
-    {% set sql = "SELECT CONCAT('`', CATALOG_NAME, '`.`', SCHEMA_NAME, '`') AS SCHEMA_NAME\nFROM `region-" ~ region ~ "`.`INFORMATION_SCHEMA`.`SCHEMATA`" %}
+    {% set sql = "SELECT CONCAT('`', REPLACE(CATALOG_NAME, '`', ''), '`.`', REPLACE(SCHEMA_NAME, '`', ''), '`') AS SCHEMA_NAME\nFROM `region-" ~ region ~ "`.`INFORMATION_SCHEMA`.`SCHEMATA`" %}
   {% else %}
-    {% set parts = [] %}
+    {# One project's Access Denied must not hide datasets from the others.
+       UNION ALL fails the whole discovery query on the first error. #}
+    {% set statements = [] %}
+    {% do statements.append("CREATE TEMP TABLE `_dbt_bq_monitoring_schemata` (schema_name STRING, error_message STRING)") %}
     {% for project in projects %}
-      {% do parts.append(
-        "SELECT CONCAT('`', CATALOG_NAME, '`.`', SCHEMA_NAME, '`') AS SCHEMA_NAME\nFROM `" ~ (project | trim) ~ "`.`region-" ~ region ~ "`.`INFORMATION_SCHEMA`.`SCHEMATA`"
-      ) %}
+      {% set project_id = dbt_bigquery_monitoring.information_schema_project_identifier(project) %}
+      {% set block %}
+BEGIN
+  INSERT INTO `_dbt_bq_monitoring_schemata` (schema_name)
+  SELECT CONCAT('`', REPLACE(CATALOG_NAME, '`', ''), '`.`', REPLACE(SCHEMA_NAME, '`', ''), '`')
+  FROM `{{ project_id }}`.`region-{{ region }}`.`INFORMATION_SCHEMA`.`SCHEMATA`;
+EXCEPTION WHEN ERROR THEN
+  INSERT INTO `_dbt_bq_monitoring_schemata` (error_message)
+  SELECT @@error.message;
+END
+      {% endset %}
+      {% do statements.append(block | trim) %}
     {% endfor %}
-    {% set sql = parts | join('\nUNION ALL\n') %}
+    {% do statements.append("SELECT schema_name AS SCHEMA_NAME, error_message AS ERROR_MESSAGE FROM `_dbt_bq_monitoring_schemata`") %}
+    {% set sql = statements | join(';\n') %}
   {% endif %}
   {{ return(sql) }}
 {% endmacro %}
@@ -107,14 +177,29 @@
        region-REGION reference lists the execution project only, so partitions,
        key/constraint usage, and search indexes then query the wrong project. #}
     {% set preflight_sql = dbt_bigquery_monitoring.information_schema_schemata_lookup_sql() %}
-
     {% set results = run_query(preflight_sql) %}
-    {% set dataset_list = results | map(attribute='SCHEMA_NAME') | list %}
-    
+    {% if results is none %}
+      {{ return([]) }}
+    {% endif %}
+
+    {% if dbt_bigquery_monitoring.project_list() | length == 0 %}
+      {% set dataset_list = results | map(attribute='SCHEMA_NAME') | list %}
+    {% else %}
+      {% set parsed = dbt_bigquery_monitoring.datasets_from_schemata_columns(
+        dbt_bigquery_monitoring.agate_column_values(results, ['SCHEMA_NAME', 'schema_name']),
+        dbt_bigquery_monitoring.agate_column_values(results, ['ERROR_MESSAGE', 'error_message'])
+      ) %}
+      {% for error_message in parsed['errors'] %}
+        {{ log("[dbt-bigquery-monitoring] Skipping an input project while listing datasets: " ~ error_message, info=True) }}
+      {% endfor %}
+      {% do dbt_bigquery_monitoring.raise_if_schemata_discovery_failed(parsed) %}
+      {% set dataset_list = parsed['datasets'] %}
+    {% endif %}
+
     {%- if dataset_list | length == 0 -%}
       {{ log("[dbt-bigquery-monitoring] No datasets found in the project list", info=False) }}
     {%- endif -%}
-    
+
     {{ return(dataset_list) }}
   {% else %}
     {{ return([]) }}

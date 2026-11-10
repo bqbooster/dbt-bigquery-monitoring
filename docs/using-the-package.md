@@ -93,7 +93,8 @@ LIMIT 10
 
 **Configuration & Reservations**
 *   `reservations`, `assignments` (slots management)
-*   `reservations_timeline`, `failover_history` (capacity over time and managed disaster-recovery failovers)
+*   `reservations_timeline` (capacity over time)
+*   `failover_history` (managed disaster-recovery failovers; preview, disabled by default)
 *   `bi_capacities` (BI Engine)
 *   `effective_project_options`
 

@@ -37,9 +37,13 @@ multiple datasets.
 
 When `input_datasets` is empty and `input_gcp_projects` is set, discovery
 reads each project's `region-<bq_region>.INFORMATION_SCHEMA.SCHEMATA`
-(`UNION ALL`) and returns project-qualified dataset names. With no
-project list, discovery uses the execution project's region.
-Dataset-scoped models (`PARTITIONS`, `KEY_COLUMN_USAGE`,
+and returns project-qualified dataset names (`` `project`.`dataset` ``).
+A project with no datasets in that region contributes nothing. If listing
+one project fails (for example, missing `bigquery.datasets.get`), that
+project is skipped and the error is logged. Discovery fails only when
+every input project fails. With no project list, discovery uses the
+execution project's region. An explicit `input_datasets` list skips
+discovery. Dataset-scoped models (`PARTITIONS`, `KEY_COLUMN_USAGE`,
 `CONSTRAINT_COLUMN_USAGE`, `SEARCH_INDEXES*`) then query those datasets.
 
 ```yml

@@ -1,4 +1,7 @@
-{{ config(materialized=dbt_bigquery_monitoring_materialization()) }}
+{{ config(materialized=dbt_bigquery_monitoring_materialization(), enabled=false) }}
+{# Preview view: INFORMATION_SCHEMA.FAILOVER_HISTORY is not available in every
+   region and needs bigquery.reservations.list. Leave it disabled so a normal
+   run does not fail. Enable this model where managed disaster recovery is used. #}
 {# More details about base table in https://cloud.google.com/bigquery/docs/information-schema-failover-history -#}
 {# Required role/permissions: 
 

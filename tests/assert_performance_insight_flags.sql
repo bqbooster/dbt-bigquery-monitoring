@@ -73,6 +73,26 @@ WITH samples AS (
                 left_rows INT64, right_rows INT64, output_rows INT64, step_index INT64
             >>
         >>) AS insights
+    UNION ALL
+    SELECT
+        'empty_insights' AS scenario,
+        FALSE AS expect_contention,
+        0 AS expect_contention_stages,
+        FALSE AS expect_shuffle_quota,
+        0 AS expect_shuffle_quota_stages,
+        FALSE AS expect_skew,
+        0 AS expect_skew_stages,
+        FALSE AS expect_join,
+        0 AS expect_join_count,
+        CAST([] AS ARRAY<STRUCT<
+            stage_id INT64,
+            slot_contention BOOL,
+            insufficient_shuffle_quota BOOL,
+            partition_skew STRUCT<skew_sources ARRAY<STRUCT<stage_id INT64>>>,
+            high_cardinality_joins ARRAY<STRUCT<
+                left_rows INT64, right_rows INT64, output_rows INT64, step_index INT64
+            >>
+        >>) AS insights
 ),
 
 flag_mismatches AS (
@@ -120,6 +140,19 @@ spill_mismatches AS (
         SELECT {{ shuffle_spill_sql('stages') }} AS spill
         FROM (
             SELECT CAST(NULL AS ARRAY<STRUCT<
+                shuffle_output_bytes INT64,
+                shuffle_output_bytes_spilled INT64
+            >>) AS stages
+        )
+    )
+    WHERE spill.shuffle_output_bytes IS NOT NULL
+        OR spill.shuffle_output_bytes_spilled IS NOT NULL
+    UNION ALL
+    SELECT 'empty_stages' AS scenario
+    FROM (
+        SELECT {{ shuffle_spill_sql('stages') }} AS spill
+        FROM (
+            SELECT CAST([] AS ARRAY<STRUCT<
                 shuffle_output_bytes INT64,
                 shuffle_output_bytes_spilled INT64
             >>) AS stages

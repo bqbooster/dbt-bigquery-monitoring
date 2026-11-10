@@ -313,7 +313,9 @@ One row per done job for the incremental window. Flags come from `query_info.per
 
 The model reads `jobs_with_cost` for the same creation-time window as the other job incrementals, and it selects those leaves only (not query text, timeline, or the rest of `job_stages`). `job_performance_insights_per_hour` rolls the per-job table up by project and reservation and does not read `INFORMATION_SCHEMA` again. Jobs with no insight stay in the table so slot-millisecond ratios use every done job as the denominator.
 
-Audit-log-only mode has no `query_info` or `job_stages`. Flags are false and spill is NULL in that mode.
+These are new models. Existing models are unchanged. `jobs_done_incremental_hourly()` with no arguments is still `SELECT *` plus the same filters. Both new models use `insert_overwrite` and `on_schema_change: append_new_columns`. Region mode and project mode both go through `jobs_with_cost`.
+
+A null or missing `performance_insights` array, and an empty array, yield false flags and zero counts. A null `job_stages` array and an empty array (including row-level security jobs) yield NULL shuffle bytes, not zero. Audit-log-only mode has no `query_info` or `job_stages` structs (they are untyped nulls). That mode does not reference those fields: flags are false and spill is NULL.
 
 **Key columns:** `hour`, `project_id`, `job_id`, `total_slot_ms`, `has_slot_contention`, `has_insufficient_shuffle_quota`, `has_partition_skew`, `has_high_cardinality_join`, `shuffle_output_bytes_spilled`
 

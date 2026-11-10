@@ -1,6 +1,6 @@
 kind: Features
-body: Add incremental per-job and hourly performance insight models for slot contention, shuffle quota, partition skew, high-cardinality joins, and shuffle spill
-time: 2026-11-10T05:00:00Z
+body: Add incremental job_performance_insights and job_performance_insights_per_hour for slot contention, insufficient shuffle quota, partition skew, high-cardinality joins, and shuffle spill. Existing models are unchanged. jobs_done_incremental_hourly() with no arguments is still SELECT * with the same filters. The new models use on_schema_change append_new_columns. Null or empty performance insights are false flags and zero counts. Null or empty job_stages (including row-level security) store NULL shuffle bytes, not zero. Audit-log-only mode does not reference those structs. Region and project mode both read jobs_with_cost
+time: 2026-11-10T05:50:00Z
 custom:
   Author: cursoragent
   Issue: ""

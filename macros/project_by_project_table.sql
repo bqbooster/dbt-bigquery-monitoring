@@ -66,14 +66,15 @@
 {% endif %}
 
 {% set main_sql = [] %}
+{% set initial_backfill_days = dbt_bigquery_monitoring_variable_initial_backfill_days() %}
 
 {#- Incremental case or full refresh if existing -#}
 {% if existing_relation is not none %}
   {#- with partitioned data special where condition #}
   {% if partition_config is not none and max_partition_value is not none and max_partition_value | length > 0 %}
-    {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= GREATEST(TIMESTAMP_TRUNC("' ~ max_partition_value ~ '", HOUR), TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 166 DAY))' %}
+    {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= GREATEST(TIMESTAMP_TRUNC("' ~ max_partition_value ~ '", HOUR), TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL ' ~ initial_backfill_days ~ ' DAY))' %}
   {% elif partition_config is not none %}
-    {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 166 DAY)' %}
+    {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL ' ~ initial_backfill_days ~ ' DAY)' %}
   {% else %}
     {% set where_condition = 'WHERE TRUE' %}
   {% endif %}
@@ -104,8 +105,8 @@
     {#- "Full-refresh" case with no existing table -#}
     {% if partition_config is not none %}
 
-      {#- bigquery doesn't allow more than 4000 partitions per insert so if we have hourly tables it's ~ 166 days -#}
-      {% set project_sql = project_sql + ' WHERE ' ~ partition_config.field ~ ' >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 166 DAY)' %}
+      {#- BigQuery allows at most 4000 partitions per INSERT. initial_backfill_days is capped at 166 so hourly tables stay under that limit. -#}
+      {% set project_sql = project_sql + ' WHERE ' ~ partition_config.field ~ ' >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL ' ~ initial_backfill_days ~ ' DAY)' %}
     {% endif %}
 
     {% set insert_sql %}

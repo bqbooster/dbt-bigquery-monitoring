@@ -1,0 +1,6 @@
+kind: Features
+body: Add initial_backfill_days (default 166) so project_by_project_table first loads and incremental catch-up are not hard-coded to 166 days
+time: 2026-11-10T04:15:00Z
+custom:
+    Author: cursoragent
+    Issue: ""

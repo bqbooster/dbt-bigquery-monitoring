@@ -71,6 +71,7 @@ These settings are used to configure how dbt will run and materialize the models
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
 | `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Number of days to look back for monitoring | `7` |
+| `initial_backfill_days` | `DBT_BQ_MONITORING_INITIAL_BACKFILL_DAYS` | Days of history `project_by_project_table` loads on the first build, on full refresh, and as the maximum incremental catch-up. Does not follow `lookback_window_days`. Capped at 166 because an hourly table can insert at most 4000 partitions (`166 * 24 = 3984`). Set this to at least `lookback_window_days` if downstream models need that much history after the first project-mode load. Lower it to avoid scanning 166 days of `INFORMATION_SCHEMA` on the first build. | `166` |
 | `lookback_incremental_billing_window_days` | `DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS` | Number of days to look back for monitoring | `3` |
 | `output_limit_size` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Limit size to use for the models | `1000` |
 | `output_partition_expiration_days` | `DBT_BQ_MONITORING_TABLE_EXPIRATION_DAYS` | Default table expiration in days for incremental models | `365` days |

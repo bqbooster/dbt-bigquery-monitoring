@@ -107,6 +107,25 @@
     {{ return(dbt_bigquery_monitoring_variable_priority('lookback_window_days', 'DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS', 7) | as_number) }}
 {% endmacro %}
 
+{#
+  Days of history loaded by project_by_project_table on the first build and on
+  full refresh, and the furthest incremental catch-up. Hourly partitioned
+  inserts cannot exceed 4000 partitions (166 * 24 = 3984). Default 166 keeps
+  the previous hard-coded window. This is independent of lookback_window_days.
+#}
+{% macro dbt_bigquery_monitoring_variable_initial_backfill_days() %}
+    {% set raw_days = dbt_bigquery_monitoring_variable_priority('initial_backfill_days', 'DBT_BQ_MONITORING_INITIAL_BACKFILL_DAYS', 166) %}
+    {% set backfill_days = raw_days | as_number | int %}
+    {% if backfill_days < 1 or backfill_days > 166 %}
+        {% do exceptions.raise_compiler_error(
+            "initial_backfill_days must be an integer from 1 to 166 "
+            ~ "(BigQuery allows 4000 partitions per hourly INSERT; 166 days is 3984 hours), got: "
+            ~ raw_days
+        ) %}
+    {% endif %}
+    {{ return(backfill_days) }}
+{% endmacro %}
+
 /* Billing data can be late, a safe window is to refresh data for the past 3 days */
 {% macro dbt_bigquery_monitoring_variable_lookback_incremental_billing_window_days() %}
     {{ return(dbt_bigquery_monitoring_variable_priority('lookback_incremental_billing_window_days', 'DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS', 3) | as_number) }}
@@ -251,6 +270,7 @@
         {'dbt_var': 'free_storage_gb_per_month', 'env_var': 'DBT_BQ_MONITORING_FREE_STORAGE_GB_PER_MONTH', 'default': 10, 'format': 'string'},
         {'dbt_var': 'bi_engine_gb_hourly_price', 'env_var': 'DBT_BQ_MONITORING_BI_ENGINE_GB_HOURLY_PRICE', 'default': 0.0416, 'format': 'string'},
         {'dbt_var': 'lookback_window_days', 'env_var': 'DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS', 'default': 7, 'format': 'string'},
+        {'dbt_var': 'initial_backfill_days', 'env_var': 'DBT_BQ_MONITORING_INITIAL_BACKFILL_DAYS', 'default': 166, 'format': 'string'},
         {'dbt_var': 'lookback_incremental_billing_window_days', 'env_var': 'DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS', 'default': 3, 'format': 'string'},
         {'dbt_var': 'output_materialization', 'env_var': 'DBT_BQ_MONITORING_OUTPUT_MATERIALIZATION', 'default': 'table', 'format': 'string'},
         {'dbt_var': 'output_limit_size', 'env_var': 'DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE', 'default': 1000, 'format': 'string'},

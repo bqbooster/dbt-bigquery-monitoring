@@ -1,0 +1,6 @@
+kind: Features
+body: Add incremental per-job and hourly performance insight models for slot contention, shuffle quota, partition skew, high-cardinality joins, and shuffle spill
+time: 2026-11-10T05:00:00Z
+custom:
+  Author: cursoragent
+  Issue: ""

@@ -90,6 +90,8 @@ BigQuery job. The intermediate layer materializes results project-by-project usi
 
 In **region mode**, this layer is ephemeral — models resolve directly as subqueries.
 
+`job_performance_insights` is an incremental table in this layer. It reads `jobs_with_cost` for the lookback window (only performance-insight leaves and shuffle byte fields). `job_performance_insights_per_hour` aggregates that table and does not scan `INFORMATION_SCHEMA` again.
+
 ### Datamarts
 
 High-level, business-ready output tables designed for direct BI tool consumption or ad-hoc queries.

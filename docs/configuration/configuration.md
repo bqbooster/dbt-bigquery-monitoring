@@ -149,6 +149,13 @@ export DBT_BQ_MONITORING_GCP_PROJECTS='[]'
 In project mode, the package creates **intermediate materialized tables** per project to avoid
 BigQuery limits when querying too many projects simultaneously. This is handled automatically
 via the `project_by_project_table` custom materialization in the `macros` folder.
+The first build loads `initial_backfill_days` (default 166, the hourly partition-insert cap).
+That default is the previous hard-coded window, including the incremental catch-up floor, so
+an upgrade with no variable change loads the same history. It does not use `lookback_window_days`.
+Lower `initial_backfill_days` when the first scan should match the monitoring window. That also
+shortens how far a later incremental run will reach back. Keep it greater than or equal to
+`lookback_window_days` so a later increase in the monitoring window still has history in the
+consolidated tables. Values outside 1–166, and non-integer strings, fail compilation.
 
 These extra tables need to be refreshed regularly — include them in your scheduled runs.
 

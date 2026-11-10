@@ -1,0 +1,6 @@
+kind: Features
+body: Add initial_backfill_days, defaulting to 166 so project-mode first loads and incremental catch-up stay on the previous window unless you set the variable
+time: 2026-11-10T04:15:00Z
+custom:
+    Author: cursoragent
+    Issue: ""

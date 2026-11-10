@@ -79,6 +79,7 @@ LIMIT 10
 
 **Jobs & Performance**
 *   `jobs`, `jobs_by_project`, `jobs_by_user`, `jobs_by_folder`
+*   `jobs_by_project` stays enabled. In project mode it repeats the `jobs` scan because BigQuery treats `JOBS` and `JOBS_BY_PROJECT` as the same view. Set `+enabled: false` on `information_schema_jobs_by_project` in your root `dbt_project.yml` if you do not query it.
 *   `jobs_timeline` (visualize concurrency)
 
 **Storage & Tables**

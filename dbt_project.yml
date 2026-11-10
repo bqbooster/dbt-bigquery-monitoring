@@ -18,6 +18,9 @@ models:
     information_schema:
       +tags:
         - "dbt-bigquery-monitoring-information-schema"
+      # jobs_by_project stays enabled so existing refs keep working. Disable the
+      # duplicate project-mode scan from the root project with a boolean enabled
+      # config. A Jinja var in that config does not turn the model off in Fusion.
       # Disable static analysis for models using expensive run_query() loops
       # to prevent dbt Fusion from performing metadata queries (LIMIT 0) on every dataset.
       # See: https://docs.getdbt.com/docs/fusion/new-concepts#configuring-static_analysis

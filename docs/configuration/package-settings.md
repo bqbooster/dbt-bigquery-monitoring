@@ -22,6 +22,8 @@ To do so, you can set the following variables in your `dbt_project.yml` file or 
 | `input_datasets` | `DBT_BQ_MONITORING_INPUT_DATASETS` | Optional `project.dataset` values that limit dataset-scanned `INFORMATION_SCHEMA` models | `[]` |
 | `bq_region` | `DBT_BQ_MONITORING_REGION` | Region where the monitored projects are located | `us` |
 
+`information_schema_jobs_by_project` stays enabled, so existing `ref()`s and queries keep working in region mode and project mode. [BigQuery documents `INFORMATION_SCHEMA.JOBS` and `INFORMATION_SCHEMA.JOBS_BY_PROJECT` as the same view](https://cloud.google.com/bigquery/docs/information-schema-jobs). In project mode each enabled model is materialized, so the by-project copy repeats the jobs scan (about the size of the `JOBS` history; one production project scanned ~120 GB twice). No model in this package refs `information_schema_jobs_by_project`. Folder and organization jobs models are already `enabled: false` inside their generated SQL. To skip the by-project model, set `+enabled: false` on it in the root project, as in the [configuration guide](/configuration#project-mode). That override is a YAML boolean and works whether the value is `true` or `false`.
+
 ### `input_datasets` examples
 
 Use `input_datasets` when you want to skip automatic dataset discovery

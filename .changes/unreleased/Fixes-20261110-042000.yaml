@@ -1,0 +1,6 @@
+kind: Docs
+body: Document how to disable information_schema_jobs_by_project with a root-project boolean. The model stays enabled, so existing refs keep working in region and project mode
+time: 2026-11-10T04:20:00Z
+custom:
+    Author: cursoragent
+    Issue: ""

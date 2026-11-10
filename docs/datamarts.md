@@ -38,6 +38,9 @@ mindmap
         cost_by_label
       BI Engine
         bi_engine_materialized_view_analysis
+      Performance
+        job_performance_insights
+        job_performance_insights_per_hour
     dbt Models
       most_expensive_models
       most_repeated_models
@@ -300,6 +303,33 @@ FROM {{ ref('job_timeline_analysis') }}
 WHERE slot_efficiency = 'Low Utilization'
   AND duration_category = 'Long Running'
 ORDER BY total_slot_seconds DESC
+```
+
+---
+
+### `job_performance_insights`
+
+One row per done job for the incremental window. Flags come from `query_info.performance_insights` (slot contention, insufficient shuffle quota, partition skew, high-cardinality joins). Shuffle spill is `SUM(job_stages.shuffle_output_bytes_spilled)`.
+
+The model reads `jobs_with_cost` for the same creation-time window as the other job incrementals, and it selects those leaves only (not query text, timeline, or the rest of `job_stages`). `job_performance_insights_per_hour` rolls the per-job table up by project and reservation and does not read `INFORMATION_SCHEMA` again. Jobs with no insight stay in the table so slot-millisecond ratios use every done job as the denominator.
+
+These are new models. Existing models are unchanged. `jobs_done_incremental_hourly()` with no arguments is still `SELECT *` plus the same filters. Both new models use `insert_overwrite` and `on_schema_change: append_new_columns`. Region mode and project mode both go through `jobs_with_cost`.
+
+A null or missing `performance_insights` array, and an empty array, yield false flags and zero counts. A null `job_stages` array and an empty array (including row-level security jobs) yield NULL shuffle bytes, not zero. Audit-log-only mode has no `query_info` or `job_stages` structs (they are untyped nulls). That mode does not reference those fields: flags are false and spill is NULL.
+
+**Key columns:** `hour`, `project_id`, `job_id`, `total_slot_ms`, `has_slot_contention`, `has_insufficient_shuffle_quota`, `has_partition_skew`, `has_high_cardinality_join`, `shuffle_output_bytes_spilled`
+
+```sql
+-- Share of slot time on contention, and spill, by reservation
+SELECT
+  hour,
+  reservation_id,
+  job_count,
+  ROUND(slot_contention_slot_ms_ratio * 100, 1) AS contention_slot_pct,
+  ROUND(shuffle_output_bytes_spilled / POW(1024, 4), 2) AS spilled_tib
+FROM {{ ref('job_performance_insights_per_hour') }}
+WHERE hour >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+ORDER BY spilled_tib DESC
 ```
 
 ---

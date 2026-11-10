@@ -34,6 +34,7 @@ Analyze query costs, performance, and user behavior.
 *   `compute.jobs.most_expensive_jobs`: The top queries driving your bill.
 *   `compute.jobs.most_repeated_jobs`: Identifies queries running too frequently (possible loop or scheduling error).
 *   `compute.jobs.slowest_jobs`: Queries with the longest duration (latency analysis).
+*   `compute.jobs.job_performance_insights`: Per-job slot contention, shuffle quota, partition skew, high-cardinality joins, and shuffle spill. `job_performance_insights_per_hour` is the hourly rollup.
 *   `compute.users.most_expensive_users`: Which users or service accounts spend the most?
 *   `compute.models.most_expensive_models`: (Requires Query Comments) Which dbt models are the most expensive to run?
 

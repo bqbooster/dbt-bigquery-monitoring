@@ -1,0 +1,6 @@
+kind: Fixes
+body: Discover datasets from each input_gcp_projects entry so dataset-scoped INFORMATION_SCHEMA models query those projects instead of the execution project
+time: 2026-11-10T03:55:01Z
+custom:
+    Author: github-christophe-oudar
+    Issue: ""

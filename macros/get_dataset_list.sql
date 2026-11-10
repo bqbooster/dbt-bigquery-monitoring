@@ -21,6 +21,23 @@
   {% endfor %}
 {% endmacro %}
 
+{% macro information_schema_schemata_lookup_sql() %}
+  {% set region = dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_bq_region() %}
+  {% set projects = dbt_bigquery_monitoring.project_list() %}
+  {% if projects | length == 0 %}
+    {% set sql = "SELECT CONCAT('`', CATALOG_NAME, '`.`', SCHEMA_NAME, '`') AS SCHEMA_NAME\nFROM `region-" ~ region ~ "`.`INFORMATION_SCHEMA`.`SCHEMATA`" %}
+  {% else %}
+    {% set parts = [] %}
+    {% for project in projects %}
+      {% do parts.append(
+        "SELECT CONCAT('`', CATALOG_NAME, '`.`', SCHEMA_NAME, '`') AS SCHEMA_NAME\nFROM `" ~ (project | trim) ~ "`.`region-" ~ region ~ "`.`INFORMATION_SCHEMA`.`SCHEMATA`"
+      ) %}
+    {% endfor %}
+    {% set sql = parts | join('\nUNION ALL\n') %}
+  {% endif %}
+  {{ return(sql) }}
+{% endmacro %}
+
 {% macro get_dataset_list() %}
   {# Only execute during actual run, not during parsing #}
   {% if execute %}
@@ -86,11 +103,11 @@
       {{ return(normalized_input_datasets) }}
     {% endif %}
 
-    {% set preflight_sql %}
-    SELECT CONCAT('`', CATALOG_NAME, '`.`', SCHEMA_NAME, '`') AS SCHEMA_NAME
-    FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`SCHEMATA`
-    {% endset %}
-    
+    {# Project mode must read each input project's SCHEMATA. An unqualified
+       region-REGION reference lists the execution project only, so partitions,
+       key/constraint usage, and search indexes then query the wrong project. #}
+    {% set preflight_sql = dbt_bigquery_monitoring.information_schema_schemata_lookup_sql() %}
+
     {% set results = run_query(preflight_sql) %}
     {% set dataset_list = results | map(attribute='SCHEMA_NAME') | list %}
     

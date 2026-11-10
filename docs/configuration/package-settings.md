@@ -35,6 +35,13 @@ If you use `DBT_BQ_MONITORING_INPUT_DATASETS`, pass a single
 parsed for this setting, so use `dbt_project.yml` or `--vars` for
 multiple datasets.
 
+When `input_datasets` is empty and `input_gcp_projects` is set, discovery
+reads each project's `region-<bq_region>.INFORMATION_SCHEMA.SCHEMATA`
+(`UNION ALL`) and returns project-qualified dataset names. With no
+project list, discovery uses the execution project's region.
+Dataset-scoped models (`PARTITIONS`, `KEY_COLUMN_USAGE`,
+`CONSTRAINT_COLUMN_USAGE`, `SEARCH_INDEXES*`) then query those datasets.
+
 ```yml
 # dbt_project.yml
 vars:

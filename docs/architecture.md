@@ -103,7 +103,7 @@ See [Using the package](/using-the-package) and [Monitoring Datamarts](/datamart
 |---|---|---|
 | INFORMATION_SCHEMA wrappers | `ephemeral` (`information_schema_partitions` is a batched table) | `incremental` (per project; partitions still use table-name batches) |
 | Base models | `ephemeral` | `ephemeral` |
-| `jobs_with_cost` | `incremental` | `incremental` |
+| `jobs_with_cost` | `view`, limited to `lookback_window_days` | `view`, limited to `lookback_window_days` |
 | Datamarts | `table` (configurable) | `table` (configurable) |
 
 The `output_materialization` variable controls the datamart materialization type

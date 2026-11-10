@@ -4,6 +4,11 @@ models:
   - name: jobs_with_cost
     description: >
       A model that combines job data with cost information.
+      Only jobs inside lookback_window_days are returned. The source scan includes
+      one extra day so a parent SCRIPT job can still supply the dbt comment for a
+      child at the start of that window. Filters on this model do not prune
+      INFORMATION_SCHEMA.JOBS, because a window function sits between the source
+      and the outer query.
     config:
       meta:
         label: "Jobs with Cost"

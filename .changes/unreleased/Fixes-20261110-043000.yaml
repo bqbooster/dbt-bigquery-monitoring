@@ -1,0 +1,6 @@
+kind: Fixes
+body: Filter jobs_with_cost to lookback_window_days before the parent-script window so incremental runs can prune the INFORMATION_SCHEMA.JOBS partition
+time: 2026-11-10T04:30:00Z
+custom:
+    Author: cursoragent
+    Issue: ""

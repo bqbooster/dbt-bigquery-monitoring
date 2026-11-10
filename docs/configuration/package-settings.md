@@ -70,7 +70,7 @@ These settings are used to configure how dbt will run and materialize the models
 
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
-| `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Number of days to look back for monitoring | `7` |
+| `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Number of days to look back for monitoring. `jobs_with_cost` returns this many days. Its scan of `INFORMATION_SCHEMA.JOBS` includes one extra day so parent SCRIPT jobs can still pass dbt comments to children, and that filter is applied before the window. A downstream `WHERE creation_time` cannot prune the jobs scan, because BigQuery does not push a predicate through the window. If an incremental model falls further behind than this window, full-refresh it. | `7` |
 | `lookback_incremental_billing_window_days` | `DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS` | Number of days to look back for monitoring | `3` |
 | `output_limit_size` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Limit size to use for the models | `1000` |
 | `output_partition_expiration_days` | `DBT_BQ_MONITORING_TABLE_EXPIRATION_DAYS` | Default table expiration in days for incremental models | `365` days |

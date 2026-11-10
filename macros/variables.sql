@@ -114,16 +114,42 @@
   the previous hard-coded window. This is independent of lookback_window_days.
 #}
 {% macro dbt_bigquery_monitoring_variable_initial_backfill_days() %}
-    {% set raw_days = dbt_bigquery_monitoring_variable_priority('initial_backfill_days', 'DBT_BQ_MONITORING_INITIAL_BACKFILL_DAYS', 166) %}
-    {% set backfill_days = raw_days | as_number | int %}
-    {% if backfill_days < 1 or backfill_days > 166 %}
+    {% set raw_days = dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('initial_backfill_days', 'DBT_BQ_MONITORING_INITIAL_BACKFILL_DAYS', 166) %}
+    {% set parsed = namespace(days=none) %}
+    {#- Env vars arrive as strings. Reject blanks, signs, and decimals before int(). -#}
+    {% if raw_days is string %}
+        {% set text = raw_days | trim %}
+        {% set digits_ok = namespace(ok=(text | length > 0)) %}
+        {% for char in text %}
+            {% if char not in '0123456789' %}
+                {% set digits_ok.ok = false %}
+            {% endif %}
+        {% endfor %}
+        {% if not digits_ok.ok %}
+            {% do exceptions.raise_compiler_error(
+                "initial_backfill_days must be an integer from 1 to 166, got: " ~ raw_days
+            ) %}
+        {% endif %}
+        {% set parsed.days = text | int %}
+    {% elif raw_days is boolean or raw_days is none or raw_days is not number %}
+        {% do exceptions.raise_compiler_error(
+            "initial_backfill_days must be an integer from 1 to 166, got: " ~ raw_days
+        ) %}
+    {% elif raw_days != (raw_days | int) %}
+        {% do exceptions.raise_compiler_error(
+            "initial_backfill_days must be an integer from 1 to 166, got: " ~ raw_days
+        ) %}
+    {% else %}
+        {% set parsed.days = raw_days | int %}
+    {% endif %}
+    {% if parsed.days < 1 or parsed.days > 166 %}
         {% do exceptions.raise_compiler_error(
             "initial_backfill_days must be an integer from 1 to 166 "
             ~ "(BigQuery allows 4000 partitions per hourly INSERT; 166 days is 3984 hours), got: "
             ~ raw_days
         ) %}
     {% endif %}
-    {{ return(backfill_days) }}
+    {{ return(parsed.days) }}
 {% endmacro %}
 
 /* Billing data can be late, a safe window is to refresh data for the past 3 days */

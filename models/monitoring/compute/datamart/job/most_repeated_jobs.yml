@@ -3,15 +3,24 @@ version: 2
 models:
   - name: most_repeated_jobs
     description: >
-      A model that stores information about the most repeated jobs.
+      Queries that ran more than once, grouped by normalized query hash so parameterized
+      repeats count as one statement. When BigQuery does not provide
+      query_hashes.normalized_literals (cache hits, failures, non-GoogleSQL, audit-log-only
+      mode), the raw query text is the group key. `query` is one example text.
     config:
       meta:
         label: "Most Repeated Jobs"
         order_fields_by: "label"
         group_label: "Compute cost"
     columns:
+      - name: query_fingerprint
+        description: >
+          normalized_literals when present, otherwise the raw query text.
+      - name: normalized_query_hash
+        description: >
+          The normalized_literals hash, or NULL when this row was grouped by query text.
       - name: query
-        description: The SQL query.
+        description: One example SQL text for this fingerprint.
       - name: project_ids
         description: The top aggregated project IDs.
       - name: reservation_ids

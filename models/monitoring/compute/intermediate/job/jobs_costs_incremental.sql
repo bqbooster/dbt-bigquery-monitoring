@@ -9,7 +9,7 @@
       "granularity": "hour",
       "copy_partitions": dbt_bigquery_monitoring_variable_use_copy_partitions()
     },
-    cluster_by = ["hour", "query"],
+    cluster_by = ["hour", "query_fingerprint"],
     partition_expiration_days = dbt_bigquery_monitoring_variable_lookback_window_days()
     )
 }}
@@ -21,6 +21,8 @@ WITH base AS (
   reservation_id,
   job_id,
   query,
+  {{ query_fingerprint_sql(normalized_literals_sql(), 'query') }} AS query_fingerprint,
+  {{ normalized_literals_sql() }} AS normalized_query_hash,
   user_email,
   cache_hit,
   query_cost,
@@ -43,7 +45,12 @@ FROM {{ jobs_done_incremental_hourly() }}
 
 SELECT
   hour,
-  query,
+  query_fingerprint,
+  -- One hash per group. NULL when the fingerprint fell back to query text.
+  ANY_VALUE(normalized_query_hash) AS normalized_query_hash,
+  -- Example statement. The jobs array does not repeat query text per job:
+  -- a popular hash can have tens of thousands of executions per hour.
+  APPROX_TOP_COUNT(query, 1)[SAFE_OFFSET(0)].value AS query,
   ARRAY_AGG(
     STRUCT(
       project_id,
@@ -78,4 +85,4 @@ SELECT
   COUNT(DISTINCT user_email) AS users_count,
   AVG(total_time_seconds) AS avg_duration_seconds
 FROM base
-GROUP BY hour, query
+GROUP BY hour, query_fingerprint

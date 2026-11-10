@@ -1,0 +1,6 @@
+kind: Features
+body: Group repeated jobs by query_info.query_hashes.normalized_literals, falling back to the raw query text when the hash is null, so parameterized repeats aggregate
+time: 2026-11-10T04:30:00Z
+custom:
+  Author: cursoragent
+  Issue: ""

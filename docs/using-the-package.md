@@ -32,7 +32,7 @@ Analyze query costs, performance, and user behavior.
 
 #### Performance & Top Consumers
 *   `compute.jobs.most_expensive_jobs`: The top queries driving your bill.
-*   `compute.jobs.most_repeated_jobs`: Identifies queries running too frequently (possible loop or scheduling error).
+*   `compute.jobs.most_repeated_jobs`: Identifies queries running too frequently, grouped by normalized query hash so parameterized repeats count together.
 *   `compute.jobs.slowest_jobs`: Queries with the longest duration (latency analysis).
 *   `compute.users.most_expensive_users`: Which users or service accounts spend the most?
 *   `compute.models.most_expensive_models`: (Requires Query Comments) Which dbt models are the most expensive to run?

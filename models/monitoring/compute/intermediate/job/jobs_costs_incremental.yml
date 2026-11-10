@@ -8,9 +8,25 @@ models:
         data_type: timestamp
         description: The hour of the compute cost.
 
+      - name: query_fingerprint
+        data_type: string
+        description: >
+          Grouping key. query_info.query_hashes.normalized_literals when BigQuery
+          populated it, otherwise the raw query text. Parameterized repeats share a hash.
+          Cache hits and failed jobs usually have a null hash and fall back to the text.
+          Requires a full refresh after upgrading so existing hour partitions are regrouped.
+
+      - name: normalized_query_hash
+        data_type: string
+        description: >
+          The normalized_literals hash for this group, or NULL when the fingerprint
+          fell back to query text.
+
       - name: query
         data_type: string
-        description: The SQL query text.
+        description: >
+          One example SQL text for this fingerprint (the most common literal variant in the hour).
+          Individual jobs in `jobs` do not repeat the query text.
 
       - name: jobs
         data_type: record

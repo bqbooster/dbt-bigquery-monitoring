@@ -9,10 +9,15 @@
   - have significant cost (high total_query_cost)
   - have low or no cache hit rate (cache_hit_ratio is low)
   These queries would benefit from scheduled queries, materialized views, or BI Engine acceleration.
+
+  Executions are grouped by normalized query hash (see jobs_costs_incremental), so
+  parameterized repeats are one candidate. The displayed query is one example text.
 #}
 WITH aggregated AS (
   SELECT
-    query,
+    query_fingerprint,
+    ANY_VALUE(normalized_query_hash) AS normalized_query_hash,
+    APPROX_TOP_COUNT(query, 1)[SAFE_OFFSET(0)].value AS query,
     SUM(cache_hit) AS cache_hits,
     SUM(query_count) AS query_count,
     ROUND(SUM(total_query_cost), 4) AS total_query_cost,
@@ -24,22 +29,12 @@ WITH aggregated AS (
     MIN(hour) AS first_seen,
     MAX(hour) AS last_seen
   FROM {{ ref('jobs_costs_incremental') }}
-  GROUP BY query
-),
-
-distinct_projects AS (
-  SELECT
-    query,
-    COUNT(DISTINCT job.project_id) AS distinct_project_count
-  FROM {{ ref('jobs_costs_incremental') }},
-    UNNEST(jobs) AS job
-  GROUP BY query
+  GROUP BY query_fingerprint
 ),
 
 candidates AS (
   SELECT
     a.*,
-    dp.distinct_project_count,
     SAFE_DIVIDE(a.cache_hits, a.query_count) AS cache_hit_ratio,
     -- Potential savings: cost that would be avoided if all repeated executions hit cache
     ROUND(a.total_query_cost * (1 - SAFE_DIVIDE(a.cache_hits, a.query_count)), 4) AS potential_savings_from_caching,
@@ -51,10 +46,11 @@ candidates AS (
       ELSE 'Low'
     END AS materialization_recommendation
   FROM aggregated AS a
-  LEFT JOIN distinct_projects AS dp USING (query)
 )
 
 SELECT
+  query_fingerprint,
+  normalized_query_hash,
   query,
   query_count,
   total_query_cost,

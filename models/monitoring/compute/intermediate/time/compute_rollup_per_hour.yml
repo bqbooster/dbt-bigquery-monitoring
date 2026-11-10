@@ -87,7 +87,13 @@ unit_tests:
     description: >
       Hour totals equal the underlying jobs. Overlapping users are counted once,
       and job-type plus statement-type arrays must not multiply slot and byte sums.
+      is_incremental is overridden so Fusion types this test from compiled SQL.
+      Without that override it describes the incremental table, which does not
+      exist yet when dbt build runs the unit test on a fresh schema.
     model: compute_rollup_per_hour
+    overrides:
+      macros:
+        is_incremental: false
     given:
       - input: ref('compute_rollup_per_minute')
         format: sql

@@ -10,5 +10,5 @@ body: >
   rewrite only partitions at or after the max hour partition; a full refresh rewrites every partition.
 time: 2026-11-10T04:10:00Z
 custom:
-    Author: cursoragent
+    Author: Kayrnt
     Issue: ""

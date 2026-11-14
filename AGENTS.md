@@ -4,18 +4,18 @@
 
 A pull request that changes package behavior needs a changie fragment under `.changes/unreleased/`. Do not edit `CHANGELOG.md` by hand.
 
-Set `custom.Author` to `Kayrnt`:
+Set `custom.Author` to the contributor's own GitHub handle. Set `custom.Issue` to the related issue number when there is one, and leave it empty when there is not:
 
 ```yaml
 custom:
-    Author: Kayrnt
-    Issue: ""
+    Author: your-github-handle
+    Issue: "123"
 ```
-
-`Kayrnt` is the maintainer handle used on released changelog entries. Do not use `cursoragent`, `bqbooster`, or another login. Keep the fragment file's existing indentation. When a change only corrects the author, leave `kind`, `body`, and `Issue` as they are.
 
 ## Behavior
 
-New behavior must be opt-in and backward compatible. Defaults stay as they are, and existing column names and types stay in place, so an upgrade keeps current results.
+New behavior must be opt-in and backward compatible. Put it behind a variable so the default stays the current behavior.
+
+Do not remove or rename existing columns. Document any full refresh that an upgrade needs.
 
 The same change must work on dbt Core and on dbt Fusion.

@@ -85,9 +85,25 @@ models:
                 data_type: int64
                 description: Number of statements of this type
       - name: avg_duration_seconds
-        description: Average duration of jobs in seconds during the hour.
+        description: Unweighted average of the per-minute average execution durations.
       - name: median_duration_seconds
-        description: Median duration of jobs in seconds during the hour.
+        description: Unweighted average of the per-minute p50 execution durations.
+      - name: avg_queue_wait_ms
+        description: >
+          Query-count-weighted average of the minute-level average queue wait.
+          Null minute values are ignored.
+      - name: duration_p50_seconds
+        description: Query-count-weighted average of the minute-level duration p50.
+      - name: duration_p90_seconds
+        description: Query-count-weighted average of the minute-level duration p90.
+      - name: duration_p99_seconds
+        description: Query-count-weighted average of the minute-level duration p99.
+      - name: queue_wait_p50_ms
+        description: Query-count-weighted average of the minute-level queue-wait p50.
+      - name: queue_wait_p90_ms
+        description: Query-count-weighted average of the minute-level queue-wait p90.
+      - name: queue_wait_p99_ms
+        description: Query-count-weighted average of the minute-level queue-wait p99.
 
 unit_tests:
   - name: compute_rollup_per_hour_matches_job_totals
@@ -127,7 +143,14 @@ unit_tests:
             ['a@example.com', 'b@example.com'] AS user_emails,
             ['s1', 's2'] AS session_ids,
             [STRUCT('QUERY' AS value, 2 AS sum)] AS job_types,
-            [STRUCT('SELECT' AS value, 1 AS sum), STRUCT('INSERT' AS value, 1 AS sum)] AS statement_types
+            [STRUCT('SELECT' AS value, 1 AS sum), STRUCT('INSERT' AS value, 1 AS sum)] AS statement_types,
+            10.0 AS avg_queue_wait_ms,
+            20.0 AS duration_p50_seconds,
+            30.0 AS duration_p90_seconds,
+            40.0 AS duration_p99_seconds,
+            50.0 AS queue_wait_p50_ms,
+            60.0 AS queue_wait_p90_ms,
+            70.0 AS queue_wait_p99_ms
           UNION ALL
           SELECT
             TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 1 MINUTE),
@@ -151,7 +174,14 @@ unit_tests:
             ['a@example.com'],
             ['s1'],
             [STRUCT('LOAD' AS value, 1 AS sum)],
-            [STRUCT('SELECT' AS value, 1 AS sum)]
+            [STRUCT('SELECT' AS value, 1 AS sum)],
+            40.0,
+            50.0,
+            60.0,
+            70.0,
+            80.0,
+            90.0,
+            100.0
           UNION ALL
           SELECT
             TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 65 MINUTE),
@@ -175,7 +205,14 @@ unit_tests:
             ['c@example.com'],
             ['s3'],
             [STRUCT('QUERY' AS value, 1 AS sum)],
-            [STRUCT('SELECT' AS value, 1 AS sum)]
+            [STRUCT('SELECT' AS value, 1 AS sum)],
+            4.0,
+            5.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            11.0
           UNION ALL
           SELECT
             TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 30 MINUTE),
@@ -199,7 +236,14 @@ unit_tests:
             ['d@example.com'],
             ['s9'],
             [STRUCT('QUERY' AS value, 1 AS sum)],
-            [STRUCT('SELECT' AS value, 1 AS sum)]
+            [STRUCT('SELECT' AS value, 1 AS sum)],
+            1.0,
+            2.0,
+            3.0,
+            4.0,
+            5.0,
+            6.0,
+            7.0
     expect:
       format: sql
       rows: |
@@ -223,7 +267,14 @@ unit_tests:
           [STRUCT('QUERY' AS value, 2 AS sum), STRUCT('LOAD' AS value, 1 AS sum)] AS job_types,
           [STRUCT('SELECT' AS value, 2 AS sum), STRUCT('INSERT' AS value, 1 AS sum)] AS statement_types,
           15.0 AS avg_duration_seconds,
-          15.0 AS median_duration_seconds
+          15.0 AS median_duration_seconds,
+          20.0 AS avg_queue_wait_ms,
+          30.0 AS duration_p50_seconds,
+          40.0 AS duration_p90_seconds,
+          50.0 AS duration_p99_seconds,
+          60.0 AS queue_wait_p50_ms,
+          70.0 AS queue_wait_p90_ms,
+          80.0 AS queue_wait_p99_ms
         UNION ALL
         SELECT
           TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 1 HOUR),
@@ -245,7 +296,14 @@ unit_tests:
           [STRUCT('QUERY' AS value, 1 AS sum)],
           [STRUCT('SELECT' AS value, 1 AS sum)],
           4.0,
-          4.0
+          4.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0,
+          8.0,
+          9.0,
+          11.0
         UNION ALL
         SELECT
           TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR),
@@ -267,7 +325,14 @@ unit_tests:
           [STRUCT('QUERY' AS value, 1 AS sum)],
           [STRUCT('SELECT' AS value, 1 AS sum)],
           3.0,
-          3.0
+          3.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0
 
   - name: compute_rollup_per_hour_keeps_legacy_counts_when_id_arrays_are_null
     description: >
@@ -304,7 +369,14 @@ unit_tests:
             CAST(NULL AS ARRAY<STRING>) AS user_emails,
             CAST(NULL AS ARRAY<STRING>) AS session_ids,
             CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS job_types,
-            CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS statement_types
+            CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS statement_types,
+            CAST(NULL AS FLOAT64) AS avg_queue_wait_ms,
+            CAST(NULL AS FLOAT64) AS duration_p50_seconds,
+            CAST(NULL AS FLOAT64) AS duration_p90_seconds,
+            CAST(NULL AS FLOAT64) AS duration_p99_seconds,
+            CAST(NULL AS FLOAT64) AS queue_wait_p50_ms,
+            CAST(NULL AS FLOAT64) AS queue_wait_p90_ms,
+            CAST(NULL AS FLOAT64) AS queue_wait_p99_ms
           UNION ALL
           SELECT
             TIMESTAMP_ADD(TIMESTAMP_TRUNC(CURRENT_TIMESTAMP(), HOUR), INTERVAL 10 MINUTE),
@@ -328,7 +400,14 @@ unit_tests:
             ['a@example.com'],
             ['s1'],
             [STRUCT(CAST(NULL AS STRING) AS value, 1 AS sum)],
-            []
+            [],
+            CAST(NULL AS FLOAT64),
+            CAST(NULL AS FLOAT64),
+            CAST(NULL AS FLOAT64),
+            CAST(NULL AS FLOAT64),
+            CAST(NULL AS FLOAT64),
+            CAST(NULL AS FLOAT64),
+            CAST(NULL AS FLOAT64)
     expect:
       format: sql
       rows: |
@@ -352,4 +431,11 @@ unit_tests:
           CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS job_types,
           CAST(NULL AS ARRAY<STRUCT<value STRING, sum INT64>>) AS statement_types,
           6.5 AS avg_duration_seconds,
-          6.5 AS median_duration_seconds
+          6.5 AS median_duration_seconds,
+          CAST(NULL AS FLOAT64) AS avg_queue_wait_ms,
+          CAST(NULL AS FLOAT64) AS duration_p50_seconds,
+          CAST(NULL AS FLOAT64) AS duration_p90_seconds,
+          CAST(NULL AS FLOAT64) AS duration_p99_seconds,
+          CAST(NULL AS FLOAT64) AS queue_wait_p50_ms,
+          CAST(NULL AS FLOAT64) AS queue_wait_p90_ms,
+          CAST(NULL AS FLOAT64) AS queue_wait_p99_ms

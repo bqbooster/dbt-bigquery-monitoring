@@ -47,6 +47,14 @@ SELECT
   -- not been rebuilt yet. compute_rollup_per_hour uses them for exact distinct
   -- counts and falls back to unique_users / unique_sessions while they are null.
   ARRAY_AGG(DISTINCT user_email IGNORE NULLS) AS user_emails,
-  ARRAY_AGG(DISTINCT session_info.session_id IGNORE NULLS) AS session_ids
+  ARRAY_AGG(DISTINCT session_info.session_id IGNORE NULLS) AS session_ids,
+  -- Appended after the id arrays so existing incremental tables only add columns.
+  AVG({{ queue_wait_ms() }}) AS avg_queue_wait_ms,
+  APPROX_QUANTILES(total_time_seconds, 100)[SAFE_OFFSET(50)] AS duration_p50_seconds,
+  APPROX_QUANTILES(total_time_seconds, 100)[SAFE_OFFSET(90)] AS duration_p90_seconds,
+  APPROX_QUANTILES(total_time_seconds, 100)[SAFE_OFFSET(99)] AS duration_p99_seconds,
+  APPROX_QUANTILES({{ queue_wait_ms() }}, 100)[SAFE_OFFSET(50)] AS queue_wait_p50_ms,
+  APPROX_QUANTILES({{ queue_wait_ms() }}, 100)[SAFE_OFFSET(90)] AS queue_wait_p90_ms,
+  APPROX_QUANTILES({{ queue_wait_ms() }}, 100)[SAFE_OFFSET(99)] AS queue_wait_p99_ms
 FROM {{ jobs_done_incremental_hourly() }}
 GROUP BY ALL

@@ -451,6 +451,10 @@ LIMIT 10
 
 Hourly compute cost with year/month/day time truncations added for easy BI tool grouping. Wraps the `compute_cost_per_hour` intermediate table.
 
+`compute_rollup_per_minute` includes average queue wait (creation to start) and duration and queue-wait p50, p90, and p99. `median_duration_seconds` is `APPROX_QUANTILES(total_time_seconds, 100)[OFFSET(50)]`. The percentile columns use `SAFE_OFFSET`. A minute whose start times are all null has null queue-wait percentiles. A minute whose durations are all null fails on `median_duration_seconds`.
+
+`compute_rollup_per_hour` reads `compute_rollup_per_minute` and re-aggregates every minute row. It does not scan `JOBS`. Unique users and sessions are distinct counts of the minute id arrays when every minute in the hour has those arrays, and otherwise the sums of the per-minute counts. Queue wait and duration p50, p90, and p99 are query-count-weighted averages of the minute values. `median_duration_seconds` is the unweighted average of the per-minute medians. `avg_duration_seconds` is the unweighted average of the per-minute averages.
+
 ```sql
 -- Rolling hourly cost for the past 24 hours
 SELECT

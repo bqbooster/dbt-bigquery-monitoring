@@ -16,6 +16,8 @@
 -- Sum metrics and repeated arrays in one grouped pass, then derive
 -- distinct counts from the concatenated arrays. Two UNNEST joins in the
 -- same FROM multiply every SUM by the product of the array lengths.
+-- Percentile columns are query-count-weighted averages of the minute
+-- values, computed in that same pass.
 WITH filtered_minutes AS (
   SELECT
     minute,
@@ -39,7 +41,14 @@ WITH filtered_minutes AS (
     user_emails,
     session_ids,
     job_types,
-    statement_types
+    statement_types,
+    avg_queue_wait_ms,
+    duration_p50_seconds,
+    duration_p90_seconds,
+    duration_p99_seconds,
+    queue_wait_p50_ms,
+    queue_wait_p90_ms,
+    queue_wait_p99_ms
   FROM {{ ref("compute_rollup_per_minute") }}
   {{ compute_incremental_minute_filter('minute') }}
 ),
@@ -73,6 +82,13 @@ grouped AS (
     ) AS job_state,
     AVG(avg_duration_seconds) AS avg_duration_seconds,
     AVG(median_duration_seconds) AS median_duration_seconds,
+    SAFE_DIVIDE(SUM(avg_queue_wait_ms * query_count), SUM(query_count)) AS avg_queue_wait_ms,
+    SAFE_DIVIDE(SUM(duration_p50_seconds * query_count), SUM(query_count)) AS duration_p50_seconds,
+    SAFE_DIVIDE(SUM(duration_p90_seconds * query_count), SUM(query_count)) AS duration_p90_seconds,
+    SAFE_DIVIDE(SUM(duration_p99_seconds * query_count), SUM(query_count)) AS duration_p99_seconds,
+    SAFE_DIVIDE(SUM(queue_wait_p50_ms * query_count), SUM(query_count)) AS queue_wait_p50_ms,
+    SAFE_DIVIDE(SUM(queue_wait_p90_ms * query_count), SUM(query_count)) AS queue_wait_p90_ms,
+    SAFE_DIVIDE(SUM(queue_wait_p99_ms * query_count), SUM(query_count)) AS queue_wait_p99_ms,
     ARRAY_CONCAT_AGG(user_emails) AS user_emails,
     ARRAY_CONCAT_AGG(session_ids) AS session_ids,
     ARRAY_CONCAT_AGG(job_types) AS job_types,
@@ -123,5 +139,12 @@ SELECT
     WHERE statement_type.value IS NOT NULL
   ) AS statement_types,
   avg_duration_seconds,
-  median_duration_seconds
+  median_duration_seconds,
+  avg_queue_wait_ms,
+  duration_p50_seconds,
+  duration_p90_seconds,
+  duration_p99_seconds,
+  queue_wait_p50_ms,
+  queue_wait_p90_ms,
+  queue_wait_p99_ms
 FROM grouped

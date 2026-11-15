@@ -134,6 +134,10 @@ Views that read `jobs_with_cost` directly cover that same window: `jobs_by_proje
 | `google_information_schema_model_materialization` | `DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION` | Whether to use a specific materialization for information schema models. Note that it doesn't work in project mode as it will materialize intermediate tables to avoid issues from BQ when too many projects are used. | `ephemeral` |
 | `partitions_table_batch_size` | `DBT_BQ_MONITORING_PARTITIONS_TABLE_BATCH_SIZE` | Max tables per `INFORMATION_SCHEMA.PARTITIONS` query. BigQuery rejects scans of more than 1000 tables; the package lists tables and queries oversized datasets in batches. Defaults to 900 to stay under the limit. Datasets at or below this size keep a single unfiltered `PARTITIONS` query. | `900` |
 
+### Client type
+
+`jobs_with_cost.client_type` is a STRING label. Labels, the dbt query comment, and the user agent classify Elementary, dbt, Airflow, Looker, Sheets, scheduled queries, Dataform, Hex, Fivetran, Hightouch, Rudderstack, Tableau, Metabase, Mode, Sigma, Lightdash, Prefect, Dagster, and Stitch. A dbt user agent is `dbt`. `Service account` is used only when no specific client matched. NULL labels, a NULL user agent, and a blank user agent are `Unknown`. A non-empty user agent that matches nothing is the label. `compute_rollup_per_minute` and `compute_rollup_per_hour` store the same label.
+
 ### Repeated query grouping
 
 `jobs_costs_incremental`, `most_repeated_jobs`, and `materialization_candidates` group by `query_fingerprint`: `query_info.query_hashes.normalized_literals` when BigQuery populated it, otherwise the raw query text. A null hash does not merge different texts. `query` is one example statement for that fingerprint. `jobs_costs_incremental` is clustered by `hour` and `query`. `most_repeated_jobs` and `materialization_candidates` are views over that table. `most_repeated_jobs` sums each hour's totals once per fingerprint.

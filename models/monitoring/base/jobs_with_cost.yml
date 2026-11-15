@@ -106,4 +106,11 @@ models:
       - name: query_cost
         description: The final query cost based on pricing choice.
       - name: client_type
-        description: The client type.
+        description: >
+          STRING client label from labels, the dbt query comment, and the user
+          agent. Recognizes Elementary, dbt, Airflow, Looker, Sheets, scheduled
+          queries, Dataform, Hex, Fivetran, Hightouch, Rudderstack, Tableau,
+          Metabase, Mode, Sigma, Lightdash, Prefect, Dagster, and Stitch. A dbt
+          user agent is 'dbt'. 'Service account' is used only when no specific
+          client matched. NULL labels, NULL user agents, and blank user agents
+          are 'Unknown'. A non-empty user agent that matches nothing is the label.

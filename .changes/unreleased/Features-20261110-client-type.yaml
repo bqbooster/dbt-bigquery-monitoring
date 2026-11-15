@@ -1,0 +1,6 @@
+kind: Features
+body: Behavior change for client_type. jobs_with_cost now classifies Elementary, Airflow, Dataform, Hex, BI tools, orchestrators, user agents, and service accounts by default. The column name and type are unchanged, but values may differ for rows recomputed going forward (a dbt user agent is dbt, not dbt run). NULL labels, NULL user agents, and blank user agents stay Unknown. A non-empty user agent that matches nothing is kept as the label. jobs_with_cost is a view and picks this up on the next run. Full-refresh compute_rollup_per_minute and compute_rollup_per_hour to reclassify historical partitions. Incremental runs succeed without a full refresh and only rewrite recent partitions. dbt stays ahead of Airflow when both labels are present, and a key named model is not classified as Mode
+time: 2026-11-10T06:00:00Z
+custom:
+  Author: Kayrnt
+  Issue: ""

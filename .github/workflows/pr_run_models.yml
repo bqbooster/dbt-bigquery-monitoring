@@ -73,7 +73,8 @@ jobs:
       # is joined to a later statement. Run the batched materialization
       # against the fixture dataset, which has tables. The CI project is on
       # the BigQuery free tier, so a parsed INSERT fails with
-      # billingNotEnabled; that is the signal the non-empty path ran.
+      # billingNotEnabled. dbt Core 1.12 prints that as
+      # "Billing has not been enabled"; either string means the non-empty path ran.
       # Unexpected ";" is the bug and still fails the job.
       - name: Run batched partitions against a non-empty dataset
         run: |
@@ -94,7 +95,7 @@ jobs:
             echo "Batched materialization produced an empty statement"
             exit 1
           fi
-          if [ "$status" -ne 0 ] && printf '%s\n' "$output" | grep -q 'billingNotEnabled'; then
+          if [ "$status" -ne 0 ] && printf '%s\n' "$output" | grep -Eq 'billingNotEnabled|Billing has not been enabled'; then
             exit 0
           fi
           exit "$status"

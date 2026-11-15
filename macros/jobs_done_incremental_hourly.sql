@@ -47,9 +47,18 @@ COALESCE(_dbt_max_partition, {{ null_fallback }})
 {#
   Returns done jobs within the specified time boundaries.
 #}
-{% macro jobs_done_incremental_hourly() -%}
+{#-
+  select_list limits the columns read from jobs_with_cost. The default keeps
+  the historical SELECT * for existing rollups.
+-#}
+{% macro jobs_done_incremental_hourly(select_list=none) -%}
     (
+      {% if select_list is none %}
       SELECT *
+      {% else %}
+      SELECT
+        {{ select_list }}
+      {% endif %}
       FROM {{ ref('jobs_with_cost') }}
       WHERE
           {#- the table already exists, we read logs are above latest max partition or above lookback window #}

@@ -32,7 +32,7 @@ The package works by ingesting raw metadata logs and transforming them into:
 ## dbt compatibility
 
 The package is actively maintained and tested with:
-*   **dbt Core** >= 1.3.0
-*   **dbt Fusion** >= 2.0.0-beta
+*   **dbt Core** >= 1.3.0 and < 2.0.0
+*   **dbt v2 (Fusion)** >= 2.0.0 and < 3.0.0
 
-It is currently used in production with dbt 1.9.x.
+It is currently used in production with dbt 1.9.x. CI tests the current dbt Core 1.x release and a pinned dbt v2 release.

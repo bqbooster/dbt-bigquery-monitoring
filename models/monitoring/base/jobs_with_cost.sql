@@ -34,6 +34,14 @@ source AS (
   NULL AS caller_supplied_user_agent,
   FROM {{ ref('information_schema_jobs') }}
 {%- endif %}
+  -- creation_time partitions INFORMATION_SCHEMA.JOBS and is present on the
+  -- audit-log input. A predicate after the parent-script window below is not
+  -- pushed into that scan. One extra day keeps a parent SCRIPT job visible to
+  -- a child at the edge of lookback_window_days.
+  WHERE creation_time >= TIMESTAMP_SUB(
+    CURRENT_TIMESTAMP(),
+    INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() + 1 }} DAY
+  )
 ),
 
 base_extracted AS (
@@ -110,6 +118,10 @@ base AS (
   FROM base_with_dbt_info
   {#- Prevent to duplicate costs as script contains query #}
   WHERE statement_type != 'SCRIPT'
+    AND creation_time >= TIMESTAMP_SUB(
+      CURRENT_TIMESTAMP(),
+      INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY
+    )
 ),
 
 base_with_enriched_fields AS (
@@ -134,7 +146,7 @@ FROM base
 base_with_all_pricing AS (
 SELECT
   * EXCEPT (dbt_model_name),
-    total_slot_ms / (1000 * 60 * 60) * {{ dbt_bigquery_monitoring_variable_hourly_slot_price() }} AS flat_pricing_query_cost,
+    total_slot_ms / (1000 * 60 * 60) * {{ dbt_bigquery_monitoring_slot_hour_price_sql() }} AS flat_pricing_query_cost,
     total_tb_billed * {{ dbt_bigquery_monitoring_variable_per_billed_tb_price() }} AS ondemand_query_cost,
     CASE
         WHEN dbt_model_name LIKE 'model.%' THEN 'model'

@@ -10,7 +10,9 @@ models:
 
       - name: query
         data_type: string
-        description: The SQL query text.
+        description: >
+          One example query text for this hour and fingerprint.
+          Individual jobs in `jobs` do not repeat the query text.
 
       - name: jobs
         data_type: record
@@ -110,5 +112,20 @@ models:
       - name: avg_duration_seconds
         data_type: float64
         description: Average duration in seconds.
+
+      - name: query_fingerprint
+        data_type: string
+        description: >
+          Group key, with `hour`. query_info.query_hashes.normalized_literals when
+          BigQuery populated it, otherwise the raw query text. Null hashes (cache hits,
+          failed jobs, non-GoogleSQL, and audit-log-only mode) fall back to the text,
+          and a null query with a null hash stays null. The table is clustered by
+          `hour` and `query`.
+
+      - name: normalized_query_hash
+        data_type: string
+        description: >
+          The normalized_literals hash, or NULL when it was not available.
+          Not the group key when the hash is null; `query_fingerprint` is.
 
 

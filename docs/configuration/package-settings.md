@@ -22,6 +22,8 @@ To do so, you can set the following variables in your `dbt_project.yml` file or 
 | `input_datasets` | `DBT_BQ_MONITORING_INPUT_DATASETS` | Optional `project.dataset` values that limit dataset-scanned `INFORMATION_SCHEMA` models | `[]` |
 | `bq_region` | `DBT_BQ_MONITORING_REGION` | Region where the monitored projects are located | `us` |
 
+`information_schema_jobs_by_project` is enabled in region mode and project mode. [BigQuery documents `INFORMATION_SCHEMA.JOBS` and `INFORMATION_SCHEMA.JOBS_BY_PROJECT` as the same view](https://cloud.google.com/bigquery/docs/information-schema-jobs). In project mode each enabled model is materialized, so the by-project model repeats the jobs scan. No model in this package refs `information_schema_jobs_by_project`. Folder and organization jobs models are `enabled: false` inside their generated SQL. To skip the by-project model, set `+enabled: false` on it in the root project, as in the [configuration guide](/configuration#project-mode). That override is a YAML boolean.
+
 ### `input_datasets` examples
 
 Use `input_datasets` when you want to skip automatic dataset discovery
@@ -34,6 +36,18 @@ If you use `DBT_BQ_MONITORING_INPUT_DATASETS`, pass a single
 `project.dataset` string. List-style environment variable values are not
 parsed for this setting, so use `dbt_project.yml` or `--vars` for
 multiple datasets.
+
+When `input_datasets` is empty and `input_gcp_projects` is set, discovery
+reads each project's `region-<bq_region>.INFORMATION_SCHEMA.SCHEMATA`
+and returns project-qualified dataset names (`` `project`.`dataset` ``).
+A project with no datasets in that region contributes nothing. If listing
+one project fails (for example, missing `bigquery.datasets.get`), that
+project is skipped and the error is logged. Discovery fails only when
+every input project fails. The lookup only reads `SCHEMATA`; it does not
+write a table, so it still runs where BigQuery rejects DML. With no project list, discovery uses the
+execution project's region. An explicit `input_datasets` list skips
+discovery. Dataset-scoped models (`PARTITIONS`, `KEY_COLUMN_USAGE`,
+`CONSTRAINT_COLUMN_USAGE`, `SEARCH_INDEXES*`) then query those datasets.
 
 ```yml
 # dbt_project.yml
@@ -56,7 +70,18 @@ vars:
 | `use_flat_pricing` | `DBT_BQ_MONITORING_USE_FLAT_PRICING` | Whether to use flat pricing or not | `true` |
 | `per_billed_tb_price` | `DBT_BQ_MONITORING_PER_BILLED_TB_PRICE` | Price in US dollars per billed TB of data processed | `6.25` |
 | `free_tb_per_month` | `DBT_BQ_MONITORING_FREE_TB_PER_MONTH` | Free on demand compute quota TB per month | `1` |
-| `hourly_slot_price` | `DBT_BQ_MONITORING_HOURLY_SLOT_PRICE` | Hourly price in US dollars per slot per hour | `0.04` |
+| `hourly_slot_price` | `DBT_BQ_MONITORING_HOURLY_SLOT_PRICE` | Hourly price in US dollars per slot per hour. This is the rate used for every job while edition pricing is off | `0.04` |
+| `use_edition_slot_pricing` | `DBT_BQ_MONITORING_USE_EDITION_SLOT_PRICING` | When on, price slot-hours from the job `edition`. When off, every job uses `hourly_slot_price` | `false` |
+| `slot_pricing_plan` | `DBT_BQ_MONITORING_SLOT_PRICING_PLAN` | Plan used when edition pricing is on: `pay_as_you_go`, `commitment_1_year`, or `commitment_3_year` | `pay_as_you_go` |
+| `standard_payg_slot_price` | `DBT_BQ_MONITORING_STANDARD_PAYG_SLOT_PRICE` | Standard edition pay-as-you-go USD per slot-hour | `0.04` |
+| `standard_commitment_1y_slot_price` | `DBT_BQ_MONITORING_STANDARD_COMMITMENT_1Y_SLOT_PRICE` | Standard 1-year spend-based CUD USD per slot-hour. Standard has no slot commitment | `0.036` |
+| `standard_commitment_3y_slot_price` | `DBT_BQ_MONITORING_STANDARD_COMMITMENT_3Y_SLOT_PRICE` | Standard 3-year spend-based CUD USD per slot-hour | `0.032` |
+| `enterprise_payg_slot_price` | `DBT_BQ_MONITORING_ENTERPRISE_PAYG_SLOT_PRICE` | Enterprise edition pay-as-you-go USD per slot-hour | `0.06` |
+| `enterprise_commitment_1y_slot_price` | `DBT_BQ_MONITORING_ENTERPRISE_COMMITMENT_1Y_SLOT_PRICE` | Enterprise 1-year resource commitment USD per slot-hour | `0.048` |
+| `enterprise_commitment_3y_slot_price` | `DBT_BQ_MONITORING_ENTERPRISE_COMMITMENT_3Y_SLOT_PRICE` | Enterprise 3-year resource commitment USD per slot-hour | `0.036` |
+| `enterprise_plus_payg_slot_price` | `DBT_BQ_MONITORING_ENTERPRISE_PLUS_PAYG_SLOT_PRICE` | Enterprise Plus pay-as-you-go USD per slot-hour | `0.10` |
+| `enterprise_plus_commitment_1y_slot_price` | `DBT_BQ_MONITORING_ENTERPRISE_PLUS_COMMITMENT_1Y_SLOT_PRICE` | Enterprise Plus 1-year resource commitment USD per slot-hour | `0.08` |
+| `enterprise_plus_commitment_3y_slot_price` | `DBT_BQ_MONITORING_ENTERPRISE_PLUS_COMMITMENT_3Y_SLOT_PRICE` | Enterprise Plus 3-year resource commitment USD per slot-hour | `0.06` |
 | `active_logical_storage_gb_price` | `DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE` | Monthly price in US dollars per active logical storage GB | `0.02` |
 | `long_term_logical_storage_gb_price` | `DBT_BQ_MONITORING_LONG_TERM_LOGICAL_STORAGE_GB_PRICE` | Monthly price in US dollars per long term logical storage GB | `0.01` |
 | `active_physical_storage_gb_price` | `DBT_BQ_MONITORING_ACTIVE_PHYSICAL_STORAGE_GB_PRICE` | Monthly price in US dollars per active physical storage GB | `0.04` |
@@ -64,13 +89,44 @@ vars:
 | `bi_engine_gb_hourly_price` | `DBT_BQ_MONITORING_BI_ENGINE_GB_HOURLY_PRICE` | Hourly price in US dollars per BI engine GB of memory | `0.0416` |
 | `free_storage_gb_per_month` | `DBT_BQ_MONITORING_FREE_STORAGE_GB_PER_MONTH` | Free storage GB per month | `10` |
 
+### Edition-aware slot pricing
+
+Off unless you set `use_edition_slot_pricing`. While it is off, `flat_pricing_query_cost` is `total_slot_ms / (1000 * 60 * 60) * hourly_slot_price`. With the default `hourly_slot_price`, that multiplier is `0.04`.
+
+Turn it on to price each job from `INFORMATION_SCHEMA.JOBS.edition`:
+
+| Edition | `pay_as_you_go` | `commitment_1_year` | `commitment_3_year` |
+|---------|-----------------|---------------------|---------------------|
+| `STANDARD` | 0.04 | 0.036 | 0.032 |
+| `ENTERPRISE` | 0.06 | 0.048 | 0.036 |
+| `ENTERPRISE_PLUS` | 0.10 | 0.08 | 0.06 |
+
+Defaults are US list prices (November 2026). Standard has no slot commitment, so its commitment columns are the 1-year and 3-year spend-based CUD rates. Enterprise and Enterprise Plus commitment columns are resource-commitment rates (20% and 40% off pay-as-you-go). Override any cell with the variable in the table above. `slot_pricing_plan` selects the column for every reservation.
+
+`NULL`, on-demand, and any other edition use `hourly_slot_price`. In audit-log-only mode `edition` is an untyped null; the enabled expression casts it to `STRING` and uses that fallback.
+
+`reservation_slot_pricing_plans` is a **dbt var only** (a string environment variable cannot carry a mapping). Map `reservation_id` to a plan name. Other reservations use `slot_pricing_plan`.
+
+```yml
+vars:
+  use_edition_slot_pricing: true
+  slot_pricing_plan: pay_as_you_go
+  reservation_slot_pricing_plans:
+    "admin-project:US.etl": commitment_3_year
+```
+
 ## Package
 
 These settings are used to configure how dbt will run and materialize the models.
 
+`jobs_with_cost` covers `lookback_window_days` of jobs. The source includes one extra day before the parent-script window, so a parent `SCRIPT` job at the edge can still pass its dbt comment to a child, and so BigQuery can prune `INFORMATION_SCHEMA.JOBS`. The audit-log input exposes `creation_time`, so the same predicate applies there.
+
+Views that read `jobs_with_cost` directly cover that same window: `jobs_by_project_with_cost`, `query_with_better_pricing_using_on_demand_view`, `query_with_better_pricing_using_flat_pricing_view`, and `bi_engine_materialized_view_analysis`. Raise `lookback_window_days` for a longer history.
+
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
-| `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Number of days to look back for monitoring | `7` |
+| `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Monitoring window in days. `jobs_with_cost` keeps only this many days. | `7` |
+| `initial_backfill_days` | `DBT_BQ_MONITORING_INITIAL_BACKFILL_DAYS` | Days of history `project_by_project_table` loads on the first build, on full refresh, and as the furthest incremental catch-up (the greater of the current max partition and this many days). Does not follow `lookback_window_days`. Integer from 1 to 166 (`166 * 24 = 3984` hourly partitions, under BigQuery's 4000-partition insert limit). `0`, negatives, values above 166, and non-integer strings fail compilation. An environment variable may be a digit string such as `"166"`. | `166` |
 | `lookback_incremental_billing_window_days` | `DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS` | Number of days to look back for monitoring | `3` |
 | `output_limit_size` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Limit size to use for the models | `1000` |
 | `output_partition_expiration_days` | `DBT_BQ_MONITORING_TABLE_EXPIRATION_DAYS` | Default table expiration in days for incremental models | `365` days |
@@ -81,6 +137,10 @@ These settings are used to configure how dbt will run and materialize the models
 ### Client type
 
 `jobs_with_cost.client_type` is a STRING label. Labels, the dbt query comment, and the user agent classify Elementary, dbt, Airflow, Looker, Sheets, scheduled queries, Dataform, Hex, Fivetran, Hightouch, Rudderstack, Tableau, Metabase, Mode, Sigma, Lightdash, Prefect, Dagster, and Stitch. A dbt user agent is `dbt`. `Service account` is used only when no specific client matched. NULL labels, a NULL user agent, and a blank user agent are `Unknown`. A non-empty user agent that matches nothing is the label. `compute_rollup_per_minute` and `compute_rollup_per_hour` store the same label.
+
+### Repeated query grouping
+
+`jobs_costs_incremental`, `most_repeated_jobs`, and `materialization_candidates` group by `query_fingerprint`: `query_info.query_hashes.normalized_literals` when BigQuery populated it, otherwise the raw query text. A null hash does not merge different texts. `query` is one example statement for that fingerprint. `jobs_costs_incremental` is clustered by `hour` and `query`. `most_repeated_jobs` and `materialization_candidates` are views over that table. `most_repeated_jobs` sums each hour's totals once per fingerprint.
 
 ### `INFORMATION_SCHEMA.PARTITIONS` 1000-table limit
 
@@ -118,10 +178,12 @@ See [GCP BigQuery Audit logs](/configuration/audit-logs) for more information.
 
 BigQuery periodically introduces new fields in `INFORMATION_SCHEMA` views that are initially in "Preview" or "Experimental" and might not be available in all regions. These fields are disabled by default in this package to ensure compatibility across all regions.
 
+`total_services_sku_slot_ms` is selected by default. It is NULL unless the job has external service costs billed with method `SERVICES_SKU`. On a normal warehouse workload the column is empty, and keeping one nullable integer costs essentially nothing. Omit it with `enable_total_services_sku_slot_ms: false` or `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS=false`. If that variable is unset, it still follows `enable_experimental_fields`. The package sets the specific variable to `true`, so turning experimental fields off does not drop this column unless you also unset the specific variable or set it to `false`.
+
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
 | `enable_experimental_fields` | `DBT_BQ_MONITORING_ENABLE_EXPERIMENTAL_FIELDS` | Toggle to enable all experimental/preview fields | `true` |
 | `enable_principal_subject` | `DBT_BQ_MONITORING_ENABLE_PRINCIPAL_SUBJECT` | Toggle to enable `principal_subject` field in jobs views | `true` |
 | `enable_reservation_group_path` | `DBT_BQ_MONITORING_ENABLE_RESERVATION_GROUP_PATH` | Toggle to enable `reservation_group_path` field in reservations views | `false` |
-| `enable_total_services_sku_slot_ms` | `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS` | Toggle to enable `total_services_sku_slot_ms` field in jobs views | `true` |
+| `enable_total_services_sku_slot_ms` | `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS` | Select `total_services_sku_slot_ms` on jobs views. The value is NULL unless the job has `SERVICES_SKU` external service costs, and keeping the nullable integer costs essentially nothing. Set this to `false`, or `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS=false`, to omit it. When the variable is unset, `enable_experimental_fields` still controls it. | `true` |
 | `enable_materialized_view_statistics` | `DBT_BQ_MONITORING_ENABLE_MATERIALIZED_VIEW_STATISTICS` | Toggle to enable `materialized_view_statistics` field in jobs views | `true` |

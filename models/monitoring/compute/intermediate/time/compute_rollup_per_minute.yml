@@ -78,6 +78,29 @@ models:
                 data_type: int64
                 description: Number of statements of this type
       - name: avg_duration_seconds
-        description: Average duration of jobs in seconds during the minute.
+        description: Average execution duration of jobs in seconds during the minute (start to end).
       - name: median_duration_seconds
-        description: Median duration of jobs in seconds during the minute.
+        description: >
+          p50 execution duration in seconds, APPROX_QUANTILES(total_time_seconds, 100)[OFFSET(50)].
+          An all-null minute fails this expression.
+      - name: user_emails
+        description: Distinct user emails in the minute.
+      - name: session_ids
+        description: Distinct session ids in the minute.
+      - name: avg_queue_wait_ms
+        description: >
+          Average milliseconds from creation to start. Null when start_time is null.
+          AVG ignores nulls.
+      - name: duration_p50_seconds
+        description: p50 execution duration in seconds (APPROX_QUANTILES offset 50 via SAFE_OFFSET).
+      - name: duration_p90_seconds
+        description: p90 execution duration in seconds (APPROX_QUANTILES offset 90).
+      - name: duration_p99_seconds
+        description: p99 execution duration in seconds (APPROX_QUANTILES offset 99).
+      - name: queue_wait_p50_ms
+        description: >
+          p50 queue wait in milliseconds. Null when every start_time in the minute is null.
+      - name: queue_wait_p90_ms
+        description: p90 queue wait in milliseconds, from creation to start.
+      - name: queue_wait_p99_ms
+        description: p99 queue wait in milliseconds, from creation to start.

@@ -21,6 +21,7 @@ SELECT
   project_id,
   ANY_VALUE(slots_assigned) AS slots_assigned,
   ANY_VALUE(slots_max_assigned) AS slots_max_assigned,
+  ANY_VALUE(slot_capacity) AS slot_capacity,
   ANY_VALUE(autoscale) AS autoscale
   FROM
   {{ ref("information_schema_reservations_timeline") }}
@@ -36,6 +37,7 @@ SELECT
   jobs.total_slot_ms,
   res.slots_assigned,
   res.slots_max_assigned,
+  res.slot_capacity,
   res.autoscale,
   -- Enhanced metrics
   jobs.total_query_cost,

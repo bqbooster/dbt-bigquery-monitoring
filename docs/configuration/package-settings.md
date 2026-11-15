@@ -80,9 +80,7 @@ These settings are used to configure how dbt will run and materialize the models
 
 ### Client type
 
-`jobs_with_cost.client_type` is still a STRING column of that name. Its values can differ from older package versions. Labels, the dbt query comment, and the user agent classify Elementary, dbt, Airflow, Looker, Sheets, scheduled queries, Dataform, Hex, Fivetran, Hightouch, Rudderstack, Tableau, Metabase, Mode, Sigma, Lightdash, Prefect, Dagster, and Stitch. A dbt user agent is `dbt`. `Service account` is used only when no specific client matched. NULL labels, a NULL user agent, and a blank user agent stay `Unknown`. A non-empty user agent that matches nothing is kept as the label.
-
-`jobs_with_cost` is a view, so the next run uses the new labels. `compute_rollup_per_minute` and `compute_rollup_per_hour` store `client_type`. Full-refresh those two models to reclassify historical partitions. The column type does not change, so an incremental run succeeds without a full refresh and only rewrites recent partitions.
+`jobs_with_cost.client_type` is a STRING label. Labels, the dbt query comment, and the user agent classify Elementary, dbt, Airflow, Looker, Sheets, scheduled queries, Dataform, Hex, Fivetran, Hightouch, Rudderstack, Tableau, Metabase, Mode, Sigma, Lightdash, Prefect, Dagster, and Stitch. A dbt user agent is `dbt`. `Service account` is used only when no specific client matched. NULL labels, a NULL user agent, and a blank user agent are `Unknown`. A non-empty user agent that matches nothing is the label. `compute_rollup_per_minute` and `compute_rollup_per_hour` store the same label.
 
 ### `INFORMATION_SCHEMA.PARTITIONS` 1000-table limit
 

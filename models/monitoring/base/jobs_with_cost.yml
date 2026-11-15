@@ -92,14 +92,10 @@ models:
         description: The final query cost based on pricing choice.
       - name: client_type
         description: >
-          Client label (STRING, same column as before). Values can differ from
-          older package versions: Elementary, Airflow, Dataform, Hex, BI tools,
-          and orchestrators are recognized from labels, the dbt query comment,
-          and the user agent. A dbt user agent is 'dbt'. 'Service account' is
-          used only when no specific client matched. NULL labels, NULL user
-          agents, and blank user agents stay 'Unknown'. A non-empty user agent
-          that matches nothing is kept as the label. jobs_with_cost is a view,
-          so the next run uses the new labels. compute_rollup_per_minute and
-          compute_rollup_per_hour store this column; full-refresh those models
-          to reclassify historical partitions. Incremental runs succeed without
-          a full refresh and only rewrite recent partitions.
+          STRING client label from labels, the dbt query comment, and the user
+          agent. Recognizes Elementary, dbt, Airflow, Looker, Sheets, scheduled
+          queries, Dataform, Hex, Fivetran, Hightouch, Rudderstack, Tableau,
+          Metabase, Mode, Sigma, Lightdash, Prefect, Dagster, and Stitch. A dbt
+          user agent is 'dbt'. 'Service account' is used only when no specific
+          client matched. NULL labels, NULL user agents, and blank user agents
+          are 'Unknown'. A non-empty user agent that matches nothing is the label.

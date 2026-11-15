@@ -6,6 +6,8 @@ models:
       Identifies repeated queries with significant cost and low cache hit rates — strong candidates for
       optimization via materialized views, scheduled queries, or BI Engine acceleration.
       Only queries classified as Medium or High recommendation are included.
+      Grouped by query_fingerprint (normalized_literals, or the raw query text when
+      the hash is null).
     config:
       meta:
         label: "Materialization Candidates"
@@ -13,7 +15,7 @@ models:
         group_label: "Compute cost"
     columns:
       - name: query
-        description: The SQL query text that is being repeatedly executed.
+        description: One example query text for this fingerprint.
       - name: query_count
         description: Total number of times this query has been executed over the lookback window.
       - name: total_query_cost
@@ -41,3 +43,9 @@ models:
           Recommendation tier based on frequency, cost, and cache hit rate.
           'High' means a materialized view or scheduled query is strongly recommended.
           'Medium' means caching or optimization could provide savings.
+      - name: query_fingerprint
+        description: >
+          Group key. normalized_literals when present, otherwise the raw query text.
+      - name: normalized_query_hash
+        description: >
+          The normalized_literals hash, or NULL when it was not available.

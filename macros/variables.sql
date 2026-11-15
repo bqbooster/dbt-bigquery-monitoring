@@ -26,11 +26,11 @@
    ============================================== */
 
 {% macro dbt_bigquery_monitoring_variable_bq_region() %}
-    {{ return(dbt_bigquery_monitoring_variable_priority('bq_region', 'DBT_BQ_MONITORING_REGION', 'us')) }}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('bq_region', 'DBT_BQ_MONITORING_REGION', 'us')) }}
 {% endmacro %}
 
 {% macro dbt_bigquery_monitoring_variable_input_gcp_projects() %}
-    {{ return(dbt_bigquery_monitoring_variable_priority('input_gcp_projects', 'DBT_BQ_MONITORING_GCP_PROJECTS', [])) }}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('input_gcp_projects', 'DBT_BQ_MONITORING_GCP_PROJECTS', [])) }}
 {% endmacro %}
 
 {% macro dbt_bigquery_monitoring_variable_input_datasets() %}
@@ -69,7 +69,56 @@
 
 /* Capacity compute (analysis) pricing */
 {% macro dbt_bigquery_monitoring_variable_hourly_slot_price() %}
-    {{ return(dbt_bigquery_monitoring_variable_priority('hourly_slot_price', 'DBT_BQ_MONITORING_HOURLY_SLOT_PRICE', 0.04) | as_number) }}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('hourly_slot_price', 'DBT_BQ_MONITORING_HOURLY_SLOT_PRICE', 0.04) | as_number) }}
+{% endmacro %}
+
+{#-
+  Off by default. While off, every job uses hourly_slot_price (0.04 unless overridden),
+  which is the historical flat slot-hour rate.
+  Calls are package-qualified so a root-project run-operation can render the rate.
+-#}
+{% macro dbt_bigquery_monitoring_variable_use_edition_slot_pricing() %}
+    {{ return(dbt_bigquery_monitoring.force_bool(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('use_edition_slot_pricing', 'DBT_BQ_MONITORING_USE_EDITION_SLOT_PRICING', false))) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_slot_pricing_plan() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('slot_pricing_plan', 'DBT_BQ_MONITORING_SLOT_PRICING_PLAN', 'pay_as_you_go')) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_standard_payg_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('standard_payg_slot_price', 'DBT_BQ_MONITORING_STANDARD_PAYG_SLOT_PRICE', 0.04) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_standard_commitment_1y_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('standard_commitment_1y_slot_price', 'DBT_BQ_MONITORING_STANDARD_COMMITMENT_1Y_SLOT_PRICE', 0.036) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_standard_commitment_3y_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('standard_commitment_3y_slot_price', 'DBT_BQ_MONITORING_STANDARD_COMMITMENT_3Y_SLOT_PRICE', 0.032) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enterprise_payg_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('enterprise_payg_slot_price', 'DBT_BQ_MONITORING_ENTERPRISE_PAYG_SLOT_PRICE', 0.06) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enterprise_commitment_1y_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('enterprise_commitment_1y_slot_price', 'DBT_BQ_MONITORING_ENTERPRISE_COMMITMENT_1Y_SLOT_PRICE', 0.048) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enterprise_commitment_3y_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('enterprise_commitment_3y_slot_price', 'DBT_BQ_MONITORING_ENTERPRISE_COMMITMENT_3Y_SLOT_PRICE', 0.036) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enterprise_plus_payg_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('enterprise_plus_payg_slot_price', 'DBT_BQ_MONITORING_ENTERPRISE_PLUS_PAYG_SLOT_PRICE', 0.10) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enterprise_plus_commitment_1y_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('enterprise_plus_commitment_1y_slot_price', 'DBT_BQ_MONITORING_ENTERPRISE_PLUS_COMMITMENT_1Y_SLOT_PRICE', 0.08) | as_number) }}
+{% endmacro %}
+
+{% macro dbt_bigquery_monitoring_variable_enterprise_plus_commitment_3y_slot_price() %}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('enterprise_plus_commitment_3y_slot_price', 'DBT_BQ_MONITORING_ENTERPRISE_PLUS_COMMITMENT_3Y_SLOT_PRICE', 0.06) | as_number) }}
 {% endmacro %}
 
 /* Storage pricing */
@@ -107,6 +156,51 @@
     {{ return(dbt_bigquery_monitoring_variable_priority('lookback_window_days', 'DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS', 7) | as_number) }}
 {% endmacro %}
 
+{#
+  Days of history loaded by project_by_project_table on the first build and on
+  full refresh, and the furthest incremental catch-up. Hourly partitioned
+  inserts cannot exceed 4000 partitions (166 * 24 = 3984). Default 166 keeps
+  the previous hard-coded window. This is independent of lookback_window_days.
+#}
+{% macro dbt_bigquery_monitoring_variable_initial_backfill_days() %}
+    {% set raw_days = dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('initial_backfill_days', 'DBT_BQ_MONITORING_INITIAL_BACKFILL_DAYS', 166) %}
+    {% set parsed = namespace(days=none) %}
+    {#- Env vars arrive as strings. Reject blanks, signs, and decimals before int(). -#}
+    {% if raw_days is string %}
+        {% set text = raw_days | trim %}
+        {% set digits_ok = namespace(ok=(text | length > 0)) %}
+        {% for char in text %}
+            {% if char not in '0123456789' %}
+                {% set digits_ok.ok = false %}
+            {% endif %}
+        {% endfor %}
+        {% if not digits_ok.ok %}
+            {% do exceptions.raise_compiler_error(
+                "initial_backfill_days must be an integer from 1 to 166, got: " ~ raw_days
+            ) %}
+        {% endif %}
+        {% set parsed.days = text | int %}
+    {% elif raw_days is boolean or raw_days is none or raw_days is not number %}
+        {% do exceptions.raise_compiler_error(
+            "initial_backfill_days must be an integer from 1 to 166, got: " ~ raw_days
+        ) %}
+    {% elif raw_days != (raw_days | int) %}
+        {% do exceptions.raise_compiler_error(
+            "initial_backfill_days must be an integer from 1 to 166, got: " ~ raw_days
+        ) %}
+    {% else %}
+        {% set parsed.days = raw_days | int %}
+    {% endif %}
+    {% if parsed.days < 1 or parsed.days > 166 %}
+        {% do exceptions.raise_compiler_error(
+            "initial_backfill_days must be an integer from 1 to 166 "
+            ~ "(BigQuery allows 4000 partitions per hourly INSERT; 166 days is 3984 hours), got: "
+            ~ raw_days
+        ) %}
+    {% endif %}
+    {{ return(parsed.days) }}
+{% endmacro %}
+
 /* Billing data can be late, a safe window is to refresh data for the past 3 days */
 {% macro dbt_bigquery_monitoring_variable_lookback_incremental_billing_window_days() %}
     {{ return(dbt_bigquery_monitoring_variable_priority('lookback_incremental_billing_window_days', 'DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS', 3) | as_number) }}
@@ -133,7 +227,7 @@
 {% endmacro %}
 
 {% macro dbt_bigquery_monitoring_variable_google_information_schema_model_materialization() %}
-    {{ return(dbt_bigquery_monitoring_variable_priority('google_information_schema_model_materialization', 'DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION', 'placeholder')) }}
+    {{ return(dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_priority('google_information_schema_model_materialization', 'DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION', 'placeholder')) }}
 {% endmacro %}
 
 /* ==============================================
@@ -244,6 +338,17 @@
         {'dbt_var': 'per_billed_tb_price', 'env_var': 'DBT_BQ_MONITORING_PER_BILLED_TB_PRICE', 'default': 6.25, 'format': 'string'},
         {'dbt_var': 'free_tb_per_month', 'env_var': 'DBT_BQ_MONITORING_FREE_TB_PER_MONTH', 'default': 1, 'format': 'string'},
         {'dbt_var': 'hourly_slot_price', 'env_var': 'DBT_BQ_MONITORING_HOURLY_SLOT_PRICE', 'default': 0.04, 'format': 'string'},
+        {'dbt_var': 'use_edition_slot_pricing', 'env_var': 'DBT_BQ_MONITORING_USE_EDITION_SLOT_PRICING', 'default': false, 'format': 'string'},
+        {'dbt_var': 'slot_pricing_plan', 'env_var': 'DBT_BQ_MONITORING_SLOT_PRICING_PLAN', 'default': 'pay_as_you_go', 'format': 'string'},
+        {'dbt_var': 'standard_payg_slot_price', 'env_var': 'DBT_BQ_MONITORING_STANDARD_PAYG_SLOT_PRICE', 'default': 0.04, 'format': 'string'},
+        {'dbt_var': 'standard_commitment_1y_slot_price', 'env_var': 'DBT_BQ_MONITORING_STANDARD_COMMITMENT_1Y_SLOT_PRICE', 'default': 0.036, 'format': 'string'},
+        {'dbt_var': 'standard_commitment_3y_slot_price', 'env_var': 'DBT_BQ_MONITORING_STANDARD_COMMITMENT_3Y_SLOT_PRICE', 'default': 0.032, 'format': 'string'},
+        {'dbt_var': 'enterprise_payg_slot_price', 'env_var': 'DBT_BQ_MONITORING_ENTERPRISE_PAYG_SLOT_PRICE', 'default': 0.06, 'format': 'string'},
+        {'dbt_var': 'enterprise_commitment_1y_slot_price', 'env_var': 'DBT_BQ_MONITORING_ENTERPRISE_COMMITMENT_1Y_SLOT_PRICE', 'default': 0.048, 'format': 'string'},
+        {'dbt_var': 'enterprise_commitment_3y_slot_price', 'env_var': 'DBT_BQ_MONITORING_ENTERPRISE_COMMITMENT_3Y_SLOT_PRICE', 'default': 0.036, 'format': 'string'},
+        {'dbt_var': 'enterprise_plus_payg_slot_price', 'env_var': 'DBT_BQ_MONITORING_ENTERPRISE_PLUS_PAYG_SLOT_PRICE', 'default': 0.10, 'format': 'string'},
+        {'dbt_var': 'enterprise_plus_commitment_1y_slot_price', 'env_var': 'DBT_BQ_MONITORING_ENTERPRISE_PLUS_COMMITMENT_1Y_SLOT_PRICE', 'default': 0.08, 'format': 'string'},
+        {'dbt_var': 'enterprise_plus_commitment_3y_slot_price', 'env_var': 'DBT_BQ_MONITORING_ENTERPRISE_PLUS_COMMITMENT_3Y_SLOT_PRICE', 'default': 0.06, 'format': 'string'},
         {'dbt_var': 'active_logical_storage_gb_price', 'env_var': 'DBT_BQ_MONITORING_ACTIVE_LOGICAL_STORAGE_GB_PRICE', 'default': 0.02, 'format': 'string'},
         {'dbt_var': 'long_term_logical_storage_gb_price', 'env_var': 'DBT_BQ_MONITORING_LONG_TERM_LOGICAL_STORAGE_GB_PRICE', 'default': 0.01, 'format': 'string'},
         {'dbt_var': 'active_physical_storage_gb_price', 'env_var': 'DBT_BQ_MONITORING_ACTIVE_PHYSICAL_STORAGE_GB_PRICE', 'default': 0.04, 'format': 'string'},
@@ -251,6 +356,7 @@
         {'dbt_var': 'free_storage_gb_per_month', 'env_var': 'DBT_BQ_MONITORING_FREE_STORAGE_GB_PER_MONTH', 'default': 10, 'format': 'string'},
         {'dbt_var': 'bi_engine_gb_hourly_price', 'env_var': 'DBT_BQ_MONITORING_BI_ENGINE_GB_HOURLY_PRICE', 'default': 0.0416, 'format': 'string'},
         {'dbt_var': 'lookback_window_days', 'env_var': 'DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS', 'default': 7, 'format': 'string'},
+        {'dbt_var': 'initial_backfill_days', 'env_var': 'DBT_BQ_MONITORING_INITIAL_BACKFILL_DAYS', 'default': 166, 'format': 'string'},
         {'dbt_var': 'lookback_incremental_billing_window_days', 'env_var': 'DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS', 'default': 3, 'format': 'string'},
         {'dbt_var': 'output_materialization', 'env_var': 'DBT_BQ_MONITORING_OUTPUT_MATERIALIZATION', 'default': 'table', 'format': 'string'},
         {'dbt_var': 'output_limit_size', 'env_var': 'DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE', 'default': 1000, 'format': 'string'},

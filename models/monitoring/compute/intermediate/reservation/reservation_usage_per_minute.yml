@@ -23,6 +23,8 @@ models:
         description: The number of slots assigned to the reservation.
       - name: slots_max_assigned
         description: The maximum number of slots that can be assigned through autoscaling.
+      - name: slot_capacity
+        description: The baseline slot capacity of the reservation.
       - name: autoscale
         description: Whether autoscaling is enabled for the reservation.
       - name: total_query_cost

@@ -34,6 +34,14 @@ source AS (
   NULL AS caller_supplied_user_agent,
   FROM {{ ref('information_schema_jobs') }}
 {%- endif %}
+  -- creation_time partitions INFORMATION_SCHEMA.JOBS and is present on the
+  -- audit-log input. A predicate after the parent-script window below is not
+  -- pushed into that scan. One extra day keeps a parent SCRIPT job visible to
+  -- a child at the edge of lookback_window_days.
+  WHERE creation_time >= TIMESTAMP_SUB(
+    CURRENT_TIMESTAMP(),
+    INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() + 1 }} DAY
+  )
 ),
 
 base_extracted AS (
@@ -110,6 +118,10 @@ base AS (
   FROM base_with_dbt_info
   {#- Prevent to duplicate costs as script contains query #}
   WHERE statement_type != 'SCRIPT'
+    AND creation_time >= TIMESTAMP_SUB(
+      CURRENT_TIMESTAMP(),
+      INTERVAL {{ dbt_bigquery_monitoring_variable_lookback_window_days() }} DAY
+    )
 ),
 
 base_with_enriched_fields AS (
@@ -127,36 +139,14 @@ SELECT
   SELECT JSON_VALUE(string_element, '$')
   FROM UNNEST(JSON_QUERY_ARRAY(dbt_info, '$.node_tags')) AS string_element
   ), NULL) AS node_tags,
-  CASE
-  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'dbt_invocation_id' AND value IS NOT NULL) THEN 'dbt'
-  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key LIKE 'looker-%' AND value IS NOT NULL) THEN 'Looker'
-  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'sheets_trigger' AND value = 'user') THEN 'Google connected sheets - manual'
-  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'sheets_trigger' AND value = 'schedule') THEN 'Google connected sheets - scheduled'
-  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'data_source_id' AND value = 'scheduled_query') THEN 'Scheduled query'
-  WHEN EXISTS (SELECT 1 FROM UNNEST(labels) WHERE key = 'client_type') THEN (SELECT value FROM UNNEST(labels) WHERE key = 'client_type' ORDER BY value LIMIT 1)
-  {%- if dbt_bigquery_monitoring_variable_enable_gcp_bigquery_audit_logs() %}
-  WHEN caller_supplied_user_agent LIKE 'dbt%' THEN 'dbt run'
-  WHEN caller_supplied_user_agent LIKE 'Fivetran%' THEN 'Fivetran'
-  WHEN caller_supplied_user_agent LIKE 'gcloud-golang-bigquery%' AND user_email LIKE 'rudderstack%' THEN 'Rudderstack'
-  WHEN caller_supplied_user_agent LIKE 'gcloud-golang%' OR caller_supplied_user_agent LIKE 'google-api-go%' THEN 'Golang Client'
-  WHEN caller_supplied_user_agent LIKE 'gcloud-node%' THEN 'Node Client'
-  WHEN caller_supplied_user_agent LIKE 'gl-python%' THEN 'Python Client'
-  WHEN caller_supplied_user_agent LIKE 'google-cloud-sdk%' THEN 'Google Cloud SDK'
-  WHEN caller_supplied_user_agent LIKE 'Hightouch%' THEN 'Hightouch'
-  WHEN caller_supplied_user_agent LIKE 'Mozilla%' THEN 'Web console'
-  WHEN caller_supplied_user_agent LIKE 'SimbaJDBCDriver%' THEN 'Java Client'
-  ELSE coalesce(caller_supplied_user_agent, 'Unknown')
-  {%- else %}
-  ELSE 'Unknown'
-  {% endif %}
-  END AS client_type,
+  {{ client_type_sql() }} AS client_type,
 FROM base
 ),
 
 base_with_all_pricing AS (
 SELECT
   * EXCEPT (dbt_model_name),
-    total_slot_ms / (1000 * 60 * 60) * {{ dbt_bigquery_monitoring_variable_hourly_slot_price() }} AS flat_pricing_query_cost,
+    total_slot_ms / (1000 * 60 * 60) * {{ dbt_bigquery_monitoring_slot_hour_price_sql() }} AS flat_pricing_query_cost,
     total_tb_billed * {{ dbt_bigquery_monitoring_variable_per_billed_tb_price() }} AS ondemand_query_cost,
     CASE
         WHEN dbt_model_name LIKE 'model.%' THEN 'model'

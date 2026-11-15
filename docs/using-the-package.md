@@ -32,8 +32,9 @@ Analyze query costs, performance, and user behavior.
 
 #### Performance & Top Consumers
 *   `compute.jobs.most_expensive_jobs`: The top queries driving your bill.
-*   `compute.jobs.most_repeated_jobs`: Identifies queries running too frequently (possible loop or scheduling error).
+*   `compute.jobs.most_repeated_jobs`: Identifies queries running too frequently. Grouped by normalized query hash, with the raw query text when that hash is null.
 *   `compute.jobs.slowest_jobs`: Queries with the longest duration (latency analysis).
+*   `compute.jobs.job_performance_insights`: Per-job slot contention, shuffle quota, partition skew, high-cardinality joins, and shuffle spill. `job_performance_insights_per_hour` is the hourly rollup.
 *   `compute.users.most_expensive_users`: Which users or service accounts spend the most?
 *   `compute.models.most_expensive_models`: (Requires Query Comments) Which dbt models are the most expensive to run?
 
@@ -79,12 +80,14 @@ LIMIT 10
 
 **Jobs & Performance**
 *   `jobs`, `jobs_by_project`, `jobs_by_user`, `jobs_by_folder`
+*   `jobs_by_project` is enabled. In project mode it repeats the `jobs` scan because BigQuery treats `JOBS` and `JOBS_BY_PROJECT` as the same view. Set `+enabled: false` on `information_schema_jobs_by_project` in your root `dbt_project.yml` if you do not query it.
 *   `jobs_timeline` (visualize concurrency)
 
 **Storage & Tables**
 *   `tables`, `table_storage`, `table_snapshots`
 *   `columns`, `column_field_paths` (schema details)
 *   `partitions`
+*   `property_graphs` (property graph metadata)
 
 **Access & Security**
 *   `object_privileges` (who can see what)
@@ -92,6 +95,8 @@ LIMIT 10
 
 **Configuration & Reservations**
 *   `reservations`, `assignments` (slots management)
+*   `reservations_timeline` (capacity over time)
+*   `failover_history` (managed disaster-recovery failovers; preview, disabled by default)
 *   `bi_capacities` (BI Engine)
 *   `effective_project_options`
 

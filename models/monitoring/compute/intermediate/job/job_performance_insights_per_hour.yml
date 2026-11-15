@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: job_performance_insights_per_hour
+    description: >
+      Hourly rollup of job_performance_insights by project and reservation.
+      Reads that table only, not INFORMATION_SCHEMA. Slot-millisecond ratios use
+      every done job in the hour as the denominator, including jobs with no insight.
+    config:
+      meta:
+        label: "Job performance insights per hour"
+        order_fields_by: "label"
+        group_label: "Compute performance"
+    columns:
+      - name: hour
+        description: Hour of job creation.
+      - name: project_id
+        description: Project that ran the jobs.
+      - name: reservation_id
+        description: Reservation assigned to the jobs, if any.
+      - name: job_count
+        description: Done jobs in the hour.
+      - name: total_slot_ms
+        description: Slot milliseconds across all done jobs in the hour.
+      - name: slot_contention_jobs
+        description: Jobs with at least one slot-contention stage.
+      - name: slot_contention_slot_ms
+        description: Slot milliseconds on jobs flagged for slot contention.
+      - name: slot_contention_slot_ms_ratio
+        description: Share of slot milliseconds on slot-contention jobs.
+      - name: insufficient_shuffle_quota_jobs
+        description: Jobs with at least one insufficient-shuffle-quota stage.
+      - name: insufficient_shuffle_quota_slot_ms
+        description: Slot milliseconds on jobs flagged for insufficient shuffle quota.
+      - name: insufficient_shuffle_quota_slot_ms_ratio
+        description: Share of slot milliseconds on insufficient-shuffle-quota jobs.
+      - name: partition_skew_jobs
+        description: Jobs with at least one partition-skew stage.
+      - name: partition_skew_slot_ms
+        description: Slot milliseconds on jobs flagged for partition skew.
+      - name: partition_skew_slot_ms_ratio
+        description: Share of slot milliseconds on partition-skew jobs.
+      - name: high_cardinality_join_jobs
+        description: Jobs with at least one high-cardinality join insight.
+      - name: high_cardinality_join_slot_ms
+        description: Slot milliseconds on jobs flagged for a high-cardinality join.
+      - name: high_cardinality_join_slot_ms_ratio
+        description: Share of slot milliseconds on high-cardinality-join jobs.
+      - name: shuffle_output_bytes
+        description: Shuffle bytes written. Stages with missing job_stages are skipped by SUM.
+      - name: shuffle_output_bytes_spilled
+        description: Shuffle bytes spilled to disk.
+      - name: jobs_with_shuffle_spill
+        description: Jobs with shuffle_output_bytes_spilled greater than zero.

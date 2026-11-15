@@ -216,9 +216,11 @@ LIMIT 20
 
 ### `most_repeated_jobs`
 
-Identifies queries that run repeatedly with the same SQL text. High repetition with low cache hit rates signals caching or materialization opportunities.
+Identifies queries that run repeatedly. One row per `query_fingerprint`: `query_info.query_hashes.normalized_literals` when BigQuery populated it, otherwise the raw query text. A null hash does not merge different texts. A null query and a null hash stay a null fingerprint. `query` is one example statement. Hourly totals are summed once per fingerprint.
 
-**Key columns:** `query`, `query_count`, `total_query_cost`, `cache_hit_ratio`, `total_slot_ms`, `user_emails`
+BigQuery does not publish the hash for cache hits, so a cached parameterized execution can remain on its own text key. Audit-log-only mode has no `query_info` (the struct is an untyped null) and uses the query text. Region and project mode both read the hash through `jobs_with_cost`. `jobs_costs_incremental` is clustered by `hour` and `query`.
+
+**Key columns:** `query_fingerprint`, `normalized_query_hash`, `query`, `query_count`, `total_query_cost`, `cache_hit_ratio`, `total_slot_ms`, `user_emails`
 
 ```sql
 -- Frequently repeated queries with poor cache hit rates
@@ -336,9 +338,9 @@ ORDER BY spilled_tib DESC
 
 ### `materialization_candidates`
 
-Identifies queries that are **strong candidates for materialized views or scheduled queries**: high frequency, significant cost, and low cache hit rate. Shows potential savings if the queries were cached.
+Identifies queries that are **strong candidates for materialized views or scheduled queries**: high frequency, significant cost, and low cache hit rate. Shows potential savings if the queries were cached. Frequency uses the same `query_fingerprint` as `most_repeated_jobs` (`normalized_literals`, or the raw query text when the hash is null).
 
-**Key columns:** `query`, `query_count`, `total_query_cost`, `cache_hit_ratio`, `potential_savings_from_caching`, `materialization_recommendation`, `first_seen`, `last_seen`
+**Key columns:** `query_fingerprint`, `query`, `query_count`, `total_query_cost`, `cache_hit_ratio`, `potential_savings_from_caching`, `materialization_recommendation`, `first_seen`, `last_seen`
 
 ```sql
 -- High-value candidates for materialization

@@ -149,10 +149,32 @@ export DBT_BQ_MONITORING_GCP_PROJECTS='[]'
 In project mode, the package creates **intermediate materialized tables** per project to avoid
 BigQuery limits when querying too many projects simultaneously. This is handled automatically
 via the `project_by_project_table` custom materialization in the `macros` folder.
+The first build, a full refresh, and the incremental catch-up floor load `initial_backfill_days`
+of history (default 166, the hourly partition-insert cap). It does not follow `lookback_window_days`.
+Lower it when the first scan should be shorter. That also shortens how far a later incremental run
+reaches back. Keep it greater than or equal to `lookback_window_days` so a later increase in the
+monitoring window still has history in the consolidated tables. Values outside 1–166, and
+non-integer strings, fail compilation.
+`information_schema_jobs_by_project` is enabled. `INFORMATION_SCHEMA.JOBS` and
+`INFORMATION_SCHEMA.JOBS_BY_PROJECT` return the same rows in project mode, so building
+both repeats the jobs scan. Disable the by-project model in the root project if you
+do not query it.
 
 These extra tables need to be refreshed regularly — include them in your scheduled runs.
 
 :::
+
+Skip `information_schema_jobs_by_project` with a literal boolean. A Jinja expression or
+`var()` in `+enabled` does not disable the model in dbt Fusion.
+
+```yml
+models:
+  dbt_bigquery_monitoring:
+    information_schema:
+      jobs:
+        information_schema_jobs_by_project:
+          +enabled: false
+```
 
 ### Limit dataset discovery with `input_datasets`
 

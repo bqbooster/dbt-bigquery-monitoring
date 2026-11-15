@@ -5,15 +5,21 @@ on:
       - 'macros/**'
       - 'models/**' 
       - 'integration_tests/**'
+      - 'tests/**'
       - 'dbt_project.yml'
       - 'packages.yml'
       - 'config.py'
+      - '.github/workflows/pr_run_models.yml'
+      - '.github/actions/setup-dbt/**'
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 # GitHub secrets
 env:
   DBT_PROFILES_DIR: .
-  GITHUB_SHA_OVERRIDE: ${{ github.event.pull_request.head.sha }} # We need the commit hash of the pull request branch's head, the GITHUB_SHA env var is always the base branch in a pull_request_target trigger
+  GITHUB_SHA_OVERRIDE: ${{ github.event.pull_request.head.sha || github.sha }}
   DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_SERVICE_ACCOUNT }}
   DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT }}
   DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT: ${{ secrets.DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT }}
@@ -31,22 +37,19 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
+      # Organization INFORMATION_SCHEMA models are enabled: false. Excluding
+      # their tag matches zero enabled nodes and warns on dbt >= 1.12.
       # --empty wraps refs in `where false limit 0`, which empties unit-test fixtures.
-      DBT_COMMON_FLAGS: "--empty --exclude tag:dbt-bigquery-monitoring-information-schema-by-organization --exclude test_type:unit"
+      DBT_COMMON_FLAGS: "--empty --exclude test_type:unit"
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha }} # Check out the code of the PR
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       
-      - name: Set up Python
-        uses: actions/setup-python@v7
-        with:
-          python-version: '3.11'
-
-      - name: Install Python packages
-        run: python -m pip install dbt-bigquery~=1.10.0 sqlfluff-templater-dbt
+      - name: Set up dbt Core
+        uses: ./.github/actions/setup-dbt
 
       - name: Write keyfile if secret is defined
         run: |
@@ -65,6 +68,38 @@ jobs:
         run: | 
           cd integration_tests
           dbt run -s tag:fixtures
+
+      # --empty never appends the INSERT jobs, so it misses the empty
+      # statement created when create_table_as() (already terminated with ';')
+      # is joined to a later statement. Run the batched materialization
+      # against the fixture dataset, which has tables. The CI project is on
+      # the BigQuery free tier, so a parsed INSERT fails with
+      # billingNotEnabled. dbt Core 1.12 prints that as
+      # "Billing has not been enabled"; either string means the non-empty path ran.
+      # Unexpected ";" is the bug and still fails the job.
+      - name: Run batched partitions against a non-empty dataset
+        run: |
+          cd integration_tests
+          suffix="${DBT_TEST_DATASET_SUFFIX:-}"
+          dataset="dbt_bigquery_monitoring_test_commit_${GITHUB_SHA_OVERRIDE}${suffix}"
+          set +e
+          output=$(DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION=information_schema_batched_table \
+            DBT_BQ_MONITORING_INPUT_DATASETS="${DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT}.${dataset}" \
+            dbt run -s information_schema_partitions --full-refresh 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          # Later steps materialize this model as a view. Drop the table
+          # this step created so that replacement can succeed.
+          dbt run-operation drop_ci_partitions_table
+          if printf '%s\n' "$output" | grep -q 'Unexpected ";"'; then
+            echo "Batched materialization produced an empty statement"
+            exit 1
+          fi
+          if [ "$status" -ne 0 ] && printf '%s\n' "$output" | grep -Eq 'billingNotEnabled|Billing has not been enabled'; then
+            exit 0
+          fi
+          exit "$status"
 
       - name: Run all models once
         run: | 

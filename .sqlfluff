@@ -1,5 +1,8 @@
 [sqlfluff]
-exclude_rules = ST07, AM04, CV03, LT05, ST06, RF04, AM06, ST05, LT02, CP02, LT07, LT14, RF01
+# RF06: generated INFORMATION_SCHEMA models quote schema and view names
+# (`INFORMATION_SCHEMA`.`JOBS`). Those identifiers are valid unquoted, but the
+# parser always emits backticks and the rest of the package uses the same form.
+exclude_rules = ST07, AM04, CV03, LT05, ST06, RF04, AM06, ST05, LT02, CP02, LT07, LT14, RF01, RF06
 dialect = bigquery
 templater = dbt
 max_line_length = 120

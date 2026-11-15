@@ -17,9 +17,7 @@ period_slot_ms,
 project_id,
 project_number,
 user_email,
-{%- if dbt_bigquery_monitoring_variable_enable_principal_subject() %}
-principal_subject,
-{%- endif %}
+{%- if dbt_bigquery_monitoring_variable_enable_principal_subject() %}principal_subject,{%- endif %}
 job_id,
 job_type,
 statement_type,
@@ -30,11 +28,14 @@ job_start_time,
 job_end_time,
 state,
 reservation_id,
+{%- if dbt_bigquery_monitoring_variable_enable_reservation_group_path() %}reservation_group_path,{%- endif %}
 edition,
 total_bytes_billed,
 total_bytes_processed,
 error_result,
 cache_hit,
 period_shuffle_ram_usage_ratio,
-period_estimated_runnable_units
+period_estimated_runnable_units,
+global_query_info,
+copy_job_statistics
 FROM `region-{{ dbt_bigquery_monitoring_variable_bq_region() }}`.`INFORMATION_SCHEMA`.`JOBS_TIMELINE_BY_ORGANIZATION`

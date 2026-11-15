@@ -35,7 +35,7 @@
   Always returns an array of project strings
 --#}
 {% macro project_list() %}
-  {% set projects = dbt_bigquery_monitoring_variable_input_gcp_projects() %}
+  {% set projects = dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_input_gcp_projects() %}
 
   {#-- If it's already a list/array, return it directly --#}
   {% if projects is iterable and projects is not string %}

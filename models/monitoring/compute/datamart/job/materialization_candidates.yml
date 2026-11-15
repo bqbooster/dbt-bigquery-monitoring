@@ -7,8 +7,7 @@ models:
       optimization via materialized views, scheduled queries, or BI Engine acceleration.
       Only queries classified as Medium or High recommendation are included.
       Grouped by query_fingerprint (normalized_literals, or the raw query text when
-      the hash is null). The recommendation thresholds are unchanged. After upgrading,
-      run `dbt run -s jobs_costs_incremental most_repeated_jobs materialization_candidates --full-refresh`.
+      the hash is null).
     config:
       meta:
         label: "Materialization Candidates"

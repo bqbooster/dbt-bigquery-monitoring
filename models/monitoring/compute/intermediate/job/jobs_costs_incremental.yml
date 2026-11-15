@@ -119,10 +119,8 @@ models:
           Group key, with `hour`. query_info.query_hashes.normalized_literals when
           BigQuery populated it, otherwise the raw query text. Null hashes (cache hits,
           failed jobs, non-GoogleSQL, and audit-log-only mode) fall back to the text,
-          and a null query with a null hash stays null. Clustering stays on
-          `hour, query`. After upgrading, full-refresh this model so older hour
-          partitions use this grain:
-          `dbt run -s jobs_costs_incremental most_repeated_jobs materialization_candidates --full-refresh`.
+          and a null query with a null hash stays null. The table is clustered by
+          `hour` and `query`.
 
       - name: normalized_query_hash
         data_type: string

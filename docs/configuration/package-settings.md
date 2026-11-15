@@ -80,17 +80,7 @@ These settings are used to configure how dbt will run and materialize the models
 
 ### Repeated query grouping
 
-`jobs_costs_incremental`, `most_repeated_jobs`, and `materialization_candidates` group by `query_fingerprint`: `query_info.query_hashes.normalized_literals` when BigQuery populated it, otherwise the raw query text. A null hash does not merge different texts. `query` is one example statement for that fingerprint. Column names and types are unchanged. `query_fingerprint` and `normalized_query_hash` are extra columns. Clustering stays `hour, query`.
-
-This changes counts and costs versus older package versions, which grouped by the raw query text. `most_repeated_jobs` also sums each hour once. The previous view repeated an hour's totals once per job in the bucket.
-
-After upgrading, full-refresh the incremental table so older hour partitions use the new grain. `most_repeated_jobs` and `materialization_candidates` are views and follow that table.
-
-```bash
-dbt run -s jobs_costs_incremental most_repeated_jobs materialization_candidates --full-refresh
-```
-
-Skipping the refresh leaves old hour partitions grouped by raw query text and new hours grouped by fingerprint.
+`jobs_costs_incremental`, `most_repeated_jobs`, and `materialization_candidates` group by `query_fingerprint`: `query_info.query_hashes.normalized_literals` when BigQuery populated it, otherwise the raw query text. A null hash does not merge different texts. `query` is one example statement for that fingerprint. `jobs_costs_incremental` is clustered by `hour` and `query`. `most_repeated_jobs` and `materialization_candidates` are views over that table. `most_repeated_jobs` sums each hour's totals once per fingerprint.
 
 ### `INFORMATION_SCHEMA.PARTITIONS` 1000-table limit
 

@@ -213,19 +213,9 @@ LIMIT 20
 
 ### `most_repeated_jobs`
 
-Identifies queries that run repeatedly. One row per `query_fingerprint`: `query_info.query_hashes.normalized_literals` when BigQuery populated it, otherwise the raw query text. A null hash does not merge different texts. A null query and a null hash stay a null fingerprint. `query` is one example statement. Column names and types are unchanged. `query_fingerprint` and `normalized_query_hash` are extra columns.
+Identifies queries that run repeatedly. One row per `query_fingerprint`: `query_info.query_hashes.normalized_literals` when BigQuery populated it, otherwise the raw query text. A null hash does not merge different texts. A null query and a null hash stay a null fingerprint. `query` is one example statement. Hourly totals are summed once per fingerprint.
 
-Hourly totals are summed once per fingerprint. Older package versions grouped by the raw query text and, in this view, repeated each hour's totals once per job in the bucket, so counts and costs can be lower after the upgrade.
-
-BigQuery does not publish the hash for cache hits, so a cached parameterized execution can remain on its own text key. Audit-log-only mode has no `query_info` (the struct is an untyped null) and always uses the query text. Region and project mode both read the hash through `jobs_with_cost`.
-
-`jobs_costs_incremental` keeps `cluster_by` `['hour', 'query']` and `on_schema_change: append_new_columns`. After upgrading, full-refresh so older hour partitions use the fingerprint grain. The views recompute from that table:
-
-```bash
-dbt run -s jobs_costs_incremental most_repeated_jobs materialization_candidates --full-refresh
-```
-
-Skipping the refresh leaves old hour partitions grouped by raw query text and new hours grouped by fingerprint.
+BigQuery does not publish the hash for cache hits, so a cached parameterized execution can remain on its own text key. Audit-log-only mode has no `query_info` (the struct is an untyped null) and uses the query text. Region and project mode both read the hash through `jobs_with_cost`. `jobs_costs_incremental` is clustered by `hour` and `query`.
 
 **Key columns:** `query_fingerprint`, `normalized_query_hash`, `query`, `query_count`, `total_query_cost`, `cache_hit_ratio`, `total_slot_ms`, `user_emails`
 
@@ -318,7 +308,7 @@ ORDER BY total_slot_seconds DESC
 
 ### `materialization_candidates`
 
-Identifies queries that are **strong candidates for materialized views or scheduled queries**: high frequency, significant cost, and low cache hit rate. Shows potential savings if the queries were cached. Frequency uses the same `query_fingerprint` as `most_repeated_jobs` (`normalized_literals`, or the raw query text when the hash is null). Recommendation thresholds are unchanged. After upgrading, run `dbt run -s jobs_costs_incremental most_repeated_jobs materialization_candidates --full-refresh` so historical hour partitions share that grain.
+Identifies queries that are **strong candidates for materialized views or scheduled queries**: high frequency, significant cost, and low cache hit rate. Shows potential savings if the queries were cached. Frequency uses the same `query_fingerprint` as `most_repeated_jobs` (`normalized_literals`, or the raw query text when the hash is null).
 
 **Key columns:** `query_fingerprint`, `query`, `query_count`, `total_query_cost`, `cache_hit_ratio`, `potential_savings_from_caching`, `materialization_recommendation`, `first_seen`, `last_seen`
 

@@ -5,10 +5,7 @@ models:
     description: >
       Queries that ran more than once, grouped by query_fingerprint
       (query_info.query_hashes.normalized_literals, or the raw query text when that
-      hash is null). Hourly totals are summed once per fingerprint. Column names and
-      types are unchanged. After upgrading, run
-      `dbt run -s jobs_costs_incremental most_repeated_jobs materialization_candidates --full-refresh`
-      so historical hour partitions use this grain.
+      hash is null). Hourly totals are summed once per fingerprint.
     config:
       meta:
         label: "Most Repeated Jobs"

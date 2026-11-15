@@ -90,6 +90,8 @@ BigQuery job. The intermediate layer materializes results project-by-project usi
 
 In **region mode**, this layer is ephemeral — models resolve directly as subqueries.
 
+`job_performance_insights` is an incremental table in this layer. It reads `jobs_with_cost` for the lookback window (only performance-insight leaves and shuffle byte fields). `job_performance_insights_per_hour` aggregates that table and does not scan `INFORMATION_SCHEMA` again.
+
 ### Datamarts
 
 High-level, business-ready output tables designed for direct BI tool consumption or ad-hoc queries.
@@ -103,7 +105,7 @@ See [Using the package](/using-the-package) and [Monitoring Datamarts](/datamart
 |---|---|---|
 | INFORMATION_SCHEMA wrappers | `ephemeral` (`information_schema_partitions` is a batched table) | `incremental` (per project; partitions still use table-name batches) |
 | Base models | `ephemeral` | `ephemeral` |
-| `jobs_with_cost` | `incremental` | `incremental` |
+| `jobs_with_cost` | `view` over `lookback_window_days` of jobs; the source scan includes one extra day | `view` over `lookback_window_days` of jobs; the source scan includes one extra day |
 | Datamarts | `table` (configurable) | `table` (configurable) |
 
 The `output_materialization` variable controls the datamart materialization type

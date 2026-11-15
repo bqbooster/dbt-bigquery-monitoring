@@ -1,3 +1,20 @@
+{# Quote query columns so INSERT lists them by name. New INFORMATION_SCHEMA
+   columns are added in SELECT order, while ALTER TABLE appends them, so a
+   positional insert mis-assigns values unless the target is rebuilt. #}
+{% macro project_by_project_column_csv(columns) %}
+  {% if columns is none or columns is mapping or columns | length == 0 %}
+    {% do exceptions.raise_compiler_error(
+      "[dbt-bigquery-monitoring] Could not read query columns for the project-mode insert. "
+      ~ "Run the model with --full-refresh if the target schema cannot be updated in place."
+    ) %}
+  {% endif %}
+  {% set quoted = [] %}
+  {% for column in columns %}
+    {% do quoted.append(adapter.quote(column if column is string else column.name)) %}
+  {% endfor %}
+  {{ return(quoted | join(',\n  ')) }}
+{% endmacro %}
+
 {%- materialization project_by_project_table, adapter='bigquery' -%}
 
 -- If we have projects, process them one by one
@@ -19,6 +36,15 @@
 
 {{ run_hooks(pre_hooks) }}
 
+{# A previous package version created some of these relations as views.
+   CREATE TABLE cannot replace a view, and TRUNCATE TABLE rejects one.
+   Drop the non-table relation and load it as a new table. #}
+{% if existing_relation is not none and not existing_relation.is_table %}
+  {% do log("[dbt-bigquery-monitoring] Replacing " ~ existing_relation.type ~ " " ~ existing_relation ~ " with table " ~ target_relation, info=True) %}
+  {% do adapter.drop_relation(existing_relation.incorporate(type=existing_relation.type or 'view')) %}
+  {% set existing_relation = none %}
+{% endif %}
+
 {#-- Use the first project from the list to bootstrap the table schema,
      so it matches the actual INFORMATION_SCHEMA being queried --#}
 {%- set first_project_sql = sql | replace('`region-', '`' ~ projects[0] | trim ~ '`.`region-') -%}
@@ -34,6 +60,7 @@
   {% set build_sql = create_table_as(False, target_relation, sql_no_data) %}
   {{ build_sql }}
   {% do run_query(build_sql) %}
+  {% set query_columns = adapter.get_columns_in_relation(target_relation) %}
 {% else %}
   {% if partition_config is not none %}
     -- Get the maximum partition value
@@ -60,20 +87,25 @@
   {%- set tmp_relation = make_temp_relation(this).incorporate(type='table') %}
   {% set build_sql = create_table_as(False, tmp_relation, sql_no_data) %}
   {% do run_query(build_sql) %}
-  {% set dest_columns = process_schema_changes('sync_all_columns', tmp_relation, existing_relation) %}
+  {# sync_all_columns adds new top-level columns before the insert. The
+     returned list is the query column order, which the named insert uses. #}
+  {% set query_columns = process_schema_changes('sync_all_columns', tmp_relation, existing_relation) %}
   {% do adapter.drop_relation(tmp_relation) %}
 
 {% endif %}
 
+{% set column_csv = dbt_bigquery_monitoring.project_by_project_column_csv(query_columns) %}
+
 {% set main_sql = [] %}
+{% set initial_backfill_days = dbt_bigquery_monitoring_variable_initial_backfill_days() %}
 
 {#- Incremental case or full refresh if existing -#}
 {% if existing_relation is not none %}
   {#- with partitioned data special where condition #}
   {% if partition_config is not none and max_partition_value is not none and max_partition_value | length > 0 %}
-    {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= GREATEST(TIMESTAMP_TRUNC("' ~ max_partition_value ~ '", HOUR), TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 166 DAY))' %}
+    {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= GREATEST(TIMESTAMP_TRUNC("' ~ max_partition_value ~ '", HOUR), TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL ' ~ initial_backfill_days ~ ' DAY))' %}
   {% elif partition_config is not none %}
-    {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 166 DAY)' %}
+    {% set where_condition = 'WHERE ' ~ partition_config.field ~ ' >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL ' ~ initial_backfill_days ~ ' DAY)' %}
   {% else %}
     {% set where_condition = 'WHERE TRUE' %}
   {% endif %}
@@ -94,7 +126,9 @@
 
     {#- with regular data where condition #}
     {% set insert_sql %}
-      INSERT INTO {{ target_relation }}
+      INSERT INTO {{ target_relation }} (
+        {{ column_csv }}
+      )
       {{ project_sql }}
       {{ where_condition }}
     {% endset %}
@@ -104,12 +138,14 @@
     {#- "Full-refresh" case with no existing table -#}
     {% if partition_config is not none %}
 
-      {#- bigquery doesn't allow more than 4000 partitions per insert so if we have hourly tables it's ~ 166 days -#}
-      {% set project_sql = project_sql + ' WHERE ' ~ partition_config.field ~ ' >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 166 DAY)' %}
+      {#- BigQuery allows at most 4000 partitions per INSERT. initial_backfill_days is capped at 166 so hourly tables stay under that limit. -#}
+      {% set project_sql = project_sql + ' WHERE ' ~ partition_config.field ~ ' >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL ' ~ initial_backfill_days ~ ' DAY)' %}
     {% endif %}
 
     {% set insert_sql %}
-      INSERT INTO {{ target_relation }}
+      INSERT INTO {{ target_relation }} (
+        {{ column_csv }}
+      )
       {{ project_sql }}
     {% endset %}
 

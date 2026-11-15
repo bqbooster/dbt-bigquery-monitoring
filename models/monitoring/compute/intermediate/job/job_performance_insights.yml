@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: job_performance_insights
+    description: >
+      One row per done job in the incremental window. Flags come from
+      query_info.performance_insights (slot contention, insufficient shuffle quota,
+      partition skew, high-cardinality joins). Shuffle spill is the sum of
+      job_stages.shuffle_output_bytes_spilled. Query text is not stored.
+      Audit-log-only mode has no query_info or job_stages, so flags are false and
+      spill is NULL. Jobs with no insight are kept so hourly ratios have a denominator.
+    config:
+      meta:
+        label: "Job performance insights"
+        order_fields_by: "label"
+        group_label: "Compute performance"
+    columns:
+      - name: hour
+        description: Creation hour of the job. Partition column.
+      - name: project_id
+        description: Project that ran the job.
+      - name: reservation_id
+        description: Reservation assigned to the job, if any.
+      - name: job_id
+        description: Job id.
+      - name: user_email
+        description: User or service account that ran the job.
+      - name: total_slot_ms
+        description: Slot milliseconds billed to the job.
+      - name: shuffle_output_bytes
+        description: Bytes written to shuffle across stages. NULL when job_stages is empty.
+      - name: shuffle_output_bytes_spilled
+        description: Shuffle bytes spilled to disk across stages. NULL when job_stages is empty.
+      - name: has_slot_contention
+        description: True when any stage has performance_insights.slot_contention.
+      - name: slot_contention_stage_count
+        description: Number of stages flagged for slot contention.
+      - name: has_insufficient_shuffle_quota
+        description: True when any stage has insufficient_shuffle_quota.
+      - name: insufficient_shuffle_quota_stage_count
+        description: Number of stages flagged for insufficient shuffle quota.
+      - name: has_partition_skew
+        description: True when any stage has a non-null partition_skew insight.
+      - name: partition_skew_stage_count
+        description: Number of stages flagged for partition skew.
+      - name: has_high_cardinality_join
+        description: True when any stage lists one or more high_cardinality_joins.
+      - name: high_cardinality_join_count
+        description: Number of high-cardinality join insights across stages.
+      - name: avg_previous_execution_ms
+        description: >
+          Average runtime of previous executions of the same query hash, when
+          BigQuery populated performance_insights.avg_previous_execution_ms.

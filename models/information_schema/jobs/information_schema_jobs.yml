@@ -11,6 +11,9 @@ models:
       \   If you have a multi-query statement\n        job, cache_hit for your parent\
       \ query is\n        NULL."
     data_type: BOOLEAN
+  - name: copy_job_statistics
+    description: "Statistics for a copy\n        job."
+    data_type: RECORD
   - name: creation_time
     description: "(Partitioning column) Creation time of this job. Partitioning is\n\
       \        based on the UTC time of this timestamp."
@@ -33,6 +36,13 @@ models:
   - name: error_result
     description: Details of any errors as ErrorProto objects.
     data_type: RECORD
+  - name: global_query_info
+    description: "Information about a global query.\n        Contains the following\
+      \ fields:\n        \nparent_job_id: The ID of the parent global query job in\
+      \ the primary region.\nparent_job_location: The location of the parent global\
+      \ query job.\nremote_regions: An array of remote regions referenced by the global\
+      \ query."
+    data_type: RECORD
   - name: job_id
     description: "The ID of the job if a job was created. Otherwise, the query ID\
       \ of a query using optional\n        job creation mode. For example, bquxjob_1234."
@@ -42,7 +52,7 @@ models:
       \ values are empty for queries that read from tables with\n          row-level\
       \ access policies. For more information, see best practices for row-level\n\
       \          security in BigQuery."
-    data_type: RECORD
+    data_type: ARRAY<RECORD>
   - name: job_type
     description: "The type of the job. Can be QUERY, LOAD, EXTRACT,\n        COPY,\
       \ or NULL. A NULL value indicates a background\n        job."
@@ -50,6 +60,13 @@ models:
   - name: labels
     description: Array of labels applied to the job as key-value pairs.
     data_type: RECORD
+  - name: object_storage_stats
+    description: "Statistics for object storage and caching usage for a query job.\n\
+      \        The value is a repeated record with the following fields:\n\ncloud_provider:\
+      \ The cloud provider where the object storage is hosted (for example, AWS).\n\
+      object_storage_bytes_read: Total number of bytes read directly from object storage.\n\
+      cache_bytes_read: Total number of bytes read from cache."
+    data_type: ARRAY<RECORD>
   - name: parent_job_id
     description: ID of the parent job, if any.
     data_type: STRING
@@ -71,6 +88,12 @@ models:
       \ fields for each table referenced by the query:\n        project_id, dataset_id,\
       \ and table_id. Only populated\n        for query jobs that are not cache hits."
     data_type: RECORD
+  - name: referenced_logical_views
+    description: "Array of STRUCT values\n        that contain the following STRING\
+      \ fields for each logical\n        view referenced by the query: project_id,\n\
+      \        dataset_id, and table_id. Only populated for\n        query jobs that\
+      \ are not cache hits."
+    data_type: RECORD
   - name: reservation_id
     description: "Name of the primary reservation assigned to this job,\n        in\
       \ the format\n        RESERVATION_ADMIN_PROJECT:RESERVATION_LOCATION.RESERVATION_NAME.\n\
@@ -78,6 +101,11 @@ models:
       \ Google Cloud project that\n            administers the reservation\nRESERVATION_LOCATION:\
       \ the location of the reservation\nRESERVATION_NAME: the name of the reservation"
     data_type: STRING
+  - name: reservation_group_path
+    description: "The reservation group to which the reservation is linked.\n    \
+      \  For example, if the reservation is linked to group my-group,\n      the reservation_group_path\
+      \ field contains a list such\n      as: [my-group]."
+    data_type: ARRAY<STRING>
   - name: edition
     description: The edition associated with the reservation assigned to this job.
       For more information about editions, see Introduction to BigQuery editions.
@@ -122,8 +150,14 @@ models:
       \        populated for LOAD and QUERY jobs."
     data_type: INTEGER
   - name: total_slot_ms
-    description: "Slot milliseconds for the job over its entire duration in the RUNNING\
-      \ state,\n        including retries."
+    description: Slot milliseconds for the last execution of the job, excluding prior
+      retries, if any.
+    data_type: INTEGER
+  - name: total_services_sku_slot_ms
+    description: "Total slot milliseconds for the job that runs on external services\
+      \ and is billed on the\n        services SKU. This field is only populated for\
+      \ jobs that have external service costs, and is\n        the total of the usage\
+      \ for costs whose billing method is \"SERVICES_SKU\"."
     data_type: INTEGER
   - name: transaction_id
     description: "ID of the transaction\n        in which this job ran, if any."
@@ -137,8 +171,8 @@ models:
       the job.
     data_type: STRING
   - name: transferred_bytes
-    description: Total bytes transferred for cross-cloud queries, such as BigQuery
-      Omni cross-cloud transfer jobs.
+    description: Total bytes transferred for BigQuery Omni queries, such as BigQuery
+      Omni transfer jobs.
     data_type: INTEGER
   - name: materialized_view_statistics
     description: "Statistics of\n        materialized views considered in a query\
@@ -158,8 +192,12 @@ models:
       \ No query dialect was specified in the job request.\n            BigQuery used\
       \ the default value of LegacySQL.\nDEFAULT_GOOGLE_SQL: No query dialect was\
       \ specified in the job request.\n            BigQuery used the default value\
-      \ of GoogleSQL.\n\nThis field is only populated for query jobs. The default\
-      \ selection of query dialect can be controlled by the configuration settings."
+      \ of GoogleSQL.\n\nFor jobs submitted by users, this field is only populated\
+      \ for query jobs.\n         The default selection of query dialect can be controlled\
+      \ by the\n         configuration settings.\nFor background jobs, the value of\
+      \ this field isn't controlled by the default query dialect\n         configuration\
+      \ settings, and doesn't impact jobs submitted by users. For some\n         background\
+      \ jobs, the value is omitted."
     data_type: STRING
   - name: continuous
     description: Whether the job is a continuous query.
@@ -167,20 +205,29 @@ models:
   - name: vector_search_statistics
     description: "Statistics for a vector\n          search query."
     data_type: RECORD
+  - name: external_service_costs
+    description: An array of information about the external service costs for a query
+      job.
+    data_type: RECORD
   - name: continuous_query_info
     description: 'continuous_query_info.output_watermark : Represents the point up
       to which the continuous query has successfully processed data.'
     data_type: RECORD
   - name: job_creation_reason
-    description: "job_creation_reason.code : Specifies the high level reason why a\
+    description: "job_creation_reason.code : Specifies the high-level reason why a\
       \ job was created.\n        Possible values are:\n        \nREQUESTED: job creation\
-      \ was requested.\nLONG_RUNNING: the query request ran beyond a system defined\
+      \ was requested.\nLONG_RUNNING: the query request ran beyond a system-defined\
       \ timeout\n            specified by the\n            timeoutMs\n           \
-      \ field in the QueryRequest. As a result it was considered a long running\n\
+      \ field in the QueryRequest. As a result it was considered a long-running\n\
       \            operation for which a job was created.\nLARGE_RESULTS: the results\
       \ from the query cannot fit in the in-line\n            response.\nOTHER: the\
       \ system has determined that the query needs to be executed as a\n         \
       \   job."
+    data_type: RECORD
+  - name: ml_statistics
+    description: "ml_statistics.model_type : If the job is a BigQuery ML model creation\
+      \ query, then this\n        field specifies the type of model\n        being\
+      \ created. For all other jobs, the value is NULL."
     data_type: RECORD
   - name: query_info
     description: "query_info.resource_warning : The warning message that appears if\
@@ -198,9 +245,4 @@ models:
       \ insights for the job.\nquery_info.optimization_details : The history-based\
       \ optimizations\n        for the job. Only the JOBS_BY_PROJECT view has this\
       \ column."
-  - name: total_services_sku_slot_ms
-    description: Total slot milliseconds consumed by a job that utilizes external services and is billed under the SERVICES_SKU billing method.
-    data_type: INTEGER
-  - name: principal_subject
-    description: The identity of the principal (user or service account) who initiated and ran the BigQuery job.
-    data_type: STRING
+    data_type: RECORD

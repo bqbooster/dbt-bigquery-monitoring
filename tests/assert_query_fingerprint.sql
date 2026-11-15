@@ -1,5 +1,5 @@
--- Repeated-query grouping key: same normalized hash collapses literal variants;
--- a null hash falls back to the raw query text so those texts stay distinct.
+-- Default repeated-query grouping key: same normalized hash collapses literal
+-- variants; a null hash falls back to the raw query text so those texts stay distinct.
 WITH samples AS (
     SELECT 'a' AS query_text, 'hash1' AS normalized_literals
     UNION ALL

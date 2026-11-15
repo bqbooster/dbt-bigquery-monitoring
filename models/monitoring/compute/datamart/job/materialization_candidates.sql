@@ -10,10 +10,9 @@
   - have low or no cache hit rate (cache_hit_ratio is low)
   These queries would benefit from scheduled queries, materialized views, or BI Engine acceleration.
 
-  Default grouping is the raw query text. Set group_repeated_jobs_by_normalized_hash
-  to count parameterized repeats as one candidate. `query` is then one example text.
+  Frequency is counted on query_fingerprint (normalized_literals, or the raw query
+  text when that hash is null). `query` is one example statement.
 #}
-{% if dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_group_repeated_jobs_by_normalized_hash() %}
 WITH aggregated AS (
   SELECT
     query_fingerprint,
@@ -47,53 +46,6 @@ candidates AS (
     END AS materialization_recommendation
   FROM aggregated AS a
 )
-{% else %}
-WITH aggregated AS (
-  SELECT
-    query,
-    SUM(cache_hit) AS cache_hits,
-    SUM(query_count) AS query_count,
-    ROUND(SUM(total_query_cost), 4) AS total_query_cost,
-    ROUND(SUM(total_query_cost) / NULLIF(SUM(query_count), 0), 4) AS avg_query_cost,
-    SUM(total_slot_ms) AS total_slot_ms,
-    AVG(avg_duration_seconds) AS avg_duration_seconds,
-    SUM(total_bytes_processed) AS total_bytes_processed,
-    SUM(total_bytes_billed) AS total_bytes_billed,
-    MIN(hour) AS first_seen,
-    MAX(hour) AS last_seen,
-    MAX(query_fingerprint) AS query_fingerprint,
-    MAX(normalized_query_hash) AS normalized_query_hash
-  FROM {{ ref('jobs_costs_incremental') }}
-  GROUP BY query
-),
-
-distinct_projects AS (
-  SELECT
-    query,
-    COUNT(DISTINCT job.project_id) AS distinct_project_count
-  FROM {{ ref('jobs_costs_incremental') }},
-    UNNEST(jobs) AS job
-  GROUP BY query
-),
-
-candidates AS (
-  SELECT
-    a.*,
-    dp.distinct_project_count,
-    SAFE_DIVIDE(a.cache_hits, a.query_count) AS cache_hit_ratio,
-    -- Potential savings: cost that would be avoided if all repeated executions hit cache
-    ROUND(a.total_query_cost * (1 - SAFE_DIVIDE(a.cache_hits, a.query_count)), 4) AS potential_savings_from_caching,
-    CASE
-      WHEN a.query_count >= 10 AND a.total_query_cost >= 1 AND SAFE_DIVIDE(a.cache_hits, a.query_count) < 0.1
-        THEN 'High — consider materialized view or scheduled query'
-      WHEN a.query_count >= 5 AND a.total_query_cost >= 0.1 AND SAFE_DIVIDE(a.cache_hits, a.query_count) < 0.2
-        THEN 'Medium — caching could help'
-      ELSE 'Low'
-    END AS materialization_recommendation
-  FROM aggregated AS a
-  LEFT JOIN distinct_projects AS dp USING (query)
-)
-{% endif %}
 
 SELECT
   query,

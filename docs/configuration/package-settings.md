@@ -73,11 +73,24 @@ These settings are used to configure how dbt will run and materialize the models
 | `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Number of days to look back for monitoring | `7` |
 | `lookback_incremental_billing_window_days` | `DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS` | Number of days to look back for monitoring | `3` |
 | `output_limit_size` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Limit size to use for the models | `1000` |
-| `group_repeated_jobs_by_normalized_hash` | `DBT_BQ_MONITORING_GROUP_REPEATED_JOBS_BY_NORMALIZED_HASH` | Group `jobs_costs_incremental`, `most_repeated_jobs`, and `materialization_candidates` by `query_info.query_hashes.normalized_literals` (raw query text when the hash is null). Off keeps the historical query-text grouping and column values. On, full-refresh `jobs_costs_incremental` to restate older hour partitions; the incremental run does not fail without it | `false` |
 | `output_partition_expiration_days` | `DBT_BQ_MONITORING_TABLE_EXPIRATION_DAYS` | Default table expiration in days for incremental models | `365` days |
 | `use_copy_partitions` | `DBT_BQ_MONITORING_USE_COPY_PARTITIONS` | Whether to use copy partitions or not | `true` |
 | `google_information_schema_model_materialization` | `DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION` | Whether to use a specific materialization for information schema models. Note that it doesn't work in project mode as it will materialize intermediate tables to avoid issues from BQ when too many projects are used. | `ephemeral` |
 | `partitions_table_batch_size` | `DBT_BQ_MONITORING_PARTITIONS_TABLE_BATCH_SIZE` | Max tables per `INFORMATION_SCHEMA.PARTITIONS` query. BigQuery rejects scans of more than 1000 tables; the package lists tables and queries oversized datasets in batches. Defaults to 900 to stay under the limit. Datasets at or below this size keep a single unfiltered `PARTITIONS` query. | `900` |
+
+### Repeated query grouping
+
+`jobs_costs_incremental`, `most_repeated_jobs`, and `materialization_candidates` group by `query_fingerprint`: `query_info.query_hashes.normalized_literals` when BigQuery populated it, otherwise the raw query text. A null hash does not merge different texts. `query` is one example statement for that fingerprint. Column names and types are unchanged. `query_fingerprint` and `normalized_query_hash` are extra columns. Clustering stays `hour, query`.
+
+This changes counts and costs versus older package versions, which grouped by the raw query text. `most_repeated_jobs` also sums each hour once. The previous view repeated an hour's totals once per job in the bucket.
+
+After upgrading, full-refresh the incremental table so older hour partitions use the new grain. `most_repeated_jobs` and `materialization_candidates` are views and follow that table.
+
+```bash
+dbt run -s jobs_costs_incremental most_repeated_jobs materialization_candidates --full-refresh
+```
+
+Skipping the refresh leaves old hour partitions grouped by raw query text and new hours grouped by fingerprint.
 
 ### `INFORMATION_SCHEMA.PARTITIONS` 1000-table limit
 

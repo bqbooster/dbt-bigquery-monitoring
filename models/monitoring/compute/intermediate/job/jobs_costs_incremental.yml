@@ -11,9 +11,7 @@ models:
       - name: query
         data_type: string
         description: >
-          The raw query text. This is the group key unless
-          group_repeated_jobs_by_normalized_hash is true, in which case it is the
-          most common literal variant for that fingerprint.
+          One example query text for this hour and fingerprint.
           Individual jobs in `jobs` do not repeat the query text.
 
       - name: jobs
@@ -118,20 +116,18 @@ models:
       - name: query_fingerprint
         data_type: string
         description: >
-          Additive column. query_info.query_hashes.normalized_literals when BigQuery
-          populated it, otherwise the raw query text. Null hashes (cache hits, failed
-          jobs, non-GoogleSQL, and audit-log-only mode) fall back to the text, and a
-          null query with a null hash stays null. Default grouping is still `query`,
-          so this column does not change existing metrics. Clustering stays on
-          `hour, query`, and on_schema_change is append_new_columns, so an upgrade
-          does not require a full refresh. Enable group_repeated_jobs_by_normalized_hash
-          to group by this value. Full-refresh after enabling it so older hour
-          partitions use the same grain; the incremental job still succeeds without that.
+          Group key, with `hour`. query_info.query_hashes.normalized_literals when
+          BigQuery populated it, otherwise the raw query text. Null hashes (cache hits,
+          failed jobs, non-GoogleSQL, and audit-log-only mode) fall back to the text,
+          and a null query with a null hash stays null. Clustering stays on
+          `hour, query`. After upgrading, full-refresh this model so older hour
+          partitions use this grain:
+          `dbt run -s jobs_costs_incremental most_repeated_jobs materialization_candidates --full-refresh`.
 
       - name: normalized_query_hash
         data_type: string
         description: >
-          Additive column. The normalized_literals hash, or NULL when it was not
-          available. Ignored by the default GROUP BY query.
+          The normalized_literals hash, or NULL when it was not available.
+          Not the group key when the hash is null; `query_fingerprint` is.
 
 

@@ -3,11 +3,12 @@ version: 2
 models:
   - name: most_repeated_jobs
     description: >
-      Queries that ran more than once. Grouped by raw query text unless
-      group_repeated_jobs_by_normalized_hash is true. With that var, rows are grouped
-      by query_info.query_hashes.normalized_literals (raw text when the hash is null)
-      and hourly totals are summed once per fingerprint. `query_fingerprint` and
-      `normalized_query_hash` are always present and do not change the historical columns.
+      Queries that ran more than once, grouped by query_fingerprint
+      (query_info.query_hashes.normalized_literals, or the raw query text when that
+      hash is null). Hourly totals are summed once per fingerprint. Column names and
+      types are unchanged. After upgrading, run
+      `dbt run -s jobs_costs_incremental most_repeated_jobs materialization_candidates --full-refresh`
+      so historical hour partitions use this grain.
     config:
       meta:
         label: "Most Repeated Jobs"
@@ -15,8 +16,7 @@ models:
         group_label: "Compute cost"
     columns:
       - name: query
-        description: >
-          The raw query text, or one example text when hash grouping is enabled.
+        description: One example query text for this fingerprint.
       - name: project_ids
         description: The top aggregated project IDs.
       - name: reservation_ids

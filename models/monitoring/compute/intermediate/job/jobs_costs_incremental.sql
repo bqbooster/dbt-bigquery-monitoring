@@ -45,12 +45,8 @@ FROM {{ jobs_done_incremental_hourly() }}
 
 SELECT
   hour,
-  {% if dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_group_repeated_jobs_by_normalized_hash() %}
   -- Example statement for this fingerprint. The jobs array does not repeat query text.
   APPROX_TOP_COUNT(query, 1)[SAFE_OFFSET(0)].value AS query,
-  {% else %}
-  query,
-  {% endif %}
   ARRAY_AGG(
     STRUCT(
       project_id,
@@ -84,12 +80,7 @@ SELECT
   COUNT(DISTINCT project_id) AS projects_count,
   COUNT(DISTINCT user_email) AS users_count,
   AVG(total_time_seconds) AS avg_duration_seconds,
-  {% if dbt_bigquery_monitoring.dbt_bigquery_monitoring_variable_group_repeated_jobs_by_normalized_hash() %}
   query_fingerprint,
   ANY_VALUE(normalized_query_hash) AS normalized_query_hash
-  {% else %}
-  COALESCE(MAX(normalized_query_hash), query) AS query_fingerprint,
-  MAX(normalized_query_hash) AS normalized_query_hash
-  {% endif %}
 FROM base
-GROUP BY {{ repeated_jobs_group_key() }}
+GROUP BY hour, query_fingerprint

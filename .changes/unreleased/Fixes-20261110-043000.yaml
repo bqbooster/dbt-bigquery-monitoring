@@ -1,6 +1,0 @@
-kind: Fixes
-body: Limit jobs_with_cost to lookback_window_days so the jobs scan is pruned to about one extra day of partitions. Views that read it directly now cover only that window; raise lookback_window_days for longer history. Incremental models cannot catch up a gap longer than the lookback. No full refresh is required.
-time: 2026-11-10T04:30:00Z
-custom:
-    Author: Kayrnt
-    Issue: ""

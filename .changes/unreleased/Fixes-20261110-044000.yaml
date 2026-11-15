@@ -1,6 +1,0 @@
-kind: Docs
-body: Document that total_services_sku_slot_ms is null unless a job has SERVICES_SKU external service costs, and that keeping the column costs essentially nothing. Omit it with enable_total_services_sku_slot_ms set to false or DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS=false. The column stays selected by default. When that variable is unset, enable_experimental_fields still controls it.
-time: 2026-11-10T04:40:00Z
-custom:
-    Author: Kayrnt
-    Issue: ""

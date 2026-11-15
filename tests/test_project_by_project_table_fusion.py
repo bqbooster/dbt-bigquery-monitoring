@@ -19,6 +19,10 @@ def test_project_by_project_table_sets_relation_types_for_fusion() -> None:
     assert (
         "existing_relation is not none and not adapter.is_replaceable(" in source
     ), "Must not call drop_relation/is_replaceable when the relation is missing"
+    assert "not existing_relation.is_table" in source
+    assert "process_schema_changes('sync_all_columns', tmp_relation, existing_relation)" in source
+    assert "project_by_project_column_csv(query_columns)" in source
+    assert "INSERT INTO {{ target_relation }} (" in source
 
 
 def parse_initial_backfill_days(raw: object) -> int:

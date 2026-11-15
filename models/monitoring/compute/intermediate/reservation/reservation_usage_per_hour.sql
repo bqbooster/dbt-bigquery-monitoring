@@ -21,6 +21,7 @@ SELECT
   SUM(total_slot_ms) AS total_slot_ms,
   ANY_VALUE(slots_assigned) AS slots_assigned,
   ANY_VALUE(slots_max_assigned) AS slots_max_assigned,
+  ANY_VALUE(slot_capacity) AS slot_capacity,
   ANY_VALUE(autoscale) AS autoscale,
   -- Enhanced metrics
   SUM(total_query_cost) AS total_query_cost,

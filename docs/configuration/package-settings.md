@@ -82,9 +82,13 @@ vars:
 
 These settings are used to configure how dbt will run and materialize the models.
 
+`jobs_with_cost` covers `lookback_window_days` of jobs. The source includes one extra day before the parent-script window, so a parent `SCRIPT` job at the edge can still pass its dbt comment to a child, and so BigQuery can prune `INFORMATION_SCHEMA.JOBS`. The audit-log input exposes `creation_time`, so the same predicate applies there.
+
+Views that read `jobs_with_cost` directly cover that same window: `jobs_by_project_with_cost`, `query_with_better_pricing_using_on_demand_view`, `query_with_better_pricing_using_flat_pricing_view`, and `bi_engine_materialized_view_analysis`. Raise `lookback_window_days` for a longer history.
+
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
-| `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Number of days to look back for monitoring | `7` |
+| `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Monitoring window in days. `jobs_with_cost` keeps only this many days. | `7` |
 | `initial_backfill_days` | `DBT_BQ_MONITORING_INITIAL_BACKFILL_DAYS` | Days of history `project_by_project_table` loads on the first build, on full refresh, and as the furthest incremental catch-up (the greater of the current max partition and this many days). Does not follow `lookback_window_days`. Integer from 1 to 166 (`166 * 24 = 3984` hourly partitions, under BigQuery's 4000-partition insert limit). `0`, negatives, values above 166, and non-integer strings fail compilation. An environment variable may be a digit string such as `"166"`. | `166` |
 | `lookback_incremental_billing_window_days` | `DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS` | Number of days to look back for monitoring | `3` |
 | `output_limit_size` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Limit size to use for the models | `1000` |

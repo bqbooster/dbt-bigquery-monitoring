@@ -97,6 +97,10 @@ Views that read `jobs_with_cost` directly cover that same window: `jobs_by_proje
 | `google_information_schema_model_materialization` | `DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION` | Whether to use a specific materialization for information schema models. Note that it doesn't work in project mode as it will materialize intermediate tables to avoid issues from BQ when too many projects are used. | `ephemeral` |
 | `partitions_table_batch_size` | `DBT_BQ_MONITORING_PARTITIONS_TABLE_BATCH_SIZE` | Max tables per `INFORMATION_SCHEMA.PARTITIONS` query. BigQuery rejects scans of more than 1000 tables; the package lists tables and queries oversized datasets in batches. Defaults to 900 to stay under the limit. Datasets at or below this size keep a single unfiltered `PARTITIONS` query. | `900` |
 
+### Repeated query grouping
+
+`jobs_costs_incremental`, `most_repeated_jobs`, and `materialization_candidates` group by `query_fingerprint`: `query_info.query_hashes.normalized_literals` when BigQuery populated it, otherwise the raw query text. A null hash does not merge different texts. `query` is one example statement for that fingerprint. `jobs_costs_incremental` is clustered by `hour` and `query`. `most_repeated_jobs` and `materialization_candidates` are views over that table. `most_repeated_jobs` sums each hour's totals once per fingerprint.
+
 ### `INFORMATION_SCHEMA.PARTITIONS` 1000-table limit
 
 [BigQuery limits `INFORMATION_SCHEMA.PARTITIONS` to 1000 tables per query](https://docs.cloud.google.com/bigquery/docs/information-schema-partitions). `input_datasets` only chooses which datasets are scanned, so it does not help when a needed dataset itself has more than 1000 tables.

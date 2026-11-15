@@ -21,6 +21,8 @@ WITH base AS (
   reservation_id,
   job_id,
   query,
+  {{ query_fingerprint_sql(normalized_literals_sql(), 'query') }} AS query_fingerprint,
+  {{ normalized_literals_sql() }} AS normalized_query_hash,
   user_email,
   cache_hit,
   query_cost,
@@ -43,7 +45,8 @@ FROM {{ jobs_done_incremental_hourly() }}
 
 SELECT
   hour,
-  query,
+  -- Example statement for this fingerprint. The jobs array does not repeat query text.
+  APPROX_TOP_COUNT(query, 1)[SAFE_OFFSET(0)].value AS query,
   ARRAY_AGG(
     STRUCT(
       project_id,
@@ -76,6 +79,8 @@ SELECT
   SUM(total_bytes_billed) AS total_bytes_billed,
   COUNT(DISTINCT project_id) AS projects_count,
   COUNT(DISTINCT user_email) AS users_count,
-  AVG(total_time_seconds) AS avg_duration_seconds
+  AVG(total_time_seconds) AS avg_duration_seconds,
+  query_fingerprint,
+  ANY_VALUE(normalized_query_hash) AS normalized_query_hash
 FROM base
-GROUP BY hour, query
+GROUP BY hour, query_fingerprint

@@ -133,10 +133,12 @@ See [GCP BigQuery Audit logs](/configuration/audit-logs) for more information.
 
 BigQuery periodically introduces new fields in `INFORMATION_SCHEMA` views that are initially in "Preview" or "Experimental" and might not be available in all regions. These fields are disabled by default in this package to ensure compatibility across all regions.
 
+`total_services_sku_slot_ms` is selected by default. It is NULL unless the job has external service costs billed with method `SERVICES_SKU`. On a normal warehouse workload the column is empty, and keeping one nullable integer costs essentially nothing. Omit it with `enable_total_services_sku_slot_ms: false` or `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS=false`. If that variable is unset, it still follows `enable_experimental_fields`. The package sets the specific variable to `true`, so turning experimental fields off does not drop this column unless you also unset the specific variable or set it to `false`.
+
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
 | `enable_experimental_fields` | `DBT_BQ_MONITORING_ENABLE_EXPERIMENTAL_FIELDS` | Toggle to enable all experimental/preview fields | `true` |
 | `enable_principal_subject` | `DBT_BQ_MONITORING_ENABLE_PRINCIPAL_SUBJECT` | Toggle to enable `principal_subject` field in jobs views | `true` |
 | `enable_reservation_group_path` | `DBT_BQ_MONITORING_ENABLE_RESERVATION_GROUP_PATH` | Toggle to enable `reservation_group_path` field in reservations views | `false` |
-| `enable_total_services_sku_slot_ms` | `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS` | Toggle to enable `total_services_sku_slot_ms` field in jobs views | `true` |
+| `enable_total_services_sku_slot_ms` | `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS` | Select `total_services_sku_slot_ms` on jobs views. The value is NULL unless the job has `SERVICES_SKU` external service costs, and keeping the nullable integer costs essentially nothing. Set this to `false`, or `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS=false`, to omit it. When the variable is unset, `enable_experimental_fields` still controls it. | `true` |
 | `enable_materialized_view_statistics` | `DBT_BQ_MONITORING_ENABLE_MATERIALIZED_VIEW_STATISTICS` | Toggle to enable `materialized_view_statistics` field in jobs views | `true` |

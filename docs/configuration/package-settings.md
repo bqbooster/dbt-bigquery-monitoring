@@ -73,11 +73,16 @@ These settings are used to configure how dbt will run and materialize the models
 | `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Number of days to look back for monitoring | `7` |
 | `lookback_incremental_billing_window_days` | `DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS` | Number of days to look back for monitoring | `3` |
 | `output_limit_size` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Limit size to use for the models | `1000` |
-| `improve_client_type_detection` | `DBT_BQ_MONITORING_IMPROVE_CLIENT_TYPE_DETECTION` | Replace the historical `client_type` CASE with label, user-agent, and service-account detection. Off keeps every existing label, including `Unknown` and audit-log `dbt run`. On does not add or retype a column. Full-refresh downstream incrementals only if you want old partitions restated; the next run succeeds without it | `false` |
 | `output_partition_expiration_days` | `DBT_BQ_MONITORING_TABLE_EXPIRATION_DAYS` | Default table expiration in days for incremental models | `365` days |
 | `use_copy_partitions` | `DBT_BQ_MONITORING_USE_COPY_PARTITIONS` | Whether to use copy partitions or not | `true` |
 | `google_information_schema_model_materialization` | `DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION` | Whether to use a specific materialization for information schema models. Note that it doesn't work in project mode as it will materialize intermediate tables to avoid issues from BQ when too many projects are used. | `ephemeral` |
 | `partitions_table_batch_size` | `DBT_BQ_MONITORING_PARTITIONS_TABLE_BATCH_SIZE` | Max tables per `INFORMATION_SCHEMA.PARTITIONS` query. BigQuery rejects scans of more than 1000 tables; the package lists tables and queries oversized datasets in batches. Defaults to 900 to stay under the limit. Datasets at or below this size keep a single unfiltered `PARTITIONS` query. | `900` |
+
+### Client type
+
+`jobs_with_cost.client_type` is still a STRING column of that name. Its values can differ from older package versions. Labels, the dbt query comment, and the user agent classify Elementary, dbt, Airflow, Looker, Sheets, scheduled queries, Dataform, Hex, Fivetran, Hightouch, Rudderstack, Tableau, Metabase, Mode, Sigma, Lightdash, Prefect, Dagster, and Stitch. A dbt user agent is `dbt`. `Service account` is used only when no specific client matched. NULL labels, a NULL user agent, and a blank user agent stay `Unknown`. A non-empty user agent that matches nothing is kept as the label.
+
+`jobs_with_cost` is a view, so the next run uses the new labels. `compute_rollup_per_minute` and `compute_rollup_per_hour` store `client_type`. Full-refresh those two models to reclassify historical partitions. The column type does not change, so an incremental run succeeds without a full refresh and only rewrites recent partitions.
 
 ### `INFORMATION_SCHEMA.PARTITIONS` 1000-table limit
 

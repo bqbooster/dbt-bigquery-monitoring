@@ -1,12 +1,14 @@
 {#-
-  Opt-in client_type CASE. The historical CASE in jobs_with_cost.sql is the default.
+  client_type for jobs_with_cost. The column name and type stay STRING.
   caller_supplied_user_agent is CAST to STRING so INFORMATION_SCHEMA-only mode
   (untyped NULL) and audit-log mode both compile. principal_subject is referenced
-  only when that experimental column is enabled, and it is cast for the same reason.
+  only when that column is enabled, and it is cast for the same reason.
   Tool checks run before the service-account fallback so a known client that
   authenticates with a service account keeps its client name.
+  NULL and blank user agents, and jobs with no matching signal, stay 'Unknown'.
+  A non-empty user agent that matches nothing is kept as the client label.
 -#}
-{% macro improved_client_type_sql() %}
+{% macro client_type_sql() %}
     {% set user_agent = "LOWER(IFNULL(CAST(caller_supplied_user_agent AS STRING), ''))" %}
 CASE
   WHEN EXISTS (
@@ -183,6 +185,6 @@ CASE
   {%- if dbt_bigquery_monitoring_variable_enable_principal_subject() %}
   WHEN LOWER(CAST(principal_subject AS STRING)) LIKE '%serviceaccount%' THEN 'Service account'
   {%- endif %}
-  ELSE COALESCE(CAST(caller_supplied_user_agent AS STRING), 'Unknown')
+  ELSE COALESCE(NULLIF(TRIM(CAST(caller_supplied_user_agent AS STRING)), ''), 'Unknown')
 END
 {% endmacro %}

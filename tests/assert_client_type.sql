@@ -1,4 +1,4 @@
--- Opt-in client_type labels. The default jobs_with_cost CASE is not this query.
+-- Default client_type labels used by jobs_with_cost.
 WITH samples AS (
     SELECT *
     FROM UNNEST([
@@ -331,6 +331,33 @@ WITH samples AS (
             CAST(NULL AS STRING),
             CAST(NULL AS STRING),
             CAST(NULL AS STRING)
+        ),
+        STRUCT(
+            'empty_user_agent',
+            'Unknown',
+            CAST([] AS ARRAY<STRUCT<key STRING, value STRING>>),
+            'person@example.com',
+            CAST(NULL AS STRING),
+            '',
+            CAST(NULL AS STRING)
+        ),
+        STRUCT(
+            'whitespace_user_agent',
+            'Unknown',
+            CAST([] AS ARRAY<STRUCT<key STRING, value STRING>>),
+            'person@example.com',
+            CAST(NULL AS STRING),
+            '   ',
+            CAST(NULL AS STRING)
+        ),
+        STRUCT(
+            'unrecognized_user_agent',
+            'custom-agent/9',
+            CAST([] AS ARRAY<STRUCT<key STRING, value STRING>>),
+            'person@example.com',
+            CAST(NULL AS STRING),
+            'custom-agent/9',
+            CAST(NULL AS STRING)
         )
     ])
 ),
@@ -339,7 +366,7 @@ classified AS (
     SELECT
         scenario,
         expected,
-        {{ improved_client_type_sql() }} AS actual
+        {{ client_type_sql() }} AS actual
     FROM samples
 )
 

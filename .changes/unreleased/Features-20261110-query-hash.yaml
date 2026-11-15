@@ -1,6 +1,0 @@
-kind: Features
-body: Behavior change for repeated-query grouping. jobs_costs_incremental, most_repeated_jobs, and materialization_candidates now group by query_info.query_hashes.normalized_literals, falling back to the raw query text when the hash is null. Column names and types are unchanged. query is one example statement, and query_fingerprint plus normalized_query_hash stay extra columns. most_repeated_jobs sums each hour once instead of repeating hourly totals once per job. Clustering stays hour plus query. After upgrading, existing users must full-refresh so older hour partitions use the new grain. dbt run -s jobs_costs_incremental most_repeated_jobs materialization_candidates --full-refresh. Skipping that leaves old hours grouped by raw query text and new hours grouped by fingerprint. Audit-log-only mode has no query_info and keeps the query text
-time: 2026-11-10T05:20:00Z
-custom:
-  Author: Kayrnt
-  Issue: ""

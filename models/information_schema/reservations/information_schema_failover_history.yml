@@ -1,0 +1,43 @@
+version: 2
+models:
+- name: information_schema_failover_history
+  columns:
+  - name: project_id
+    description: ID of the administration project that contains the reservation.
+    data_type: STRING
+  - name: project_number
+    description: Number of the administration project.
+    data_type: INTEGER
+  - name: reservation_name
+    description: "User-provided reservation name. For example, if the reservation\
+      \ URI is\n        projects/my-project/locations/US/reservations/my-reservation,\n\
+      \        then the reservation name is my-reservation."
+    data_type: STRING
+  - name: start_time
+    description: Time when the failover was initiated.
+    data_type: TIMESTAMP
+  - name: original_primary_location
+    description: The location where the reservation was originally created.
+    data_type: STRING
+  - name: from_location
+    description: "The primary location before the failover. This location becomes\
+      \ the\n        secondary after the failover."
+    data_type: STRING
+  - name: to_location
+    description: "The secondary location before the failover, where the failover was\n\
+      \        initiated. This location becomes the primary after the failover."
+    data_type: STRING
+  - name: end_time
+    description: "Time when the soft failover completed. NULL while the\n        soft\
+      \ failover is in progress, and always NULL for the hard\n        failover."
+    data_type: TIMESTAMP
+  - name: failover_mode
+    description: "Type of failover. Can be SOFT or HARD. For\n        more information,\
+      \ see\n        Managed disaster\n        recovery."
+    data_type: STRING
+  - name: state
+    description: "State of the failover. Can be STARTED (while a soft\n        failover\
+      \ is in progress, or for a hard failover) or\n        COMPLETED (after a soft\
+      \ failover finishes). For more\n        information about the STARTED state\
+      \ for a hard failover,\n        see Limitations."
+    data_type: STRING

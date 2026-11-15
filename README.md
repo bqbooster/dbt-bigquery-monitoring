@@ -98,8 +98,8 @@ Then head to the [configuration guide](https://bqbooster.github.io/dbt-bigquery-
 
 ## 🛠 Compatibility
 
-*   **dbt Core** >= 1.3.0
-*   **dbt Fusion** >= 2.0.0-preview
+*   **dbt Core** >= 1.3.0 and < 2.0.0
+*   **dbt v2 (Fusion)** >= 2.0.0 and < 3.0.0
 
 ---
 

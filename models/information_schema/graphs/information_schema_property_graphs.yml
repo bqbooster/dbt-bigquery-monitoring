@@ -1,0 +1,22 @@
+version: 2
+models:
+- name: information_schema_property_graphs
+  columns:
+  - name: property_graph_catalog
+    description: "The name of the project that contains the dataset where the\n  \
+      \      graph is defined."
+    data_type: STRING
+  - name: property_graph_schema
+    description: The name of the dataset that contains the graph.
+    data_type: STRING
+  - name: property_graph_name
+    description: The name of the graph.
+    data_type: STRING
+  - name: property_graph_metadata_json
+    description: "The JSON representation of the graph definition. This\n        representation\
+      \ contains information about the graph, such as its nodes,\n        edges, labels,\
+      \ properties, creation timestamp, and modification\n        timestamps."
+    data_type: STRING
+  - name: ddl
+    description: A DDL statement that can be used to create the graph.
+    data_type: STRING

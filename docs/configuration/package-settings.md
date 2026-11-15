@@ -22,6 +22,8 @@ To do so, you can set the following variables in your `dbt_project.yml` file or 
 | `input_datasets` | `DBT_BQ_MONITORING_INPUT_DATASETS` | Optional `project.dataset` values that limit dataset-scanned `INFORMATION_SCHEMA` models | `[]` |
 | `bq_region` | `DBT_BQ_MONITORING_REGION` | Region where the monitored projects are located | `us` |
 
+`information_schema_jobs_by_project` is enabled in region mode and project mode. [BigQuery documents `INFORMATION_SCHEMA.JOBS` and `INFORMATION_SCHEMA.JOBS_BY_PROJECT` as the same view](https://cloud.google.com/bigquery/docs/information-schema-jobs). In project mode each enabled model is materialized, so the by-project model repeats the jobs scan. No model in this package refs `information_schema_jobs_by_project`. Folder and organization jobs models are `enabled: false` inside their generated SQL. To skip the by-project model, set `+enabled: false` on it in the root project, as in the [configuration guide](/configuration#project-mode). That override is a YAML boolean.
+
 ### `input_datasets` examples
 
 Use `input_datasets` when you want to skip automatic dataset discovery
@@ -34,6 +36,18 @@ If you use `DBT_BQ_MONITORING_INPUT_DATASETS`, pass a single
 `project.dataset` string. List-style environment variable values are not
 parsed for this setting, so use `dbt_project.yml` or `--vars` for
 multiple datasets.
+
+When `input_datasets` is empty and `input_gcp_projects` is set, discovery
+reads each project's `region-<bq_region>.INFORMATION_SCHEMA.SCHEMATA`
+and returns project-qualified dataset names (`` `project`.`dataset` ``).
+A project with no datasets in that region contributes nothing. If listing
+one project fails (for example, missing `bigquery.datasets.get`), that
+project is skipped and the error is logged. Discovery fails only when
+every input project fails. The lookup only reads `SCHEMATA`; it does not
+write a table, so it still runs where BigQuery rejects DML. With no project list, discovery uses the
+execution project's region. An explicit `input_datasets` list skips
+discovery. Dataset-scoped models (`PARTITIONS`, `KEY_COLUMN_USAGE`,
+`CONSTRAINT_COLUMN_USAGE`, `SEARCH_INDEXES*`) then query those datasets.
 
 ```yml
 # dbt_project.yml
@@ -68,9 +82,14 @@ vars:
 
 These settings are used to configure how dbt will run and materialize the models.
 
+`jobs_with_cost` covers `lookback_window_days` of jobs. The source includes one extra day before the parent-script window, so a parent `SCRIPT` job at the edge can still pass its dbt comment to a child, and so BigQuery can prune `INFORMATION_SCHEMA.JOBS`. The audit-log input exposes `creation_time`, so the same predicate applies there.
+
+Views that read `jobs_with_cost` directly cover that same window: `jobs_by_project_with_cost`, `query_with_better_pricing_using_on_demand_view`, `query_with_better_pricing_using_flat_pricing_view`, and `bi_engine_materialized_view_analysis`. Raise `lookback_window_days` for a longer history.
+
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
-| `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Number of days to look back for monitoring | `7` |
+| `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Monitoring window in days. `jobs_with_cost` keeps only this many days. | `7` |
+| `initial_backfill_days` | `DBT_BQ_MONITORING_INITIAL_BACKFILL_DAYS` | Days of history `project_by_project_table` loads on the first build, on full refresh, and as the furthest incremental catch-up (the greater of the current max partition and this many days). Does not follow `lookback_window_days`. Integer from 1 to 166 (`166 * 24 = 3984` hourly partitions, under BigQuery's 4000-partition insert limit). `0`, negatives, values above 166, and non-integer strings fail compilation. An environment variable may be a digit string such as `"166"`. | `166` |
 | `lookback_incremental_billing_window_days` | `DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS` | Number of days to look back for monitoring | `3` |
 | `output_limit_size` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Limit size to use for the models | `1000` |
 | `output_partition_expiration_days` | `DBT_BQ_MONITORING_TABLE_EXPIRATION_DAYS` | Default table expiration in days for incremental models | `365` days |
@@ -118,10 +137,12 @@ See [GCP BigQuery Audit logs](/configuration/audit-logs) for more information.
 
 BigQuery periodically introduces new fields in `INFORMATION_SCHEMA` views that are initially in "Preview" or "Experimental" and might not be available in all regions. These fields are disabled by default in this package to ensure compatibility across all regions.
 
+`total_services_sku_slot_ms` is selected by default. It is NULL unless the job has external service costs billed with method `SERVICES_SKU`. On a normal warehouse workload the column is empty, and keeping one nullable integer costs essentially nothing. Omit it with `enable_total_services_sku_slot_ms: false` or `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS=false`. If that variable is unset, it still follows `enable_experimental_fields`. The package sets the specific variable to `true`, so turning experimental fields off does not drop this column unless you also unset the specific variable or set it to `false`.
+
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
 | `enable_experimental_fields` | `DBT_BQ_MONITORING_ENABLE_EXPERIMENTAL_FIELDS` | Toggle to enable all experimental/preview fields | `true` |
 | `enable_principal_subject` | `DBT_BQ_MONITORING_ENABLE_PRINCIPAL_SUBJECT` | Toggle to enable `principal_subject` field in jobs views | `true` |
 | `enable_reservation_group_path` | `DBT_BQ_MONITORING_ENABLE_RESERVATION_GROUP_PATH` | Toggle to enable `reservation_group_path` field in reservations views | `false` |
-| `enable_total_services_sku_slot_ms` | `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS` | Toggle to enable `total_services_sku_slot_ms` field in jobs views | `true` |
+| `enable_total_services_sku_slot_ms` | `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS` | Select `total_services_sku_slot_ms` on jobs views. The value is NULL unless the job has `SERVICES_SKU` external service costs, and keeping the nullable integer costs essentially nothing. Set this to `false`, or `DBT_BQ_MONITORING_ENABLE_TOTAL_SERVICES_SKU_SLOT_MS=false`, to omit it. When the variable is unset, `enable_experimental_fields` still controls it. | `true` |
 | `enable_materialized_view_statistics` | `DBT_BQ_MONITORING_ENABLE_MATERIALIZED_VIEW_STATISTICS` | Toggle to enable `materialized_view_statistics` field in jobs views | `true` |

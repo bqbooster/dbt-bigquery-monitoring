@@ -3,13 +3,10 @@ version: 2
 models:
   - name: jobs_with_cost
     description: >
-      Job rows with cost, limited to lookback_window_days. The source is
-      filtered to one extra day before the parent-script window so BigQuery
-      can prune INFORMATION_SCHEMA.JOBS and the audit-log input. A later
-      filter on this model does not prune that scan, because the window sits
-      between the source and the outer query. Raise lookback_window_days for
-      a longer history. Views that read this model directly, and incremental
-      models that catch up through it, cannot see jobs older than the lookback.
+      Job rows with cost, covering lookback_window_days. The source includes
+      one extra day before the parent-script window so a parent SCRIPT job at
+      the edge can still supply its dbt comment. Raise lookback_window_days
+      for a longer history. Direct readers cover the same window.
     config:
       meta:
         label: "Jobs with Cost"

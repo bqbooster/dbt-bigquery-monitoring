@@ -68,11 +68,9 @@ vars:
 
 These settings are used to configure how dbt will run and materialize the models.
 
-`jobs_with_cost` always keeps `lookback_window_days` of jobs. The source is filtered to `lookback_window_days + 1` before the parent-script window, so BigQuery can prune `INFORMATION_SCHEMA.JOBS`. The audit-log input also exposes `creation_time`, so the same predicate applies there. Rows older than `lookback_window_days` are dropped after the window. The extra source day lets a parent `SCRIPT` job still pass its dbt comment to a child at the edge of the window. Column names and types are unchanged. No full refresh is required.
+`jobs_with_cost` covers `lookback_window_days` of jobs. The source includes one extra day before the parent-script window, so a parent `SCRIPT` job at the edge can still pass its dbt comment to a child, and so BigQuery can prune `INFORMATION_SCHEMA.JOBS`. The audit-log input exposes `creation_time`, so the same predicate applies there.
 
-Views that read `jobs_with_cost` directly now cover only that window: `jobs_by_project_with_cost`, `query_with_better_pricing_using_on_demand_view`, `query_with_better_pricing_using_flat_pricing_view`, and `bi_engine_materialized_view_analysis`. Raise `lookback_window_days` for a longer history.
-
-If dbt has not run for longer than the lookback, incremental models that read this view cannot catch up the gap beyond it. Each jobs scan should fall from full retention to about `lookback_window_days + 1` days of partitions.
+Views that read `jobs_with_cost` directly cover that same window: `jobs_by_project_with_cost`, `query_with_better_pricing_using_on_demand_view`, `query_with_better_pricing_using_flat_pricing_view`, and `bi_engine_materialized_view_analysis`. Raise `lookback_window_days` for a longer history.
 
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|

@@ -22,6 +22,8 @@ To do so, you can set the following variables in your `dbt_project.yml` file or 
 | `input_datasets` | `DBT_BQ_MONITORING_INPUT_DATASETS` | Optional `project.dataset` values that limit dataset-scanned `INFORMATION_SCHEMA` models | `[]` |
 | `bq_region` | `DBT_BQ_MONITORING_REGION` | Region where the monitored projects are located | `us` |
 
+`information_schema_jobs_by_project` is enabled in region mode and project mode. [BigQuery documents `INFORMATION_SCHEMA.JOBS` and `INFORMATION_SCHEMA.JOBS_BY_PROJECT` as the same view](https://cloud.google.com/bigquery/docs/information-schema-jobs). In project mode each enabled model is materialized, so the by-project model repeats the jobs scan. No model in this package refs `information_schema_jobs_by_project`. Folder and organization jobs models are `enabled: false` inside their generated SQL. To skip the by-project model, set `+enabled: false` on it in the root project, as in the [configuration guide](/configuration#project-mode). That override is a YAML boolean.
+
 ### `input_datasets` examples
 
 Use `input_datasets` when you want to skip automatic dataset discovery
@@ -34,6 +36,18 @@ If you use `DBT_BQ_MONITORING_INPUT_DATASETS`, pass a single
 `project.dataset` string. List-style environment variable values are not
 parsed for this setting, so use `dbt_project.yml` or `--vars` for
 multiple datasets.
+
+When `input_datasets` is empty and `input_gcp_projects` is set, discovery
+reads each project's `region-<bq_region>.INFORMATION_SCHEMA.SCHEMATA`
+and returns project-qualified dataset names (`` `project`.`dataset` ``).
+A project with no datasets in that region contributes nothing. If listing
+one project fails (for example, missing `bigquery.datasets.get`), that
+project is skipped and the error is logged. Discovery fails only when
+every input project fails. The lookup only reads `SCHEMATA`; it does not
+write a table, so it still runs where BigQuery rejects DML. With no project list, discovery uses the
+execution project's region. An explicit `input_datasets` list skips
+discovery. Dataset-scoped models (`PARTITIONS`, `KEY_COLUMN_USAGE`,
+`CONSTRAINT_COLUMN_USAGE`, `SEARCH_INDEXES*`) then query those datasets.
 
 ```yml
 # dbt_project.yml
@@ -75,6 +89,7 @@ Views that read `jobs_with_cost` directly cover that same window: `jobs_by_proje
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
 | `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Monitoring window in days. `jobs_with_cost` keeps only this many days. | `7` |
+| `initial_backfill_days` | `DBT_BQ_MONITORING_INITIAL_BACKFILL_DAYS` | Days of history `project_by_project_table` loads on the first build, on full refresh, and as the furthest incremental catch-up (the greater of the current max partition and this many days). Does not follow `lookback_window_days`. Integer from 1 to 166 (`166 * 24 = 3984` hourly partitions, under BigQuery's 4000-partition insert limit). `0`, negatives, values above 166, and non-integer strings fail compilation. An environment variable may be a digit string such as `"166"`. | `166` |
 | `lookback_incremental_billing_window_days` | `DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS` | Number of days to look back for monitoring | `3` |
 | `output_limit_size` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Limit size to use for the models | `1000` |
 | `output_partition_expiration_days` | `DBT_BQ_MONITORING_TABLE_EXPIRATION_DAYS` | Default table expiration in days for incremental models | `365` days |

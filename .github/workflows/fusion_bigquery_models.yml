@@ -36,7 +36,8 @@ jobs:
       DBT_BQ_MONITORING_GOOGLE_INFORMATION_SCHEMA_MODELS_MATERIALIZATION: project_by_project_view
       # Organization INFORMATION_SCHEMA models are enabled: false. Excluding
       # their tag matches zero enabled nodes and warns on dbt >= 1.12.
-      DBT_COMMON_FLAGS: "--empty"
+      # --empty wraps refs in `where false limit 0`, which empties unit-test fixtures.
+      DBT_COMMON_FLAGS: "--empty --exclude test_type:unit"
 
     steps:
       - name: Checkout
@@ -143,6 +144,11 @@ jobs:
         run: |
           cd integration_tests
           dbt build -s dbt_bigquery_monitoring --full-refresh ${{ env.DBT_COMMON_FLAGS }}
+
+      - name: Run unit tests with their fixture rows
+        run: |
+          cd integration_tests
+          dbt test -s test_type:unit --exclude tag:dbt-bigquery-monitoring-information-schema-by-organization
 
       - name: Run all models again to test incremental
         run: |

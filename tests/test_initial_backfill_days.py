@@ -18,7 +18,9 @@ def _dbt_env(**overrides: str) -> dict[str, str]:
             "DBT_PROFILES_DIR": ".",
             "DBT_ENV_SECRET_BIGQUERY_TEST_STORAGE_PROJECT": "dummy-project",
             "DBT_ENV_SECRET_BIGQUERY_TEST_EXECUTION_PROJECT": "dummy-project",
-            "DBT_ENV_SECRET_BIGQUERY_TEST_LOCATION": "us",
+            # dbt 1.12 scrubs DBT_ENV_SECRET_* values out of error text. "us" is
+            # a substring of "must", so a us location hides the compiler error.
+            "DBT_ENV_SECRET_BIGQUERY_TEST_LOCATION": "europe-west1",
             "GITHUB_SHA": "local",
         }
     )

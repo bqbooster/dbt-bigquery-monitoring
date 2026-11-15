@@ -57,7 +57,7 @@ vars:
 | `per_billed_tb_price` | `DBT_BQ_MONITORING_PER_BILLED_TB_PRICE` | Price in US dollars per billed TB of data processed | `6.25` |
 | `free_tb_per_month` | `DBT_BQ_MONITORING_FREE_TB_PER_MONTH` | Free on demand compute quota TB per month | `1` |
 | `hourly_slot_price` | `DBT_BQ_MONITORING_HOURLY_SLOT_PRICE` | Hourly price in US dollars per slot per hour. This is the rate used for every job while edition pricing is off | `0.04` |
-| `use_edition_slot_pricing` | `DBT_BQ_MONITORING_USE_EDITION_SLOT_PRICING` | Price slot-hours from the job `edition` instead of `hourly_slot_price`. Off preserves the historical flat rate | `false` |
+| `use_edition_slot_pricing` | `DBT_BQ_MONITORING_USE_EDITION_SLOT_PRICING` | When on, price slot-hours from the job `edition`. When off, every job uses `hourly_slot_price` | `false` |
 | `slot_pricing_plan` | `DBT_BQ_MONITORING_SLOT_PRICING_PLAN` | Plan used when edition pricing is on: `pay_as_you_go`, `commitment_1_year`, or `commitment_3_year` | `pay_as_you_go` |
 | `standard_payg_slot_price` | `DBT_BQ_MONITORING_STANDARD_PAYG_SLOT_PRICE` | Standard edition pay-as-you-go USD per slot-hour | `0.04` |
 | `standard_commitment_1y_slot_price` | `DBT_BQ_MONITORING_STANDARD_COMMITMENT_1Y_SLOT_PRICE` | Standard 1-year spend-based CUD USD per slot-hour. Standard has no slot commitment | `0.036` |
@@ -77,7 +77,7 @@ vars:
 
 ### Edition-aware slot pricing
 
-This stays **off** unless you set `use_edition_slot_pricing`. While it is off, `flat_pricing_query_cost` is still `total_slot_ms / (1000 * 60 * 60) * hourly_slot_price`, and the compiled multiplier is the number `0.04` when you have not overridden `hourly_slot_price`. Column names, types, and costs do not change, and no full refresh is required.
+Off unless you set `use_edition_slot_pricing`. While it is off, `flat_pricing_query_cost` is `total_slot_ms / (1000 * 60 * 60) * hourly_slot_price`. With the default `hourly_slot_price`, that multiplier is `0.04`.
 
 Turn it on to price each job from `INFORMATION_SCHEMA.JOBS.edition`:
 
@@ -89,7 +89,7 @@ Turn it on to price each job from `INFORMATION_SCHEMA.JOBS.edition`:
 
 Defaults are US list prices (November 2026). Standard has no slot commitment, so its commitment columns are the 1-year and 3-year spend-based CUD rates. Enterprise and Enterprise Plus commitment columns are resource-commitment rates (20% and 40% off pay-as-you-go). Override any cell with the variable in the table above. `slot_pricing_plan` selects the column for every reservation.
 
-`NULL`, on-demand, and any other edition use `hourly_slot_price`. In audit-log-only mode `edition` is an untyped null; the enabled expression casts it to `STRING` and takes that same fallback, so `jobs_with_cost` still compiles.
+`NULL`, on-demand, and any other edition use `hourly_slot_price`. In audit-log-only mode `edition` is an untyped null; the enabled expression casts it to `STRING` and uses that fallback.
 
 `reservation_slot_pricing_plans` is a **dbt var only** (a string environment variable cannot carry a mapping). Map `reservation_id` to a plan name. Other reservations use `slot_pricing_plan`.
 
@@ -100,8 +100,6 @@ vars:
   reservation_slot_pricing_plans:
     "admin-project:US.etl": commitment_3_year
 ```
-
-Enabling the flag does not alter table schemas. Incremental models keep previously written costs until those partitions are rebuilt. Run a full refresh of the downstream incremental models when you want history restated at the new rates.
 
 ## Package
 

@@ -42,6 +42,13 @@ SELECT
   -- Performance metrics
   AVG(total_time_seconds) AS avg_duration_seconds,
   APPROX_QUANTILES(total_time_seconds, 100)[OFFSET(50)] AS median_duration_seconds,
+  -- Appended so on_schema_change=append_new_columns can add them to an existing
+  -- incremental table without reordering columns. Null on partitions that have
+  -- not been rebuilt yet. compute_rollup_per_hour uses them for exact distinct
+  -- counts and falls back to unique_users / unique_sessions while they are null.
+  ARRAY_AGG(DISTINCT user_email IGNORE NULLS) AS user_emails,
+  ARRAY_AGG(DISTINCT session_info.session_id IGNORE NULLS) AS session_ids,
+  -- Appended after the id arrays so existing incremental tables only add columns.
   AVG({{ queue_wait_ms() }}) AS avg_queue_wait_ms,
   APPROX_QUANTILES(total_time_seconds, 100)[SAFE_OFFSET(50)] AS duration_p50_seconds,
   APPROX_QUANTILES(total_time_seconds, 100)[SAFE_OFFSET(90)] AS duration_p90_seconds,

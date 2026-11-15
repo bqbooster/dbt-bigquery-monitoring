@@ -13,11 +13,11 @@ models:
     description: The name of the table or view also referred to as the tableId.
     data_type: STRING
   - name: column_name
-    description: The name of the column.
+    description: The name of the top-level column.
     data_type: STRING
   - name: field_path
-    description: "The path to a column nested\n        within a `RECORD` or `STRUCT`\
-      \ column."
+    description: "The name of the top-level column or the path to the column\n   \
+      \     nested\n        within a RECORD or STRUCT column."
     data_type: STRING
   - name: data_type
     description: "The column's GoogleSQL\n        data type."
@@ -33,9 +33,16 @@ models:
     data_type: STRING
   - name: rounding_mode
     description: "The mode of rounding that's used when applying precision and scale\
-      \ to+\n        parameterized NUMERIC or BIGNUMERIC values;\n        otherwise,\
+      \ to\n        parameterized NUMERIC or BIGNUMERIC values;\n        otherwise,\
       \ the value is NULL."
     data_type: STRING
+  - name: data_governance_tags
+    description: "The list of data\n        governance tags that are attached to the\
+      \ column or nested field to\n        control access and masking. Each STRUCT\
+      \ contains the\n        following STRING fields:\n        \nkey: the namespaced\
+      \ tag key, in the format\n            PROJECT_ID/TAG_KEY or\n            ORGANIZATION_ID/TAG_KEY.\n\
+      value: the short name of the tag value."
+    data_type: ARRAY<STRUCT>
   - name: policy_tags
     description: The list of policy tags that are attached to the column.
     data_type: ARRAY<STRING>

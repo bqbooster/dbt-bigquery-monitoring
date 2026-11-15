@@ -9,6 +9,13 @@ on:
       - 'Makefile'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  cancel-in-progress: true
+  group: build-base-image-${{ github.ref }}
+
 # GitHub secrets
 env:
   DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
@@ -24,7 +31,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha }} # Check out the code of the PR
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Log in to Docker Hub
         run: |

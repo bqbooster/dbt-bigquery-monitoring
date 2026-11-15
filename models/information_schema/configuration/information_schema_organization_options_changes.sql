@@ -5,13 +5,7 @@
       you need to get the configuration changes,
 
       ask your administrator to grant you the
-
-
-
-
-      BigQuery Admin  (roles/bigquery.admin)
-     IAM role
-     on your organization.
+    BigQuery Admin  (roles/bigquery.admin) IAM role on your organization.
 
 
 

@@ -38,6 +38,9 @@ mindmap
         cost_by_label
       BI Engine
         bi_engine_materialized_view_analysis
+      Performance
+        job_performance_insights
+        job_performance_insights_per_hour
     dbt Models
       most_expensive_models
       most_repeated_models
@@ -213,9 +216,11 @@ LIMIT 20
 
 ### `most_repeated_jobs`
 
-Identifies queries that run repeatedly with the same SQL text. High repetition with low cache hit rates signals caching or materialization opportunities.
+Identifies queries that run repeatedly. One row per `query_fingerprint`: `query_info.query_hashes.normalized_literals` when BigQuery populated it, otherwise the raw query text. A null hash does not merge different texts. A null query and a null hash stay a null fingerprint. `query` is one example statement. Hourly totals are summed once per fingerprint.
 
-**Key columns:** `query`, `query_count`, `total_query_cost`, `cache_hit_ratio`, `total_slot_ms`, `user_emails`
+BigQuery does not publish the hash for cache hits, so a cached parameterized execution can remain on its own text key. Audit-log-only mode has no `query_info` (the struct is an untyped null) and uses the query text. Region and project mode both read the hash through `jobs_with_cost`. `jobs_costs_incremental` is clustered by `hour` and `query`.
+
+**Key columns:** `query_fingerprint`, `normalized_query_hash`, `query`, `query_count`, `total_query_cost`, `cache_hit_ratio`, `total_slot_ms`, `user_emails`
 
 ```sql
 -- Frequently repeated queries with poor cache hit rates
@@ -304,11 +309,38 @@ ORDER BY total_slot_seconds DESC
 
 ---
 
+### `job_performance_insights`
+
+One row per done job for the incremental window. Flags come from `query_info.performance_insights` (slot contention, insufficient shuffle quota, partition skew, high-cardinality joins). Shuffle spill is `SUM(job_stages.shuffle_output_bytes_spilled)`.
+
+The model reads `jobs_with_cost` for the same creation-time window as the other job incrementals, and it selects those leaves only (not query text, timeline, or the rest of `job_stages`). `job_performance_insights_per_hour` rolls the per-job table up by project and reservation and does not read `INFORMATION_SCHEMA` again. Jobs with no insight stay in the table so slot-millisecond ratios use every done job as the denominator.
+
+Both models use `insert_overwrite` and `on_schema_change: append_new_columns`. Region mode and project mode both go through `jobs_with_cost`.
+
+A null or missing `performance_insights` array, and an empty array, yield false flags and zero counts. A null `job_stages` array and an empty array (including row-level security jobs) yield NULL shuffle bytes, not zero. Audit-log-only mode has no `query_info` or `job_stages` structs (they are untyped nulls). That mode does not reference those fields: flags are false and spill is NULL.
+
+**Key columns:** `hour`, `project_id`, `job_id`, `total_slot_ms`, `has_slot_contention`, `has_insufficient_shuffle_quota`, `has_partition_skew`, `has_high_cardinality_join`, `shuffle_output_bytes_spilled`
+
+```sql
+-- Share of slot time on contention, and spill, by reservation
+SELECT
+  hour,
+  reservation_id,
+  job_count,
+  ROUND(slot_contention_slot_ms_ratio * 100, 1) AS contention_slot_pct,
+  ROUND(shuffle_output_bytes_spilled / POW(1024, 4), 2) AS spilled_tib
+FROM {{ ref('job_performance_insights_per_hour') }}
+WHERE hour >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+ORDER BY spilled_tib DESC
+```
+
+---
+
 ### `materialization_candidates`
 
-Identifies queries that are **strong candidates for materialized views or scheduled queries**: high frequency, significant cost, and low cache hit rate. Shows potential savings if the queries were cached.
+Identifies queries that are **strong candidates for materialized views or scheduled queries**: high frequency, significant cost, and low cache hit rate. Shows potential savings if the queries were cached. Frequency uses the same `query_fingerprint` as `most_repeated_jobs` (`normalized_literals`, or the raw query text when the hash is null).
 
-**Key columns:** `query`, `query_count`, `total_query_cost`, `cache_hit_ratio`, `potential_savings_from_caching`, `materialization_recommendation`, `first_seen`, `last_seen`
+**Key columns:** `query_fingerprint`, `query`, `query_count`, `total_query_cost`, `cache_hit_ratio`, `potential_savings_from_caching`, `materialization_recommendation`, `first_seen`, `last_seen`
 
 ```sql
 -- High-value candidates for materialization
@@ -421,7 +453,7 @@ Hourly compute cost with year/month/day time truncations added for easy BI tool 
 
 `compute_rollup_per_minute` includes average queue wait (creation to start) and duration and queue-wait p50, p90, and p99. `median_duration_seconds` is `APPROX_QUANTILES(total_time_seconds, 100)[OFFSET(50)]`. The percentile columns use `SAFE_OFFSET`. A minute whose start times are all null has null queue-wait percentiles. A minute whose durations are all null fails on `median_duration_seconds`.
 
-`compute_rollup_per_hour` reads `compute_rollup_per_minute` and re-aggregates every minute row. It does not scan `JOBS`. Queue wait and duration p50, p90, and p99 are query-count-weighted averages of the minute values. `median_duration_seconds` is the unweighted average of the per-minute medians. `avg_duration_seconds` is the unweighted average of the per-minute averages.
+`compute_rollup_per_hour` reads `compute_rollup_per_minute` and re-aggregates every minute row. It does not scan `JOBS`. Unique users and sessions are distinct counts of the minute id arrays when every minute in the hour has those arrays, and otherwise the sums of the per-minute counts. Queue wait and duration p50, p90, and p99 are query-count-weighted averages of the minute values. `median_duration_seconds` is the unweighted average of the per-minute medians. `avg_duration_seconds` is the unweighted average of the per-minute averages.
 
 ```sql
 -- Rolling hourly cost for the past 24 hours

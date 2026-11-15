@@ -53,19 +53,19 @@ models:
     data_type: INT64
   - name: total_physical_bytes
     description: "Total number of physical (compressed) bytes used for storage,\n\
-      \        including active, long-term, and time travel (deleted or changed data)\n\
+      \        including active, long-term, and time-travel (deleted or changed data)\n\
       \        bytes. Fail-safe (deleted or changed data retained after the time-travel\n\
       \        window) bytes aren't included."
     data_type: INT64
   - name: active_physical_bytes
     description: "Number of physical (compressed) bytes younger than 90 days,\n  \
-      \    including time travel (deleted or changed data) bytes."
+      \    including time-travel (deleted or changed data) bytes."
     data_type: INT64
   - name: long_term_physical_bytes
     description: Number of physical (compressed) bytes older than 90 days.
     data_type: INT64
   - name: time_travel_physical_bytes
-    description: "Number of physical (compressed) bytes used by time travel storage\n\
+    description: "Number of physical (compressed) bytes used by time-travel storage\n\
       \        (deleted or changed data)."
     data_type: INT64
   - name: storage_last_modified_time

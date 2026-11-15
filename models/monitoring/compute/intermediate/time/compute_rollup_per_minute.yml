@@ -83,6 +83,10 @@ models:
         description: >
           p50 execution duration in seconds, APPROX_QUANTILES(total_time_seconds, 100)[OFFSET(50)].
           An all-null minute fails this expression.
+      - name: user_emails
+        description: Distinct user emails in the minute.
+      - name: session_ids
+        description: Distinct session ids in the minute.
       - name: avg_queue_wait_ms
         description: >
           Average milliseconds from creation to start. Null when start_time is null.

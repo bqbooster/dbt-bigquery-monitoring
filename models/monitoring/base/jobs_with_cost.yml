@@ -3,7 +3,10 @@ version: 2
 models:
   - name: jobs_with_cost
     description: >
-      A model that combines job data with cost information.
+      Job rows with cost, covering lookback_window_days. The source includes
+      one extra day before the parent-script window so a parent SCRIPT job at
+      the edge can still supply its dbt comment. Raise lookback_window_days
+      for a longer history. Direct readers cover the same window.
     config:
       meta:
         label: "Jobs with Cost"

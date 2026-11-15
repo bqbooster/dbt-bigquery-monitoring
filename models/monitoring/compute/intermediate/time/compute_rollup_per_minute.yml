@@ -81,3 +81,7 @@ models:
         description: Average duration of jobs in seconds during the minute.
       - name: median_duration_seconds
         description: Median duration of jobs in seconds during the minute.
+      - name: user_emails
+        description: Distinct user emails in the minute.
+      - name: session_ids
+        description: Distinct session ids in the minute.

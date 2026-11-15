@@ -79,12 +79,14 @@ LIMIT 10
 
 **Jobs & Performance**
 *   `jobs`, `jobs_by_project`, `jobs_by_user`, `jobs_by_folder`
+*   `jobs_by_project` is enabled. In project mode it repeats the `jobs` scan because BigQuery treats `JOBS` and `JOBS_BY_PROJECT` as the same view. Set `+enabled: false` on `information_schema_jobs_by_project` in your root `dbt_project.yml` if you do not query it.
 *   `jobs_timeline` (visualize concurrency)
 
 **Storage & Tables**
 *   `tables`, `table_storage`, `table_snapshots`
 *   `columns`, `column_field_paths` (schema details)
 *   `partitions`
+*   `property_graphs` (property graph metadata)
 
 **Access & Security**
 *   `object_privileges` (who can see what)
@@ -92,6 +94,8 @@ LIMIT 10
 
 **Configuration & Reservations**
 *   `reservations`, `assignments` (slots management)
+*   `reservations_timeline` (capacity over time)
+*   `failover_history` (managed disaster-recovery failovers; preview, disabled by default)
 *   `bi_capacities` (BI Engine)
 *   `effective_project_options`
 

@@ -68,10 +68,15 @@ vars:
 
 These settings are used to configure how dbt will run and materialize the models.
 
+`jobs_with_cost` always keeps `lookback_window_days` of jobs. The source is filtered to `lookback_window_days + 1` before the parent-script window, so BigQuery can prune `INFORMATION_SCHEMA.JOBS`. The audit-log input also exposes `creation_time`, so the same predicate applies there. Rows older than `lookback_window_days` are dropped after the window. The extra source day lets a parent `SCRIPT` job still pass its dbt comment to a child at the edge of the window. Column names and types are unchanged. No full refresh is required.
+
+Views that read `jobs_with_cost` directly now cover only that window: `jobs_by_project_with_cost`, `query_with_better_pricing_using_on_demand_view`, `query_with_better_pricing_using_flat_pricing_view`, and `bi_engine_materialized_view_analysis`. Raise `lookback_window_days` for a longer history.
+
+If dbt has not run for longer than the lookback, incremental models that read this view cannot catch up the gap beyond it. Each jobs scan should fall from full retention to about `lookback_window_days + 1` days of partitions.
+
 | Variable | Environment Variable | Description | Default |
 |----------|-------------------|-------------|---------|
-| `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Number of days to look back for monitoring | `7` |
-| `enable_jobs_with_cost_partition_pruning` | `DBT_BQ_MONITORING_ENABLE_JOBS_WITH_COST_PARTITION_PRUNING` | When `true`, `jobs_with_cost` keeps only `lookback_window_days` and applies that predicate before the parent-script window, so BigQuery can prune `INFORMATION_SCHEMA.JOBS` (and the audit-log input, which also exposes `creation_time`). The scan includes one extra day so a parent SCRIPT job can still pass its dbt comment to a child at the edge of the window. Default `false` leaves the view identical to previous releases: project mode still exposes the consolidated jobs table (up to `initial_backfill_days` / 166 days), region mode still exposes the `INFORMATION_SCHEMA` retention, and audit-log mode is unfiltered here. Turning it on drops older rows from `jobs_by_project_with_cost`, the pricing comparison views, and BI Engine analysis, and an incremental model that uses `jobs_done_incremental_hourly` cannot catch up further than this window (a gap longer than `lookback_window_days`, or a billing backfill that expected older jobs, needs the flag left off or a full refresh after you widen it). `lookback_incremental_billing_window_days` is unchanged and still applies only to billing models. | `false` |
+| `lookback_window_days` | `DBT_BQ_MONITORING_LOOKBACK_WINDOW_DAYS` | Monitoring window in days. `jobs_with_cost` keeps only this many days. | `7` |
 | `lookback_incremental_billing_window_days` | `DBT_BQ_MONITORING_LOOKBACK_INCREMENTAL_BILLING_WINDOW_DAYS` | Number of days to look back for monitoring | `3` |
 | `output_limit_size` | `DBT_BQ_MONITORING_OUTPUT_LIMIT_SIZE` | Limit size to use for the models | `1000` |
 | `output_partition_expiration_days` | `DBT_BQ_MONITORING_TABLE_EXPIRATION_DAYS` | Default table expiration in days for incremental models | `365` days |

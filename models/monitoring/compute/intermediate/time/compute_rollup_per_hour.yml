@@ -5,13 +5,8 @@ models:
     description: >
       Hourly compute rollup. Additive metrics are summed from compute_rollup_per_minute.
       unique_users and unique_sessions count distinct ids across the hour when every
-      minute row has user_emails and session_ids. Incremental runs only rewrite partitions
-      at or after the current max hour partition, so older hour partitions keep their
-      previous values until a full refresh. A full refresh of compute_rollup_per_minute,
-      then this model, rewrites history: sums match the minute (and raw job) totals,
-      and distinct users are exact. Until those minute partitions are rebuilt, their
-      id arrays are NULL and this model keeps the sum of the per-minute distinct counts
-      for that hour instead of writing zero.
+      minute row has user_emails and session_ids. If any minute in the hour has a
+      null id array, those counts are the sums of the per-minute distinct counts.
     config:
       meta:
         label: "Compute cost per hour"
@@ -47,8 +42,7 @@ models:
       - name: unique_users
         description: >
           Distinct users during the hour when user_emails is populated on every contributing
-          minute. Otherwise the sum of per-minute unique_users, which is what an incremental
-          upgrade uses until a full refresh backfills the arrays.
+          minute. Otherwise the sum of per-minute unique_users.
       - name: unique_sessions
         description: >
           Distinct sessions during the hour when session_ids is populated on every contributing
@@ -277,10 +271,9 @@ unit_tests:
 
   - name: compute_rollup_per_hour_keeps_legacy_counts_when_id_arrays_are_null
     description: >
-      Minute partitions written before user_emails and session_ids existed have NULL
-      arrays. The hour must keep the summed per-minute counts instead of returning 0,
-      including when only some minutes in the hour have been backfilled. Null job and
-      statement arrays must not multiply the sums.
+      When user_emails or session_ids is null on any minute in the hour, unique_users
+      and unique_sessions are the sums of the per-minute counts. Null job and statement
+      arrays do not multiply the sums.
     model: compute_rollup_per_hour
     overrides:
       macros:
